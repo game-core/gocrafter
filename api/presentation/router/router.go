@@ -26,7 +26,7 @@ func Init() {
 	e.Use(middleware.Recover())
 
 	account := e.Group("/account")
-	account.POST("/register", accountController.Register())
+	account.POST("/register_account", accountController.RegisterAccount())
 
 	e.Logger.Fatal(e.Start(":8000"))
 }

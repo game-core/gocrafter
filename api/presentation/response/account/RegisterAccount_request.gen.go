@@ -1,7 +1,9 @@
 package account
 
 type RegisterAccount struct {
-	ID inbt64 `json:"id"`
+	Status int64 `json:"status"`
+
+	ID int64 `json:"id"`
 
 	UUID string `json:"uuid"`
 
@@ -10,6 +12,6 @@ type RegisterAccount struct {
 	Password string `json:"password"`
 }
 
-func RegisterAccountResponse(iD inbt64, uUID string, name string, password string) *RegisterAccount {
-	return &RegisterAccount{ID: iD, UUID: uUID, Name: name, Password: password}
+func RegisterAccountResponse(uUID string, name string, password string, status int64, iD int64) *RegisterAccount {
+	return &RegisterAccount{UUID: uUID, Name: name, Password: password, Status: status, ID: iD}
 }

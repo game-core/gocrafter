@@ -59,7 +59,7 @@ func generateResponse(yamlFilePath string, outputBaseDir string) error {
 	}
 
 	outputDir := filepath.Join(outputBaseDir, structInfo.Package)
-	if err = os.MkdirAll(outputDir, os.ModePerm); err != nil {
+	if err := os.MkdirAll(outputDir, os.ModePerm); err != nil {
 		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
 	}
 
