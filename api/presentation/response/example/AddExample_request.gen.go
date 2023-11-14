@@ -14,6 +14,6 @@ type AddExample struct {
 	Config *Config `json:"config"`
 }
 
-func AddExampleResponse(name string, detail *string, count int, config *Config, status int64, userID int64) *AddExample {
-	return &AddExample{Name: name, Detail: detail, Count: count, Config: config, Status: status, UserID: userID}
+func AddExampleResponse(status int64, userID int64, name string, detail *string, count int, config *Config) *AddExample {
+	return &AddExample{Status: status, UserID: userID, Name: name, Detail: detail, Count: count, Config: config}
 }
