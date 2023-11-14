@@ -1,0 +1,67 @@
+basePath: /
+definitions:
+  output.Error:
+    properties:
+      message:
+        type: string
+    type: object
+  output.Example:
+    properties:
+      example_key:
+        type: string
+      example_name:
+        type: string
+      message:
+        type: string
+    type: object
+  response.Success:
+    properties:
+      items: {}
+      status:
+        type: integer
+      types:
+        type: string
+    type: object
+host: localhost:8001
+info:
+  contact: {}
+  description: This is a sample swagger server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Chat Connect
+  version: "1.0"
+paths:
+  /example/{example_key}/get_example:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: example_key
+        in: path
+        maxLength: 20
+        name: example_key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Success'
+            - properties:
+                items:
+                  $ref: '#/definitions/output.Example'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            items:
+              $ref: '#/definitions/output.Error'
+            type: array
+      summary: 確認用
+      tags:
+      - Example
+swagger: "2.0"

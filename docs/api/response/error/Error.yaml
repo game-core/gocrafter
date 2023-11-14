@@ -1,0 +1,13 @@
+name: Error
+package: error
+structure:
+  Status:
+    name: status
+    type: int64
+    nullable: false
+    number: 1
+  ErrorMessage:
+    name: error_message
+    type: string
+    nullable: false
+    number: 2

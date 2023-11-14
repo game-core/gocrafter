@@ -1,0 +1,13 @@
+.env
+
+/tmp
+/log/api_debug.log
+/log/batch_debug.log
+/static/images
+
+/docker/db_api/sql
+/docker/db_api/data
+/docker/db_test/sql
+/docker/db_test/data
+/docker/db_auth/sql
+/docker/db_auth/data

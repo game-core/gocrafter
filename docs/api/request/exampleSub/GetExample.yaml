@@ -1,0 +1,13 @@
+name: GetExampleSub
+package: exampleSub
+structure:
+  UserID:
+    name: user_id
+    type: int64
+    nullable: false
+    number: 2
+  Name:
+    name: name
+    type: string
+    nullable: false
+    number: 4

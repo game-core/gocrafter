@@ -1,0 +1,119 @@
+basePath: /
+definitions:
+  output.Error:
+    properties:
+      message:
+        type: string
+    type: object
+  output.User:
+    properties:
+      email:
+        type: string
+      message:
+        type: string
+      name:
+        type: string
+      token:
+        type: string
+      user_key:
+        type: string
+    type: object
+  parameter.LoginUser:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  parameter.RegisterUser:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      user_name:
+        type: string
+    type: object
+  response.Success:
+    properties:
+      items: {}
+      status:
+        type: integer
+      types:
+        type: string
+    type: object
+host: localhost:8002
+info:
+  contact: {}
+  description: This is a sample swagger server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Chat Connect
+  version: "1.0"
+paths:
+  /user/login_user:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ユーザーログイン
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/parameter.LoginUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Success'
+            - properties:
+                items:
+                  $ref: '#/definitions/output.User'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            items:
+              $ref: '#/definitions/output.Error'
+            type: array
+      summary: ユーザーログイン
+      tags:
+      - User
+  /user/register_user:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ユーザー登録
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/parameter.RegisterUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Success'
+            - properties:
+                items:
+                  $ref: '#/definitions/output.User'
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            items:
+              $ref: '#/definitions/output.Error'
+            type: array
+      summary: ユーザー登録
+      tags:
+      - User
+swagger: "2.0"
