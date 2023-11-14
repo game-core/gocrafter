@@ -9,7 +9,6 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
-	"strings"
 	"text/template"
 	"gopkg.in/yaml.v2"
 )
@@ -25,7 +24,6 @@ type StructInfo struct {
 	Name     string                 `yaml:"name"`
 	Package  string                 `yaml:"package"`
 	Fields   map[string]StructField `yaml:"structure"`
-	Script   string
 }
 
 const templateCode = `
@@ -36,8 +34,6 @@ type {{.Name}} struct {
 	{{$field.Name}} {{$field.TypeWithPointer}} ` + "`json:\"{{$field.Json}}\"{{if eq $field.Name \"CreatedAt\"}} gorm:\"autoCreateTime\"{{else if eq $field.Name \"UpdatedAt\"}} gorm:\"autoUpdateTime\"{{end}}`" + `
 {{end}}
 }
-
-{{.Script}}
 `
 
 func generateResponse(yamlFilePath string, outputBaseDir string) error {
@@ -70,32 +66,14 @@ func generateResponse(yamlFilePath string, outputBaseDir string) error {
 	}
 	defer outputFile.Close()
 
-	var paramStrings []string
-	var scriptStrings []string
-	fields := sortByNumber(structInfo.Fields)
-
-	for i := range fields {
-		param := strings.ToLower(fields[i].Name[:1]) + fields[i].Name[1:]
-		paramStrings = append(paramStrings, fmt.Sprintf("%s %s", param, getTypeWithPointer(structInfo.Fields[fields[i].Name])))
-		scriptStrings = append(scriptStrings, fmt.Sprintf("%s: %s", fields[i].Name, param))
-	}
-
-	script := fmt.Sprintf(`
-	func %sResponse(%s) *%s {
-		return &%s{%s}
-	}
-	`, structInfo.Name, strings.Join(paramStrings, ","), structInfo.Name, structInfo.Name, strings.Join(scriptStrings, ","))
-
 	if err = tmpl.ExecuteTemplate(outputFile, "structTemplate", struct {
 		Name        string
 		Package     string
 		Fields      map[string]StructField
-		Script      string
 	}{
 		Name:        structInfo.Name,
 		Package:     structInfo.Package,
 		Fields:      structInfo.Fields,
-		Script:      script,
 	}); err != nil {
 		return fmt.Errorf("template error: %v", err)
 	}
