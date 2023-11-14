@@ -15,10 +15,10 @@ import (
 )
 
 type StructField struct {
-	Name     string `yaml:"name"`
-	Type     string `yaml:"type"`
-	Nullable bool   `yaml:"nullable"`
-	Number   int    `yaml:"number"`
+	Name     string  `yaml:"name"`
+	Type     string  `yaml:"type"`
+	Nullable bool    `yaml:"nullable"`
+	Number   int     `yaml:"number"`
 }
 
 type StructInfo struct {
@@ -63,7 +63,7 @@ func generateResponse(yamlFilePath string, outputBaseDir string) error {
 		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
 	}
 
-	outputFileName := filepath.Join(outputDir, fmt.Sprintf("%s_request.gen.go", structInfo.Name))
+	outputFileName := filepath.Join(outputDir, fmt.Sprintf("%s_response.gen.go", structInfo.Name))
 	outputFile, err := os.Create(outputFileName)
 	if err != nil {
 		return fmt.Errorf("outputFileName file %s create error: %v", outputFileName, err)
@@ -72,14 +72,12 @@ func generateResponse(yamlFilePath string, outputBaseDir string) error {
 
 	var paramStrings []string
 	var scriptStrings []string
-	fieldsOrdered := make([]string, 0, len(structInfo.Fields))
+	fields := sortByNumber(structInfo.Fields)
 
-	for fieldName := range structInfo.Fields {
-		fieldsOrdered = append(fieldsOrdered, fieldName)
-
-		param := strings.ToLower(fieldName[:1]) + fieldName[1:]
-		paramStrings = append(paramStrings, fmt.Sprintf("%s %s", param, getTypeWithPointer(structInfo.Fields[fieldName])))
-		scriptStrings = append(scriptStrings, fmt.Sprintf("%s: %s", fieldName, param))
+	for i := range fields {
+		param := strings.ToLower(fields[i].Name[:1]) + fields[i].Name[1:]
+		paramStrings = append(paramStrings, fmt.Sprintf("%s %s", param, getTypeWithPointer(structInfo.Fields[fields[i].Name])))
+		scriptStrings = append(scriptStrings, fmt.Sprintf("%s: %s", fields[i].Name, param))
 	}
 
 	script := fmt.Sprintf(`
@@ -92,13 +90,11 @@ func generateResponse(yamlFilePath string, outputBaseDir string) error {
 		Name        string
 		Package     string
 		Fields      map[string]StructField
-		FieldsOrder []string
 		Script      string
 	}{
 		Name:        structInfo.Name,
 		Package:     structInfo.Package,
 		Fields:      structInfo.Fields,
-		FieldsOrder: fieldsOrdered,
 		Script:      script,
 	}); err != nil {
 		return fmt.Errorf("template error: %v", err)

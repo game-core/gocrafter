@@ -77,12 +77,10 @@ func generateRequest(yamlFilePath string, outputBaseDir string) error {
 		Name        string
 		Package     string
 		Fields      map[string]StructField
-		FieldsOrder []string
 	}{
 		Name:        structInfo.Name,
 		Package:     structInfo.Package,
 		Fields:      structInfo.Fields,
-		FieldsOrder: fieldsOrdered,
 	})
 	if err != nil {
 		return fmt.Errorf("template error: %v", err)
