@@ -1,7 +1,7 @@
 package example
 
 import (
-	"github.com/architecture-template/echo-ddd/config/db"
+	"github.com/architecture-template/echo-ddd/config/database"
 	"github.com/architecture-template/echo-ddd/domain/model/user/example"
 	exampleRepository "github.com/architecture-template/echo-ddd/domain/repository/user/example"
 	"github.com/jinzhu/gorm"
@@ -12,10 +12,10 @@ type exampleDao struct {
 	Write *gorm.DB
 }
 
-func NewExampleDao(conn *db.SqlHandler) exampleRepository.ExampleRepository {
+func NewExampleDao(conn *database.SqlHandler) exampleRepository.ExampleRepository {
 	return &exampleDao{
-		Read:  conn.ReadConn,
-		Write: conn.WriteConn,
+		Read:  conn.User.ReadConn,
+		Write: conn.User.WriteConn,
 	}
 }
 

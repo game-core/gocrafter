@@ -48,10 +48,10 @@ type {{.Package}}Dao struct {
 	Write *gorm.DB
 }
 
-func New{{.Name}}Dao(conn *db.SqlHandler) {{.Package}}Repository.{{.RepositoryInterface}} {
+func New{{.Name}}Dao(conn *database.SqlHandler) {{.Package}}Repository.{{.RepositoryInterface}} {
 	return &{{.Package}}Dao{
-		Read:  conn.ReadConn,
-		Write: conn.WriteConn,
+		Read:  conn.User.ReadConn,
+		Write: conn.User.WriteConn,
 	}
 }
 
