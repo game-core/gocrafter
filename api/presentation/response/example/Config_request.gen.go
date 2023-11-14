@@ -6,6 +6,6 @@ type Config struct {
 	SetConfig int64 `json:"set_config"`
 }
 
-func ConfigResponse(setConfig int64, getConfig int64) *Config {
-	return &Config{SetConfig: setConfig, GetConfig: getConfig}
+func ConfigResponse(getConfig int64, setConfig int64) *Config {
+	return &Config{GetConfig: getConfig, SetConfig: setConfig}
 }

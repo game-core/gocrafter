@@ -12,6 +12,6 @@ type RegisterAccount struct {
 	Password string `json:"password"`
 }
 
-func RegisterAccountResponse(uUID string, name string, password string, status int64, iD int64) *RegisterAccount {
-	return &RegisterAccount{UUID: uUID, Name: name, Password: password, Status: status, ID: iD}
+func RegisterAccountResponse(status int64, iD int64, uUID string, name string, password string) *RegisterAccount {
+	return &RegisterAccount{Status: status, ID: iD, UUID: uUID, Name: name, Password: password}
 }

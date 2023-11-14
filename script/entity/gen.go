@@ -129,7 +129,7 @@ func sortByNumber(fields map[string]StructField) []struct {
 		})
 	}
 
-	sort.Slice(sortedFields, func(i, j int) bool {
+	sort.SliceStable(sortedFields, func(i, j int) bool {
 		return fields[sortedFields[i].Name].Number < fields[sortedFields[j].Name].Number
 	})
 
