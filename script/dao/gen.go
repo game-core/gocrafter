@@ -50,8 +50,8 @@ type {{.Package}}Dao struct {
 
 func New{{.Name}}Dao(conn *database.SqlHandler) {{.Package}}Repository.{{.RepositoryInterface}} {
 	return &{{.Package}}Dao{
-		Read:  conn.User.ReadConn,
-		Write: conn.User.WriteConn,
+		Read:  conn.{{.Conn}}.ReadConn,
+		Write: conn.{{.Conn}}.WriteConn,
 	}
 }
 
@@ -223,6 +223,7 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 		Methods              map[string]methodType
 		RepositoryImportPath string
 		RepositoryInterface  string
+		Conn                 string
 	}{
 		Name:                 structInfo.Name,
 		Package:              structInfo.Package,
@@ -230,6 +231,7 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 		Methods:              methods,
 		RepositoryImportPath: fmt.Sprintf("%s \"github.com/game-core/gocrafter/domain/repository/%s/%s\"", structInfo.Package+"Repository", structInfo.Database, structInfo.Package),
 		RepositoryInterface:  fmt.Sprintf("%sRepository", structInfo.Name),
+		Conn:                 strings.Title(structInfo.Database),
 	})
 	if err != nil {
 		return fmt.Errorf("template error: %v", err)

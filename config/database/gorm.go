@@ -8,11 +8,11 @@ import (
 )
 
 type SqlHandler struct {
-	User   *conn
-	Master *conn
+	User   *Conn
+	Master *Conn
 }
 
-type conn struct {
+type Conn struct {
 	ReadConn  *gorm.DB
 	WriteConn *gorm.DB
 }
@@ -24,7 +24,7 @@ func NewDB() *SqlHandler {
     }
 }
 
-func userDB() *conn {
+func userDB() *Conn {
 	readConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		os.Getenv("MYSQL_READ_USER"),
@@ -54,13 +54,13 @@ func userDB() *conn {
 	readDB.SingularTable(true)
 	writeDB.SingularTable(true)
 
-	return &conn{
+	return &Conn{
 		ReadConn:  readDB,
         WriteConn: writeDB,
 	}
 }
 
-func masterDB() *conn {
+func masterDB() *Conn {
 	readConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		os.Getenv("MYSQL_READ_USER"),
@@ -90,7 +90,7 @@ func masterDB() *conn {
 	readDB.SingularTable(true)
 	writeDB.SingularTable(true)
 
-	return &conn{
+	return &Conn{
 		ReadConn:  readDB,
         WriteConn: writeDB,
 	}
