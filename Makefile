@@ -9,6 +9,13 @@ docker_wire_gen:
 	docker compose -f docker-compose.local.yml exec gen wire auth/di/wire.go
 	docker compose -f docker-compose.local.yml exec gen wire batch/di/wire.go
 
+# 全てのappを自動生成
+docker_app_gen:
+	docker compose -f docker-compose.local.yml exec gen go generate ./script/request/gen.go
+	docker compose -f docker-compose.local.yml exec gen go fmt ./api/presentation/request...
+	docker compose -f docker-compose.local.yml exec gen go generate ./script/response/gen.go
+	docker compose -f docker-compose.local.yml exec gen go fmt ./api/presentation/response...
+
 # requestを自動生成
 docker_request_gen:
 	docker compose -f docker-compose.local.yml exec gen go generate ./script/request/gen.go
