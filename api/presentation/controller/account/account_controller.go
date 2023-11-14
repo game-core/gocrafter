@@ -37,7 +37,7 @@ func (a *accountController) RegisterAccount() echo.HandlerFunc {
 		param := &request.RegisterAccount{}
 		c.controller.Bind(param)
 
-		result, err := service.Register(param)
+		response, err := service.RegisterAccount(param)
 		if err != nil {
 			return c.JSON(500, errorResponse.ErrorResponse())
 		}
