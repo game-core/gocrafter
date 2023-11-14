@@ -34,6 +34,7 @@ docker_domain_gen:
 	docker compose -f docker-compose.local.yml exec gen go fmt ./domain/repository/...
 	docker compose -f docker-compose.local.yml exec gen go generate ./script/dao/gen.go
 	docker compose -f docker-compose.local.yml exec gen go fmt ./infra/dao/...
+	docker compose -f docker-compose.local.yml exec gen go generate ./script/sql/gen.go
 
 # modelを自動生成
 docker_entity_gen:
