@@ -91,9 +91,9 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 	if len(structInfo.Primary) > 0 {
 		methods["FindByID"] = methodType{
 			Script: fmt.Sprintf(`
-			func (e *%sDao) FindByID(ID int64) (*%s.%s, error) {
+			func (d *%sDao) FindByID(ID int64) (*%s.%s, error) {
 				entity := &%s.%s{}
-				res := e.Read.Where("id = ?", ID).Find(entity)
+				res := d.Read.Where("id = ?", ID).Find(entity)
 				if err := res.Error; err != nil {
 					return nil, err
 				}
@@ -120,9 +120,9 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 
 		methods[fmt.Sprintf("FindBy%s", strings.Join(indexFields, "And"))] = methodType{
 			Script: fmt.Sprintf(`
-			func (e *%sDao) FindBy%s(%s) (*%s.%s, error) {
+			func (d *%sDao) FindBy%s(%s) (*%s.%s, error) {
 				entity := &%s.%s{}
-				res := e.Read.%s.Find(entity)
+				res := d.Read.%s.Find(entity)
 				if err := res.Error; err != nil {
 					return nil, err
 				}
@@ -136,9 +136,9 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 	// List
 	methods["List"] = methodType{
 		Script: fmt.Sprintf(`
-		func (e *%sDao) List(limit int64) (*%s.%ss, error) {
+		func (d *%sDao) List(limit int64) (*%s.%ss, error) {
 			entity := &%s.%ss{}
-			res := e.Read.Limit(limit).Find(entity)
+			res := d.Read.Limit(limit).Find(entity)
 			if err := res.Error; err != nil {
 				return nil, err
 			}
@@ -151,12 +151,12 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 	// Create
 	methods["Create"] = methodType{
 		Script: fmt.Sprintf(`
-		func (e *%sDao) Create(entity *%s.%s, tx *gorm.DB) (*%s.%s, error) {
+		func (d *%sDao) Create(entity *%s.%s, tx *gorm.DB) (*%s.%s, error) {
 			var conn *gorm.DB
 			if tx != nil {
 				conn = tx
 			} else {
-				conn = e.Write
+				conn = d.Write
 			}
 		
 			res := conn.Model(&%s.%s{}).Create(entity)
@@ -172,12 +172,12 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 	// Update
 	methods["Update"] = methodType{
 		Script: fmt.Sprintf(`
-		func (e *%sDao) Update(entity *%s.%s, tx *gorm.DB) (*%s.%s, error) {
+		func (d *%sDao) Update(entity *%s.%s, tx *gorm.DB) (*%s.%s, error) {
 			var conn *gorm.DB
 			if tx != nil {
 				conn = tx
 			} else {
-				conn = e.Write
+				conn = d.Write
 			}
 		
 			res := conn.Model(&%s.%s{}).Where("id = ?", entity.ID).Update(entity)
@@ -193,12 +193,12 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 	// Delete
 	methods["Delete"] = methodType{
 		Script: fmt.Sprintf(`
-		func (e *%sDao) Delete(entity *%s.%s, tx *gorm.DB) error {
+		func (d *%sDao) Delete(entity *%s.%s, tx *gorm.DB) error {
 			var conn *gorm.DB
 			if tx != nil {
 				conn = tx
 			} else {
-				conn = e.Write
+				conn = d.Write
 			}
 		
 			res := conn.Model(&%s.%s{}).Where("id = ?", entity.ID).Delete(entity)

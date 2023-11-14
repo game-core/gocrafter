@@ -19,12 +19,12 @@ func NewAccountDao(conn *database.SqlHandler) accountRepository.AccountRepositor
 	}
 }
 
-func (e *accountDao) Create(entity *account.Account, tx *gorm.DB) (*account.Account, error) {
+func (d *accountDao) Create(entity *account.Account, tx *gorm.DB) (*account.Account, error) {
 	var conn *gorm.DB
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = e.Write
+		conn = d.Write
 	}
 
 	res := conn.Model(&account.Account{}).Create(entity)
@@ -35,12 +35,12 @@ func (e *accountDao) Create(entity *account.Account, tx *gorm.DB) (*account.Acco
 	return entity, nil
 }
 
-func (e *accountDao) Delete(entity *account.Account, tx *gorm.DB) error {
+func (d *accountDao) Delete(entity *account.Account, tx *gorm.DB) error {
 	var conn *gorm.DB
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = e.Write
+		conn = d.Write
 	}
 
 	res := conn.Model(&account.Account{}).Where("id = ?", entity.ID).Delete(entity)
@@ -51,9 +51,9 @@ func (e *accountDao) Delete(entity *account.Account, tx *gorm.DB) error {
 	return nil
 }
 
-func (e *accountDao) FindByID(ID int64) (*account.Account, error) {
+func (d *accountDao) FindByID(ID int64) (*account.Account, error) {
 	entity := &account.Account{}
-	res := e.Read.Where("id = ?", ID).Find(entity)
+	res := d.Read.Where("id = ?", ID).Find(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -61,9 +61,9 @@ func (e *accountDao) FindByID(ID int64) (*account.Account, error) {
 	return entity, nil
 }
 
-func (e *accountDao) FindByIDAndUUID(ID int64, UUID int64) (*account.Account, error) {
+func (d *accountDao) FindByIDAndUUID(ID int64, UUID int64) (*account.Account, error) {
 	entity := &account.Account{}
-	res := e.Read.Where("id = ?", ID).Where("uuid = ?", UUID).Find(entity)
+	res := d.Read.Where("id = ?", ID).Where("uuid = ?", UUID).Find(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -71,9 +71,9 @@ func (e *accountDao) FindByIDAndUUID(ID int64, UUID int64) (*account.Account, er
 	return entity, nil
 }
 
-func (e *accountDao) FindByUUID(UUID int64) (*account.Account, error) {
+func (d *accountDao) FindByUUID(UUID int64) (*account.Account, error) {
 	entity := &account.Account{}
-	res := e.Read.Where("uuid = ?", UUID).Find(entity)
+	res := d.Read.Where("uuid = ?", UUID).Find(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -81,9 +81,9 @@ func (e *accountDao) FindByUUID(UUID int64) (*account.Account, error) {
 	return entity, nil
 }
 
-func (e *accountDao) List(limit int64) (*account.Accounts, error) {
+func (d *accountDao) List(limit int64) (*account.Accounts, error) {
 	entity := &account.Accounts{}
-	res := e.Read.Limit(limit).Find(entity)
+	res := d.Read.Limit(limit).Find(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -91,12 +91,12 @@ func (e *accountDao) List(limit int64) (*account.Accounts, error) {
 	return entity, nil
 }
 
-func (e *accountDao) Update(entity *account.Account, tx *gorm.DB) (*account.Account, error) {
+func (d *accountDao) Update(entity *account.Account, tx *gorm.DB) (*account.Account, error) {
 	var conn *gorm.DB
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = e.Write
+		conn = d.Write
 	}
 
 	res := conn.Model(&account.Account{}).Where("id = ?", entity.ID).Update(entity)

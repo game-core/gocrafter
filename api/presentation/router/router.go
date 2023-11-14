@@ -13,7 +13,7 @@ import (
 
 func Init() {
 	// di: wire ./api/di/wire.go
-	exampleController := di.InitializeExampleController()
+	accountController := di.InitializeAccountController()
 
 	e := echo.New()
 
@@ -25,8 +25,8 @@ func Init() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	example := e.Group("/example")
-	example.GET("/:exampleKey/get_example", exampleController.GetExample())
+	account := e.Group("/account")
+	account.POST("/register", accountController.Register())
 
 	e.Logger.Fatal(e.Start(":8000"))
 }

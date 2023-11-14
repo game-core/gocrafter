@@ -1,29 +1,30 @@
-package controller
+package account
 
 import (
 	"github.com/labstack/echo/v4"
 	
-	"github.com/game-core/gocrafter/api/service"
+	"github.com/game-core/gocrafter/domain/service"
 	"github.com/game-core/gocrafter/api/presentation/parameter"
 	"github.com/game-core/gocrafter/api/presentation/output"
 	"github.com/game-core/gocrafter/api/presentation/response"
+	"github.com/game-core/gocrafter/api/presentation/controller"
 )
 
-type ExampleController interface {
-	GetExample() echo.HandlerFunc
+type AccountController interface {
+	Register() echo.HandlerFunc
 }
 
 type exampleController struct {
-	exampleService service.ExampleService
+	accountService service.AccountService
 }
 
-func NewExampleController(exampleService service.ExampleService) ExampleController {
-    return &exampleController{
-        exampleService: exampleService,
+func NewAccountController(accountService service.AccountService) AccountController {
+    return &accountController{
+        accountService: accountService,
     }
 }
 
-// @tags        Example
+// @tags        Account
 // @Summary     確認用
 // @Accept      json
 // @Produce     json
@@ -31,8 +32,8 @@ func NewExampleController(exampleService service.ExampleService) ExampleControll
 // @Router      /example/{example_key}/get_example [get]
 // @Success     200  {object} response.Success{items=output.Example}
 // @Failure     500  {array}  output.Error
-func (e *exampleController) GetExample() echo.HandlerFunc {
-	return func(c echo.Context) error {
+func (a *accountController) GetExample() echo.HandlerFunc {
+	return func(c echo.controller.Context) error {
 		exampleKey := &parameter.ExampleKey{
 			ExampleKey: c.Param("exampleKey"),
 		}

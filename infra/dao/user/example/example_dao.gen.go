@@ -19,12 +19,12 @@ func NewExampleDao(conn *database.SqlHandler) exampleRepository.ExampleRepositor
 	}
 }
 
-func (e *exampleDao) Create(entity *example.Example, tx *gorm.DB) (*example.Example, error) {
+func (d *exampleDao) Create(entity *example.Example, tx *gorm.DB) (*example.Example, error) {
 	var conn *gorm.DB
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = e.Write
+		conn = d.Write
 	}
 
 	res := conn.Model(&example.Example{}).Create(entity)
@@ -35,12 +35,12 @@ func (e *exampleDao) Create(entity *example.Example, tx *gorm.DB) (*example.Exam
 	return entity, nil
 }
 
-func (e *exampleDao) Delete(entity *example.Example, tx *gorm.DB) error {
+func (d *exampleDao) Delete(entity *example.Example, tx *gorm.DB) error {
 	var conn *gorm.DB
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = e.Write
+		conn = d.Write
 	}
 
 	res := conn.Model(&example.Example{}).Where("id = ?", entity.ID).Delete(entity)
@@ -51,9 +51,9 @@ func (e *exampleDao) Delete(entity *example.Example, tx *gorm.DB) error {
 	return nil
 }
 
-func (e *exampleDao) FindByID(ID int64) (*example.Example, error) {
+func (d *exampleDao) FindByID(ID int64) (*example.Example, error) {
 	entity := &example.Example{}
-	res := e.Read.Where("id = ?", ID).Find(entity)
+	res := d.Read.Where("id = ?", ID).Find(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -61,9 +61,9 @@ func (e *exampleDao) FindByID(ID int64) (*example.Example, error) {
 	return entity, nil
 }
 
-func (e *exampleDao) FindByIDAndUserID(ID int64, UserID int64) (*example.Example, error) {
+func (d *exampleDao) FindByIDAndUserID(ID int64, UserID int64) (*example.Example, error) {
 	entity := &example.Example{}
-	res := e.Read.Where("id = ?", ID).Where("user_id = ?", UserID).Find(entity)
+	res := d.Read.Where("id = ?", ID).Where("user_id = ?", UserID).Find(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -71,9 +71,9 @@ func (e *exampleDao) FindByIDAndUserID(ID int64, UserID int64) (*example.Example
 	return entity, nil
 }
 
-func (e *exampleDao) FindByUserID(UserID int64) (*example.Example, error) {
+func (d *exampleDao) FindByUserID(UserID int64) (*example.Example, error) {
 	entity := &example.Example{}
-	res := e.Read.Where("user_id = ?", UserID).Find(entity)
+	res := d.Read.Where("user_id = ?", UserID).Find(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -81,9 +81,9 @@ func (e *exampleDao) FindByUserID(UserID int64) (*example.Example, error) {
 	return entity, nil
 }
 
-func (e *exampleDao) List(limit int64) (*example.Examples, error) {
+func (d *exampleDao) List(limit int64) (*example.Examples, error) {
 	entity := &example.Examples{}
-	res := e.Read.Limit(limit).Find(entity)
+	res := d.Read.Limit(limit).Find(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -91,12 +91,12 @@ func (e *exampleDao) List(limit int64) (*example.Examples, error) {
 	return entity, nil
 }
 
-func (e *exampleDao) Update(entity *example.Example, tx *gorm.DB) (*example.Example, error) {
+func (d *exampleDao) Update(entity *example.Example, tx *gorm.DB) (*example.Example, error) {
 	var conn *gorm.DB
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = e.Write
+		conn = d.Write
 	}
 
 	res := conn.Model(&example.Example{}).Where("id = ?", entity.ID).Update(entity)
