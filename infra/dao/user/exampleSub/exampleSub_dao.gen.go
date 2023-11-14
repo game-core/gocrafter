@@ -1,7 +1,7 @@
 package exampleSub
 
 import (
-	"github.com/game-core/gocrafter/config/db"
+	"github.com/game-core/gocrafter/config/database"
 	"github.com/game-core/gocrafter/domain/model/user/exampleSub"
 	exampleSubRepository "github.com/game-core/gocrafter/domain/repository/user/exampleSub"
 	"github.com/jinzhu/gorm"
@@ -12,10 +12,10 @@ type exampleSubDao struct {
 	Write *gorm.DB
 }
 
-func NewExampleSubDao(conn *db.SqlHandler) exampleSubRepository.ExampleSubRepository {
+func NewExampleSubDao(conn *database.SqlHandler) exampleSubRepository.ExampleSubRepository {
 	return &exampleSubDao{
-		Read:  conn.ReadConn,
-		Write: conn.WriteConn,
+		Read:  conn.User.ReadConn,
+		Write: conn.User.WriteConn,
 	}
 }
 
