@@ -6,28 +6,20 @@ import (
     "github.com/google/wire"
 
     "github.com/game-core/gocrafter/config/database"
-    "github.com/game-core/gocrafter/infra/dao"
-    "github.com/game-core/gocrafter/api/service"	
-    "github.com/game-core/gocrafter/api/presentation/controller"
-	"github.com/game-core/gocrafter/api/presentation/middleware"
+    dao "github.com/game-core/gocrafter/infra/dao/user"
+    accountDao "github.com/game-core/gocrafter/infra/dao/user/account"
+    accountController "github.com/game-core/gocrafter/api/presentation/controller/account"	
+	accountService "github.com/game-core/gocrafter/domain/service/account"
 )
 
-// example
-func InitializeExampleController() controller.ExampleController {
-	wire.Build(
-		db.NewDB,
-		dao.NewExampleDao,
-		service.NewExampleService,
-		controller.NewExampleController,
-	)
-
-    return nil
-}
-
-// user
-func InitializeUserMiddleware() middleware.UserMiddleware {
+func InitializeAccountController() accountController.AccountController {
     wire.Build(
-		middleware.NewUserMiddleware,
+       database.NewDB,
+       dao.NewTransactionDao,
+       accountDao.NewAccountDao,
+       accountService.NewAccountService,
+       accountController.NewAccountController,
     )
+ 
     return nil
 }

@@ -1,7 +1,7 @@
 package example
 
 import (
-	"github.com/game-core/gocrafter/domain/model/user/example"
+	"github.com/game-core/gocrafter/domain/entity/user/example"
 	"github.com/jinzhu/gorm"
 )
 

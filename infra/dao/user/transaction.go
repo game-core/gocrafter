@@ -1,10 +1,10 @@
-package dao
+package user
 
 import (
 	"github.com/jinzhu/gorm"
 
-	"github.com/game-core/gocrafter/config/db"
-	"github.com/game-core/gocrafter/domain/repository"
+	"github.com/game-core/gocrafter/config/database"
+	repository "github.com/game-core/gocrafter/domain/repository/user"
 )
 
 type transactionDao struct {
@@ -12,10 +12,10 @@ type transactionDao struct {
 	Write *gorm.DB
 }
 
-func NewTransactionDao(conn *db.SqlHandler) repository.TransactionRepository {
+func NewTransactionDao(conn *database.SqlHandler) repository.TransactionRepository {
 	return &transactionDao{
-		Read:  conn.ReadConn,
-		Write: conn.WriteConn,
+		Read:  conn.User.ReadConn,
+		Write: conn.User.WriteConn,
 	}
 }
 

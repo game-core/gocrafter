@@ -37,7 +37,7 @@ package {{.Package}}
 
 import (
 	"github.com/jinzhu/gorm"
-	"github.com/game-core/gocrafter/domain/model/{{.Database}}/{{.Package}}"
+	"github.com/game-core/gocrafter/domain/entity/{{.Database}}/{{.Package}}"
 )
 
 type {{.Name}}Repository interface {

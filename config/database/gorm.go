@@ -27,18 +27,18 @@ func NewDB() *SqlHandler {
 func userDB() *Conn {
 	readConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		os.Getenv("MYSQL_READ_USER"),
-		os.Getenv("MYSQL_READ_PASSWORD"),
-		os.Getenv("MYSQL_READ_HOST"),
-		os.Getenv("MYSQL_DATABASE"),
+		os.Getenv("USER_MYSQL_READ_USER"),
+		os.Getenv("USER_MYSQL_READ_PASSWORD"),
+		os.Getenv("USER_MYSQL_READ_HOST"),
+		os.Getenv("USER_MYSQL_DATABASE"),
 	)
 
 	writeConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		os.Getenv("MYSQL_WRITE_USER"),
-		os.Getenv("MYSQL_WRITE_PASSWORD"),
-		os.Getenv("MYSQL_WRITE_HOST"),
-		os.Getenv("MYSQL_DATABASE"),
+		os.Getenv("USER_MYSQL_WRITE_USER"),
+		os.Getenv("USER_MYSQL_WRITE_PASSWORD"),
+		os.Getenv("USER_MYSQL_WRITE_HOST"),
+		os.Getenv("USER_MYSQL_DATABASE"),
 	)
 
     readDB, err := gorm.Open("mysql", readConn)
@@ -63,18 +63,18 @@ func userDB() *Conn {
 func masterDB() *Conn {
 	readConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		os.Getenv("MYSQL_READ_USER"),
-		os.Getenv("MYSQL_READ_PASSWORD"),
-		os.Getenv("MYSQL_READ_HOST"),
-		os.Getenv("MYSQL_DATABASE"),
+		os.Getenv("MASTER_MYSQL_READ_USER"),
+		os.Getenv("MASTER_MYSQL_READ_PASSWORD"),
+		os.Getenv("MASTER_MYSQL_READ_HOST"),
+		os.Getenv("MASTER_MYSQL_DATABASE"),
 	)
 
 	writeConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		os.Getenv("MYSQL_WRITE_USER"),
-		os.Getenv("MYSQL_WRITE_PASSWORD"),
-		os.Getenv("MYSQL_WRITE_HOST"),
-		os.Getenv("MYSQL_DATABASE"),
+		os.Getenv("MASTER_MYSQL_WRITE_USER"),
+		os.Getenv("MASTER_MYSQL_WRITE_PASSWORD"),
+		os.Getenv("MASTER_MYSQL_WRITE_HOST"),
+		os.Getenv("MASTER_MYSQL_DATABASE"),
 	)
 	
     readDB, err := gorm.Open("mysql", readConn)

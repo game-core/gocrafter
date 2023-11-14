@@ -2,7 +2,7 @@ package account
 
 import (
 	"github.com/game-core/gocrafter/config/database"
-	"github.com/game-core/gocrafter/domain/model/user/account"
+	"github.com/game-core/gocrafter/domain/entity/user/account"
 	accountRepository "github.com/game-core/gocrafter/domain/repository/user/account"
 	"github.com/jinzhu/gorm"
 )

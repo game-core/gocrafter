@@ -7,7 +7,7 @@ import (
 	request "github.com/game-core/gocrafter/api/presentation/request/account"
 	response "github.com/game-core/gocrafter/api/presentation/response/account"
 	errorResponse "github.com/game-core/gocrafter/api/presentation/response/error"
-	service "github.com/game-core/gocrafter/api/domain/service/account"
+	accountService "github.com/game-core/gocrafter/domain/service/account"
 )
 
 type AccountController interface {
@@ -15,17 +15,19 @@ type AccountController interface {
 }
 
 type exampleController struct {
-	accountService service.AccountService
+	accountService accountService.AccountService
 }
 
-func NewAccountController(accountService service.AccountService) AccountController {
+func NewAccountController(
+	accountService accountService.AccountService,
+) AccountController {
     return &accountController{
         accountService: accountService,
     }
 }
 
 // @tags        Account
-// @Summary     確認用
+// @Summary     アカウント登録
 // @Accept      json
 // @Produce     json
 // @Param       body body parameter.RegisterAccount true "アカウント登録"
@@ -37,7 +39,7 @@ func (a *accountController) RegisterAccount() echo.HandlerFunc {
 		param := &request.RegisterAccount{}
 		c.controller.Bind(param)
 
-		response, err := service.RegisterAccount(param)
+		response, err := a.accountService.RegisterAccount(param)
 		if err != nil {
 			return c.JSON(500, errorResponse.ErrorResponse())
 		}
