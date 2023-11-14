@@ -1,6 +1,7 @@
 name: ExampleSub
 database: user
 package: exampleSub
+table: example_sub
 structure:
   ID:
     name: id

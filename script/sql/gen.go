@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strings"
 	"text/template"
 	"gopkg.in/yaml.v2"
 )
@@ -22,6 +23,7 @@ type StructField struct {
 
 type StructInfo struct {
 	Name     string                 `yaml:"name"`
+	Table    string                 `yaml:"table"`
 	Database string                 `yaml:"database"`
 	Package  string                 `yaml:"package"`
 	Fields   map[string]StructField `yaml:"structure"`
@@ -30,19 +32,13 @@ type StructInfo struct {
 }
 
 const templateCode = `
-package {{.Package}}
-
-import (
-	"time"
-)
-
-type {{.Name}}s []{{.Name}}
-
-type {{.Name}} struct {
+CREATE TABLE {{.Table}} (
 {{range $field := sortByNumber .Fields}}
-	{{$field.Name}} {{$field.TypeWithPointer}} ` + "`json:\"{{$field.Json}}\"{{if eq $field.Name \"CreatedAt\"}} gorm:\"autoCreateTime\"{{else if eq $field.Name \"UpdatedAt\"}} gorm:\"autoUpdateTime\"{{end}}`" + `
+	{{$field.Column}} {{$field.Type}} {{$field.TypeWithPointer}} {{$field.Config}},
 {{end}}
-}
+	{{.PrimaryKey}},
+	{{.IndexKey}}
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 `
 
 func generateEntity(yamlFilePath string, outputBaseDir string) error {
@@ -52,8 +48,7 @@ func generateEntity(yamlFilePath string, outputBaseDir string) error {
 	}
 
 	var structInfo StructInfo
-	err = yaml.Unmarshal(yamlData, &structInfo)
-	if err != nil {
+	if err := yaml.Unmarshal(yamlData, &structInfo); err != nil {
 		return fmt.Errorf("error unmarshalling YAML in file %s: %v", yamlFilePath, err)
 	}
 
@@ -64,13 +59,12 @@ func generateEntity(yamlFilePath string, outputBaseDir string) error {
 		return fmt.Errorf("error parsing template: %v", err)
 	}
 
-	outputDir := filepath.Join(fmt.Sprintf("%s/%s", outputBaseDir, structInfo.Database), structInfo.Package)
-	err = os.MkdirAll(outputDir, os.ModePerm)
-	if err != nil {
+	outputDir := fmt.Sprintf("%s/%s", outputBaseDir, structInfo.Database)
+	if err := os.MkdirAll(outputDir, os.ModePerm); err != nil {
 		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
 	}
 
-	outputFileName := filepath.Join(outputDir, fmt.Sprintf("%s_entiry.gen.go", structInfo.Package))
+	outputFileName := filepath.Join(outputDir, fmt.Sprintf("%s.sql", structInfo.Package))
 	outputFile, err := os.Create(outputFileName)
 	if err != nil {
 		return fmt.Errorf("outputFileName file %s create error: %v", outputFileName, err)
@@ -82,18 +76,35 @@ func generateEntity(yamlFilePath string, outputBaseDir string) error {
 		fieldsOrdered = append(fieldsOrdered, fieldName)
 	}
 
-	err = tmpl.ExecuteTemplate(outputFile, "structTemplate", struct {
-		Name        string
-		Package     string
+	var primaryStrings []string
+	for _, primary := range structInfo.Primary {
+		for field := range structInfo.Fields {
+			if field == primary {
+				primaryStrings = append(primaryStrings, fmt.Sprintf("PRIMARY KEY(%s)", structInfo.Fields[field].Name))
+			}
+		}
+	}
+
+	var indexStrings []string
+	for _, index := range structInfo.Index {
+		for field := range structInfo.Fields {
+			if field == index {
+				indexStrings = append(indexStrings, fmt.Sprintf("INDEX(%s)", structInfo.Fields[field].Name))
+			}
+		}
+	}
+
+	if err = tmpl.ExecuteTemplate(outputFile, "structTemplate", struct {
+		Table       string
 		Fields      map[string]StructField
-		FieldsOrder []string
+		PrimaryKey  string
+		IndexKey    string
 	}{
-		Name:        structInfo.Name,
-		Package:     structInfo.Package,
+		Table:       structInfo.Table,
 		Fields:      structInfo.Fields,
-		FieldsOrder: fieldsOrdered,
-	})
-	if err != nil {
+		PrimaryKey:  strings.Join(primaryStrings, ","),
+		IndexKey:    strings.Join(indexStrings, ","),
+	}); err != nil {
 		return fmt.Errorf("template error: %v", err)
 	}
 
@@ -105,27 +116,35 @@ func generateEntity(yamlFilePath string, outputBaseDir string) error {
 func sortByNumber(fields map[string]StructField) []struct {
 	Name            string
 	FieldInfo       StructField
+	Column          string
+	Type            string
 	TypeWithPointer string
-	Json            string
+	Config          string
 } {
 	var sortedFields []struct {
 		Name            string
 		FieldInfo       StructField
+		Column          string
+		Type            string
 		TypeWithPointer string
-		Json            string
+		Config          string
 	}
 
 	for name, fieldInfo := range fields {
 		sortedFields = append(sortedFields, struct {
 			Name            string
 			FieldInfo       StructField
+			Column          string
+			Type            string
 			TypeWithPointer string
-			Json            string
+			Config          string
 		}{
 			Name:            name,
 			FieldInfo:       fieldInfo,
+			Column:          fieldInfo.Name,
+			Type:            getType(fieldInfo),  
 			TypeWithPointer: getTypeWithPointer(fieldInfo),
-			Json:            fieldInfo.Name,
+			Config:          getConfig(fieldInfo),
 		})
 	}
 
@@ -136,15 +155,45 @@ func sortByNumber(fields map[string]StructField) []struct {
 	return sortedFields
 }
 
+func getType(fieldInfo StructField)  string {
+	if fieldInfo.Type == "string" {
+		return "VARCHAR(255)"
+	} else if fieldInfo.Type == "int64" {
+		return "BIGINT"
+	} else if fieldInfo.Type == "int" {
+		return "INT"
+	} else if fieldInfo.Type == "time.Time" {
+		return "TIMESTAMP"
+	} 
+
+	return ""
+}
+
 func getTypeWithPointer(fieldInfo StructField) string {
 	if fieldInfo.Nullable {
-		return "*" + fieldInfo.Type
+		return "DEFAULT NULL"
 	}
-	return fieldInfo.Type
+	return "NOT NULL"
+}
+
+func getConfig(fieldInfo StructField)  string {
+	if fieldInfo.Name == "id" {
+		return "AUTO_INCREMENT"
+	}
+
+	return ""
+}
+
+func getPrimary(fieldInfo StructField) string {
+	if fieldInfo.Name == "id" {
+		return "PRIMARY KEY (id),"
+	}
+	
+	return ""
 }
 
 func main() {
-	userOutput := "../../domain/entity"
+	userOutput := "../../docs/sql"
 	userYamlFiles, err := filepath.Glob("../../docs/entity/*.yaml")
 	if err != nil {
 		log.Fatalf("Error finding YAML files: %v", err)

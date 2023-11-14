@@ -1,6 +1,7 @@
 name: Example
 database: user
 package: example
+table: example
 structure:
   ID:
     name: id
