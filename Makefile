@@ -56,7 +56,6 @@ docker_sql_gen:
 # Swaggerを自動生成
 docker_swag_gen:
 	docker compose -f docker-compose.local.yml exec api swag init --dir=api --output=docs/swagger/api
-	docker compose -f docker-compose.local.yml exec auth swag init --dir=auth --output=docs/swagger/auth
 
 # Swaggerのモックサーバーを起動
 docker_swag_mock:

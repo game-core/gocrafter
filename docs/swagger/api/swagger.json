@@ -13,8 +13,8 @@
     "host": "localhost:8001",
     "basePath": "/",
     "paths": {
-        "/example/{example_key}/get_example": {
-            "get": {
+        "/account/register": {
+            "post": {
                 "consumes": [
                     "application/json"
                 ],
@@ -22,45 +22,31 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Example"
+                    "Account"
                 ],
-                "summary": "確認用",
+                "summary": "アカウント登録",
                 "parameters": [
                     {
-                        "maxLength": 20,
-                        "type": "string",
-                        "description": "example_key",
-                        "name": "example_key",
-                        "in": "path",
-                        "required": true
+                        "description": "アカウント登録",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github.com_game-core_gocrafter_api_presentation_request_account.RegisterAccount"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Success"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "items": {
-                                            "$ref": "#/definitions/output.Example"
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/github.com_game-core_gocrafter_api_presentation_response_account.RegisterAccount"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/output.Error"
-                            }
+                            "$ref": "#/definitions/error.Error"
                         }
                     }
                 }
@@ -68,36 +54,41 @@
         }
     },
     "definitions": {
-        "output.Error": {
+        "error.Error": {
             "type": "object",
             "properties": {
-                "message": {
+                "error_message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github.com_game-core_gocrafter_api_presentation_request_account.RegisterAccount": {
+            "type": "object",
+            "properties": {
+                "name": {
                     "type": "string"
                 }
             }
         },
-        "output.Example": {
+        "github.com_game-core_gocrafter_api_presentation_response_account.RegisterAccount": {
             "type": "object",
             "properties": {
-                "example_key": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
                     "type": "string"
                 },
-                "example_name": {
+                "password": {
                     "type": "string"
                 },
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "response.Success": {
-            "type": "object",
-            "properties": {
-                "items": {},
                 "status": {
                     "type": "integer"
                 },
-                "types": {
+                "uuid": {
                     "type": "string"
                 }
             }

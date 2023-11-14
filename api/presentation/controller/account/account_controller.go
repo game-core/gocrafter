@@ -3,6 +3,7 @@ package account
 import (
 	"github.com/labstack/echo/v4"
 	
+	_ "github.com/game-core/gocrafter/api/presentation/response/account"
 	request "github.com/game-core/gocrafter/api/presentation/request/account"
 	errorResponse "github.com/game-core/gocrafter/api/presentation/response/error"
 	accountService "github.com/game-core/gocrafter/domain/service/account"
@@ -28,16 +29,16 @@ func NewAccountController(
 // @Summary     アカウント登録
 // @Accept      json
 // @Produce     json
-// @Param       body body parameter.RegisterAccount true "アカウント登録"
+// @Param       body body request.RegisterAccount true "アカウント登録"
 // @Router      /account/register [post]
-// @Success     200  {object} response.RegisterAccount
-// @Failure     500  {array}  output.Error
+// @Success     200  {object} account.RegisterAccount
+// @Failure     500  {object}  errorResponse.Error
 func (a *accountController) RegisterAccount() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		param := &request.RegisterAccount{}
-		c.Bind(param)
+		request := &request.RegisterAccount{}
+		c.Bind(request)
 
-		response, err := a.accountService.RegisterAccount(param)
+		response, err := a.accountService.RegisterAccount(request)
 		if err != nil {
 			return c.JSON(500, &errorResponse.Error{
 				Status: 500,

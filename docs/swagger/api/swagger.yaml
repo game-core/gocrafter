@@ -1,25 +1,28 @@
 basePath: /
 definitions:
-  output.Error:
+  error.Error:
     properties:
-      message:
+      error_message:
         type: string
-    type: object
-  output.Example:
-    properties:
-      example_key:
-        type: string
-      example_name:
-        type: string
-      message:
-        type: string
-    type: object
-  response.Success:
-    properties:
-      items: {}
       status:
         type: integer
-      types:
+    type: object
+  github.com_game-core_gocrafter_api_presentation_request_account.RegisterAccount:
+    properties:
+      name:
+        type: string
+    type: object
+  github.com_game-core_gocrafter_api_presentation_response_account.RegisterAccount:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      password:
+        type: string
+      status:
+        type: integer
+      uuid:
         type: string
     type: object
 host: localhost:8001
@@ -32,36 +35,29 @@ info:
   title: Chat Connect
   version: "1.0"
 paths:
-  /example/{example_key}/get_example:
-    get:
+  /account/register:
+    post:
       consumes:
       - application/json
       parameters:
-      - description: example_key
-        in: path
-        maxLength: 20
-        name: example_key
+      - description: アカウント登録
+        in: body
+        name: body
         required: true
-        type: string
+        schema:
+          $ref: '#/definitions/github.com_game-core_gocrafter_api_presentation_request_account.RegisterAccount'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            allOf:
-            - $ref: '#/definitions/response.Success'
-            - properties:
-                items:
-                  $ref: '#/definitions/output.Example'
-              type: object
+            $ref: '#/definitions/github.com_game-core_gocrafter_api_presentation_response_account.RegisterAccount'
         "500":
           description: Internal Server Error
           schema:
-            items:
-              $ref: '#/definitions/output.Error'
-            type: array
-      summary: 確認用
+            $ref: '#/definitions/error.Error'
+      summary: アカウント登録
       tags:
-      - Example
+      - Account
 swagger: "2.0"
