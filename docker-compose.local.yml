@@ -3,22 +3,44 @@ version: '3.8'
 name: gocrafter
 
 services:
-  # DB
-  db:
-    container_name: gocrafter-db
+  # UserDB
+  db_user:
+    container_name: gocrafter-db-user
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: mysql_root
-      MYSQL_DATABASE: echo_ddd_api_local
+      MYSQL_DATABASE: gocrafter_user
       MYSQL_USER: mysql_user
       MYSQL_PASSWORD: mysql_password
       TZ: 'Asia/Tokyo'
     volumes:
-      - ./docker/db/data:/var/lib/mysql  
-      - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
-      - ./docker/db/sql:/docker-entrypoint-initdb.d
+      - ./docker/db_user/data:/var/lib/mysql  
+      - ./docker/db_user/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./docker/db_user/sql:/docker-entrypoint-initdb.d
     ports:
       - "3306:3306"
+    tty: true
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+  
+  # MasterDB
+  db_master:
+    container_name: gocrafter-db-master
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql_root
+      MYSQL_DATABASE: gocrafter_master
+      MYSQL_USER: mysql_user
+      MYSQL_PASSWORD: mysql_password
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - ./docker/db_master/data:/var/lib/mysql  
+      - ./docker/db_master/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./docker/db_master/sql:/docker-entrypoint-initdb.d
+    ports:
+      - "3307:3306"
     tty: true
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
@@ -29,7 +51,7 @@ services:
   gen:
     container_name: gocrafter-gen
     env_file:
-      - .env.api.local
+      - .env.local
     build:
       target: dev
       context: .
@@ -38,14 +60,16 @@ services:
       - ./:/go/src/app
     tty: true
     depends_on:
-      db:
+      db_user:
+        condition: service_healthy
+      db_master:
         condition: service_healthy
 
   # API
   api:
     container_name: gocrafter-api
     env_file:
-      - .env.api.local
+      - .env.local
     build: 
       target: dev
       context: .
@@ -56,14 +80,16 @@ services:
       - "8001:8000"
     tty: true
     depends_on:
-      db:
+      db_user:
+        condition: service_healthy
+      db_master:
         condition: service_healthy
 
   # Batch
   batch:
     container_name: gocrafter-batch
     env_file:
-      - .env.api.local
+      - .env.local
     build:
       target: dev
       context: .
@@ -72,14 +98,16 @@ services:
       - ./:/go/src/app
     tty: true
     depends_on:
-      db:
+      db_user:
+        condition: service_healthy
+      db_master:
         condition: service_healthy
 
   # Swagger
   swagger:
     container_name: gocrafter-swagger
     env_file:
-      - .env.api.local
+      - .env.local
     build:
       target: dev
       context: .

@@ -3,22 +3,44 @@ version: '3.8'
 name: gocrafter-test
 
 services:
-# Test DB
-  test_db:
-    container_name: gocrafter-test-db
+  # UserDB
+  test_db_user:
+    container_name: gocrafter-test-db-user
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: mysql_root
-      MYSQL_DATABASE: echo_ddd_test
+      MYSQL_DATABASE: gocrafter_user
       MYSQL_USER: mysql_user
       MYSQL_PASSWORD: mysql_password
       TZ: 'Asia/Tokyo'
     volumes:
-      - ./docker/test_db/data:/var/lib/mysql  
-      - ./docker/test_db/my.cnf:/etc/mysql/conf.d/my.cnf
-      - ./docker/test_db/sql:/docker-entrypoint-initdb.d
+      - ./docker/test_db_user/data:/var/lib/mysql  
+      - ./docker/test_db_user/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./docker/test_db_user/sql:/docker-entrypoint-initdb.d
     ports:
-      - "3307:3306"
+      - "3308:3306"
+    tty: true
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+  
+  # MasterDB
+  test_db_master:
+    container_name: gocrafter-test-db-master
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql_root
+      MYSQL_DATABASE: gocrafter_master
+      MYSQL_USER: mysql_user
+      MYSQL_PASSWORD: mysql_password
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - ./docker/test_db_master/data:/var/lib/mysql  
+      - ./docker/test_db_master/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./docker/test_db_master/sql:/docker-entrypoint-initdb.d
+    ports:
+      - "3309:3306"
     tty: true
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
@@ -46,5 +68,7 @@ services:
       - ./:/go/src/app
     tty: true
     depends_on:
-      test_db:
+      test_db_user:
+        condition: service_healthy
+      test_db_master:
         condition: service_healthy

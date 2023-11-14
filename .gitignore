@@ -5,7 +5,11 @@
 /log/batch_debug.log
 /static/images
 
-/docker/db/sql
-/docker/db/data
-/docker/test_db/sql
-/docker/test_db/data
+/docker/db_user/sql
+/docker/db_user/data
+/docker/db_master/sql
+/docker/db_master/data
+/docker/test_db_user/sql
+/docker/test_db_user/data
+/docker/test_db_master/sql
+/docker/test_db_master/data
