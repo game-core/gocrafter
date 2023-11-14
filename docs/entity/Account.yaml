@@ -10,7 +10,7 @@ structure:
     number: 1
   UUID:
     name: uuid
-    type: int64
+    type: string
     nullable: false
     number: 2
   Name:

@@ -7,26 +7,20 @@
 package di
 
 import (
-	"github.com/game-core/gocrafter/api/presentation/controller"
-	"github.com/game-core/gocrafter/api/presentation/middleware"
-	"github.com/game-core/gocrafter/api/service"
-	"github.com/game-core/gocrafter/config/db"
-	"github.com/game-core/gocrafter/infra/dao"
+	"github.com/game-core/gocrafter/api/presentation/controller/account"
+	"github.com/game-core/gocrafter/config/database"
+	account3 "github.com/game-core/gocrafter/domain/service/account"
+	"github.com/game-core/gocrafter/infra/dao/user"
+	account2 "github.com/game-core/gocrafter/infra/dao/user/account"
 )
 
 // Injectors from wire.go:
 
-// example
-func InitializeExampleController() controller.ExampleController {
-	sqlHandler := db.NewDB()
-	exampleRepository := dao.NewExampleDao(sqlHandler)
-	exampleService := service.NewExampleService(exampleRepository)
-	exampleController := controller.NewExampleController(exampleService)
-	return exampleController
-}
-
-// user
-func InitializeUserMiddleware() middleware.UserMiddleware {
-	userMiddleware := middleware.NewUserMiddleware()
-	return userMiddleware
+func InitializeAccountController() account.AccountController {
+	sqlHandler := database.NewDB()
+	transactionRepository := user.NewTransactionDao(sqlHandler)
+	accountRepository := account2.NewAccountDao(sqlHandler)
+	accountService := account3.NewAccountService(transactionRepository, accountRepository)
+	accountController := account.NewAccountController(accountService)
+	return accountController
 }

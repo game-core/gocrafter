@@ -6,8 +6,6 @@ docker_up:
 # wireを自動生成
 docker_wire_gen:
 	docker compose -f docker-compose.local.yml exec gen wire api/di/wire.go
-	docker compose -f docker-compose.local.yml exec gen wire auth/di/wire.go
-	docker compose -f docker-compose.local.yml exec gen wire batch/di/wire.go
 
 # 全てのappを自動生成
 docker_app_gen:

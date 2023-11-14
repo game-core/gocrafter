@@ -61,7 +61,7 @@ func (d *accountDao) FindByID(ID int64) (*account.Account, error) {
 	return entity, nil
 }
 
-func (d *accountDao) FindByIDAndUUID(ID int64, UUID int64) (*account.Account, error) {
+func (d *accountDao) FindByIDAndUUID(ID int64, UUID string) (*account.Account, error) {
 	entity := &account.Account{}
 	res := d.Read.Where("id = ?", ID).Where("uuid = ?", UUID).Find(entity)
 	if err := res.Error; err != nil {
@@ -71,7 +71,7 @@ func (d *accountDao) FindByIDAndUUID(ID int64, UUID int64) (*account.Account, er
 	return entity, nil
 }
 
-func (d *accountDao) FindByUUID(UUID int64) (*account.Account, error) {
+func (d *accountDao) FindByUUID(UUID string) (*account.Account, error) {
 	entity := &account.Account{}
 	res := d.Read.Where("uuid = ?", UUID).Find(entity)
 	if err := res.Error; err != nil {

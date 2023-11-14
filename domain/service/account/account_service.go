@@ -1,6 +1,8 @@
 package account
 
 import (
+	"log"
+
 	"github.com/game-core/gocrafter/config/key"
 	repository "github.com/game-core/gocrafter/domain/repository/user"
 	request "github.com/game-core/gocrafter/api/presentation/request/account"
@@ -15,13 +17,13 @@ type AccountService interface {
 
 type accountService struct {
 	transactionRepository repository.TransactionRepository
-	accountRepository     accountRepository.AccounRepository
+	accountRepository     accountRepository.AccountRepository
 }
 
 func NewAccountService(
 	transactionRepository repository.TransactionRepository,
-	accountRepository accountRepository.AccounRepository,
-) AccounService {
+	accountRepository     accountRepository.AccountRepository,
+) AccountService {
 	return &accountService{
 		transactionRepository: transactionRepository,
 		accountRepository:     accountRepository,
@@ -47,10 +49,20 @@ func (a *accountService) RegisterAccount(req *request.RegisterAccount) (*respons
 		}
 	}()
 
+	uuid, err := key.GenerateKey()
+	if err != nil {
+		return nil, err
+	}
+
+	pass, err := key.GenerateKey()
+	if err != nil {
+		return nil, err
+	}
+
 	account := &accountEntity.Account{
-		UUID:     key.GenerateKey(),
+		UUID:     uuid,
 		Name:     req.Name,
-		Password: key.GenerateKey(),
+		Password: pass,
 	}
 
 	ar, err := a.accountRepository.Create(account, tx)

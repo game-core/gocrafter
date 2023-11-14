@@ -9,7 +9,7 @@ services:
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: mysql_root
-      MYSQL_DATABASE: gocrafter_user
+      MYSQL_DATABASE: gocrafter_user_test
       MYSQL_USER: mysql_user
       MYSQL_PASSWORD: mysql_password
       TZ: 'Asia/Tokyo'
@@ -31,7 +31,7 @@ services:
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: mysql_root
-      MYSQL_DATABASE: gocrafter_master
+      MYSQL_DATABASE: gocrafter_master_test
       MYSQL_USER: mysql_user
       MYSQL_PASSWORD: mysql_password
       TZ: 'Asia/Tokyo'
@@ -50,16 +50,8 @@ services:
 # API Test
   test_api:
     container_name: gocrafter-test-api
-    environment:
-      MYSQL_DATABASE: echo_ddd_test
-      MYSQL_WRITE_USER: mysql_user
-      MYSQL_WRITE_PASSWORD: mysql_password
-      MYSQL_WRITE_HOST: echo-ddd-db-test
-      MYSQL_READ_USER: mysql_user
-      MYSQL_READ_PASSWORD: mysql_password
-      MYSQL_READ_HOST: echo-ddd-db-test
-      TEST_API_URL: http://0.0.0.0:8000
-      AUTH_SECRET: secret_key
+    env_file:
+      - .env.test
     build:
       target: dev
       context: .

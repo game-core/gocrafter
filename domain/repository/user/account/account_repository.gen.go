@@ -12,9 +12,9 @@ type AccountRepository interface {
 
 	FindByID(ID int64) (*account.Account, error)
 
-	FindByIDAndUUID(ID int64, UUID int64) (*account.Account, error)
+	FindByIDAndUUID(ID int64, UUID string) (*account.Account, error)
 
-	FindByUUID(UUID int64) (*account.Account, error)
+	FindByUUID(UUID string) (*account.Account, error)
 
 	List(limit int64) (*account.Accounts, error)
 
