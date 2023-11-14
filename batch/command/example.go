@@ -5,7 +5,7 @@ import (
 	"time"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
-	"github.com/architecture-template/echo-ddd/batch/service"
+	"github.com/game-core/gocrafter/batch/service"
 )
 
 type ExampleCommand interface {

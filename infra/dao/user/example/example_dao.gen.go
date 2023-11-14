@@ -1,9 +1,9 @@
 package example
 
 import (
-	"github.com/architecture-template/echo-ddd/config/database"
-	"github.com/architecture-template/echo-ddd/domain/model/user/example"
-	exampleRepository "github.com/architecture-template/echo-ddd/domain/repository/user/example"
+	"github.com/game-core/gocrafter/config/database"
+	"github.com/game-core/gocrafter/domain/model/user/example"
+	exampleRepository "github.com/game-core/gocrafter/domain/repository/user/example"
 	"github.com/jinzhu/gorm"
 )
 

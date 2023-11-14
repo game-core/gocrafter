@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/architecture-template/echo-ddd/api/presentation/router"
+	"github.com/game-core/gocrafter/api/presentation/router"
 )
 
 // @title Chat Connect

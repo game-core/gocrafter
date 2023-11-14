@@ -1,9 +1,9 @@
 package exampleSub
 
 import (
-	"github.com/architecture-template/echo-ddd/config/db"
-	"github.com/architecture-template/echo-ddd/domain/model/user/exampleSub"
-	exampleSubRepository "github.com/architecture-template/echo-ddd/domain/repository/user/exampleSub"
+	"github.com/game-core/gocrafter/config/db"
+	"github.com/game-core/gocrafter/domain/model/user/exampleSub"
+	exampleSubRepository "github.com/game-core/gocrafter/domain/repository/user/exampleSub"
 	"github.com/jinzhu/gorm"
 )
 

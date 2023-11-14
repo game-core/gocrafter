@@ -5,11 +5,11 @@ package di
 import (
     "github.com/google/wire"
 
-    "github.com/architecture-template/echo-ddd/config/database"
-    "github.com/architecture-template/echo-ddd/infra/dao"
-    "github.com/architecture-template/echo-ddd/api/service"	
-    "github.com/architecture-template/echo-ddd/api/presentation/controller"
-	"github.com/architecture-template/echo-ddd/api/presentation/middleware"
+    "github.com/game-core/gocrafter/config/database"
+    "github.com/game-core/gocrafter/infra/dao"
+    "github.com/game-core/gocrafter/api/service"	
+    "github.com/game-core/gocrafter/api/presentation/controller"
+	"github.com/game-core/gocrafter/api/presentation/middleware"
 )
 
 // example

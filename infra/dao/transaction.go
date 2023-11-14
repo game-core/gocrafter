@@ -3,8 +3,8 @@ package dao
 import (
 	"github.com/jinzhu/gorm"
 
-	"github.com/architecture-template/echo-ddd/config/db"
-	"github.com/architecture-template/echo-ddd/domain/repository"
+	"github.com/game-core/gocrafter/config/db"
+	"github.com/game-core/gocrafter/domain/repository"
 )
 
 type transactionDao struct {

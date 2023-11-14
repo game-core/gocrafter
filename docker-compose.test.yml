@@ -1,11 +1,11 @@
 version: '3.8'
 
-name: echo-ddd-test
+name: gocrafter-test
 
 services:
 # Test DB
   test_db:
-    container_name: echo-ddd-db-test
+    container_name: gocrafter-test-db
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: mysql_root
@@ -27,7 +27,7 @@ services:
 
 # API Test
   test_api:
-    container_name: echo-ddd-api-test
+    container_name: gocrafter-test-api
     environment:
       MYSQL_DATABASE: echo_ddd_test
       MYSQL_WRITE_USER: mysql_user

@@ -1,4 +1,4 @@
-module github.com/architecture-template/echo-ddd
+module github.com/game-core/gocrafter
 
 go 1.19
 

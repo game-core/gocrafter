@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/architecture-template/echo-ddd/api/presentation/parameter"
-	"github.com/architecture-template/echo-ddd/domain/model"
-	"github.com/architecture-template/echo-ddd/domain/repository"
+	"github.com/game-core/gocrafter/api/presentation/parameter"
+	"github.com/game-core/gocrafter/domain/model"
+	"github.com/game-core/gocrafter/domain/repository"
 )
 
 type ExampleService interface {

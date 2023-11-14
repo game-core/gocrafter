@@ -1,7 +1,7 @@
 package example
 
 import (
-	"github.com/architecture-template/echo-ddd/domain/model/user/example"
+	"github.com/game-core/gocrafter/domain/model/user/example"
 	"github.com/jinzhu/gorm"
 )
 

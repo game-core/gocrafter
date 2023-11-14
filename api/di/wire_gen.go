@@ -7,11 +7,11 @@
 package di
 
 import (
-	"github.com/architecture-template/echo-ddd/api/presentation/controller"
-	"github.com/architecture-template/echo-ddd/api/presentation/middleware"
-	"github.com/architecture-template/echo-ddd/api/service"
-	"github.com/architecture-template/echo-ddd/config/db"
-	"github.com/architecture-template/echo-ddd/infra/dao"
+	"github.com/game-core/gocrafter/api/presentation/controller"
+	"github.com/game-core/gocrafter/api/presentation/middleware"
+	"github.com/game-core/gocrafter/api/service"
+	"github.com/game-core/gocrafter/config/db"
+	"github.com/game-core/gocrafter/infra/dao"
 )
 
 // Injectors from wire.go:

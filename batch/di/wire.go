@@ -5,10 +5,10 @@ package di
 import (
     "github.com/google/wire"
 
-    "github.com/architecture-template/echo-ddd/config/db"
-    "github.com/architecture-template/echo-ddd/infra/dao"
-    "github.com/architecture-template/echo-ddd/batch/service"	
-    "github.com/architecture-template/echo-ddd/batch/command"
+    "github.com/game-core/gocrafter/config/db"
+    "github.com/game-core/gocrafter/infra/dao"
+    "github.com/game-core/gocrafter/batch/service"	
+    "github.com/game-core/gocrafter/batch/command"
 )
 
 // example

@@ -1,7 +1,7 @@
 package exampleSub
 
 import (
-	"github.com/architecture-template/echo-ddd/domain/model/user/exampleSub"
+	"github.com/game-core/gocrafter/domain/model/user/exampleSub"
 	"github.com/jinzhu/gorm"
 )
 

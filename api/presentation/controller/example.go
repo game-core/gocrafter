@@ -3,10 +3,10 @@ package controller
 import (
 	"github.com/labstack/echo/v4"
 	
-	"github.com/architecture-template/echo-ddd/api/service"
-	"github.com/architecture-template/echo-ddd/api/presentation/parameter"
-	"github.com/architecture-template/echo-ddd/api/presentation/output"
-	"github.com/architecture-template/echo-ddd/api/presentation/response"
+	"github.com/game-core/gocrafter/api/service"
+	"github.com/game-core/gocrafter/api/presentation/parameter"
+	"github.com/game-core/gocrafter/api/presentation/output"
+	"github.com/game-core/gocrafter/api/presentation/response"
 )
 
 type ExampleController interface {

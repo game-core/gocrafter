@@ -5,8 +5,8 @@ import (
     "fmt"
     "log"
 
-    "github.com/architecture-template/echo-ddd/batch/di"
-    batchLog "github.com/architecture-template/echo-ddd/log"
+    "github.com/game-core/gocrafter/batch/di"
+    batchLog "github.com/game-core/gocrafter/log"
 )
 
 func main() {

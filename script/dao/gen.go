@@ -38,8 +38,8 @@ package {{.Package}}
 
 import (
 	"github.com/jinzhu/gorm"
-	"github.com/architecture-template/echo-ddd/config/database"
-	"github.com/architecture-template/echo-ddd/domain/model/{{.Database}}/{{.Package}}"
+	"github.com/game-core/gocrafter/config/database"
+	"github.com/game-core/gocrafter/domain/model/{{.Database}}/{{.Package}}"
 	{{.RepositoryImportPath}}
 )
 
@@ -228,7 +228,7 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 		Package:              structInfo.Package,
 		Database:             structInfo.Database,
 		Methods:              methods,
-		RepositoryImportPath: fmt.Sprintf("%s \"github.com/architecture-template/echo-ddd/domain/repository/%s/%s\"", structInfo.Package+"Repository", structInfo.Database, structInfo.Package),
+		RepositoryImportPath: fmt.Sprintf("%s \"github.com/game-core/gocrafter/domain/repository/%s/%s\"", structInfo.Package+"Repository", structInfo.Database, structInfo.Package),
 		RepositoryInterface:  fmt.Sprintf("%sRepository", structInfo.Name),
 	})
 	if err != nil {

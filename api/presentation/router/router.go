@@ -6,9 +6,9 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	echoSwagger "github.com/swaggo/echo-swagger"
 
-	"github.com/architecture-template/echo-ddd/api/di"
-	"github.com/architecture-template/echo-ddd/log"
-	_ "github.com/architecture-template/echo-ddd/docs/swagger/api"
+	"github.com/game-core/gocrafter/api/di"
+	"github.com/game-core/gocrafter/log"
+	_ "github.com/game-core/gocrafter/docs/swagger/api"
 )
 
 func Init() {
