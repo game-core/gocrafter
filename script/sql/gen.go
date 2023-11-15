@@ -201,37 +201,26 @@ func getPrimary(fieldInfo StructField) string {
 }
 
 func fileExistsWithDifferentDateTime(directory, fileName string) bool {
-	// ディレクトリ内のファイル一覧を取得
 	fileList, err := filepath.Glob(filepath.Join(directory, "*"))
 	if err != nil {
-		fmt.Println("Error:", err)
 		return false
 	}
 
-	// 指定されたファイル名から日時情報を取り除く
 	targetFileName := extractFileName(fileName)
-
-	// ディレクトリ内のファイルを走査して同じファイル名が存在するか確認
+	
 	for _, existingFile := range fileList {
 		existingFileName := extractFileName(existingFile)
-
-		// 同じファイル名が存在する場合、日時情報が異なっていてもtrueを返す
 		if existingFileName == targetFileName {
 			return true
 		}
 	}
 
-	// 同じファイル名が見つからない場合はfalseを返す
 	return false
 }
 
-// ファイル名から日時情報を取り除く関数
 func extractFileName(filePath string) string {
-	// ファイルパスをスラッシュで分割して最後の要素を取得
 	elements := strings.Split(filePath, "/")
 	fileName := elements[len(elements)-1]
-
-	// ファイル名から日時情報を取り除く
 	parts := strings.Split(fileName, "_")
 	if len(parts) > 1 {
 		fileName = parts[1]
