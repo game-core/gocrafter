@@ -37,14 +37,9 @@ type {{.Name}} struct {
 `
 
 func generateResponse(yamlFilePath string, outputBaseDir string) error {
-	yamlData, err := ioutil.ReadFile(yamlFilePath)
+	structInfo, err := getStructInfo(yamlFilePath)
 	if err != nil {
-		return fmt.Errorf("error reading YAML file %s: %v", yamlFilePath, err)
-	}
-
-	var structInfo StructInfo
-	if err = yaml.Unmarshal(yamlData, &structInfo); err != nil {
-		return fmt.Errorf("error unmarshalling YAML in file %s: %v", yamlFilePath, err)
+		return err
 	}
 
 	tmpl, err := template.New("structTemplate").Funcs(template.FuncMap{
@@ -117,11 +112,25 @@ func sortByNumber(fields map[string]StructField) []struct {
 	return sortedFields
 }
 
+func getStructInfo(yamlFilePath string) (*StructInfo, error) {
+	yamlData, err := ioutil.ReadFile(yamlFilePath)
+	if err != nil {
+		return nil, fmt.Errorf("error reading YAML file %s: %v", yamlFilePath, err)
+	}
+
+	var structInfo StructInfo
+	if err := yaml.Unmarshal(yamlData, &structInfo); err != nil {
+		return nil, fmt.Errorf("error unmarshalling YAML in file %s: %v", yamlFilePath, err)
+	}
+
+	return &structInfo, nil
+}
+
 func getTypeWithPointer(fieldInfo StructField) string {
 	if fieldInfo.Nullable {
 		return "*" + fieldInfo.Type
 	}
-	
+
 	return fieldInfo.Type
 }
 
