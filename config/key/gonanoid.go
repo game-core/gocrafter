@@ -2,7 +2,7 @@ package key
 
 import (
 	"golang.org/x/crypto/bcrypt"
-	
+
 	gonanoid "github.com/matoous/go-nanoid/v2"
 )
 
@@ -29,4 +29,13 @@ func GeneratePassword() (string, string, error) {
 	}
 
 	return password, string(hashedPassword), nil
+}
+
+// Checkassword パスワードを検証する
+func CheckPassword(password, hashPassword string) bool {
+	if err := bcrypt.CompareHashAndPassword([]byte(hashPassword), []byte(password)); err != nil {
+		return false
+	}
+
+	return true
 }
