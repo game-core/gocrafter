@@ -8,6 +8,7 @@ package di
 
 import (
 	"github.com/game-core/gocrafter/api/presentation/controller/account"
+	"github.com/game-core/gocrafter/api/presentation/middleware"
 	"github.com/game-core/gocrafter/config/database"
 	account3 "github.com/game-core/gocrafter/domain/service/account"
 	"github.com/game-core/gocrafter/infra/dao/user"
@@ -15,6 +16,11 @@ import (
 )
 
 // Injectors from wire.go:
+
+func InitializeAccountMiddleware() middleware.AccountMiddleware {
+	accountMiddleware := middleware.NewAccountMiddleware()
+	return accountMiddleware
+}
 
 func InitializeAccountController() account.AccountController {
 	sqlHandler := database.NewDB()

@@ -14,8 +14,9 @@ import (
 )
 
 type AccountService interface {
-	RegisterAccount(request *request.RegisterAccount) (*response.RegisterAccount, error)
-	LoginAccount(request *request.LoginAccount) (*response.LoginAccount, error)
+	RegisterAccount(req *request.RegisterAccount) (*response.RegisterAccount, error)
+	LoginAccount(req *request.LoginAccount) (*response.LoginAccount, error)
+	CheckAccount(req *request.CheckAccount) (*response.CheckAccount, error)
 }
 
 type accountService struct {
@@ -109,6 +110,25 @@ func (a *accountService) LoginAccount(req *request.LoginAccount) (*response.Logi
 			Name:     ar.Name,
 			Password: req.Password,
 			Token:    token,
+		},
+	}, nil
+}
+
+// ChekAccount アカウントを確認する
+func (a *accountService) CheckAccount(req *request.CheckAccount) (*response.CheckAccount, error) {
+	ar, err := a.accountRepository.FindByUUID(req.UUID)
+	if err != nil {
+		return nil, err
+	}
+
+	return &response.CheckAccount{
+		Status: 200,
+		Item: response.Account{
+			ID:       ar.ID,
+			UUID:     ar.UUID,
+			Name:     ar.Name,
+			Password: "",
+			Token:    "",
 		},
 	}, nil
 }
