@@ -73,8 +73,7 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 	}
 
 	outputDir := filepath.Join(fmt.Sprintf("%s/%s", outputBaseDir, structInfo.Database), structInfo.Package)
-	err = os.MkdirAll(outputDir, os.ModePerm)
-	if err != nil {
+	if err := os.MkdirAll(outputDir, os.ModePerm); err != nil {
 		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
 	}
 
@@ -91,16 +90,22 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 	if len(structInfo.Primary) > 0 {
 		methods["FindByID"] = methodType{
 			Script: fmt.Sprintf(`
-			func (d *%sDao) FindByID(ID int64) (*%s.%s, error) {
-				entity := &%s.%s{}
-				res := d.Read.Where("id = ?", ID).Find(entity)
-				if err := res.Error; err != nil {
-					return nil, err
+				func (d *%sDao) FindByID(ID int64) (*%s.%s, error) {
+					entity := &%s.%s{}
+					res := d.Read.Where("id = ?", ID).Find(entity)
+					if err := res.Error; err != nil {
+						return nil, err
+					}
+				
+					return entity, nil
 				}
-			
-				return entity, nil
-			}
-			`, structInfo.Package, structInfo.Package, structInfo.Name, structInfo.Package, structInfo.Name),
+				`,
+				structInfo.Package,
+				structInfo.Package,
+				structInfo.Name,
+				structInfo.Package,
+				structInfo.Name,
+			),
 		}
 	}
 
@@ -120,95 +125,132 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 
 		methods[fmt.Sprintf("FindBy%s", strings.Join(indexFields, "And"))] = methodType{
 			Script: fmt.Sprintf(`
-			func (d *%sDao) FindBy%s(%s) (*%s.%s, error) {
-				entity := &%s.%s{}
-				res := d.Read.%s.Find(entity)
-				if err := res.Error; err != nil {
-					return nil, err
+				func (d *%sDao) FindBy%s(%s) (*%s.%s, error) {
+					entity := &%s.%s{}
+					res := d.Read.%s.Find(entity)
+					if err := res.Error; err != nil {
+						return nil, err
+					}
+				
+					return entity, nil
 				}
-			
-				return entity, nil
-			}
-			`, structInfo.Package, strings.Join(indexFields, "And"), strings.Join(paramStrings, ","), structInfo.Package, structInfo.Name, structInfo.Package, structInfo.Name, strings.Join(scriptStrings, ".")),
+				`, 
+				structInfo.Package,
+				strings.Join(indexFields, "And"),
+				strings.Join(paramStrings, ","),
+				structInfo.Package,
+				structInfo.Name,
+				structInfo.Package,
+				structInfo.Name,
+				strings.Join(scriptStrings, "."),
+			),
 		}
 	}
 
 	// List
 	methods["List"] = methodType{
 		Script: fmt.Sprintf(`
-		func (d *%sDao) List(limit int64) (*%s.%ss, error) {
-			entity := &%s.%ss{}
-			res := d.Read.Limit(limit).Find(entity)
-			if err := res.Error; err != nil {
-				return nil, err
+			func (d *%sDao) List(limit int64) (*%s.%ss, error) {
+				entity := &%s.%ss{}
+				res := d.Read.Limit(limit).Find(entity)
+				if err := res.Error; err != nil {
+					return nil, err
+				}
+			
+				return entity, nil
 			}
-		
-			return entity, nil
-		}
-		`, structInfo.Package, structInfo.Package, structInfo.Name, structInfo.Package, structInfo.Name),
+			`,
+			structInfo.Package,
+			structInfo.Package,
+			structInfo.Name,
+			structInfo.Package,
+			structInfo.Name,
+		),
 	}
 
 	// Create
 	methods["Create"] = methodType{
 		Script: fmt.Sprintf(`
-		func (d *%sDao) Create(entity *%s.%s, tx *gorm.DB) (*%s.%s, error) {
-			var conn *gorm.DB
-			if tx != nil {
-				conn = tx
-			} else {
-				conn = d.Write
+			func (d *%sDao) Create(entity *%s.%s, tx *gorm.DB) (*%s.%s, error) {
+				var conn *gorm.DB
+				if tx != nil {
+					conn = tx
+				} else {
+					conn = d.Write
+				}
+			
+				res := conn.Model(&%s.%s{}).Create(entity)
+				if err := res.Error; err != nil {
+					return nil, err
+				}
+			
+				return entity, nil
 			}
-		
-			res := conn.Model(&%s.%s{}).Create(entity)
-			if err := res.Error; err != nil {
-				return nil, err
-			}
-		
-			return entity, nil
-		}
-		`, structInfo.Package, structInfo.Package, structInfo.Name, structInfo.Package, structInfo.Name, structInfo.Package, structInfo.Name),
+			`,
+			structInfo.Package,
+			structInfo.Package,
+			structInfo.Name,
+			structInfo.Package,
+			structInfo.Name,
+			structInfo.Package,
+			structInfo.Name,
+		),
 	}
 
 	// Update
 	methods["Update"] = methodType{
 		Script: fmt.Sprintf(`
-		func (d *%sDao) Update(entity *%s.%s, tx *gorm.DB) (*%s.%s, error) {
-			var conn *gorm.DB
-			if tx != nil {
-				conn = tx
-			} else {
-				conn = d.Write
+			func (d *%sDao) Update(entity *%s.%s, tx *gorm.DB) (*%s.%s, error) {
+				var conn *gorm.DB
+				if tx != nil {
+					conn = tx
+				} else {
+					conn = d.Write
+				}
+			
+				res := conn.Model(&%s.%s{}).Where("id = ?", entity.ID).Update(entity)
+				if err := res.Error; err != nil {
+					return nil, err
+				}
+			
+				return entity, nil
 			}
-		
-			res := conn.Model(&%s.%s{}).Where("id = ?", entity.ID).Update(entity)
-			if err := res.Error; err != nil {
-				return nil, err
-			}
-		
-			return entity, nil
-		}
-		`, structInfo.Package, structInfo.Package, structInfo.Name, structInfo.Package, structInfo.Name, structInfo.Package, structInfo.Name),
+			`,
+			structInfo.Package,
+			structInfo.Package,
+			structInfo.Name,
+			structInfo.Package,
+			structInfo.Name,
+			structInfo.Package,
+			structInfo.Name,
+		),
 	}
 
 	// Delete
 	methods["Delete"] = methodType{
 		Script: fmt.Sprintf(`
-		func (d *%sDao) Delete(entity *%s.%s, tx *gorm.DB) error {
-			var conn *gorm.DB
-			if tx != nil {
-				conn = tx
-			} else {
-				conn = d.Write
+			func (d *%sDao) Delete(entity *%s.%s, tx *gorm.DB) error {
+				var conn *gorm.DB
+				if tx != nil {
+					conn = tx
+				} else {
+					conn = d.Write
+				}
+			
+				res := conn.Model(&%s.%s{}).Where("id = ?", entity.ID).Delete(entity)
+				if err := res.Error; err != nil {
+					return err
+				}
+			
+				return nil
 			}
-		
-			res := conn.Model(&%s.%s{}).Where("id = ?", entity.ID).Delete(entity)
-			if err := res.Error; err != nil {
-				return err
-			}
-		
-			return nil
-		}
-		`, structInfo.Package, structInfo.Package, structInfo.Name, structInfo.Package, structInfo.Name),
+			`,
+			structInfo.Package,
+			structInfo.Package,
+			structInfo.Name,
+			structInfo.Package,
+			structInfo.Name,
+		),
 	}
 
 	daoTmpl, err := template.New("daoTemplate").Parse(daoTemplateCode)
