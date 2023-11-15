@@ -161,18 +161,19 @@ func sortByNumber(fields map[string]StructField) []struct {
 	return sortedFields
 }
 
-func getType(fieldInfo StructField)  string {
-	if fieldInfo.Type == "string" {
+func getType(fieldInfo StructField) string {
+	switch fieldInfo.Type {
+	case "string":
 		return " VARCHAR(255)"
-	} else if fieldInfo.Type == "int64" {
+	case "int64":
 		return " BIGINT"
-	} else if fieldInfo.Type == "int" {
+	case "int":
 		return " INT"
-	} else if fieldInfo.Type == "time.Time" {
+	case "time.Time":
 		return " TIMESTAMP"
-	} 
-
-	return ""
+	default:
+		return ""
+	}
 }
 
 func getTypeWithPointer(fieldInfo StructField) string {
