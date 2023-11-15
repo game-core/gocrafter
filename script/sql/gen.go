@@ -65,8 +65,9 @@ func generateEntity(yamlFilePath string, outputBaseDir string) error {
 		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
 	}
 
-	outputFileName := filepath.Join(outputDir, fmt.Sprintf("%s_%s.sql", time.Now().Format("20060102"), structInfo.Package))
-	if fileExists(outputFileName) {
+	fileName := fmt.Sprintf("%s_%s.sql", time.Now().Format("20060102"), structInfo.Package)
+	outputFileName := filepath.Join(outputDir, fileName)
+	if fileExistsWithDifferentDateTime(outputDir, fileName) {
 		fmt.Printf("Skipped %s Entity because the file already exists: %s\n", structInfo.Name, outputFileName)
 		return nil
 	}
@@ -199,9 +200,44 @@ func getPrimary(fieldInfo StructField) string {
 	return ""
 }
 
-func fileExists(filePath string) bool {
-	_, err := os.Stat(filePath)
-	return !os.IsNotExist(err)
+func fileExistsWithDifferentDateTime(directory, fileName string) bool {
+	// ディレクトリ内のファイル一覧を取得
+	fileList, err := filepath.Glob(filepath.Join(directory, "*"))
+	if err != nil {
+		fmt.Println("Error:", err)
+		return false
+	}
+
+	// 指定されたファイル名から日時情報を取り除く
+	targetFileName := extractFileName(fileName)
+
+	// ディレクトリ内のファイルを走査して同じファイル名が存在するか確認
+	for _, existingFile := range fileList {
+		existingFileName := extractFileName(existingFile)
+
+		// 同じファイル名が存在する場合、日時情報が異なっていてもtrueを返す
+		if existingFileName == targetFileName {
+			return true
+		}
+	}
+
+	// 同じファイル名が見つからない場合はfalseを返す
+	return false
+}
+
+// ファイル名から日時情報を取り除く関数
+func extractFileName(filePath string) string {
+	// ファイルパスをスラッシュで分割して最後の要素を取得
+	elements := strings.Split(filePath, "/")
+	fileName := elements[len(elements)-1]
+
+	// ファイル名から日時情報を取り除く
+	parts := strings.Split(fileName, "_")
+	if len(parts) > 1 {
+		fileName = parts[1]
+	}
+
+	return fileName
 }
 
 func main() {
