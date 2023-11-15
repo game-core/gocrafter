@@ -8,4 +8,6 @@ type Account struct {
 	Name string `json:"name"`
 
 	Password string `json:"password"`
+
+	Token string `json:"token"`
 }

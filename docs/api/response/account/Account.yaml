@@ -21,3 +21,8 @@ structure:
     type: string
     nullable: false
     number: 5
+  Token:
+    name: token
+    type: string
+    nullable: false
+    number: 6
