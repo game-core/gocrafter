@@ -11,6 +11,7 @@ import (
 	"sort"
 	"strings"
 	"text/template"
+	"time"
 	"gopkg.in/yaml.v2"
 )
 
@@ -64,7 +65,12 @@ func generateEntity(yamlFilePath string, outputBaseDir string) error {
 		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
 	}
 
-	outputFileName := filepath.Join(outputDir, fmt.Sprintf("%s.sql", structInfo.Package))
+	outputFileName := filepath.Join(outputDir, fmt.Sprintf("%s_%s.sql", time.Now().Format("20060102"), structInfo.Package))
+	if fileExists(outputFileName) {
+		fmt.Printf("Skipped %s Entity because the file already exists: %s\n", structInfo.Name, outputFileName)
+		return nil
+	}
+
 	outputFile, err := os.Create(outputFileName)
 	if err != nil {
 		return fmt.Errorf("outputFileName file %s create error: %v", outputFileName, err)
@@ -191,6 +197,11 @@ func getPrimary(fieldInfo StructField) string {
 	}
 	
 	return ""
+}
+
+func fileExists(filePath string) bool {
+	_, err := os.Stat(filePath)
+	return !os.IsNotExist(err)
 }
 
 func main() {
