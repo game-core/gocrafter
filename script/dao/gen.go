@@ -89,8 +89,8 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 	// FindByID
 	if len(structInfo.Primary) > 0 {
 		methods["FindByID"] = methodType{
-			Script: fmt.Sprintf(`
-				func (d *%sDao) FindByID(ID int64) (*%s.%s, error) {
+			Script: fmt.Sprintf(
+				`func (d *%sDao) FindByID(ID int64) (*%s.%s, error) {
 					entity := &%s.%s{}
 					res := d.Read.Where("id = ?", ID).Find(entity)
 					if err := res.Error; err != nil {
@@ -124,8 +124,8 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 		}
 
 		methods[fmt.Sprintf("FindBy%s", strings.Join(indexFields, "And"))] = methodType{
-			Script: fmt.Sprintf(`
-				func (d *%sDao) FindBy%s(%s) (*%s.%s, error) {
+			Script: fmt.Sprintf(
+				`func (d *%sDao) FindBy%s(%s) (*%s.%s, error) {
 					entity := &%s.%s{}
 					res := d.Read.%s.Find(entity)
 					if err := res.Error; err != nil {
@@ -149,8 +149,8 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 
 	// List
 	methods["List"] = methodType{
-		Script: fmt.Sprintf(`
-			func (d *%sDao) List(limit int64) (*%s.%ss, error) {
+		Script: fmt.Sprintf(
+			`func (d *%sDao) List(limit int64) (*%s.%ss, error) {
 				entity := &%s.%ss{}
 				res := d.Read.Limit(limit).Find(entity)
 				if err := res.Error; err != nil {
@@ -170,8 +170,8 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 
 	// Create
 	methods["Create"] = methodType{
-		Script: fmt.Sprintf(`
-			func (d *%sDao) Create(entity *%s.%s, tx *gorm.DB) (*%s.%s, error) {
+		Script: fmt.Sprintf(
+			`func (d *%sDao) Create(entity *%s.%s, tx *gorm.DB) (*%s.%s, error) {
 				var conn *gorm.DB
 				if tx != nil {
 					conn = tx
@@ -199,8 +199,8 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 
 	// Update
 	methods["Update"] = methodType{
-		Script: fmt.Sprintf(`
-			func (d *%sDao) Update(entity *%s.%s, tx *gorm.DB) (*%s.%s, error) {
+		Script: fmt.Sprintf(
+			`func (d *%sDao) Update(entity *%s.%s, tx *gorm.DB) (*%s.%s, error) {
 				var conn *gorm.DB
 				if tx != nil {
 					conn = tx
@@ -228,8 +228,8 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 
 	// Delete
 	methods["Delete"] = methodType{
-		Script: fmt.Sprintf(`
-			func (d *%sDao) Delete(entity *%s.%s, tx *gorm.DB) error {
+		Script: fmt.Sprintf(
+			`func (d *%sDao) Delete(entity *%s.%s, tx *gorm.DB) error {
 				var conn *gorm.DB
 				if tx != nil {
 					conn = tx
