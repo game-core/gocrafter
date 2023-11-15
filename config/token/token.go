@@ -1,6 +1,7 @@
 package token
 
 import (
+	"os"
 	"time"
 	"github.com/dgrijalva/jwt-go"
 )
@@ -12,7 +13,7 @@ func GenerateAuthToken(uuid, name string) (string, error) {
 	claims["name"] = name
 	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 	
-	token, err := baseToken.SignedString([]byte("secret"))
+	token, err := baseToken.SignedString([]byte(os.Getenv("AUTH_SECRET")))
 	if err != nil {
 		return "", err
 	}
