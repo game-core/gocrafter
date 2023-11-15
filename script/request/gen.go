@@ -26,7 +26,8 @@ type StructInfo struct {
 	Fields   map[string]StructField `yaml:"structure"`
 }
 
-const templateCode = `
+const templateCode =
+`
 package {{.Package}}
 
 type {{.Name}} struct {

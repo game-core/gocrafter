@@ -29,7 +29,8 @@ type StructInfo struct {
 	Index    []string               `yaml:"index"`
 }
 
-const templateCode = `
+const templateCode =
+`
 package {{.Package}}
 
 import (

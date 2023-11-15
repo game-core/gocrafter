@@ -32,7 +32,8 @@ type methodType struct {
 	Script  string
 }
 
-const repositoryTemplateCode = `
+const repositoryTemplateCode =
+`
 package {{.Package}}
 
 import (

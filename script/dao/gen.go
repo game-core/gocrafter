@@ -33,7 +33,8 @@ type methodType struct {
 	Script string
 }
 
-const daoTemplateCode = `
+const daoTemplateCode =
+`
 package {{.Package}}
 
 import (
