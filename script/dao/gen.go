@@ -4,13 +4,13 @@ package main
 
 import (
 	"fmt"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
 	"text/template"
-	"gopkg.in/yaml.v2"
 )
 
 type StructField struct {
@@ -30,7 +30,7 @@ type StructInfo struct {
 }
 
 type methodType struct {
-	Script  string
+	Script string
 }
 
 const daoTemplateCode = `
@@ -134,7 +134,7 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 				
 					return entity, nil
 				}
-				`, 
+				`,
 				structInfo.Package,
 				strings.Join(indexFields, "And"),
 				strings.Join(paramStrings, ","),
