@@ -78,174 +78,7 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 	}
 	defer outputFile.Close()
 
-	methods := make(map[string]methodType)
-
-	// FindByID
-	if len(structInfo.Primary) > 0 {
-		methods["FindByID"] = methodType{
-			Script: fmt.Sprintf(
-				`func (d *%sDao) FindByID(ID int64) (*%s.%s, error) {
-					entity := &%s.%s{}
-					res := d.Read.Where("id = ?", ID).Find(entity)
-					if err := res.Error; err != nil {
-						return nil, err
-					}
-				
-					return entity, nil
-				}
-				`,
-				structInfo.Package,
-				structInfo.Package,
-				structInfo.Name,
-				structInfo.Package,
-				structInfo.Name,
-			),
-		}
-	}
-
-	// FindByIndex
-	for _, index := range structInfo.Index {
-		indexFields := strings.Split(index, ",")
-		params := make([]struct{ Name, Type string }, len(indexFields))
-
-		var paramStrings []string
-		var scriptStrings []string
-
-		for i, field := range indexFields {
-			params[i] = struct{ Name, Type string }{field, structInfo.Fields[field].Type}
-			paramStrings = append(paramStrings, fmt.Sprintf("%s %s", field, structInfo.Fields[field].Type))
-			scriptStrings = append(scriptStrings, fmt.Sprintf("Where(\"%s = ?\", %s)", structInfo.Fields[field].Name, field))
-		}
-
-		methods[fmt.Sprintf("FindBy%s", strings.Join(indexFields, "And"))] = methodType{
-			Script: fmt.Sprintf(
-				`func (d *%sDao) FindBy%s(%s) (*%s.%s, error) {
-					entity := &%s.%s{}
-					res := d.Read.%s.Find(entity)
-					if err := res.Error; err != nil {
-						return nil, err
-					}
-				
-					return entity, nil
-				}
-				`,
-				structInfo.Package,
-				strings.Join(indexFields, "And"),
-				strings.Join(paramStrings, ","),
-				structInfo.Package,
-				structInfo.Name,
-				structInfo.Package,
-				structInfo.Name,
-				strings.Join(scriptStrings, "."),
-			),
-		}
-	}
-
-	// List
-	methods["List"] = methodType{
-		Script: fmt.Sprintf(
-			`func (d *%sDao) List(limit int64) (*%s.%ss, error) {
-				entity := &%s.%ss{}
-				res := d.Read.Limit(limit).Find(entity)
-				if err := res.Error; err != nil {
-					return nil, err
-				}
-			
-				return entity, nil
-			}
-			`,
-			structInfo.Package,
-			structInfo.Package,
-			structInfo.Name,
-			structInfo.Package,
-			structInfo.Name,
-		),
-	}
-
-	// Create
-	methods["Create"] = methodType{
-		Script: fmt.Sprintf(
-			`func (d *%sDao) Create(entity *%s.%s, tx *gorm.DB) (*%s.%s, error) {
-				var conn *gorm.DB
-				if tx != nil {
-					conn = tx
-				} else {
-					conn = d.Write
-				}
-			
-				res := conn.Model(&%s.%s{}).Create(entity)
-				if err := res.Error; err != nil {
-					return nil, err
-				}
-			
-				return entity, nil
-			}
-			`,
-			structInfo.Package,
-			structInfo.Package,
-			structInfo.Name,
-			structInfo.Package,
-			structInfo.Name,
-			structInfo.Package,
-			structInfo.Name,
-		),
-	}
-
-	// Update
-	methods["Update"] = methodType{
-		Script: fmt.Sprintf(
-			`func (d *%sDao) Update(entity *%s.%s, tx *gorm.DB) (*%s.%s, error) {
-				var conn *gorm.DB
-				if tx != nil {
-					conn = tx
-				} else {
-					conn = d.Write
-				}
-			
-				res := conn.Model(&%s.%s{}).Where("id = ?", entity.ID).Update(entity)
-				if err := res.Error; err != nil {
-					return nil, err
-				}
-			
-				return entity, nil
-			}
-			`,
-			structInfo.Package,
-			structInfo.Package,
-			structInfo.Name,
-			structInfo.Package,
-			structInfo.Name,
-			structInfo.Package,
-			structInfo.Name,
-		),
-	}
-
-	// Delete
-	methods["Delete"] = methodType{
-		Script: fmt.Sprintf(
-			`func (d *%sDao) Delete(entity *%s.%s, tx *gorm.DB) error {
-				var conn *gorm.DB
-				if tx != nil {
-					conn = tx
-				} else {
-					conn = d.Write
-				}
-			
-				res := conn.Model(&%s.%s{}).Where("id = ?", entity.ID).Delete(entity)
-				if err := res.Error; err != nil {
-					return err
-				}
-			
-				return nil
-			}
-			`,
-			structInfo.Package,
-			structInfo.Package,
-			structInfo.Name,
-			structInfo.Package,
-			structInfo.Name,
-		),
-	}
+	methods := generateMethods(structInfo)
 
 	daoTmpl, err := template.New("daoTemplate").Parse(daoTemplateCode)
 	if err != nil {
@@ -276,6 +109,202 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 	fmt.Printf("Created %s Dao in %s\n", structInfo.Name, outputFileName)
 
 	return nil
+}
+
+func generateMethods(structInfo *StructInfo) map[string]methodType {
+	methods := make(map[string]methodType)
+
+	// FindByID
+	if len(structInfo.Primary) > 0 {
+		methods["FindByID"] = methodType{
+			Script: generateFindByID(structInfo),
+		}
+	}
+
+	// FindByIndex
+	for _, index := range structInfo.Index {
+		indexFields := strings.Split(index, ",")
+		methods[fmt.Sprintf("FindBy%s", strings.Join(indexFields, "And"))] = methodType{
+			Script: generateFindByIndex(structInfo, indexFields),
+		}
+	}
+
+	// List
+	methods["List"] = methodType{
+		Script: generateList(structInfo),
+	}
+
+	// Create
+	methods["Create"] = methodType{
+		Script: generateCreate(structInfo),
+	}
+
+	// Update
+	methods["Update"] = methodType{
+		Script: generateUpdate(structInfo),
+	}
+
+	// Delete
+	methods["Delete"] = methodType{
+		Script: generateDelete(structInfo),
+	}
+
+	return methods
+}
+
+func generateFindByID(structInfo *StructInfo) string {
+	return fmt.Sprintf(
+		`func (d *%sDao) FindByID(ID int64) (*%s.%s, error) {
+			entity := &%s.%s{}
+			res := d.Read.Where("id = ?", ID).Find(entity)
+			if err := res.Error; err != nil {
+				return nil, err
+			}
+		
+			return entity, nil
+		}
+		`,
+		structInfo.Package,
+		structInfo.Package,
+		structInfo.Name,
+		structInfo.Package,
+		structInfo.Name,
+	)
+}
+
+func generateFindByIndex(structInfo *StructInfo, indexFields []string) string {
+	params := make([]struct{ Name, Type string }, len(indexFields))
+	paramStrings := make([]string, len(indexFields))
+	scriptStrings := make([]string, len(indexFields))
+
+	for i, field := range indexFields {
+		params[i] = struct{ Name, Type string }{field, structInfo.Fields[field].Type}
+		paramStrings[i] = fmt.Sprintf("%s %s", field, structInfo.Fields[field].Type)
+		scriptStrings[i] = fmt.Sprintf("Where(\"%s = ?\", %s)", structInfo.Fields[field].Name, field)
+	}
+
+	return fmt.Sprintf(
+		`func (d *%sDao) FindBy%s(%s) (*%s.%s, error) {
+			entity := &%s.%s{}
+			res := d.Read.%s.Find(entity)
+			if err := res.Error; err != nil {
+				return nil, err
+			}
+		
+			return entity, nil
+		}
+		`,
+		structInfo.Package,
+		strings.Join(indexFields, "And"),
+		strings.Join(paramStrings, ","),
+		structInfo.Package,
+		structInfo.Name,
+		structInfo.Package,
+		structInfo.Name,
+		strings.Join(scriptStrings, "."),
+	)
+}
+
+func generateList(structInfo *StructInfo) string {
+	return fmt.Sprintf(
+		`func (d *%sDao) List(limit int64) (*%s.%ss, error) {
+			entity := &%s.%ss{}
+			res := d.Read.Limit(limit).Find(entity)
+			if err := res.Error; err != nil {
+				return nil, err
+			}
+		
+			return entity, nil
+		}
+		`,
+		structInfo.Package,
+		structInfo.Package,
+		structInfo.Name,
+		structInfo.Package,
+		structInfo.Name,
+	)
+}
+
+func generateCreate(structInfo *StructInfo) string {
+	return fmt.Sprintf(
+		`func (d *%sDao) Create(entity *%s.%s, tx *gorm.DB) (*%s.%s, error) {
+			var conn *gorm.DB
+			if tx != nil {
+				conn = tx
+			} else {
+				conn = d.Write
+			}
+		
+			res := conn.Model(&%s.%s{}).Create(entity)
+			if err := res.Error; err != nil {
+				return nil, err
+			}
+		
+			return entity, nil
+		}
+		`,
+		structInfo.Package,
+		structInfo.Package,
+		structInfo.Name,
+		structInfo.Package,
+		structInfo.Name,
+		structInfo.Package,
+		structInfo.Name,
+	)
+}
+
+func generateUpdate(structInfo *StructInfo) string {
+	return fmt.Sprintf(
+		`func (d *%sDao) Update(entity *%s.%s, tx *gorm.DB) (*%s.%s, error) {
+			var conn *gorm.DB
+			if tx != nil {
+				conn = tx
+			} else {
+				conn = d.Write
+			}
+		
+			res := conn.Model(&%s.%s{}).Where("id = ?", entity.ID).Update(entity)
+			if err := res.Error; err != nil {
+				return nil, err
+			}
+		
+			return entity, nil
+		}
+		`,
+		structInfo.Package,
+		structInfo.Package,
+		structInfo.Name,
+		structInfo.Package,
+		structInfo.Name,
+		structInfo.Package,
+		structInfo.Name,
+	)
+}
+
+func generateDelete(structInfo *StructInfo) string {
+	return fmt.Sprintf(
+		`func (d *%sDao) Delete(entity *%s.%s, tx *gorm.DB) error {
+			var conn *gorm.DB
+			if tx != nil {
+				conn = tx
+			} else {
+				conn = d.Write
+			}
+		
+			res := conn.Model(&%s.%s{}).Where("id = ?", entity.ID).Delete(entity)
+			if err := res.Error; err != nil {
+				return err
+			}
+		
+			return nil
+		}
+		`,
+		structInfo.Package,
+		structInfo.Package,
+		structInfo.Name,
+		structInfo.Package,
+		structInfo.Name,
+	)
 }
 
 func getStructInfo(yamlFilePath string) (*StructInfo, error) {
