@@ -72,9 +72,11 @@ func (a *accountService) RegisterAccount(req *request.RegisterAccount) (*respons
 
 	return &response.RegisterAccount{
 		Status: 200,
-		ID:       ar.ID,
-		UUID:     ar.UUID,
-		Name:     ar.Name,
-		Password: password,
+		Item: response.Account{
+			ID:       ar.ID,
+			UUID:     ar.UUID,
+			Name:     ar.Name,
+			Password: password,
+		},
 	}, nil
 }
