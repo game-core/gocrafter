@@ -65,8 +65,7 @@ func generateEntity(yamlFilePath string, outputBaseDir string) error {
 	}
 
 	outputDir := filepath.Join(fmt.Sprintf("%s/%s", outputBaseDir, structInfo.Database), structInfo.Package)
-	err = os.MkdirAll(outputDir, os.ModePerm)
-	if err != nil {
+	if err = os.MkdirAll(outputDir, os.ModePerm); err != nil {
 		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
 	}
 
@@ -140,6 +139,7 @@ func getTypeWithPointer(fieldInfo StructField) string {
 	if fieldInfo.Nullable {
 		return "*" + fieldInfo.Type
 	}
+	
 	return fieldInfo.Type
 }
 
