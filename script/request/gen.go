@@ -129,6 +129,7 @@ func getTypeWithPointer(fieldInfo StructField) string {
 	if fieldInfo.Nullable {
 		return "*" + fieldInfo.Type
 	}
+	
 	return fieldInfo.Type
 }
 
