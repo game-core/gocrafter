@@ -1,14 +1,32 @@
 package key
 
 import (
+	"golang.org/x/crypto/bcrypt"
+	
 	gonanoid "github.com/matoous/go-nanoid/v2"
 )
 
-func GenerateKey() (key string, err error) {
-	key, err = gonanoid.New(20)
+// GenerateUUID UUIDを生成する
+func GenerateUUID() (string, error) {
+	uuid, err := gonanoid.New(20)
 	if err != nil {
 		return "", err
 	}
 	
-	return key, nil
+	return uuid, nil
+}
+
+// GeneratePassword パスワードを生成する
+func GeneratePassword() (string, string, error) {
+	password, err := gonanoid.New(20)
+	if err != nil {
+		return "", "", err
+	}
+	
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", "", err
+	}
+
+	return password, string(hashedPassword), nil
 }

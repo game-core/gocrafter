@@ -49,12 +49,12 @@ func (a *accountService) RegisterAccount(req *request.RegisterAccount) (*respons
 		}
 	}()
 
-	uuid, err := key.GenerateKey()
+	uuid, err := key.GenerateUUID()
 	if err != nil {
 		return nil, err
 	}
 
-	pass, err := key.GenerateKey()
+	password, hashedPassword, err := key.GeneratePassword()
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +62,7 @@ func (a *accountService) RegisterAccount(req *request.RegisterAccount) (*respons
 	account := &accountEntity.Account{
 		UUID:     uuid,
 		Name:     req.Name,
-		Password: pass,
+		Password: hashedPassword,
 	}
 
 	ar, err := a.accountRepository.Create(account, tx)
@@ -75,6 +75,6 @@ func (a *accountService) RegisterAccount(req *request.RegisterAccount) (*respons
 		ID:       ar.ID,
 		UUID:     ar.UUID,
 		Name:     ar.Name,
-		Password: ar.Password,
+		Password: password,
 	}, nil
 }
