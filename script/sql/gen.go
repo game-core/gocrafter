@@ -31,10 +31,10 @@ type StructInfo struct {
 	Index    []string               `yaml:"index"`
 }
 
-const templateCode = `
-CREATE TABLE {{.Table}} (
+const templateCode = 
+`CREATE TABLE {{.Table}} (
 {{range $field := sortByNumber .Fields}}
-	{{$field.Column}} {{$field.Type}} {{$field.TypeWithPointer}} {{$field.Config}},
+	{{$field.Column}}{{$field.Type}}{{$field.TypeWithPointer}}{{$field.Config}},
 {{end}}
 	{{.PrimaryKey}},
 	{{.IndexKey}}
@@ -157,13 +157,13 @@ func sortByNumber(fields map[string]StructField) []struct {
 
 func getType(fieldInfo StructField)  string {
 	if fieldInfo.Type == "string" {
-		return "VARCHAR(255)"
+		return " VARCHAR(255)"
 	} else if fieldInfo.Type == "int64" {
-		return "BIGINT"
+		return " BIGINT"
 	} else if fieldInfo.Type == "int" {
-		return "INT"
+		return " INT"
 	} else if fieldInfo.Type == "time.Time" {
-		return "TIMESTAMP"
+		return " TIMESTAMP"
 	} 
 
 	return ""
@@ -171,15 +171,15 @@ func getType(fieldInfo StructField)  string {
 
 func getTypeWithPointer(fieldInfo StructField) string {
 	if fieldInfo.Nullable {
-		return "DEFAULT NULL"
+		return " DEFAULT NULL"
 	}
-	
-	return "NOT NULL"
+
+	return " NOT NULL"
 }
 
 func getConfig(fieldInfo StructField)  string {
 	if fieldInfo.Name == "id" {
-		return "AUTO_INCREMENT"
+		return " AUTO_INCREMENT"
 	}
 
 	return ""
@@ -187,7 +187,7 @@ func getConfig(fieldInfo StructField)  string {
 
 func getPrimary(fieldInfo StructField) string {
 	if fieldInfo.Name == "id" {
-		return "PRIMARY KEY (id),"
+		return " PRIMARY KEY (id),"
 	}
 	
 	return ""
