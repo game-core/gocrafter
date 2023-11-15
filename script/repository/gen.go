@@ -54,8 +54,7 @@ func generateRepository(yamlFilePath string, outputBaseDir string) error {
 	}
 
 	var structInfo StructInfo
-	err = yaml.Unmarshal(yamlData, &structInfo)
-	if err != nil {
+	if err = yaml.Unmarshal(yamlData, &structInfo); err != nil {
 		return fmt.Errorf("error unmarshalling YAML in file %s: %v", yamlFilePath, err)
 	}
 
@@ -87,35 +86,64 @@ func generateRepository(yamlFilePath string, outputBaseDir string) error {
 		params := make([]struct{ Name, Type string }, len(indexFields))
 
 		var paramStrings []string
-
+		
 		for i, field := range indexFields {
 			paramStrings = append(paramStrings, fmt.Sprintf("%s %s", field, structInfo.Fields[field].Type))
 			params[i] = struct{ Name, Type string }{ field, structInfo.Fields[field].Type }
 		}
 		
 		methods[fmt.Sprintf("FindBy%s", strings.Join(indexFields, "And"))] = methodType{
-			Script: fmt.Sprintf(`FindBy%s(%s) (*%s.%s, error)`, strings.Join(indexFields, "And"), strings.Join(paramStrings, ","), structInfo.Package, structInfo.Name),
+			Script: fmt.Sprintf(
+				`FindBy%s(%s) (*%s.%s, error)`,
+				strings.Join(indexFields, "And"),
+				strings.Join(paramStrings, ","),
+				structInfo.Package,
+				structInfo.Name,
+			),
 		}
 	}
 
 	// List
 	methods["List"] = methodType{
-		Script: fmt.Sprintf(`List(limit int64) (*%s.%ss, error)`, structInfo.Package, structInfo.Name),
+		Script: fmt.Sprintf(
+			`List(limit int64) (*%s.%ss, error)`,
+			structInfo.Package,
+			structInfo.Name,
+		),
 	}
 	
 	// Create
 	methods["Create"] = methodType{
-		Script: fmt.Sprintf(`Create(%s *%s.%s, tx *gorm.DB) (*%s.%s, error)`,  structInfo.Package, structInfo.Package, structInfo.Name, structInfo.Package, structInfo.Name),
+		Script: fmt.Sprintf(
+			`Create(%s *%s.%s, tx *gorm.DB) (*%s.%s, error)`, 
+			structInfo.Package,
+			structInfo.Package,
+			structInfo.Name,
+			structInfo.Package,
+			structInfo.Name,
+		),
 	}
 	
 	// Update
 	methods["Update"] = methodType{
-		Script: fmt.Sprintf(`Update(%s *%s.%s, tx *gorm.DB) (*%s.%s, error)`,  structInfo.Package, structInfo.Package, structInfo.Name, structInfo.Package, structInfo.Name),
+		Script: fmt.Sprintf(
+			`Update(%s *%s.%s, tx *gorm.DB) (*%s.%s, error)`,
+			structInfo.Package,
+			structInfo.Package,
+			structInfo.Name,
+			structInfo.Package,
+			structInfo.Name,
+		),
 	}
 	
 	// Delete
 	methods["Delete"] = methodType{
-		Script: fmt.Sprintf(`Delete(%s *%s.%s, tx *gorm.DB) error`,  structInfo.Package, structInfo.Package, structInfo.Name),
+		Script: fmt.Sprintf(
+			`Delete(%s *%s.%s, tx *gorm.DB) error`,
+			structInfo.Package,
+			structInfo.Package,
+			structInfo.Name,
+		),
 	}
 
 	repositoryTmpl, err := template.New("repositoryTemplate").Parse(repositoryTemplateCode)
