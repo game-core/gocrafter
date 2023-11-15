@@ -61,15 +61,9 @@ func New{{.Name}}Dao(conn *database.SqlHandler) {{.Package}}Repository.{{.Reposi
 `
 
 func generateDao(yamlFilePath string, outputBaseDir string) error {
-	yamlData, err := ioutil.ReadFile(yamlFilePath)
+	structInfo, err := getStructInfo(yamlFilePath)
 	if err != nil {
-		return fmt.Errorf("error reading YAML file %s: %v", yamlFilePath, err)
-	}
-
-	var structInfo StructInfo
-	err = yaml.Unmarshal(yamlData, &structInfo)
-	if err != nil {
-		return fmt.Errorf("error unmarshalling YAML in file %s: %v", yamlFilePath, err)
+		return err
 	}
 
 	outputDir := filepath.Join(fmt.Sprintf("%s/%s", outputBaseDir, structInfo.Database), structInfo.Package)
@@ -282,6 +276,20 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 	fmt.Printf("Created %s Dao in %s\n", structInfo.Name, outputFileName)
 
 	return nil
+}
+
+func getStructInfo(yamlFilePath string) (*StructInfo, error) {
+	yamlData, err := ioutil.ReadFile(yamlFilePath)
+	if err != nil {
+		return nil, fmt.Errorf("error reading YAML file %s: %v", yamlFilePath, err)
+	}
+
+	var structInfo StructInfo
+	if err := yaml.Unmarshal(yamlData, &structInfo); err != nil {
+		return nil, fmt.Errorf("error unmarshalling YAML in file %s: %v", yamlFilePath, err)
+	}
+
+	return &structInfo, nil
 }
 
 func main() {
