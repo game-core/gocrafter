@@ -1,0 +1,13 @@
+name: LoginAccount
+package: account
+structure:
+  Status:
+    name: status
+    type: int64
+    nullable: false
+    number: 1
+  Item:
+    name: item
+    type: Account
+    nullable: false
+    number: 2
