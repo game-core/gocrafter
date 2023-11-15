@@ -66,12 +66,11 @@ func generateEntity(yamlFilePath string, outputBaseDir string) error {
 	}
 
 	fileName := fmt.Sprintf("%s_%s.sql", time.Now().Format("20060102"), structInfo.Package)
-	outputFileName := filepath.Join(outputDir, fileName)
 	if fileExistsWithDifferentDateTime(outputDir, fileName) {
-		fmt.Printf("Skipped %s Entity because the file already exists: %s\n", structInfo.Name, outputFileName)
 		return nil
 	}
 
+	outputFileName := filepath.Join(outputDir, fileName)
 	outputFile, err := os.Create(outputFileName)
 	if err != nil {
 		return fmt.Errorf("outputFileName file %s create error: %v", outputFileName, err)
@@ -207,7 +206,7 @@ func fileExistsWithDifferentDateTime(directory, fileName string) bool {
 	}
 
 	targetFileName := extractFileName(fileName)
-	
+
 	for _, existingFile := range fileList {
 		existingFileName := extractFileName(existingFile)
 		if existingFileName == targetFileName {
