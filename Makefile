@@ -27,12 +27,10 @@ docker_response_gen:
 # 全てのdomainを自動生成
 docker_domain_gen:
 	docker compose -f docker-compose.local.yml exec gen go generate ./config/generator/entity/gen.go
-	docker compose -f docker-compose.local.yml exec gen go fmt ./domain/entity/...
 	docker compose -f docker-compose.local.yml exec gen go generate ./config/generator/repository/gen.go
-	docker compose -f docker-compose.local.yml exec gen go fmt ./domain/repository/...
 	docker compose -f docker-compose.local.yml exec gen go generate ./config/generator/dao/gen.go
-	docker compose -f docker-compose.local.yml exec gen go fmt ./infra/dao/...
 	docker compose -f docker-compose.local.yml exec gen go generate ./config/generator/sql/gen.go
+	docker compose -f docker-compose.local.yml exec gen go fmt ./...
 
 # modelを自動生成
 docker_entity_gen:

@@ -4,13 +4,13 @@ package main
 
 import (
 	"fmt"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
 	"text/template"
-	"gopkg.in/yaml.v2"
 )
 
 type StructField struct {
@@ -29,11 +29,10 @@ type StructInfo struct {
 }
 
 type methodType struct {
-	Script  string
+	Script string
 }
 
-const repositoryTemplateCode =
-`
+const repositoryTemplateCode = `
 package {{.Package}}
 
 import (
@@ -85,9 +84,9 @@ func generateRepository(yamlFilePath string, outputBaseDir string) error {
 
 		for i, field := range indexFields {
 			paramStrings = append(paramStrings, fmt.Sprintf("%s %s", field, structInfo.Fields[field].Type))
-			params[i] = struct{ Name, Type string }{ field, structInfo.Fields[field].Type }
+			params[i] = struct{ Name, Type string }{field, structInfo.Fields[field].Type}
 		}
-		
+
 		methods[fmt.Sprintf("FindBy%s", strings.Join(indexFields, "And"))] = methodType{
 			Script: fmt.Sprintf(
 				`FindBy%s(%s) (*%s.%s, error)`,
@@ -107,11 +106,11 @@ func generateRepository(yamlFilePath string, outputBaseDir string) error {
 			structInfo.Name,
 		),
 	}
-	
+
 	// Create
 	methods["Create"] = methodType{
 		Script: fmt.Sprintf(
-			`Create(%s *%s.%s, tx *gorm.DB) (*%s.%s, error)`, 
+			`Create(%s *%s.%s, tx *gorm.DB) (*%s.%s, error)`,
 			structInfo.Package,
 			structInfo.Package,
 			structInfo.Name,
@@ -119,7 +118,7 @@ func generateRepository(yamlFilePath string, outputBaseDir string) error {
 			structInfo.Name,
 		),
 	}
-	
+
 	// Update
 	methods["Update"] = methodType{
 		Script: fmt.Sprintf(
@@ -131,7 +130,7 @@ func generateRepository(yamlFilePath string, outputBaseDir string) error {
 			structInfo.Name,
 		),
 	}
-	
+
 	// Delete
 	methods["Delete"] = methodType{
 		Script: fmt.Sprintf(

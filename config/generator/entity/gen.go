@@ -4,13 +4,13 @@ package main
 
 import (
 	"fmt"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 	"sort"
 	"text/template"
-	"gopkg.in/yaml.v2"
 )
 
 type StructField struct {
@@ -29,8 +29,7 @@ type StructInfo struct {
 	Index    []string               `yaml:"index"`
 }
 
-const templateCode =
-`
+const templateCode = `
 package {{.Package}}
 
 import (
@@ -148,7 +147,7 @@ func getTypeWithPointer(fieldInfo StructField) string {
 	if fieldInfo.Nullable {
 		return "*" + fieldInfo.Type
 	}
-	
+
 	return fieldInfo.Type
 }
 

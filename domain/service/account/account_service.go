@@ -4,12 +4,12 @@ import (
 	"errors"
 	"log"
 
-	"github.com/game-core/gocrafter/config/key"
-	"github.com/game-core/gocrafter/config/token"
-	repository "github.com/game-core/gocrafter/domain/repository/user"
 	request "github.com/game-core/gocrafter/api/presentation/request/account"
 	response "github.com/game-core/gocrafter/api/presentation/response/account"
+	"github.com/game-core/gocrafter/config/key"
+	"github.com/game-core/gocrafter/config/token"
 	accountEntity "github.com/game-core/gocrafter/domain/entity/user/account"
+	repository "github.com/game-core/gocrafter/domain/repository/user"
 	accountRepository "github.com/game-core/gocrafter/domain/repository/user/account"
 )
 
@@ -26,7 +26,7 @@ type accountService struct {
 
 func NewAccountService(
 	transactionRepository repository.TransactionRepository,
-	accountRepository     accountRepository.AccountRepository,
+	accountRepository accountRepository.AccountRepository,
 ) AccountService {
 	return &accountService{
 		transactionRepository: transactionRepository,
@@ -94,12 +94,12 @@ func (a *accountService) LoginAccount(req *request.LoginAccount) (*response.Logi
 	}
 
 	if !key.CheckPassword(req.Password, ar.Password) {
-		return nil,  errors.New("faild to key.CheckPassword")
+		return nil, errors.New("faild to key.CheckPassword")
 	}
 
 	token, err := token.GenerateAuthToken(ar.UUID, ar.Name)
 	if err != nil {
-		return nil,  errors.New("faild to token.GenerateAuthToken")
+		return nil, errors.New("faild to token.GenerateAuthToken")
 	}
 
 	return &response.LoginAccount{

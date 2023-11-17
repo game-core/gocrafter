@@ -12,7 +12,7 @@ func GenerateUUID() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	
+
 	return uuid, nil
 }
 
@@ -22,7 +22,7 @@ func GeneratePassword() (string, string, error) {
 	if err != nil {
 		return "", "", err
 	}
-	
+
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return "", "", err

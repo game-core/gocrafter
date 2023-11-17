@@ -4,6 +4,7 @@ package main
 
 import (
 	"fmt"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
 	"os"
@@ -12,7 +13,6 @@ import (
 	"strings"
 	"text/template"
 	"time"
-	"gopkg.in/yaml.v2"
 )
 
 type StructField struct {
@@ -32,8 +32,7 @@ type StructInfo struct {
 	Index    []string               `yaml:"index"`
 }
 
-const templateCode = 
-`CREATE TABLE {{.Table}} (
+const templateCode = `CREATE TABLE {{.Table}} (
 {{range $field := sortByNumber .Fields}}
 	{{$field.Column}}{{$field.Type}}{{$field.TypeWithPointer}}{{$field.Config}},
 {{end}}
@@ -96,15 +95,15 @@ func generateEntity(yamlFilePath string, outputBaseDir string) error {
 	}
 
 	if err = tmpl.ExecuteTemplate(outputFile, "structTemplate", struct {
-		Table       string
-		Fields      map[string]StructField
-		PrimaryKey  string
-		IndexKey    string
+		Table      string
+		Fields     map[string]StructField
+		PrimaryKey string
+		IndexKey   string
 	}{
-		Table:       structInfo.Table,
-		Fields:      structInfo.Fields,
-		PrimaryKey:  strings.Join(primaryStrings, ","),
-		IndexKey:    strings.Join(indexStrings, ","),
+		Table:      structInfo.Table,
+		Fields:     structInfo.Fields,
+		PrimaryKey: strings.Join(primaryStrings, ","),
+		IndexKey:   strings.Join(indexStrings, ","),
 	}); err != nil {
 		return fmt.Errorf("template error: %v", err)
 	}
@@ -143,7 +142,7 @@ func sortByNumber(fields map[string]StructField) []struct {
 			Name:            name,
 			FieldInfo:       fieldInfo,
 			Column:          fieldInfo.Name,
-			Type:            getType(fieldInfo),  
+			Type:            getType(fieldInfo),
 			TypeWithPointer: getTypeWithPointer(fieldInfo),
 			Config:          getConfig(fieldInfo),
 		})
@@ -193,7 +192,7 @@ func getTypeWithPointer(fieldInfo StructField) string {
 	return " NOT NULL"
 }
 
-func getConfig(fieldInfo StructField)  string {
+func getConfig(fieldInfo StructField) string {
 	if fieldInfo.Name == "id" {
 		return " AUTO_INCREMENT"
 	}
@@ -205,7 +204,7 @@ func getPrimary(fieldInfo StructField) string {
 	if fieldInfo.Name == "id" {
 		return " PRIMARY KEY (id),"
 	}
-	
+
 	return ""
 }
 

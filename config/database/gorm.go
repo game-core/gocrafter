@@ -3,7 +3,7 @@ package database
 import (
 	"fmt"
 	"os"
-	
+
 	"github.com/jinzhu/gorm"
 )
 
@@ -18,10 +18,10 @@ type Conn struct {
 }
 
 func NewDB() *SqlHandler {
-    return &SqlHandler{
+	return &SqlHandler{
 		User:   userDB(),
 		Master: masterDB(),
-    }
+	}
 }
 
 func userDB() *Conn {
@@ -41,22 +41,22 @@ func userDB() *Conn {
 		os.Getenv("USER_MYSQL_DATABASE"),
 	)
 
-    readDB, err := gorm.Open("mysql", readConn)
-    if err != nil {
-        panic(err.Error())
-    }
+	readDB, err := gorm.Open("mysql", readConn)
+	if err != nil {
+		panic(err.Error())
+	}
 
-    writeDB, err := gorm.Open("mysql", writeConn)
-    if err != nil {
-        panic(err.Error())
-    }
+	writeDB, err := gorm.Open("mysql", writeConn)
+	if err != nil {
+		panic(err.Error())
+	}
 
 	readDB.SingularTable(true)
 	writeDB.SingularTable(true)
 
 	return &Conn{
 		ReadConn:  readDB,
-        WriteConn: writeDB,
+		WriteConn: writeDB,
 	}
 }
 
@@ -76,22 +76,22 @@ func masterDB() *Conn {
 		os.Getenv("MASTER_MYSQL_WRITE_HOST"),
 		os.Getenv("MASTER_MYSQL_DATABASE"),
 	)
-	
-    readDB, err := gorm.Open("mysql", readConn)
-    if err != nil {
-        panic(err.Error())
-    }
 
-    writeDB, err := gorm.Open("mysql", writeConn)
-    if err != nil {
-        panic(err.Error())
-    }
+	readDB, err := gorm.Open("mysql", readConn)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	writeDB, err := gorm.Open("mysql", writeConn)
+	if err != nil {
+		panic(err.Error())
+	}
 
 	readDB.SingularTable(true)
 	writeDB.SingularTable(true)
 
 	return &Conn{
 		ReadConn:  readDB,
-        WriteConn: writeDB,
+		WriteConn: writeDB,
 	}
 }

@@ -4,30 +4,29 @@ package main
 
 import (
 	"fmt"
+	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 	"sort"
 	"text/template"
-	"gopkg.in/yaml.v2"
 )
 
 type StructField struct {
-	Name     string  `yaml:"name"`
-	Type     string  `yaml:"type"`
-	Nullable bool    `yaml:"nullable"`
-	Number   int     `yaml:"number"`
+	Name     string `yaml:"name"`
+	Type     string `yaml:"type"`
+	Nullable bool   `yaml:"nullable"`
+	Number   int    `yaml:"number"`
 }
 
 type StructInfo struct {
-	Name     string                 `yaml:"name"`
-	Package  string                 `yaml:"package"`
-	Fields   map[string]StructField `yaml:"structure"`
+	Name    string                 `yaml:"name"`
+	Package string                 `yaml:"package"`
+	Fields  map[string]StructField `yaml:"structure"`
 }
 
-const templateCode =
-`
+const templateCode = `
 package {{.Package}}
 
 type {{.Name}} struct {
@@ -63,13 +62,13 @@ func generateResponse(yamlFilePath string, outputBaseDir string) error {
 	defer outputFile.Close()
 
 	if err = tmpl.ExecuteTemplate(outputFile, "structTemplate", struct {
-		Name        string
-		Package     string
-		Fields      map[string]StructField
+		Name    string
+		Package string
+		Fields  map[string]StructField
 	}{
-		Name:        structInfo.Name,
-		Package:     structInfo.Package,
-		Fields:      structInfo.Fields,
+		Name:    structInfo.Name,
+		Package: structInfo.Package,
+		Fields:  structInfo.Fields,
 	}); err != nil {
 		return fmt.Errorf("template error: %v", err)
 	}

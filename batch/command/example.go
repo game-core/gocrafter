@@ -2,8 +2,8 @@ package command
 
 import (
 	"fmt"
-	"time"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"time"
 
 	"github.com/game-core/gocrafter/batch/service"
 )
@@ -17,9 +17,9 @@ type exampleCommand struct {
 }
 
 func NewExampleCommand(exampleService service.ExampleService) ExampleCommand {
-    return &exampleCommand{
-        exampleService: exampleService,
-    }
+	return &exampleCommand{
+		exampleService: exampleService,
+	}
 }
 
 // ListExample exampleテーブル一覧を取得する

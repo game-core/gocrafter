@@ -2,9 +2,9 @@ package account
 
 import (
 	"github.com/labstack/echo/v4"
-	
-	_ "github.com/game-core/gocrafter/api/presentation/response/account"
+
 	request "github.com/game-core/gocrafter/api/presentation/request/account"
+	_ "github.com/game-core/gocrafter/api/presentation/response/account"
 	errorResponse "github.com/game-core/gocrafter/api/presentation/response/error"
 	accountService "github.com/game-core/gocrafter/domain/service/account"
 )
@@ -22,9 +22,9 @@ type accountController struct {
 func NewAccountController(
 	accountService accountService.AccountService,
 ) AccountController {
-    return &accountController{
-        accountService: accountService,
-    }
+	return &accountController{
+		accountService: accountService,
+	}
 }
 
 // @tags        Account
@@ -43,7 +43,7 @@ func (a *accountController) RegisterAccount() echo.HandlerFunc {
 		response, err := a.accountService.RegisterAccount(request)
 		if err != nil {
 			return c.JSON(500, &errorResponse.Error{
-				Status: 500,
+				Status:       500,
 				ErrorMessage: "",
 			})
 		}
@@ -68,7 +68,7 @@ func (a *accountController) LoginAccount() echo.HandlerFunc {
 		response, err := a.accountService.LoginAccount(request)
 		if err != nil {
 			return c.JSON(500, &errorResponse.Error{
-				Status: 500,
+				Status:       500,
 				ErrorMessage: "",
 			})
 		}
@@ -93,7 +93,7 @@ func (a *accountController) CheckAccount() echo.HandlerFunc {
 		response, err := a.accountService.CheckAccount(request)
 		if err != nil {
 			return c.JSON(500, &errorResponse.Error{
-				Status: 500,
+				Status:       500,
 				ErrorMessage: "",
 			})
 		}
