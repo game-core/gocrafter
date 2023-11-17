@@ -9,49 +9,49 @@ docker_wire_gen:
 
 # 全てのappを自動生成
 docker_app_gen:
-	docker compose -f docker-compose.local.yml exec gen go generate ./script/request/gen.go
+	docker compose -f docker-compose.local.yml exec gen go generate ./config/generator/request/gen.go
 	docker compose -f docker-compose.local.yml exec gen go fmt ./api/presentation/request...
-	docker compose -f docker-compose.local.yml exec gen go generate ./script/response/gen.go
+	docker compose -f docker-compose.local.yml exec gen go generate ./config/generator/response/gen.go
 	docker compose -f docker-compose.local.yml exec gen go fmt ./api/presentation/response...
 
 # requestを自動生成
 docker_request_gen:
-	docker compose -f docker-compose.local.yml exec gen go generate ./script/request/gen.go
+	docker compose -f docker-compose.local.yml exec gen go generate ./config/generator/request/gen.go
 	docker compose -f docker-compose.local.yml exec gen go fmt ./api/presentation/request...
 
 # responseを自動生成
 docker_response_gen:
-	docker compose -f docker-compose.local.yml exec gen go generate ./script/response/gen.go
+	docker compose -f docker-compose.local.yml exec gen go generate ./config/generator/response/gen.go
 	docker compose -f docker-compose.local.yml exec gen go fmt ./api/presentation/response...
 
 # 全てのdomainを自動生成
 docker_domain_gen:
-	docker compose -f docker-compose.local.yml exec gen go generate ./script/entity/gen.go
+	docker compose -f docker-compose.local.yml exec gen go generate ./config/generator/entity/gen.go
 	docker compose -f docker-compose.local.yml exec gen go fmt ./domain/entity/...
-	docker compose -f docker-compose.local.yml exec gen go generate ./script/repository/gen.go
+	docker compose -f docker-compose.local.yml exec gen go generate ./config/generator/repository/gen.go
 	docker compose -f docker-compose.local.yml exec gen go fmt ./domain/repository/...
-	docker compose -f docker-compose.local.yml exec gen go generate ./script/dao/gen.go
+	docker compose -f docker-compose.local.yml exec gen go generate ./config/generator/dao/gen.go
 	docker compose -f docker-compose.local.yml exec gen go fmt ./infra/dao/...
-	docker compose -f docker-compose.local.yml exec gen go generate ./script/sql/gen.go
+	docker compose -f docker-compose.local.yml exec gen go generate ./config/generator/sql/gen.go
 
 # modelを自動生成
 docker_entity_gen:
-	docker compose -f docker-compose.local.yml exec gen go generate ./script/entity/gen.go
+	docker compose -f docker-compose.local.yml exec gen go generate ./config/generator/entity/gen.go
 	docker compose -f docker-compose.local.yml exec gen go fmt ./domain/entity/...
 
 # repositoryを自動生成
 docker_repository_gen:
-	docker compose -f docker-compose.local.yml exec gen go generate ./script/repository/gen.go
+	docker compose -f docker-compose.local.yml exec gen go generate ./config/generator/repository/gen.go
 	docker compose -f docker-compose.local.yml exec gen go fmt ./domain/repository/...
 
 # daoを自動生成
 docker_dao_gen:
-	docker compose -f docker-compose.local.yml exec gen go generate ./script/dao/gen.go
+	docker compose -f docker-compose.local.yml exec gen go generate ./config/generator/dao/gen.go
 	docker compose -f docker-compose.local.yml exec gen go fmt ./infra/dao/...
 
 # sqlを自動生成
 docker_sql_gen:
-	docker compose -f docker-compose.local.yml exec gen go generate ./script/sql/gen.go
+	docker compose -f docker-compose.local.yml exec gen go generate ./config/generator/sql/gen.go
 
 # Swaggerを自動生成
 docker_swag_gen:
