@@ -18,6 +18,7 @@ func InitializeAccountMiddleware() middleware.AccountMiddleware {
 	wire.Build(
 		middleware.NewAccountMiddleware,
 	)
+	
 	return nil
 }
 
