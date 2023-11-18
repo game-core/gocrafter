@@ -21,7 +21,6 @@ type StructField struct {
 
 type StructInfo struct {
 	Name     string                 `yaml:"name"`
-	Database string                 `yaml:"database"`
 	Package  string                 `yaml:"package"`
 	Fields   map[string]StructField `yaml:"structure"`
 	Primary  []string               `yaml:"primary"`
@@ -37,7 +36,7 @@ package {{.Package}}
 
 import (
 	"github.com/jinzhu/gorm"
-	"github.com/game-core/gocrafter/domain/entity/{{.Database}}/{{.Package}}"
+	"github.com/game-core/gocrafter/domain/entity/master/{{.Package}}"
 )
 
 type {{.Name}}Repository interface {
@@ -53,7 +52,7 @@ func generateRepository(yamlFilePath string, outputBaseDir string) error {
 		return err
 	}
 
-	outputDir := filepath.Join(fmt.Sprintf("%s/%s", outputBaseDir, structInfo.Database), structInfo.Package)
+	outputDir := filepath.Join(outputBaseDir, structInfo.Package)
 	err = os.MkdirAll(outputDir, os.ModePerm)
 	if err != nil {
 		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
@@ -154,7 +153,6 @@ func generateRepository(yamlFilePath string, outputBaseDir string) error {
 	}{
 		Name:     structInfo.Name,
 		Package:  structInfo.Package,
-		Database: structInfo.Database,
 		Methods:  methods,
 	})
 	if err != nil {
@@ -181,8 +179,8 @@ func getStructInfo(yamlFilePath string) (*StructInfo, error) {
 }
 
 func main() {
-	outputBaseDir := "../../../domain/repository"
-	yamlFiles, err := filepath.Glob("../../../docs/entity/*.yaml")
+	outputBaseDir := "../../../domain/repository/master"
+	yamlFiles, err := filepath.Glob("../../../docs/entity/master/*.yaml")
 	if err != nil {
 		log.Fatalf("Error finding YAML files: %v", err)
 	}

@@ -25,7 +25,6 @@ type StructField struct {
 type StructInfo struct {
 	Name     string                 `yaml:"name"`
 	Table    string                 `yaml:"table"`
-	Database string                 `yaml:"database"`
 	Package  string                 `yaml:"package"`
 	Fields   map[string]StructField `yaml:"structure"`
 	Primary  []string               `yaml:"primary"`
@@ -41,7 +40,7 @@ const templateCode = `CREATE TABLE {{.Table}} (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 `
 
-func generateEntity(yamlFilePath string, outputBaseDir string) error {
+func generateEntity(yamlFilePath string, outputDir string) error {
 	structInfo, err := getStructInfo(yamlFilePath)
 	if err != nil {
 		return err
@@ -54,7 +53,6 @@ func generateEntity(yamlFilePath string, outputBaseDir string) error {
 		return fmt.Errorf("error parsing template: %v", err)
 	}
 
-	outputDir := fmt.Sprintf("%s/%s", outputBaseDir, structInfo.Database)
 	if err := os.MkdirAll(outputDir, os.ModePerm); err != nil {
 		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
 	}
@@ -108,7 +106,7 @@ func generateEntity(yamlFilePath string, outputBaseDir string) error {
 		return fmt.Errorf("template error: %v", err)
 	}
 
-	fmt.Printf("Created %s Entity in %s\n", structInfo.Name, outputFileName)
+	fmt.Printf("Created %s SQL in %s\n", structInfo.Name, outputFileName)
 
 	return nil
 }
@@ -238,14 +236,14 @@ func extractFileName(filePath string) string {
 }
 
 func main() {
-	userOutput := "../../../docs/sql"
-	userYamlFiles, err := filepath.Glob("../../../docs/entity/*.yaml")
+	outputDir := "../../../docs/sql/user"
+	yamlFiles, err := filepath.Glob("../../../docs/entity/user/*.yaml")
 	if err != nil {
 		log.Fatalf("Error finding YAML files: %v", err)
 	}
 
-	for _, yamlFile := range userYamlFiles {
-		err := generateEntity(yamlFile, userOutput)
+	for _, yamlFile := range yamlFiles {
+		err := generateEntity(yamlFile, outputDir)
 		if err != nil {
 			log.Printf("Error generating entity from YAML file %s: %v", yamlFile, err)
 		}

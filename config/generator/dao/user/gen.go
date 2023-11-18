@@ -22,7 +22,6 @@ type StructField struct {
 
 type StructInfo struct {
 	Name     string                 `yaml:"name"`
-	Database string                 `yaml:"database"`
 	Package  string                 `yaml:"package"`
 	Fields   map[string]StructField `yaml:"structure"`
 	Primary  []string               `yaml:"primary"`
@@ -39,7 +38,7 @@ package {{.Package}}
 import (
 	"github.com/jinzhu/gorm"
 	"github.com/game-core/gocrafter/config/database"
-	"github.com/game-core/gocrafter/domain/entity/{{.Database}}/{{.Package}}"
+	"github.com/game-core/gocrafter/domain/entity/user/{{.Package}}"
 	{{.RepositoryImportPath}}
 )
 
@@ -50,8 +49,8 @@ type {{.Package}}Dao struct {
 
 func New{{.Name}}Dao(conn *database.SqlHandler) {{.Package}}Repository.{{.RepositoryInterface}} {
 	return &{{.Package}}Dao{
-		Read:  conn.{{.Conn}}.ReadConn,
-		Write: conn.{{.Conn}}.WriteConn,
+		Read:  conn.User.ReadConn,
+		Write: conn.User.WriteConn,
 	}
 }
 
@@ -66,7 +65,7 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 		return err
 	}
 
-	outputDir := filepath.Join(fmt.Sprintf("%s/%s", outputBaseDir, structInfo.Database), structInfo.Package)
+	outputDir := filepath.Join(outputBaseDir, structInfo.Package)
 	if err := os.MkdirAll(outputDir, os.ModePerm); err != nil {
 		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
 	}
@@ -85,24 +84,19 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 		return fmt.Errorf("error parsing DAO template: %v", err)
 	}
 
-	err = daoTmpl.ExecuteTemplate(outputFile, "daoTemplate", struct {
+	if err := daoTmpl.ExecuteTemplate(outputFile, "daoTemplate", struct {
 		Name                 string
 		Package              string
-		Database             string
 		Methods              map[string]methodType
 		RepositoryImportPath string
 		RepositoryInterface  string
-		Conn                 string
 	}{
 		Name:                 structInfo.Name,
 		Package:              structInfo.Package,
-		Database:             structInfo.Database,
 		Methods:              methods,
-		RepositoryImportPath: fmt.Sprintf("%s \"github.com/game-core/gocrafter/domain/repository/%s/%s\"", structInfo.Package+"Repository", structInfo.Database, structInfo.Package),
+		RepositoryImportPath: fmt.Sprintf("%s \"github.com/game-core/gocrafter/domain/repository/user/%s\"", structInfo.Package+"Repository", structInfo.Package),
 		RepositoryInterface:  fmt.Sprintf("%sRepository", structInfo.Name),
-		Conn:                 strings.Title(structInfo.Database),
-	})
-	if err != nil {
+	}); err != nil {
 		return fmt.Errorf("template error: %v", err)
 	}
 
@@ -322,8 +316,8 @@ func getStructInfo(yamlFilePath string) (*StructInfo, error) {
 }
 
 func main() {
-	outputBaseDir := "../../../infra/dao"
-	yamlFiles, err := filepath.Glob("../../../docs/entity/*.yaml")
+	outputBaseDir := "../../../infra/dao/user"
+	yamlFiles, err := filepath.Glob("../../../docs/entity/user/*.yaml")
 	if err != nil {
 		log.Fatalf("Error finding YAML files: %v", err)
 	}

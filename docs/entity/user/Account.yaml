@@ -1,5 +1,4 @@
 name: Account
-database: user
 package: account
 table: account
 structure:

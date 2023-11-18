@@ -22,7 +22,6 @@ type StructField struct {
 
 type StructInfo struct {
 	Name     string                 `yaml:"name"`
-	Database string                 `yaml:"database"`
 	Package  string                 `yaml:"package"`
 	Fields   map[string]StructField `yaml:"structure"`
 	Primary  []string               `yaml:"primary"`
@@ -45,8 +44,8 @@ type {{.Name}} struct {
 }
 `
 
-func generateEntity(yamlFilePath string, outputBaseDir string) error {
-	structInfo, err := getStructInfo(yamlFilePath)
+func generateEntity(yamlFile string, outputBaseDir string) error {
+	structInfo, err := getStructInfo(yamlFile)
 	if err != nil {
 		return err
 	}
@@ -58,8 +57,8 @@ func generateEntity(yamlFilePath string, outputBaseDir string) error {
 		return fmt.Errorf("error parsing template: %v", err)
 	}
 
-	outputDir := filepath.Join(fmt.Sprintf("%s/%s", outputBaseDir, structInfo.Database), structInfo.Package)
-	if err = os.MkdirAll(outputDir, os.ModePerm); err != nil {
+	outputDir := filepath.Join(outputBaseDir, structInfo.Package)
+	if err := os.MkdirAll(outputDir, os.ModePerm); err != nil {
 		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
 	}
 
@@ -75,7 +74,7 @@ func generateEntity(yamlFilePath string, outputBaseDir string) error {
 		fieldsOrdered = append(fieldsOrdered, fieldName)
 	}
 
-	err = tmpl.ExecuteTemplate(outputFile, "structTemplate", struct {
+	if err := tmpl.ExecuteTemplate(outputFile, "structTemplate", struct {
 		Name        string
 		Package     string
 		Fields      map[string]StructField
@@ -85,8 +84,7 @@ func generateEntity(yamlFilePath string, outputBaseDir string) error {
 		Package:     structInfo.Package,
 		Fields:      structInfo.Fields,
 		FieldsOrder: fieldsOrdered,
-	})
-	if err != nil {
+	}); err != nil {
 		return fmt.Errorf("template error: %v", err)
 	}
 
@@ -152,14 +150,14 @@ func getTypeWithPointer(fieldInfo StructField) string {
 }
 
 func main() {
-	userOutput := "../../../domain/entity"
-	userYamlFiles, err := filepath.Glob("../../../docs/entity/*.yaml")
+	outputBaseDir := "../../../domain/entity/master"
+	yamlFiles, err := filepath.Glob("../../../docs/entity/master/*.yaml")
 	if err != nil {
 		log.Fatalf("Error finding YAML files: %v", err)
 	}
 
-	for _, yamlFile := range userYamlFiles {
-		err := generateEntity(yamlFile, userOutput)
+	for _, yamlFile := range yamlFiles {
+		err := generateEntity(yamlFile, outputBaseDir)
 		if err != nil {
 			log.Printf("Error generating entity from YAML file %s: %v", yamlFile, err)
 		}
