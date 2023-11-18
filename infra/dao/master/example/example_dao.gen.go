@@ -57,7 +57,7 @@ func (d *exampleDao) Delete(entity *example.Example, tx *gorm.DB) error {
 }
 
 func (d *exampleDao) FindByID(ID int64) (*example.Example, error) {
-	cachedResult, found := d.Cache.Get(cacheKey("FindByID", ID))
+	cachedResult, found := d.Cache.Get(cacheKey("FindByID", fmt.Sprintf("%d_", ID)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*example.Example); ok {
 			return cachedEntity, nil
@@ -70,7 +70,7 @@ func (d *exampleDao) FindByID(ID int64) (*example.Example, error) {
 		return nil, err
 	}
 
-	d.Cache.Set(cacheKey("FindByID", ID), entity, cache.DefaultExpiration)
+	d.Cache.Set(cacheKey("FindByID", fmt.Sprintf("%d_", ID)), entity, cache.DefaultExpiration)
 
 	return entity, nil
 }
@@ -148,11 +148,6 @@ func (d *exampleDao) Update(entity *example.Example, tx *gorm.DB) (*example.Exam
 	return entity, nil
 }
 
-func cacheKey(method string, key interface{}) string {
-	switch key.(type) {
-	case string:
-		return fmt.Sprintf("example:%s:%s", method, key)
-	default:
-		return fmt.Sprintf("example:%s:%d", method, key)
-	}
+func cacheKey(method string, key string) string {
+	return fmt.Sprintf("example:%s:%s", method, key)
 }

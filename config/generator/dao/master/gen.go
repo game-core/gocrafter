@@ -64,13 +64,8 @@ func New{{.Name}}Dao(conn *database.SqlHandler) {{.Package}}Repository.{{.Reposi
 	{{.Script}}
 {{end}}
 
-func cacheKey(method string, key interface{}) string {
-	switch key.(type) {
-	case string:
-		return fmt.Sprintf("{{.Table}}:%s:%s", method, key)
-	default:
-		return fmt.Sprintf("{{.Table}}:%s:%d", method, key)
-	}
+func cacheKey(method string, key string) string {
+	return fmt.Sprintf("{{.Table}}:%s:%s", method, key)
 }
 `
 
@@ -166,7 +161,7 @@ func generateMethods(structInfo *StructInfo) map[string]methodType {
 func generateFindByID(structInfo *StructInfo) string {
 	return fmt.Sprintf(
 		`func (d *%sDao) FindByID(ID int64) (*%s.%s, error) {
-			cachedResult, found := d.Cache.Get(cacheKey("FindByID", ID))
+			cachedResult, found := d.Cache.Get(cacheKey("FindByID", %s))
 			if found {
 				if cachedEntity, ok := cachedResult.(*%s.%s); ok {
 					return cachedEntity, nil
@@ -179,7 +174,7 @@ func generateFindByID(structInfo *StructInfo) string {
 				return nil, err
 			}
 		
-			d.Cache.Set(cacheKey("FindByID", ID), entity, cache.DefaultExpiration)
+			d.Cache.Set(cacheKey("FindByID", %s), entity, cache.DefaultExpiration)
 
 			return entity, nil
 		}
@@ -187,10 +182,12 @@ func generateFindByID(structInfo *StructInfo) string {
 		structInfo.Package,
 		structInfo.Package,
 		structInfo.Name,
+		`fmt.Sprintf("%d_", ID)`,
 		structInfo.Package,
 		structInfo.Name,
 		structInfo.Package,
 		structInfo.Name,
+		`fmt.Sprintf("%d_", ID)`,
 	)
 }
 
