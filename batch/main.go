@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/game-core/gocrafter/batch/di"
 	batchLog "github.com/game-core/gocrafter/log"
 )

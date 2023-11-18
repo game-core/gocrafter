@@ -7,19 +7,18 @@
 package di
 
 import (
-	"github.com/game-core/gocrafter/batch/command"
-	"github.com/game-core/gocrafter/batch/service"
-	"github.com/game-core/gocrafter/config/db"
-	"github.com/game-core/gocrafter/infra/dao"
+	"github.com/game-core/gocrafter/batch/command/example"
+	"github.com/game-core/gocrafter/config/database"
+	example3 "github.com/game-core/gocrafter/domain/service/example"
+	example2 "github.com/game-core/gocrafter/infra/dao/master/example"
 )
 
 // Injectors from wire.go:
 
-// example
-func InitializeExampleCommand() command.ExampleCommand {
-	sqlHandler := db.NewDB()
-	exampleRepository := dao.NewExampleDao(sqlHandler)
-	exampleService := service.NewExampleService(exampleRepository)
-	exampleCommand := command.NewExampleCommand(exampleService)
+func InitializeExampleCommand() example.ExampleCommand {
+	sqlHandler := database.NewDB()
+	exampleRepository := example2.NewExampleDao(sqlHandler)
+	exampleService := example3.NewExampleService(exampleRepository)
+	exampleCommand := example.NewExampleCommand(exampleService)
 	return exampleCommand
 }

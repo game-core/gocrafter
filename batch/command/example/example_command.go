@@ -1,11 +1,10 @@
-package command
+package example
 
 import (
 	"fmt"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"time"
 
-	"github.com/game-core/gocrafter/batch/service"
+	exampleService "github.com/game-core/gocrafter/domain/service/example"
 )
 
 type ExampleCommand interface {
@@ -13,10 +12,12 @@ type ExampleCommand interface {
 }
 
 type exampleCommand struct {
-	exampleService service.ExampleService
+	exampleService exampleService.ExampleService
 }
 
-func NewExampleCommand(exampleService service.ExampleService) ExampleCommand {
+func NewExampleCommand(
+	exampleService exampleService.ExampleService,
+) ExampleCommand {
 	return &exampleCommand{
 		exampleService: exampleService,
 	}
@@ -24,17 +25,18 @@ func NewExampleCommand(exampleService service.ExampleService) ExampleCommand {
 
 // ListExample exampleテーブル一覧を取得する
 func (e *exampleCommand) ListExample() (err error) {
-	results, err := e.exampleService.ListExample()
+	results, err := e.exampleService.ListExampleBatch()
 	if err != nil {
 		return err
 	}
 
 	fmt.Println("List Examples:")
 	for _, example := range *results {
-		fmt.Printf("ID: %d, ExampleKey: %s, ExampleName: %s, CreatedAt: %s, UpdatedAt: %s\n",
+		fmt.Printf("ID: %d, Name: %s, Detail: %s, Count: %d, CreatedAt: %s, UpdatedAt: %s\n",
 			example.ID,
-			example.ExampleKey,
-			example.ExampleName,
+			example.Name,
+			*example.Detail,
+			example.Count,
 			example.CreatedAt.Format(time.RFC3339),
 			example.UpdatedAt.Format(time.RFC3339),
 		)

@@ -6,19 +6,18 @@ package di
 import (
 	"github.com/google/wire"
 
-	"github.com/game-core/gocrafter/batch/command"
-	"github.com/game-core/gocrafter/batch/service"
-	"github.com/game-core/gocrafter/config/db"
-	"github.com/game-core/gocrafter/infra/dao"
+	exampleCommand "github.com/game-core/gocrafter/batch/command/example"
+	exampleService "github.com/game-core/gocrafter/domain/service/example"
+	"github.com/game-core/gocrafter/config/database"
+	exampleDao "github.com/game-core/gocrafter/infra/dao/master/example"
 )
 
-// example
-func InitializeExampleCommand() command.ExampleCommand {
+func InitializeExampleCommand() exampleCommand.ExampleCommand {
 	wire.Build(
-		db.NewDB,
-		dao.NewExampleDao,
-		service.NewExampleService,
-		command.NewExampleCommand,
+		database.NewDB,
+		exampleDao.NewExampleDao,
+		exampleService.NewExampleService,
+		exampleCommand.NewExampleCommand,
 	)
 
 	return nil
