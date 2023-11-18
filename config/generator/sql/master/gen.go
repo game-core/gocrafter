@@ -23,12 +23,12 @@ type StructField struct {
 }
 
 type StructInfo struct {
-	Name     string                 `yaml:"name"`
-	Table    string                 `yaml:"table"`
-	Package  string                 `yaml:"package"`
-	Fields   map[string]StructField `yaml:"structure"`
-	Primary  []string               `yaml:"primary"`
-	Index    []string               `yaml:"index"`
+	Name    string                 `yaml:"name"`
+	Table   string                 `yaml:"table"`
+	Package string                 `yaml:"package"`
+	Fields  map[string]StructField `yaml:"structure"`
+	Primary []string               `yaml:"primary"`
+	Index   []string               `yaml:"index"`
 }
 
 const templateCode = `CREATE TABLE {{.Table}} (

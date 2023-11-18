@@ -20,11 +20,11 @@ type StructField struct {
 }
 
 type StructInfo struct {
-	Name     string                 `yaml:"name"`
-	Package  string                 `yaml:"package"`
-	Fields   map[string]StructField `yaml:"structure"`
-	Primary  []string               `yaml:"primary"`
-	Index    []string               `yaml:"index"`
+	Name    string                 `yaml:"name"`
+	Package string                 `yaml:"package"`
+	Fields  map[string]StructField `yaml:"structure"`
+	Primary []string               `yaml:"primary"`
+	Index   []string               `yaml:"index"`
 }
 
 type methodType struct {
@@ -151,9 +151,9 @@ func generateRepository(yamlFilePath string, outputBaseDir string) error {
 		Database string
 		Methods  map[string]methodType
 	}{
-		Name:     structInfo.Name,
-		Package:  structInfo.Package,
-		Methods:  methods,
+		Name:    structInfo.Name,
+		Package: structInfo.Package,
+		Methods: methods,
 	})
 	if err != nil {
 		return fmt.Errorf("template error: %v", err)
