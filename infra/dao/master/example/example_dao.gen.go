@@ -2,8 +2,8 @@ package example
 
 import (
 	"github.com/game-core/gocrafter/config/database"
-	"github.com/game-core/gocrafter/domain/entity/user/example"
-	exampleRepository "github.com/game-core/gocrafter/domain/repository/user/example"
+	"github.com/game-core/gocrafter/domain/entity/master/example"
+	exampleRepository "github.com/game-core/gocrafter/domain/repository/master/example"
 	"github.com/jinzhu/gorm"
 )
 
@@ -14,8 +14,8 @@ type exampleDao struct {
 
 func NewExampleDao(conn *database.SqlHandler) exampleRepository.ExampleRepository {
 	return &exampleDao{
-		Read:  conn.User.ReadConn,
-		Write: conn.User.WriteConn,
+		Read:  conn.Master.ReadConn,
+		Write: conn.Master.WriteConn,
 	}
 }
 
