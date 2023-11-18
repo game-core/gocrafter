@@ -23,6 +23,7 @@ type StructField struct {
 type StructInfo struct {
 	Name    string                 `yaml:"name"`
 	Package string                 `yaml:"package"`
+	Table   string                 `yaml:"table"`
 	Fields  map[string]StructField `yaml:"structure"`
 	Primary []string               `yaml:"primary"`
 	Index   []string               `yaml:"index"`
@@ -36,7 +37,10 @@ const daoTemplateCode = `
 package {{.Package}}
 
 import (
+	"fmt"
 	"github.com/jinzhu/gorm"
+	"github.com/patrickmn/go-cache"
+	
 	"github.com/game-core/gocrafter/config/database"
 	"github.com/game-core/gocrafter/domain/entity/master/{{.Package}}"
 	{{.RepositoryImportPath}}
@@ -45,18 +49,29 @@ import (
 type {{.Package}}Dao struct {
 	Read  *gorm.DB
 	Write *gorm.DB
+	Cache *cache.Cache
 }
 
 func New{{.Name}}Dao(conn *database.SqlHandler) {{.Package}}Repository.{{.RepositoryInterface}} {
 	return &{{.Package}}Dao{
 		Read:  conn.Master.ReadConn,
 		Write: conn.Master.WriteConn,
+		Cache: cache.New(cache.NoExpiration, cache.NoExpiration),
 	}
 }
 
 {{range $methodName, $methodType := .Methods }}
 	{{.Script}}
 {{end}}
+
+func cacheKey(method string, key interface{}) string {
+	switch key.(type) {
+	case string:
+		return fmt.Sprintf("{{.Table}}:%s:%s", method, key)
+	default:
+		return fmt.Sprintf("{{.Table}}:%s:%d", method, key)
+	}
+}
 `
 
 func generateDao(yamlFilePath string, outputBaseDir string) error {
@@ -87,12 +102,14 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 	if err := daoTmpl.ExecuteTemplate(outputFile, "daoTemplate", struct {
 		Name                 string
 		Package              string
+		Table                string
 		Methods              map[string]methodType
 		RepositoryImportPath string
 		RepositoryInterface  string
 	}{
 		Name:                 structInfo.Name,
 		Package:              structInfo.Package,
+		Table:                structInfo.Table,
 		Methods:              methods,
 		RepositoryImportPath: fmt.Sprintf("%s \"github.com/game-core/gocrafter/domain/repository/master/%s\"", structInfo.Package+"Repository", structInfo.Package),
 		RepositoryInterface:  fmt.Sprintf("%sRepository", structInfo.Name),
@@ -149,16 +166,27 @@ func generateMethods(structInfo *StructInfo) map[string]methodType {
 func generateFindByID(structInfo *StructInfo) string {
 	return fmt.Sprintf(
 		`func (d *%sDao) FindByID(ID int64) (*%s.%s, error) {
+			cachedResult, found := d.Cache.Get(cacheKey("FindByID", ID))
+			if found {
+				if cachedEntity, ok := cachedResult.(*%s.%s); ok {
+					return cachedEntity, nil
+				}
+			}
+
 			entity := &%s.%s{}
 			res := d.Read.Where("id = ?", ID).Find(entity)
 			if err := res.Error; err != nil {
 				return nil, err
 			}
 		
+			d.Cache.Set(cacheKey("FindByID", ID), entity, cache.DefaultExpiration)
+
 			return entity, nil
 		}
 		`,
 		structInfo.Package,
+		structInfo.Package,
+		structInfo.Name,
 		structInfo.Package,
 		structInfo.Name,
 		structInfo.Package,
@@ -170,20 +198,39 @@ func generateFindByIndex(structInfo *StructInfo, indexFields []string) string {
 	params := make([]struct{ Name, Type string }, len(indexFields))
 	paramStrings := make([]string, len(indexFields))
 	scriptStrings := make([]string, len(indexFields))
+	sprints := make([]string, len(indexFields))
+	sprintParams := make([]string, len(indexFields))
 
 	for i, field := range indexFields {
 		params[i] = struct{ Name, Type string }{field, structInfo.Fields[field].Type}
 		paramStrings[i] = fmt.Sprintf("%s %s", field, structInfo.Fields[field].Type)
 		scriptStrings[i] = fmt.Sprintf("Where(\"%s = ?\", %s)", structInfo.Fields[field].Name, field)
+		sprintParams[i] = field
+
+		switch structInfo.Fields[field].Type {
+		case "string":
+			sprints[i] = "%s_"
+		default:
+			sprints[i] = "%d_"
+		}
 	}
 
 	return fmt.Sprintf(
 		`func (d *%sDao) FindBy%s(%s) (*%s.%s, error) {
+			cachedResult, found := d.Cache.Get(cacheKey("FindBy%s", %s))
+			if found {
+				if cachedEntity, ok := cachedResult.(*%s.%s); ok {
+					return cachedEntity, nil
+				}
+			}
+
 			entity := &%s.%s{}
 			res := d.Read.%s.Find(entity)
 			if err := res.Error; err != nil {
 				return nil, err
 			}
+
+			d.Cache.Set(cacheKey("FindBy%s", %s), entity, cache.DefaultExpiration)
 		
 			return entity, nil
 		}
@@ -193,25 +240,42 @@ func generateFindByIndex(structInfo *StructInfo, indexFields []string) string {
 		strings.Join(paramStrings, ","),
 		structInfo.Package,
 		structInfo.Name,
+		strings.Join(indexFields, "And"),
+		fmt.Sprintf(`fmt.Sprintf("%s", %s)`, strings.Join(sprints, ""), strings.Join(sprintParams, ",")),
+		structInfo.Package,
+		structInfo.Name,
 		structInfo.Package,
 		structInfo.Name,
 		strings.Join(scriptStrings, "."),
+		strings.Join(indexFields, "And"),
+		fmt.Sprintf(`fmt.Sprintf("%s", %s)`, strings.Join(sprints, ""), strings.Join(sprintParams, ",")),
 	)
 }
 
 func generateList(structInfo *StructInfo) string {
 	return fmt.Sprintf(
 		`func (d *%sDao) List(limit int64) (*%s.%ss, error) {
+			cachedResult, found := d.Cache.Get(cacheKey("List", ""))
+			if found {
+				if cachedEntity, ok := cachedResult.(*%s.%ss); ok {
+					return cachedEntity, nil
+				}
+			}
+
 			entity := &%s.%ss{}
 			res := d.Read.Limit(limit).Find(entity)
 			if err := res.Error; err != nil {
 				return nil, err
 			}
+
+			d.Cache.Set(cacheKey("List", ""), entity, cache.DefaultExpiration)
 		
 			return entity, nil
 		}
 		`,
 		structInfo.Package,
+		structInfo.Package,
+		structInfo.Name,
 		structInfo.Package,
 		structInfo.Name,
 		structInfo.Package,
