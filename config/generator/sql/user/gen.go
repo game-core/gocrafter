@@ -175,6 +175,8 @@ func getType(fieldInfo StructField) string {
 		return " BIGINT"
 	case "int":
 		return " INT"
+	case "bool":
+		return " TINYINT"
 	case "time.Time":
 		return " TIMESTAMP"
 	default:
