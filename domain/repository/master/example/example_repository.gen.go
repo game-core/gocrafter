@@ -12,9 +12,9 @@ type ExampleRepository interface {
 
 	FindByID(ID int64) (*example.Example, error)
 
-	FindByIDAndUserID(ID int64, UserID int64) (*example.Example, error)
+	FindByIDAndName(ID int64, Name string) (*example.Example, error)
 
-	FindByUserID(UserID int64) (*example.Example, error)
+	FindByName(Name string) (*example.Example, error)
 
 	List(limit int64) (*example.Examples, error)
 

@@ -7,11 +7,6 @@ structure:
     type: int64
     nullable: false
     number: 1
-  UserID:
-    name: user_id
-    type: int64
-    nullable: false
-    number: 2
   Name:
     name: name
     type: string
@@ -40,5 +35,5 @@ structure:
 primary:
   - ID
 index:
-  - UserID
-  - ID,UserID
+  - Name
+  - ID,Name
