@@ -1,5 +1,7 @@
 package account
 
+type Accounts []Account
+
 type Account struct {
 	ID int64 `json:"id"`
 

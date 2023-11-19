@@ -1,12 +1,12 @@
 package example
 
 import (
-	exampleEntity "github.com/game-core/gocrafter/domain/entity/master/example"
+	response "github.com/game-core/gocrafter/api/presentation/response/example"
 	exampleRepository "github.com/game-core/gocrafter/domain/repository/master/example"
 )
 
 type ExampleService interface {
-	ListExampleBatch() (*exampleEntity.Examples, error)
+	ListExample(limit int64) (*response.ListExample, error)
 }
 
 type exampleService struct {
@@ -21,11 +21,26 @@ func NewExampleService(
 	}
 }
 
-func (e *exampleService) ListExampleBatch() (*exampleEntity.Examples, error) {
-	result, err := e.exampleRepository.List(10)
+// ListExample 一覧を取得する
+func (e *exampleService) ListExample(limit int64) (*response.ListExample, error) {
+	ers, err := e.exampleRepository.List(limit)
 	if err != nil {
 		return nil, err
 	}
 
-	return result, nil
+	examples := make(response.Examples, len(*ers))
+	for i, er := range *ers {
+		example := &response.Example{
+			ID:     er.ID,
+			Name:   er.Name,
+			Detail: er.Detail,
+			Count:  er.Count,
+		}
+		examples[i] = *example
+	}
+
+	return &response.ListExample{
+		Status: 200,
+		Items:   &examples,
+	}, nil
 }

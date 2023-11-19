@@ -2,7 +2,6 @@ package example
 
 import (
 	"fmt"
-	"time"
 
 	exampleService "github.com/game-core/gocrafter/domain/service/example"
 )
@@ -25,20 +24,18 @@ func NewExampleCommand(
 
 // ListExample exampleテーブル一覧を取得する
 func (e *exampleCommand) ListExample() (err error) {
-	results, err := e.exampleService.ListExampleBatch()
+	results, err := e.exampleService.ListExample(10)
 	if err != nil {
 		return err
 	}
 
 	fmt.Println("List Examples:")
-	for _, example := range *results {
-		fmt.Printf("ID: %d, Name: %s, Detail: %s, Count: %d, CreatedAt: %s, UpdatedAt: %s\n",
+	for _, example := range *results.Items {
+		fmt.Printf("ID: %d, Name: %s, Detail: %s, Count: %d\n",
 			example.ID,
 			example.Name,
 			*example.Detail,
 			example.Count,
-			example.CreatedAt.Format(time.RFC3339),
-			example.UpdatedAt.Format(time.RFC3339),
 		)
 	}
 
