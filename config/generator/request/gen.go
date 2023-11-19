@@ -52,8 +52,7 @@ func generateRequest(yamlFilePath string, outputBaseDir string) error {
 	}
 
 	outputDir := filepath.Join(outputBaseDir, structInfo.Package)
-	err = os.MkdirAll(outputDir, os.ModePerm)
-	if err != nil {
+	if err := os.MkdirAll(outputDir, os.ModePerm); err != nil {
 		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
 	}
 
@@ -69,7 +68,7 @@ func generateRequest(yamlFilePath string, outputBaseDir string) error {
 		fieldsOrdered = append(fieldsOrdered, fieldName)
 	}
 
-	err = tmpl.ExecuteTemplate(outputFile, "structTemplate", struct {
+	if err := tmpl.ExecuteTemplate(outputFile, "structTemplate", struct {
 		Name    string
 		Package string
 		Fields  map[string]StructField
@@ -77,8 +76,7 @@ func generateRequest(yamlFilePath string, outputBaseDir string) error {
 		Name:    structInfo.Name,
 		Package: structInfo.Package,
 		Fields:  structInfo.Fields,
-	})
-	if err != nil {
+	}); err != nil {
 		return fmt.Errorf("template error: %v", err)
 	}
 

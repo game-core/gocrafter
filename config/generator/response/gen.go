@@ -63,7 +63,7 @@ func generateResponse(yamlFilePath string, outputBaseDir string) error {
 	}
 	defer outputFile.Close()
 
-	if err = tmpl.ExecuteTemplate(outputFile, "structTemplate", struct {
+	if err := tmpl.ExecuteTemplate(outputFile, "structTemplate", struct {
 		Name    string
 		Package string
 		Fields  map[string]StructField
