@@ -93,101 +93,122 @@ func generateMethods(structInfo *StructInfo) map[string]methodType {
 	methods := make(map[string]methodType)
 
 	// FindByID
-	if len(structInfo.Primary) > 0 {
-		methods["FindByID"] = methodType{
-			Script: fmt.Sprintf(`FindByID(ID int64) (*%s.%s, error)`, structInfo.Package, structInfo.Name),
-		}
+	methods["FindByID"] = methodType{
+		Script: generateFindByID(structInfo),
 	}
 
 	// FindByIndex
 	for _, index := range structInfo.Index {
 		indexFields := strings.Split(index, ",")
-		params := make([]struct{ Name, Type string }, len(indexFields))
-
-		var paramStrings []string
-
-		for i, field := range indexFields {
-			paramStrings = append(paramStrings, fmt.Sprintf("%s %s", field, structInfo.Fields[field].Type))
-			params[i] = struct{ Name, Type string }{field, structInfo.Fields[field].Type}
-		}
-
 		methods[fmt.Sprintf("FindBy%s", strings.Join(indexFields, "And"))] = methodType{
-			Script: fmt.Sprintf(
-				`FindBy%s(%s) (*%s.%s, error)`,
-				strings.Join(indexFields, "And"),
-				strings.Join(paramStrings, ","),
-				structInfo.Package,
-				structInfo.Name,
-			),
+			Script: generateFindByIndex(structInfo, indexFields),
 		}
 	}
 
 	// List
 	methods["List"] = methodType{
-		Script: fmt.Sprintf(
-			`List(limit int64) (*%s.%ss, error)`,
-			structInfo.Package,
-			structInfo.Name,
-		),
+		Script: generateList(structInfo),
 	}
 
 	// ListByIndex
 	for _, index := range structInfo.Index {
 		indexFields := strings.Split(index, ",")
-		params := make([]struct{ Name, Type string }, len(indexFields))
-
-		var paramStrings []string
-
-		for i, field := range indexFields {
-			paramStrings = append(paramStrings, fmt.Sprintf("%s %s", field, structInfo.Fields[field].Type))
-			params[i] = struct{ Name, Type string }{field, structInfo.Fields[field].Type}
-		}
-
 		methods[fmt.Sprintf("ListBy%s", strings.Join(indexFields, "And"))] = methodType{
-			Script: fmt.Sprintf(
-				`ListBy%s(%s) (*%s.%ss, error)`,
-				strings.Join(indexFields, "And"),
-				strings.Join(paramStrings, ","),
-				structInfo.Package,
-				structInfo.Name,
-			),
+			Script: generateListByIndex(structInfo, indexFields),
 		}
 	}
 
 	// Create
 	methods["Create"] = methodType{
-		Script: fmt.Sprintf(
-			`Create(%s *%s.%s, tx *gorm.DB) (*%s.%s, error)`,
-			structInfo.Package,
-			structInfo.Package,
-			structInfo.Name,
-			structInfo.Package,
-			structInfo.Name,
-		),
+		Script: generateCreate(structInfo),
 	}
 
 	// Update
 	methods["Update"] = methodType{
-		Script: fmt.Sprintf(
-			`Update(%s *%s.%s, tx *gorm.DB) (*%s.%s, error)`,
-			structInfo.Package,
-			structInfo.Package,
-			structInfo.Name,
-			structInfo.Package,
-			structInfo.Name,
-		),
+		Script: generateUpdate(structInfo),
 	}
 
 	// Delete
 	methods["Delete"] = methodType{
-		Script: fmt.Sprintf(
-			`Delete(%s *%s.%s, tx *gorm.DB) error`,
-			structInfo.Package,
-			structInfo.Package,
-			structInfo.Name,
-		),
+		Script: generateDelete(structInfo),
 	}
+
 	return methods
+}
+
+func generateFindByID(structInfo *StructInfo) string {
+	return fmt.Sprintf(`FindByID(ID int64) (*%s.%s, error)`, structInfo.Package, structInfo.Name)
+}
+
+func generateList(structInfo *StructInfo) string {
+	return fmt.Sprintf(`List(limit int64) (*%s.%ss, error)`, structInfo.Package, structInfo.Name)
+}
+
+func generateCreate(structInfo *StructInfo) string {
+	return fmt.Sprintf(
+		`Create(%s *%s.%s, tx *gorm.DB) (*%s.%s, error)`,
+		structInfo.Package,
+		structInfo.Package,
+		structInfo.Name,
+		structInfo.Package,
+		structInfo.Name,
+	)
+}
+
+func generateUpdate(structInfo *StructInfo) string {
+	return fmt.Sprintf(
+		`Update(%s *%s.%s, tx *gorm.DB) (*%s.%s, error)`,
+		structInfo.Package,
+		structInfo.Package,
+		structInfo.Name,
+		structInfo.Package,
+		structInfo.Name,
+	)
+}
+
+func generateDelete(structInfo *StructInfo) string {
+	return fmt.Sprintf(
+		`Delete(%s *%s.%s, tx *gorm.DB) error`,
+		structInfo.Package,
+		structInfo.Package,
+		structInfo.Name,
+	)
+}
+
+func generateFindByIndex(structInfo *StructInfo, indexFields []string) string {
+	params := make([]struct{ Name, Type string }, len(indexFields))
+	var paramStrings []string
+
+	for i, field := range indexFields {
+		paramStrings = append(paramStrings, fmt.Sprintf("%s %s", field, structInfo.Fields[field].Type))
+		params[i] = struct{ Name, Type string }{field, structInfo.Fields[field].Type}
+	}
+
+	return fmt.Sprintf(
+		`FindBy%s(%s) (*%s.%s, error)`,
+		strings.Join(indexFields, "And"),
+		strings.Join(paramStrings, ","),
+		structInfo.Package,
+		structInfo.Name,
+	)
+}
+
+func generateListByIndex(structInfo *StructInfo, indexFields []string) string {
+	params := make([]struct{ Name, Type string }, len(indexFields))
+	var paramStrings []string
+
+	for i, field := range indexFields {
+		paramStrings = append(paramStrings, fmt.Sprintf("%s %s", field, structInfo.Fields[field].Type))
+		params[i] = struct{ Name, Type string }{field, structInfo.Fields[field].Type}
+	}
+
+	return fmt.Sprintf(
+		`ListBy%s(%s) (*%s.%ss, error)`,
+		strings.Join(indexFields, "And"),
+		strings.Join(paramStrings, ","),
+		structInfo.Package,
+		structInfo.Name,
+	)
 }
 
 func getStructInfo(yamlFilePath string) (*StructInfo, error) {
