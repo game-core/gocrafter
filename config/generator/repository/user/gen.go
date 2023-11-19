@@ -53,8 +53,7 @@ func generateRepository(yamlFilePath string, outputBaseDir string) error {
 	}
 
 	outputDir := filepath.Join(outputBaseDir, structInfo.Package)
-	err = os.MkdirAll(outputDir, os.ModePerm)
-	if err != nil {
+	if err := os.MkdirAll(outputDir, os.ModePerm); err != nil {
 		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
 	}
 
@@ -65,6 +64,32 @@ func generateRepository(yamlFilePath string, outputBaseDir string) error {
 	}
 	defer outputFile.Close()
 
+	methods := generateMethods(structInfo)
+
+	repositoryTmpl, err := template.New("repositoryTemplate").Parse(repositoryTemplateCode)
+	if err != nil {
+		return fmt.Errorf("error parsing repository template: %v", err)
+	}
+
+	if err = repositoryTmpl.ExecuteTemplate(outputFile, "repositoryTemplate", struct {
+		Name     string
+		Package  string
+		Database string
+		Methods  map[string]methodType
+	}{
+		Name:    structInfo.Name,
+		Package: structInfo.Package,
+		Methods: methods,
+	}); err != nil {
+		return fmt.Errorf("template error: %v", err)
+	}
+
+	fmt.Printf("Created %s Repository in %s\n", structInfo.Name, outputFileName)
+
+	return nil
+}
+
+func generateMethods(structInfo *StructInfo) map[string]methodType {
 	methods := make(map[string]methodType)
 
 	// FindByID
@@ -162,29 +187,7 @@ func generateRepository(yamlFilePath string, outputBaseDir string) error {
 			structInfo.Name,
 		),
 	}
-
-	repositoryTmpl, err := template.New("repositoryTemplate").Parse(repositoryTemplateCode)
-	if err != nil {
-		return fmt.Errorf("error parsing repository template: %v", err)
-	}
-
-	err = repositoryTmpl.ExecuteTemplate(outputFile, "repositoryTemplate", struct {
-		Name     string
-		Package  string
-		Database string
-		Methods  map[string]methodType
-	}{
-		Name:    structInfo.Name,
-		Package: structInfo.Package,
-		Methods: methods,
-	})
-	if err != nil {
-		return fmt.Errorf("template error: %v", err)
-	}
-
-	fmt.Printf("Created %s Repository in %s\n", structInfo.Name, outputFileName)
-
-	return nil
+	return methods
 }
 
 func getStructInfo(yamlFilePath string) (*StructInfo, error) {
