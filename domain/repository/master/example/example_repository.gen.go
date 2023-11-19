@@ -18,5 +18,9 @@ type ExampleRepository interface {
 
 	List(limit int64) (*example.Examples, error)
 
+	ListByIDAndName(ID int64, Name string) (*example.Examples, error)
+
+	ListByName(Name string) (*example.Examples, error)
+
 	Update(example *example.Example, tx *gorm.DB) (*example.Example, error)
 }

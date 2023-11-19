@@ -106,6 +106,29 @@ func generateRepository(yamlFilePath string, outputBaseDir string) error {
 		),
 	}
 
+	// ListByIndex
+	for _, index := range structInfo.Index {
+		indexFields := strings.Split(index, ",")
+		params := make([]struct{ Name, Type string }, len(indexFields))
+
+		var paramStrings []string
+
+		for i, field := range indexFields {
+			paramStrings = append(paramStrings, fmt.Sprintf("%s %s", field, structInfo.Fields[field].Type))
+			params[i] = struct{ Name, Type string }{field, structInfo.Fields[field].Type}
+		}
+
+		methods[fmt.Sprintf("ListBy%s", strings.Join(indexFields, "And"))] = methodType{
+			Script: fmt.Sprintf(
+				`ListBy%s(%s) (*%s.%ss, error)`,
+				strings.Join(indexFields, "And"),
+				strings.Join(paramStrings, ","),
+				structInfo.Package,
+				structInfo.Name,
+			),
+		}
+	}
+
 	// Create
 	methods["Create"] = methodType{
 		Script: fmt.Sprintf(

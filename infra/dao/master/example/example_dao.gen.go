@@ -132,6 +132,44 @@ func (d *exampleDao) List(limit int64) (*example.Examples, error) {
 	return entity, nil
 }
 
+func (d *exampleDao) ListByIDAndName(ID int64, Name string) (*example.Examples, error) {
+	cachedResult, found := d.Cache.Get(cacheKey("ListByIDAndName", fmt.Sprintf("%d_%s_", ID, Name)))
+	if found {
+		if cachedEntity, ok := cachedResult.(*example.Examples); ok {
+			return cachedEntity, nil
+		}
+	}
+
+	entity := &example.Examples{}
+	res := d.Read.Where("id = ?", ID).Where("name = ?", Name).Find(entity)
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	d.Cache.Set(cacheKey("ListByIDAndName", fmt.Sprintf("%d_%s_", ID, Name)), entity, cache.DefaultExpiration)
+
+	return entity, nil
+}
+
+func (d *exampleDao) ListByName(Name string) (*example.Examples, error) {
+	cachedResult, found := d.Cache.Get(cacheKey("ListByName", fmt.Sprintf("%s_", Name)))
+	if found {
+		if cachedEntity, ok := cachedResult.(*example.Examples); ok {
+			return cachedEntity, nil
+		}
+	}
+
+	entity := &example.Examples{}
+	res := d.Read.Where("name = ?", Name).Find(entity)
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	d.Cache.Set(cacheKey("ListByName", fmt.Sprintf("%s_", Name)), entity, cache.DefaultExpiration)
+
+	return entity, nil
+}
+
 func (d *exampleDao) Update(entity *example.Example, tx *gorm.DB) (*example.Example, error) {
 	var conn *gorm.DB
 	if tx != nil {

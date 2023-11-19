@@ -7,8 +7,8 @@ import (
 	"github.com/google/wire"
 
 	exampleCommand "github.com/game-core/gocrafter/batch/command/example"
-	exampleService "github.com/game-core/gocrafter/domain/service/example"
 	"github.com/game-core/gocrafter/config/database"
+	exampleService "github.com/game-core/gocrafter/domain/service/example"
 	exampleDao "github.com/game-core/gocrafter/infra/dao/master/example"
 )
 

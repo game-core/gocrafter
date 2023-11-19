@@ -128,6 +128,14 @@ func generateMethods(structInfo *StructInfo) map[string]methodType {
 		Script: generateList(structInfo),
 	}
 
+	// ListByIndex
+	for _, index := range structInfo.Index {
+		indexFields := strings.Split(index, ",")
+		methods[fmt.Sprintf("ListBy%s", strings.Join(indexFields, "And"))] = methodType{
+			Script: generateListByIndex(structInfo, indexFields),
+		}
+	}
+
 	// Create
 	methods["Create"] = methodType{
 		Script: generateCreate(structInfo),
@@ -216,6 +224,39 @@ func generateList(structInfo *StructInfo) string {
 		structInfo.Name,
 		structInfo.Package,
 		structInfo.Name,
+	)
+}
+
+func generateListByIndex(structInfo *StructInfo, indexFields []string) string {
+	params := make([]struct{ Name, Type string }, len(indexFields))
+	paramStrings := make([]string, len(indexFields))
+	scriptStrings := make([]string, len(indexFields))
+
+	for i, field := range indexFields {
+		params[i] = struct{ Name, Type string }{field, structInfo.Fields[field].Type}
+		paramStrings[i] = fmt.Sprintf("%s %s", field, structInfo.Fields[field].Type)
+		scriptStrings[i] = fmt.Sprintf("Where(\"%s = ?\", %s)", structInfo.Fields[field].Name, field)
+	}
+
+	return fmt.Sprintf(
+		`func (d *%sDao) ListBy%s(%s) (*%s.%ss, error) {
+			entity := &%s.%ss{}
+			res := d.Read.%s.Find(entity)
+			if err := res.Error; err != nil {
+				return nil, err
+			}
+		
+			return entity, nil
+		}
+		`,
+		structInfo.Package,
+		strings.Join(indexFields, "And"),
+		strings.Join(paramStrings, ","),
+		structInfo.Package,
+		structInfo.Name,
+		structInfo.Package,
+		structInfo.Name,
+		strings.Join(scriptStrings, "."),
 	)
 }
 
