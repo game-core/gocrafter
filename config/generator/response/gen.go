@@ -137,8 +137,8 @@ func getTypeWithPointer(fieldInfo StructField) string {
 }
 
 func main() {
-	userOutput := "../../../api/presentation/response"
-	userYamlFiles, err := filepath.Glob("../../../docs/api/response/**/*.yaml")
+	userOutput := "./api/presentation/response"
+	userYamlFiles, err := filepath.Glob("./docs/api/response/**/*.yaml")
 	if err != nil {
 		log.Fatalf("Error finding YAML files: %v", err)
 	}

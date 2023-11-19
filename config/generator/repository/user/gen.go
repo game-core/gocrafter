@@ -226,8 +226,8 @@ func getStructInfo(yamlFilePath string) (*StructInfo, error) {
 }
 
 func main() {
-	outputBaseDir := "../../../../domain/repository/user"
-	yamlFiles, err := filepath.Glob("../../../../docs/entity/user/*.yaml")
+	outputBaseDir := "./domain/repository/user"
+	yamlFiles, err := filepath.Glob("./docs/entity/user/*.yaml")
 	if err != nil {
 		log.Fatalf("Error finding YAML files: %v", err)
 	}
