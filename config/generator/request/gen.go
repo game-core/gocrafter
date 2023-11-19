@@ -29,6 +29,8 @@ type StructInfo struct {
 const templateCode = `
 package {{.Package}}
 
+type {{.Name}}s []{{.Name}}
+
 type {{.Name}} struct {
 {{range $field := sortByNumber .Fields}}
 	{{$field.Name}} {{$field.TypeWithPointer}} ` + "`json:\"{{$field.Json}}\"{{if eq $field.Name \"CreatedAt\"}} gorm:\"autoCreateTime\"{{else if eq $field.Name \"UpdatedAt\"}} gorm:\"autoUpdateTime\"{{end}}`" + `
