@@ -443,8 +443,8 @@ func getStructInfo(yamlFilePath string) (*StructInfo, error) {
 }
 
 func main() {
-	outputBaseDir := "./infra/dao/master"
-	yamlFiles, err := filepath.Glob("./docs/entity/master/*.yaml")
+	outputBaseDir := "../../../../infra/dao/master"
+	yamlFiles, err := filepath.Glob("../../../../docs/entity/master/*.yaml")
 	if err != nil {
 		log.Fatalf("Error finding YAML files: %v", err)
 	}

@@ -238,8 +238,8 @@ func extractFileName(filePath string) string {
 }
 
 func main() {
-	outputDir := "./docs/sql/master"
-	yamlFiles, err := filepath.Glob("./docs/entity/master/*.yaml")
+	outputDir := "../../../../docs/sql/master"
+	yamlFiles, err := filepath.Glob("../../../../docs/entity/master/*.yaml")
 	if err != nil {
 		log.Fatalf("Error finding YAML files: %v", err)
 	}
