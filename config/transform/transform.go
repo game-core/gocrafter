@@ -11,5 +11,5 @@ func CamelToSnake(s string) string {
 }
 
 func KebabToCamel(s string) string {
-	return strings.ReplaceAll(strings.Title(strings.ReplaceAll(s, "-", " ")), " ", "")
+	return strings.ToLower(s[:1]) + s[1:]
 }
