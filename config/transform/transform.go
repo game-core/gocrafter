@@ -9,3 +9,7 @@ func CamelToSnake(s string) string {
 		return r == '_' || r == '-'
 	}), "_"))
 }
+
+func KebabToCamel(s string) string {
+	return strings.ReplaceAll(strings.Title(strings.ReplaceAll(s, "-", " ")), " ", "")
+}

@@ -10,8 +10,9 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
-	"strings"
 	"text/template"
+
+	"github.com/game-core/gocrafter/config/transform"
 )
 
 type StructField struct {
@@ -50,7 +51,7 @@ func generateRequest(yamlFilePath string, outputBaseDir string) error {
 		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
 	}
 
-	outputFileName := filepath.Join(outputDir, fmt.Sprintf("%s_request.gen.go", strings.ToLower(structInfo.Name[:1])+structInfo.Name[1:]))
+	outputFileName := filepath.Join(outputDir, fmt.Sprintf("%s_request.gen.go", transform.KebabToCamel(structInfo.Name)))
 	outputFile, err := os.Create(outputFileName)
 	if err != nil {
 		return fmt.Errorf("outputFileName file %s create error: %v", outputFileName, err)
