@@ -65,29 +65,40 @@ func generateRepository(yamlFilePath string, outputBaseDir string) error {
 	}
 	defer outputFile.Close()
 
+	if err := generateTemplate(structInfo, outputFile); err != nil {
+		return fmt.Errorf("faild to generateTemplate: %v", err)
+	}
+
+	fmt.Printf("Created %s Repository in %s\n", structInfo.Name, outputFileName)
+
+	return nil
+}
+
+func generateTemplate(structInfo *StructInfo, outputFile *os.File) error {
 	tmpl, err := template.New("repositoryTemplate").Parse(repositoryTemplateCode)
 	if err != nil {
 		return fmt.Errorf("error parsing repository template: %v", err)
 	}
 
 	if err := tmpl.ExecuteTemplate(outputFile, "repositoryTemplate", struct {
-		Name     string
-		Package  string
-		Database string
-		Methods  map[string]MethodType
-		Mock     string
+		Name    string
+		Package string
+		Mock    string
+		Methods map[string]MethodType
 	}{
 		Name:    structInfo.Name,
 		Package: structInfo.Package,
-		Methods: generateMethods(structInfo),
 		Mock:    generateMock(structInfo),
+		Methods: generateMethods(structInfo),
 	}); err != nil {
 		return fmt.Errorf("template error: %v", err)
 	}
 
-	fmt.Printf("Created %s Repository in %s\n", structInfo.Name, outputFileName)
-
 	return nil
+}
+
+func generateMock(structInfo *StructInfo) string {
+	return fmt.Sprintf("//go:generate mockgen -source=./%s_repository.gen.go -destination=./%s_repository_mock.gen.go -package=%s", structInfo.Package, structInfo.Package, structInfo.Package)
 }
 
 func generateMethods(structInfo *StructInfo) map[string]MethodType {
@@ -135,10 +146,6 @@ func generateMethods(structInfo *StructInfo) map[string]MethodType {
 	}
 
 	return methods
-}
-
-func generateMock(structInfo *StructInfo) string {
-	return fmt.Sprintf("//go:generate mockgen -source=./%s_repository.gen.go -destination=./%s_repository_mock.gen.go -package=%s", structInfo.Package, structInfo.Package, structInfo.Package)
 }
 
 func generateFindByID(structInfo *StructInfo) string {
