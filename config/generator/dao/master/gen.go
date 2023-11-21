@@ -88,12 +88,22 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 	}
 	defer outputFile.Close()
 
+	if err := generateTemplate(structInfo, outputFile); err != nil {
+		return fmt.Errorf("template error: %v", err)
+	}
+
+	fmt.Printf("Created %s Dao in %s\n", structInfo.Name, outputFileName)
+
+	return nil
+}
+
+func generateTemplate(structInfo *StructInfo, outputFile *os.File) error {
 	tmpl, err := template.New("daoTemplate").Parse(daoTemplateCode)
 	if err != nil {
 		return fmt.Errorf("error parsing DAO template: %v", err)
 	}
 
-	if err := tmpl.ExecuteTemplate(outputFile, "daoTemplate", struct {
+	data := struct {
 		Name    string
 		Package string
 		Table   string
@@ -103,11 +113,11 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 		Package: structInfo.Package,
 		Table:   structInfo.Table,
 		Methods: generateMethods(structInfo),
-	}); err != nil {
-		return fmt.Errorf("template error: %v", err)
 	}
 
-	fmt.Printf("Created %s Dao in %s\n", structInfo.Name, outputFileName)
+	if err := tmpl.ExecuteTemplate(outputFile, "daoTemplate", data); err != nil {
+		return fmt.Errorf("template error: %v", err)
+	}
 
 	return nil
 }
