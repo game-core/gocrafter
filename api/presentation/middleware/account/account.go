@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
+	"net/http"
 	"os"
 	"strings"
 	"time"
@@ -24,19 +25,19 @@ func (a *accountMiddleware) AccountMiddleware(next echo.HandlerFunc) echo.Handle
 	return func(c echo.Context) error {
 		tokenString, err := extractTokenFromHeader(c)
 		if err != nil {
-			return err
+			return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
 		}
 
 		token, err := parseToken(tokenString)
 		if err != nil {
-			return err
+			return echo.NewHTTPError(http.StatusUnauthorized, err.Error())
 		}
 
 		if isValidToken(token) {
 			return next(c)
 		}
 
-		return fmt.Errorf("Invalid token")
+		return echo.NewHTTPError(http.StatusUnauthorized, "Invalid token")
 	}
 }
 
