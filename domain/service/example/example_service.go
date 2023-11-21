@@ -41,6 +41,6 @@ func (e *exampleService) ListExample(limit int64) (*response.ListExample, error)
 
 	return &response.ListExample{
 		Status: 200,
-		Items:   &examples,
+		Items:  &examples,
 	}, nil
 }
