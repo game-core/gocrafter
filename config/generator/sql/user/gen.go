@@ -61,7 +61,6 @@ func generateEntity(yamlFilePath string, outputDir string) error {
 	if err != nil {
 		return fmt.Errorf("outputFileName file %s create error: %v", outputFileName, err)
 	}
-	defer outputFile.Close()
 
 	var primaryStrings []string
 	for _, primary := range structInfo.Primary {

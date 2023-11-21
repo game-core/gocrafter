@@ -55,7 +55,6 @@ func generateResponse(yamlFilePath string, outputBaseDir string) error {
 	if err != nil {
 		return fmt.Errorf("outputFileName file %s create error: %v", outputFileName, err)
 	}
-	defer outputFile.Close()
 
 	if err := generateTemplate(structInfo, outputFile); err != nil {
 		return fmt.Errorf("faild to generateTemplate: %v", err)
