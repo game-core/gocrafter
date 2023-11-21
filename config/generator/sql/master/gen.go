@@ -86,6 +86,16 @@ func generateEntity(yamlFilePath string, outputDir string) error {
 		}
 	}
 
+	if err := generateTemplate(structInfo, outputFile, primaryStrings, indexStrings); err != nil {
+		return fmt.Errorf("faild to generateTemplate: %v", err)
+	}
+
+	fmt.Printf("Created %s SQL in %s\n", structInfo.Name, outputFileName)
+
+	return nil
+}
+
+func generateTemplate(structInfo *StructInfo, outputFile *os.File, primaryStrings, indexStrings []string) error {
 	tmpl, err := template.New("structTemplate").Funcs(template.FuncMap{
 		"sortByNumber": sortByNumber,
 	}).Parse(templateCode)
@@ -106,8 +116,6 @@ func generateEntity(yamlFilePath string, outputDir string) error {
 	}); err != nil {
 		return fmt.Errorf("template error: %v", err)
 	}
-
-	fmt.Printf("Created %s SQL in %s\n", structInfo.Name, outputFileName)
 
 	return nil
 }
