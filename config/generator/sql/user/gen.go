@@ -13,6 +13,8 @@ import (
 	"strings"
 	"text/template"
 	"time"
+
+	"github.com/game-core/gocrafter/config/transform"
 )
 
 type StructField struct {
@@ -102,7 +104,7 @@ func generateTemplate(structInfo *StructInfo, outputFile *os.File, primaryString
 		PrimaryKey string
 		IndexKey   string
 	}{
-		Table:      camelToSnake(structInfo.Package),
+		Table:      transform.CamelToSnake(structInfo.Package),
 		Fields:     structInfo.Fields,
 		PrimaryKey: strings.Join(primaryStrings, ","),
 		IndexKey:   strings.Join(indexStrings, ","),
@@ -237,12 +239,6 @@ func extractFileName(filePath string) string {
 	}
 
 	return fileName
-}
-
-func camelToSnake(s string) string {
-	return strings.ToLower(strings.Join(strings.FieldsFunc(s, func(r rune) bool {
-		return r == '_' || r == '-'
-	}), "_"))
 }
 
 func main() {
