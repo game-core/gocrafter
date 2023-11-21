@@ -87,8 +87,6 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 	}
 	defer outputFile.Close()
 
-	methods := generateMethods(structInfo)
-
 	daoTmpl, err := template.New("daoTemplate").Parse(daoTemplateCode)
 	if err != nil {
 		return fmt.Errorf("error parsing DAO template: %v", err)
@@ -105,7 +103,7 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 		Name:                 structInfo.Name,
 		Package:              structInfo.Package,
 		Table:                structInfo.Table,
-		Methods:              methods,
+		Methods:              generateMethods(structInfo),
 		RepositoryImportPath: fmt.Sprintf("%s \"github.com/game-core/gocrafter/domain/repository/master/%s\"", structInfo.Package+"Repository", structInfo.Package),
 		RepositoryInterface:  fmt.Sprintf("%sRepository", structInfo.Name),
 	}); err != nil {

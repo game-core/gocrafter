@@ -64,8 +64,6 @@ func generateRepository(yamlFilePath string, outputBaseDir string) error {
 	}
 	defer outputFile.Close()
 
-	methods := generateMethods(structInfo)
-
 	repositoryTmpl, err := template.New("repositoryTemplate").Parse(repositoryTemplateCode)
 	if err != nil {
 		return fmt.Errorf("error parsing repository template: %v", err)
@@ -79,7 +77,7 @@ func generateRepository(yamlFilePath string, outputBaseDir string) error {
 	}{
 		Name:    structInfo.Name,
 		Package: structInfo.Package,
-		Methods: methods,
+		Methods: generateMethods(structInfo),
 	}); err != nil {
 		return fmt.Errorf("template error: %v", err)
 	}
