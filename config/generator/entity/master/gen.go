@@ -50,13 +50,6 @@ func generateEntity(yamlFile string, outputBaseDir string) error {
 		return err
 	}
 
-	tmpl, err := template.New("structTemplate").Funcs(template.FuncMap{
-		"sortByNumber": sortByNumber,
-	}).Parse(templateCode)
-	if err != nil {
-		return fmt.Errorf("error parsing template: %v", err)
-	}
-
 	outputDir := filepath.Join(outputBaseDir, structInfo.Package)
 	if err := os.MkdirAll(outputDir, os.ModePerm); err != nil {
 		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
@@ -72,6 +65,13 @@ func generateEntity(yamlFile string, outputBaseDir string) error {
 	fieldsOrdered := make([]string, 0, len(structInfo.Fields))
 	for fieldName := range structInfo.Fields {
 		fieldsOrdered = append(fieldsOrdered, fieldName)
+	}
+
+	tmpl, err := template.New("structTemplate").Funcs(template.FuncMap{
+		"sortByNumber": sortByNumber,
+	}).Parse(templateCode)
+	if err != nil {
+		return fmt.Errorf("error parsing template: %v", err)
 	}
 
 	if err := tmpl.ExecuteTemplate(outputFile, "structTemplate", struct {

@@ -31,7 +31,8 @@ type StructInfo struct {
 	Index   []string               `yaml:"index"`
 }
 
-const templateCode = `CREATE TABLE {{.Table}} (
+const templateCode = `
+CREATE TABLE {{.Table}} (
 {{range $field := sortByNumber .Fields}}
 	{{$field.Column}}{{$field.Type}}{{$field.TypeWithPointer}}{{$field.Config}},
 {{end}}
@@ -44,13 +45,6 @@ func generateEntity(yamlFilePath string, outputDir string) error {
 	structInfo, err := getStructInfo(yamlFilePath)
 	if err != nil {
 		return err
-	}
-
-	tmpl, err := template.New("structTemplate").Funcs(template.FuncMap{
-		"sortByNumber": sortByNumber,
-	}).Parse(templateCode)
-	if err != nil {
-		return fmt.Errorf("error parsing template: %v", err)
 	}
 
 	if err := os.MkdirAll(outputDir, os.ModePerm); err != nil {
@@ -90,6 +84,13 @@ func generateEntity(yamlFilePath string, outputDir string) error {
 				indexStrings = append(indexStrings, fmt.Sprintf("INDEX(%s)", structInfo.Fields[field].Name))
 			}
 		}
+	}
+
+	tmpl, err := template.New("structTemplate").Funcs(template.FuncMap{
+		"sortByNumber": sortByNumber,
+	}).Parse(templateCode)
+	if err != nil {
+		return fmt.Errorf("error parsing template: %v", err)
 	}
 
 	if err = tmpl.ExecuteTemplate(outputFile, "structTemplate", struct {

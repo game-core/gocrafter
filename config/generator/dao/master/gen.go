@@ -87,12 +87,12 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 	}
 	defer outputFile.Close()
 
-	daoTmpl, err := template.New("daoTemplate").Parse(daoTemplateCode)
+	tmpl, err := template.New("daoTemplate").Parse(daoTemplateCode)
 	if err != nil {
 		return fmt.Errorf("error parsing DAO template: %v", err)
 	}
 
-	if err := daoTmpl.ExecuteTemplate(outputFile, "daoTemplate", struct {
+	if err := tmpl.ExecuteTemplate(outputFile, "daoTemplate", struct {
 		Name                 string
 		Package              string
 		Table                string

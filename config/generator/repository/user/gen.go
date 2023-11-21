@@ -65,12 +65,12 @@ func generateRepository(yamlFilePath string, outputBaseDir string) error {
 	}
 	defer outputFile.Close()
 
-	repositoryTmpl, err := template.New("repositoryTemplate").Parse(repositoryTemplateCode)
+	tmpl, err := template.New("repositoryTemplate").Parse(repositoryTemplateCode)
 	if err != nil {
 		return fmt.Errorf("error parsing repository template: %v", err)
 	}
 
-	if err := repositoryTmpl.ExecuteTemplate(outputFile, "repositoryTemplate", struct {
+	if err := tmpl.ExecuteTemplate(outputFile, "repositoryTemplate", struct {
 		Name     string
 		Package  string
 		Database string
