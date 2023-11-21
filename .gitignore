@@ -1,5 +1,7 @@
 .env
 
+.idea
+
 /tmp
 /log/api_debug.log
 /log/batch_debug.log
