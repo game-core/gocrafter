@@ -37,18 +37,18 @@ func NewAccountController(
 // @Failure 500 {object} errorResponse.Error
 func (a *accountController) RegisterAccount() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		request := &request.RegisterAccount{}
-		c.Bind(request)
+		req := &request.RegisterAccount{}
+		c.Bind(req)
 
-		response, err := a.accountService.RegisterAccount(request)
+		res, err := a.accountService.RegisterAccount(req)
 		if err != nil {
 			return c.JSON(500, &errorResponse.Error{
 				Status:       500,
-				ErrorMessage: "",
+				ErrorMessage: err.Error(),
 			})
 		}
 
-		return c.JSON(200, response)
+		return c.JSON(200, res)
 	}
 }
 
@@ -62,18 +62,18 @@ func (a *accountController) RegisterAccount() echo.HandlerFunc {
 // @Failure 500 {object} errorResponse.Error
 func (a *accountController) LoginAccount() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		request := &request.LoginAccount{}
-		c.Bind(request)
+		req := &request.LoginAccount{}
+		c.Bind(req)
 
-		response, err := a.accountService.LoginAccount(request)
+		res, err := a.accountService.LoginAccount(req)
 		if err != nil {
 			return c.JSON(500, &errorResponse.Error{
 				Status:       500,
-				ErrorMessage: "",
+				ErrorMessage: err.Error(),
 			})
 		}
 
-		return c.JSON(200, response)
+		return c.JSON(200, res)
 	}
 }
 
@@ -87,17 +87,17 @@ func (a *accountController) LoginAccount() echo.HandlerFunc {
 // @Failure 500 {object} errorResponse.Error
 func (a *accountController) CheckAccount() echo.HandlerFunc {
 	return func(c echo.Context) error {
-		request := &request.CheckAccount{}
-		c.Bind(request)
+		req := &request.CheckAccount{}
+		c.Bind(req)
 
-		response, err := a.accountService.CheckAccount(request)
+		res, err := a.accountService.CheckAccount(req)
 		if err != nil {
 			return c.JSON(500, &errorResponse.Error{
 				Status:       500,
-				ErrorMessage: "",
+				ErrorMessage: err.Error(),
 			})
 		}
 
-		return c.JSON(200, response)
+		return c.JSON(200, res)
 	}
 }
