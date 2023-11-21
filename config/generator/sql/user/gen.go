@@ -17,7 +17,7 @@ import (
 
 type StructField struct {
 	Name     string `yaml:"name"`
-	Type     string `yaml:"type"`
+	Type     string `yaml:"pointer"`
 	Nullable bool   `yaml:"nullable"`
 	Number   int    `yaml:"number"`
 }

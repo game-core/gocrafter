@@ -270,14 +270,14 @@ func TestAccountService_LoginAccount(t *testing.T) {
 
 			got, err := s.LoginAccount(tt.args.req)
 			if !reflect.DeepEqual(err, tt.wantErr) {
-				t.Errorf("RegisterAccount() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("LoginAccount() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if got != nil {
 				got.Item.Token = "token"
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("RegisterAccount() = %v, want %v", got, tt.want)
+				t.Errorf("LoginAccount() = %v, want %v", got, tt.want)
 			}
 		})
 	}
@@ -371,11 +371,11 @@ func TestAccountService_CheckAccount(t *testing.T) {
 
 			got, err := s.CheckAccount(tt.args.req)
 			if !reflect.DeepEqual(err, tt.wantErr) {
-				t.Errorf("RegisterAccount() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("CheckAccount() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("RegisterAccount() = %v, want %v", got, tt.want)
+				t.Errorf("CheckAccount() = %v, want %v", got, tt.want)
 			}
 		})
 	}

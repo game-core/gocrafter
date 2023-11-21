@@ -15,7 +15,7 @@ import (
 
 type StructField struct {
 	Name     string `yaml:"name"`
-	Type     string `yaml:"type"`
+	Type     string `yaml:"pointer"`
 	Nullable bool   `yaml:"nullable"`
 	Number   int    `yaml:"number"`
 }
@@ -43,7 +43,7 @@ import (
 	{{.Package}}Repository "github.com/game-core/gocrafter/domain/repository/user/{{.Package}}"
 )
 
-type {{.Package}}Dao struct {
+pointer {{.Package}}Dao struct {
 	Read  *gorm.DB
 	Write *gorm.DB
 }

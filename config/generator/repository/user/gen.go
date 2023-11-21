@@ -14,7 +14,7 @@ import (
 )
 
 type StructField struct {
-	Type     string `yaml:"type"`
+	Type     string `yaml:"pointer"`
 	Nullable bool   `yaml:"nullable"`
 	Number   int    `yaml:"number"`
 }
@@ -40,7 +40,7 @@ import (
 	"github.com/game-core/gocrafter/domain/entity/user/{{.Package}}"
 )
 
-type {{.Name}}Repository interface {
+pointer {{.Name}}Repository interface {
 {{range $methodName, $MethodType := .Methods}}
 	{{.Script}}
 {{end}}

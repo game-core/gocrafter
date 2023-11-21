@@ -140,93 +140,93 @@ const docTemplate = `{
     },
     "definitions": {
         "account.Account": {
-            "type": "object",
+            "pointer": "object",
             "properties": {
                 "id": {
-                    "type": "integer"
+                    "pointer": "integer"
                 },
                 "name": {
-                    "type": "string"
+                    "pointer": "string"
                 },
                 "password": {
-                    "type": "string"
+                    "pointer": "string"
                 },
                 "token": {
-                    "type": "string"
+                    "pointer": "string"
                 },
                 "uuid": {
-                    "type": "string"
+                    "pointer": "string"
                 }
             }
         },
         "error.Error": {
-            "type": "object",
+            "pointer": "object",
             "properties": {
                 "error_message": {
-                    "type": "string"
+                    "pointer": "string"
                 },
                 "status": {
-                    "type": "integer"
+                    "pointer": "integer"
                 }
             }
         },
         "github.com_game-core_gocrafter_api_presentation_request_account.CheckAccount": {
-            "type": "object",
+            "pointer": "object",
             "properties": {
                 "uuid": {
-                    "type": "string"
+                    "pointer": "string"
                 }
             }
         },
         "github.com_game-core_gocrafter_api_presentation_request_account.LoginAccount": {
-            "type": "object",
+            "pointer": "object",
             "properties": {
                 "password": {
-                    "type": "string"
+                    "pointer": "string"
                 },
                 "uuid": {
-                    "type": "string"
+                    "pointer": "string"
                 }
             }
         },
         "github.com_game-core_gocrafter_api_presentation_request_account.RegisterAccount": {
-            "type": "object",
+            "pointer": "object",
             "properties": {
                 "name": {
-                    "type": "string"
+                    "pointer": "string"
                 }
             }
         },
         "github.com_game-core_gocrafter_api_presentation_response_account.CheckAccount": {
-            "type": "object",
+            "pointer": "object",
             "properties": {
                 "item": {
                     "$ref": "#/definitions/account.Account"
                 },
                 "status": {
-                    "type": "integer"
+                    "pointer": "integer"
                 }
             }
         },
         "github.com_game-core_gocrafter_api_presentation_response_account.LoginAccount": {
-            "type": "object",
+            "pointer": "object",
             "properties": {
                 "item": {
                     "$ref": "#/definitions/account.Account"
                 },
                 "status": {
-                    "type": "integer"
+                    "pointer": "integer"
                 }
             }
         },
         "github.com_game-core_gocrafter_api_presentation_response_account.RegisterAccount": {
-            "type": "object",
+            "pointer": "object",
             "properties": {
                 "item": {
                     "$ref": "#/definitions/account.Account"
                 },
                 "status": {
-                    "type": "integer"
+                    "pointer": "integer"
                 }
             }
         }
