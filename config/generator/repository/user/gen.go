@@ -27,7 +27,7 @@ type StructInfo struct {
 	Index   []string               `yaml:"index"`
 }
 
-type methodType struct {
+type MethodType struct {
 	Script string
 }
 
@@ -41,7 +41,7 @@ import (
 )
 
 type {{.Name}}Repository interface {
-{{range $methodName, $methodType := .Methods}}
+{{range $methodName, $MethodType := .Methods}}
 	{{.Script}}
 {{end}}
 }
@@ -74,7 +74,7 @@ func generateRepository(yamlFilePath string, outputBaseDir string) error {
 		Name     string
 		Package  string
 		Database string
-		Methods  map[string]methodType
+		Methods  map[string]MethodType
 		Mock     string
 	}{
 		Name:    structInfo.Name,
@@ -90,47 +90,47 @@ func generateRepository(yamlFilePath string, outputBaseDir string) error {
 	return nil
 }
 
-func generateMethods(structInfo *StructInfo) map[string]methodType {
-	methods := make(map[string]methodType)
+func generateMethods(structInfo *StructInfo) map[string]MethodType {
+	methods := make(map[string]MethodType)
 
 	// FindByID
-	methods["FindByID"] = methodType{
+	methods["FindByID"] = MethodType{
 		Script: generateFindByID(structInfo),
 	}
 
 	// FindByIndex
 	for _, index := range structInfo.Index {
 		indexFields := strings.Split(index, ",")
-		methods[fmt.Sprintf("FindBy%s", strings.Join(indexFields, "And"))] = methodType{
+		methods[fmt.Sprintf("FindBy%s", strings.Join(indexFields, "And"))] = MethodType{
 			Script: generateFindByIndex(structInfo, indexFields),
 		}
 	}
 
 	// List
-	methods["List"] = methodType{
+	methods["List"] = MethodType{
 		Script: generateList(structInfo),
 	}
 
 	// ListByIndex
 	for _, index := range structInfo.Index {
 		indexFields := strings.Split(index, ",")
-		methods[fmt.Sprintf("ListBy%s", strings.Join(indexFields, "And"))] = methodType{
+		methods[fmt.Sprintf("ListBy%s", strings.Join(indexFields, "And"))] = MethodType{
 			Script: generateListByIndex(structInfo, indexFields),
 		}
 	}
 
 	// Create
-	methods["Create"] = methodType{
+	methods["Create"] = MethodType{
 		Script: generateCreate(structInfo),
 	}
 
 	// Update
-	methods["Update"] = methodType{
+	methods["Update"] = MethodType{
 		Script: generateUpdate(structInfo),
 	}
 
 	// Delete
-	methods["Delete"] = methodType{
+	methods["Delete"] = MethodType{
 		Script: generateDelete(structInfo),
 	}
 
