@@ -1,18 +1,6 @@
 basePath: /
 definitions:
-  error.Error:
-    properties:
-      error_message:
-        type: string
-      status:
-        type: integer
-    type: object
-  github.com_game-core_gocrafter_api_presentation_request_account.RegisterAccount:
-    properties:
-      name:
-        type: string
-    type: object
-  github.com_game-core_gocrafter_api_presentation_response_account.RegisterAccount:
+  account.Account:
     properties:
       id:
         type: integer
@@ -20,10 +8,55 @@ definitions:
         type: string
       password:
         type: string
-      status:
-        type: integer
+      token:
+        type: string
       uuid:
         type: string
+    type: object
+  error.Error:
+    properties:
+      error_message:
+        type: string
+      status:
+        type: integer
+    type: object
+  github.com_game-core_gocrafter_api_presentation_request_account.CheckAccount:
+    properties:
+      uuid:
+        type: string
+    type: object
+  github.com_game-core_gocrafter_api_presentation_request_account.LoginAccount:
+    properties:
+      password:
+        type: string
+      uuid:
+        type: string
+    type: object
+  github.com_game-core_gocrafter_api_presentation_request_account.RegisterAccount:
+    properties:
+      name:
+        type: string
+    type: object
+  github.com_game-core_gocrafter_api_presentation_response_account.CheckAccount:
+    properties:
+      item:
+        $ref: '#/definitions/account.Account'
+      status:
+        type: integer
+    type: object
+  github.com_game-core_gocrafter_api_presentation_response_account.LoginAccount:
+    properties:
+      item:
+        $ref: '#/definitions/account.Account'
+      status:
+        type: integer
+    type: object
+  github.com_game-core_gocrafter_api_presentation_response_account.RegisterAccount:
+    properties:
+      item:
+        $ref: '#/definitions/account.Account'
+      status:
+        type: integer
     type: object
 host: localhost:8001
 info:
@@ -35,7 +68,57 @@ info:
   title: Chat Connect
   version: "1.0"
 paths:
-  /account/register:
+  /account/check_account:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: アカウント確認
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/github.com_game-core_gocrafter_api_presentation_request_account.CheckAccount'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github.com_game-core_gocrafter_api_presentation_response_account.CheckAccount'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: アカウント確認
+      tags:
+      - Account
+  /account/login_account:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: アカウントログイン
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/github.com_game-core_gocrafter_api_presentation_request_account.LoginAccount'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github.com_game-core_gocrafter_api_presentation_response_account.LoginAccount'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: アカウントログイン
+      tags:
+      - Account
+  /account/register_account:
     post:
       consumes:
       - application/json
