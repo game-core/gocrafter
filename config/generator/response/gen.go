@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strings"
 	"text/template"
 )
 
@@ -56,7 +57,7 @@ func generateResponse(yamlFilePath string, outputBaseDir string) error {
 		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
 	}
 
-	outputFileName := filepath.Join(outputDir, fmt.Sprintf("%s_response.gen.go", structInfo.Name))
+	outputFileName := filepath.Join(outputDir, fmt.Sprintf("%s_request.gen.go", strings.ToLower(structInfo.Name[:1])+structInfo.Name[1:]))
 	outputFile, err := os.Create(outputFileName)
 	if err != nil {
 		return fmt.Errorf("outputFileName file %s create error: %v", outputFileName, err)
