@@ -7,9 +7,9 @@ import (
 )
 
 type ExampleRepository interface {
-	Create(example *example.Example, tx *gorm.DB) (*example.Example, error)
+	Create(entity *example.Example, tx *gorm.DB) (*example.Example, error)
 
-	Delete(example *example.Example, tx *gorm.DB) error
+	Delete(entity *example.Example, tx *gorm.DB) error
 
 	FindByID(ID int64) (*example.Example, error)
 
@@ -23,5 +23,5 @@ type ExampleRepository interface {
 
 	ListByName(Name string) (*example.Examples, error)
 
-	Update(example *example.Example, tx *gorm.DB) (*example.Example, error)
+	Update(entity *example.Example, tx *gorm.DB) (*example.Example, error)
 }

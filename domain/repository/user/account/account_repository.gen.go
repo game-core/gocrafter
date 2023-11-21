@@ -7,9 +7,9 @@ import (
 )
 
 type AccountRepository interface {
-	Create(account *account.Account, tx *gorm.DB) (*account.Account, error)
+	Create(entity *account.Account, tx *gorm.DB) (*account.Account, error)
 
-	Delete(account *account.Account, tx *gorm.DB) error
+	Delete(entity *account.Account, tx *gorm.DB) error
 
 	FindByID(ID int64) (*account.Account, error)
 
@@ -23,5 +23,5 @@ type AccountRepository interface {
 
 	ListByUUID(UUID string) (*account.Accounts, error)
 
-	Update(account *account.Account, tx *gorm.DB) (*account.Account, error)
+	Update(entity *account.Account, tx *gorm.DB) (*account.Account, error)
 }

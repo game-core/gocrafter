@@ -147,8 +147,7 @@ func generateList(structInfo *StructInfo) string {
 
 func generateCreate(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`Create(%s *%s.%s, tx *gorm.DB) (*%s.%s, error)`,
-		structInfo.Package,
+		`Create(entity *%s.%s, tx *gorm.DB) (*%s.%s, error)`,
 		structInfo.Package,
 		structInfo.Name,
 		structInfo.Package,
@@ -158,8 +157,7 @@ func generateCreate(structInfo *StructInfo) string {
 
 func generateUpdate(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`Update(%s *%s.%s, tx *gorm.DB) (*%s.%s, error)`,
-		structInfo.Package,
+		`Update(entity *%s.%s, tx *gorm.DB) (*%s.%s, error)`,
 		structInfo.Package,
 		structInfo.Name,
 		structInfo.Package,
@@ -169,8 +167,7 @@ func generateUpdate(structInfo *StructInfo) string {
 
 func generateDelete(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`Delete(%s *%s.%s, tx *gorm.DB) error`,
-		structInfo.Package,
+		`Delete(entity *%s.%s, tx *gorm.DB) error`,
 		structInfo.Package,
 		structInfo.Name,
 	)

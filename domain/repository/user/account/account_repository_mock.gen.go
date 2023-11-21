@@ -36,32 +36,32 @@ func (m *MockAccountRepository) EXPECT() *MockAccountRepositoryMockRecorder {
 }
 
 // Create mocks base method.
-func (m *MockAccountRepository) Create(account *account.Account, tx *gorm.DB) (*account.Account, error) {
+func (m *MockAccountRepository) Create(entity *account.Account, tx *gorm.DB) (*account.Account, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Create", account, tx)
+	ret := m.ctrl.Call(m, "Create", entity, tx)
 	ret0, _ := ret[0].(*account.Account)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Create indicates an expected call of Create.
-func (mr *MockAccountRepositoryMockRecorder) Create(account, tx interface{}) *gomock.Call {
+func (mr *MockAccountRepositoryMockRecorder) Create(entity, tx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockAccountRepository)(nil).Create), account, tx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockAccountRepository)(nil).Create), entity, tx)
 }
 
 // Delete mocks base method.
-func (m *MockAccountRepository) Delete(account *account.Account, tx *gorm.DB) error {
+func (m *MockAccountRepository) Delete(entity *account.Account, tx *gorm.DB) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Delete", account, tx)
+	ret := m.ctrl.Call(m, "Delete", entity, tx)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Delete indicates an expected call of Delete.
-func (mr *MockAccountRepositoryMockRecorder) Delete(account, tx interface{}) *gomock.Call {
+func (mr *MockAccountRepositoryMockRecorder) Delete(entity, tx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockAccountRepository)(nil).Delete), account, tx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockAccountRepository)(nil).Delete), entity, tx)
 }
 
 // FindByID mocks base method.
@@ -155,16 +155,16 @@ func (mr *MockAccountRepositoryMockRecorder) ListByUUID(UUID interface{}) *gomoc
 }
 
 // Update mocks base method.
-func (m *MockAccountRepository) Update(account *account.Account, tx *gorm.DB) (*account.Account, error) {
+func (m *MockAccountRepository) Update(entity *account.Account, tx *gorm.DB) (*account.Account, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Update", account, tx)
+	ret := m.ctrl.Call(m, "Update", entity, tx)
 	ret0, _ := ret[0].(*account.Account)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Update indicates an expected call of Update.
-func (mr *MockAccountRepositoryMockRecorder) Update(account, tx interface{}) *gomock.Call {
+func (mr *MockAccountRepositoryMockRecorder) Update(entity, tx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockAccountRepository)(nil).Update), account, tx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockAccountRepository)(nil).Update), entity, tx)
 }
