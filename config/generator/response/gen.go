@@ -31,6 +31,8 @@ type StructInfo struct {
 const templateCode = `
 package {{.Package}}
 
+{{.Import}}
+
 type {{.Name}}s []{{.Name}}
 
 type {{.Name}} struct {
@@ -77,10 +79,12 @@ func generateTemplate(structInfo *StructInfo, outputFile *os.File) error {
 	if err := tmpl.ExecuteTemplate(outputFile, "structTemplate", struct {
 		Name    string
 		Package string
+		Import  string
 		Fields  map[string]StructField
 	}{
 		Name:    structInfo.Name,
 		Package: structInfo.Package,
+		Import:  generateImport(structInfo.Fields),
 		Fields:  structInfo.Fields,
 	}); err != nil {
 		return fmt.Errorf("template error: %v", err)
@@ -121,6 +125,20 @@ func sortByNumber(fields map[string]StructField) []struct {
 	})
 
 	return sortedFields
+}
+
+func generateImport(fields map[string]StructField) string {
+	for _, fieldInfo := range fields {
+		if fieldInfo.Type == "time.Time" {
+			return fmt.Sprintf(
+				`import (
+				"time"
+				)`,
+			)
+		}
+	}
+
+	return ""
 }
 
 func getStructInfo(yamlFilePath string) (*StructInfo, error) {
