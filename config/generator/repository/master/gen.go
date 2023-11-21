@@ -80,7 +80,7 @@ func generateRepository(yamlFilePath string, outputBaseDir string) error {
 		Name:    structInfo.Name,
 		Package: structInfo.Package,
 		Methods: generateMethods(structInfo),
-		Mock:    fmt.Sprintf("//go:generate mockgen -source=./%s_repository.gen.go -destination=./%s_repository_mock.gen.go -package=%s", structInfo.Package, structInfo.Package, structInfo.Package),
+		Mock:    generateMock(structInfo),
 	}); err != nil {
 		return fmt.Errorf("template error: %v", err)
 	}
@@ -135,6 +135,10 @@ func generateMethods(structInfo *StructInfo) map[string]MethodType {
 	}
 
 	return methods
+}
+
+func generateMock(structInfo *StructInfo) string {
+	return fmt.Sprintf("//go:generate mockgen -source=./%s_repository.gen.go -destination=./%s_repository_mock.gen.go -package=%s", structInfo.Package, structInfo.Package, structInfo.Package)
 }
 
 func generateFindByID(structInfo *StructInfo) string {
