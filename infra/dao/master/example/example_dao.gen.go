@@ -2,6 +2,7 @@ package example
 
 import (
 	"fmt"
+
 	"github.com/jinzhu/gorm"
 	"github.com/patrickmn/go-cache"
 

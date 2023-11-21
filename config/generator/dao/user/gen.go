@@ -39,7 +39,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/game-core/gocrafter/config/database"
 	"github.com/game-core/gocrafter/domain/entity/user/{{.Package}}"
-	{{.RepositoryImportPath}}
+	{{.Package}}Repository "github.com/game-core/gocrafter/domain/repository/user/{{.Package}}"
 )
 
 type {{.Package}}Dao struct {
@@ -47,7 +47,7 @@ type {{.Package}}Dao struct {
 	Write *gorm.DB
 }
 
-func New{{.Name}}Dao(conn *database.SqlHandler) {{.Package}}Repository.{{.RepositoryInterface}} {
+func New{{.Name}}Dao(conn *database.SqlHandler) {{.Package}}Repository.{{.Name}}Repository {
 	return &{{.Package}}Dao{
 		Read:  conn.User.ReadConn,
 		Write: conn.User.WriteConn,
@@ -83,17 +83,13 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 	}
 
 	if err := tmpl.ExecuteTemplate(outputFile, "daoTemplate", struct {
-		Name                 string
-		Package              string
-		Methods              map[string]MethodType
-		RepositoryImportPath string
-		RepositoryInterface  string
+		Name    string
+		Package string
+		Methods map[string]MethodType
 	}{
-		Name:                 structInfo.Name,
-		Package:              structInfo.Package,
-		Methods:              generateMethods(structInfo),
-		RepositoryImportPath: fmt.Sprintf("%s \"github.com/game-core/gocrafter/domain/repository/user/%s\"", structInfo.Package+"Repository", structInfo.Package),
-		RepositoryInterface:  fmt.Sprintf("%sRepository", structInfo.Name),
+		Name:    structInfo.Name,
+		Package: structInfo.Package,
+		Methods: generateMethods(structInfo),
 	}); err != nil {
 		return fmt.Errorf("template error: %v", err)
 	}
