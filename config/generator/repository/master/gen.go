@@ -32,6 +32,7 @@ type methodType struct {
 }
 
 const repositoryTemplateCode = `
+{{.Mock}}
 package {{.Package}}
 
 import (
@@ -74,10 +75,12 @@ func generateRepository(yamlFilePath string, outputBaseDir string) error {
 		Package  string
 		Database string
 		Methods  map[string]methodType
+		Mock     string
 	}{
 		Name:    structInfo.Name,
 		Package: structInfo.Package,
 		Methods: generateMethods(structInfo),
+		Mock:    fmt.Sprintf("//go:generate mockgen -source=./%s_repository.gen.go -destination=./%s_repository_mock.gen.go -package=%s", structInfo.Package, structInfo.Package, structInfo.Package),
 	}); err != nil {
 		return fmt.Errorf("template error: %v", err)
 	}
