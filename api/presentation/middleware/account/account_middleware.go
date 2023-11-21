@@ -1,6 +1,7 @@
 package account
 
 import (
+	"errors"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
@@ -44,7 +45,7 @@ func (a *accountMiddleware) AccountMiddleware(next echo.HandlerFunc) echo.Handle
 func extractTokenFromHeader(c echo.Context) (string, error) {
 	tokenString := strings.ReplaceAll(c.Request().Header.Get("Authorization"), "Bearer ", "")
 	if tokenString == "" {
-		return "", fmt.Errorf("Authorization header is missing")
+		return "", errors.New("Authorization header is missing")
 	}
 
 	return tokenString, nil
@@ -53,9 +54,9 @@ func extractTokenFromHeader(c echo.Context) (string, error) {
 func parseToken(tokenString string) (*jwt.Token, error) {
 	return jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if signingMethod, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+			return nil, errors.New("unexpected signing method: " + fmt.Sprint(token.Header["alg"]))
 		} else if signingMethod != jwt.SigningMethodHS256 {
-			return nil, fmt.Errorf("unexpected signing method: %v", signingMethod.Alg())
+			return nil, errors.New("unexpected signing method: " + signingMethod.Alg())
 		}
 
 		return []byte(os.Getenv("AUTH_SECRET")), nil

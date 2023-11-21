@@ -1,12 +1,12 @@
 package account
 
 import (
-	"github.com/labstack/echo/v4"
 	"net/http"
 	"net/http/httptest"
+	"reflect"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/labstack/echo/v4"
 )
 
 func TestAccountMiddleware_AccountMiddleware(t *testing.T) {
@@ -51,13 +51,16 @@ func TestAccountMiddleware_AccountMiddleware(t *testing.T) {
 			rec := httptest.NewRecorder()
 			c := e.NewContext(req, rec)
 
-			assert.NotNil(t, tt.want, "Expected handler function is nil")
-
 			err := handler(c)
-			if tt.name == "正常：通過できる" {
-				assert.Equal(t, http.StatusOK, rec.Code)
+			if tt.name != "正常：通過できる" {
+				if !reflect.DeepEqual(err, tt.want(c)) {
+					t.Errorf("ListExample() error = %v, wantErr %v", err, tt.want(c))
+					return
+				}
 			} else {
-				assert.EqualError(t, err, tt.want(c).(*echo.HTTPError).Error())
+				if !reflect.DeepEqual(http.StatusOK, rec.Code) {
+					t.Errorf("ListExample() = %v, want %v", rec.Code, tt.want)
+				}
 			}
 		})
 	}
