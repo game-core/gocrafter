@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestAccountMiddleware(t *testing.T) {
+func TestAccountMiddleware_AccountMiddleware(t *testing.T) {
 	type args struct {
 		next echo.HandlerFunc
 	}
