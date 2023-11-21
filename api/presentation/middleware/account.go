@@ -21,8 +21,7 @@ func NewAccountMiddleware() AccountMiddleware {
 // AccountMiddleware トークンを検証する
 func (a *accountMiddleware) AccountMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		tokenString := c.Request().Header.Get("Authorization")
-		tokenString = strings.ReplaceAll(tokenString, "Bearer ", "")
+		tokenString := strings.ReplaceAll(c.Request().Header.Get("Authorization"), "Bearer ", "")
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
@@ -31,7 +30,7 @@ func (a *accountMiddleware) AccountMiddleware(next echo.HandlerFunc) echo.Handle
 			return []byte(os.Getenv("AUTH_SECRET")), nil
 		})
 		if err != nil {
-			return fmt.Errorf("Invalid token")
+			return err
 		}
 
 		if _, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
