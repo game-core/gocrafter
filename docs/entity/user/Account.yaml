@@ -1,6 +1,5 @@
 name: Account
 package: account
-table: account
 structure:
   ID:
     name: id

@@ -16,7 +16,7 @@ import (
 
 type StructField struct {
 	Name     string `yaml:"name"`
-	Type     string `yaml:"pointer"`
+	Type     string `yaml:"type"`
 	Nullable bool   `yaml:"nullable"`
 	Number   int    `yaml:"number"`
 }
@@ -30,9 +30,9 @@ type StructInfo struct {
 const templateCode = `
 package {{.Package}}
 
-pointer {{.Name}}s []{{.Name}}
+type {{.Name}}s []{{.Name}}
 
-pointer {{.Name}} struct {
+type {{.Name}} struct {
 {{range $field := sortByNumber .Fields}}
 	{{$field.Name}} {{$field.TypeWithPointer}} ` + "`json:\"{{$field.Json}}\"{{if eq $field.Name \"CreatedAt\"}} gorm:\"autoCreateTime\"{{else if eq $field.Name \"UpdatedAt\"}} gorm:\"autoUpdateTime\"{{end}}`" + `
 {{end}}

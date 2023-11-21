@@ -17,14 +17,13 @@ import (
 
 type StructField struct {
 	Name     string `yaml:"name"`
-	Type     string `yaml:"pointer"`
+	Type     string `yaml:"type"`
 	Nullable bool   `yaml:"nullable"`
 	Number   int    `yaml:"number"`
 }
 
 type StructInfo struct {
 	Name    string                 `yaml:"name"`
-	Table   string                 `yaml:"table"`
 	Package string                 `yaml:"package"`
 	Fields  map[string]StructField `yaml:"structure"`
 	Primary []string               `yaml:"primary"`
@@ -97,13 +96,13 @@ func generateTemplate(structInfo *StructInfo, outputFile *os.File, primaryString
 		return fmt.Errorf("error parsing template: %v", err)
 	}
 
-	if err = tmpl.ExecuteTemplate(outputFile, "structTemplate", struct {
+	if err := tmpl.ExecuteTemplate(outputFile, "structTemplate", struct {
 		Table      string
 		Fields     map[string]StructField
 		PrimaryKey string
 		IndexKey   string
 	}{
-		Table:      structInfo.Table,
+		Table:      camelToSnake(structInfo.Package),
 		Fields:     structInfo.Fields,
 		PrimaryKey: strings.Join(primaryStrings, ","),
 		IndexKey:   strings.Join(indexStrings, ","),
@@ -238,6 +237,12 @@ func extractFileName(filePath string) string {
 	}
 
 	return fileName
+}
+
+func camelToSnake(s string) string {
+	return strings.ToLower(strings.Join(strings.FieldsFunc(s, func(r rune) bool {
+		return r == '_' || r == '-'
+	}), "_"))
 }
 
 func main() {

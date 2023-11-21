@@ -1,6 +1,5 @@
 name: Example
 package: example
-table: example
 structure:
   ID:
     name: id

@@ -15,7 +15,7 @@ import (
 
 type StructField struct {
 	Name     string `yaml:"name"`
-	Type     string `yaml:"pointer"`
+	Type     string `yaml:"type"`
 	Nullable bool   `yaml:"nullable"`
 	Number   int    `yaml:"number"`
 }
@@ -23,7 +23,6 @@ type StructField struct {
 type StructInfo struct {
 	Name    string                 `yaml:"name"`
 	Package string                 `yaml:"package"`
-	Table   string                 `yaml:"table"`
 	Fields  map[string]StructField `yaml:"structure"`
 	Primary []string               `yaml:"primary"`
 	Index   []string               `yaml:"index"`
@@ -47,7 +46,7 @@ import (
 	{{.Package}}Repository "github.com/game-core/gocrafter/domain/repository/master/{{.Package}}"
 )
 
-pointer {{.Package}}Dao struct {
+type {{.Package}}Dao struct {
 	Read  *gorm.DB
 	Write *gorm.DB
 	Cache *cache.Cache
@@ -110,7 +109,7 @@ func generateTemplate(structInfo *StructInfo, outputFile *os.File) error {
 	}{
 		Name:    structInfo.Name,
 		Package: structInfo.Package,
-		Table:   structInfo.Table,
+		Table:   camelToSnake(structInfo.Package),
 		Methods: generateMethods(structInfo),
 	}
 
@@ -444,6 +443,12 @@ func getStructInfo(yamlFilePath string) (*StructInfo, error) {
 	}
 
 	return &structInfo, nil
+}
+
+func camelToSnake(s string) string {
+	return strings.ToLower(strings.Join(strings.FieldsFunc(s, func(r rune) bool {
+		return r == '_' || r == '-'
+	}), "_"))
 }
 
 func main() {
