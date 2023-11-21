@@ -57,11 +57,16 @@ func generateRequest(yamlFilePath string, outputBaseDir string) error {
 	}
 	defer outputFile.Close()
 
-	fieldsOrdered := make([]string, 0, len(structInfo.Fields))
-	for fieldName := range structInfo.Fields {
-		fieldsOrdered = append(fieldsOrdered, fieldName)
+	if err := generateTemplate(structInfo, outputFile); err != nil {
+		return fmt.Errorf("faild to generateTemplate: %v", err)
 	}
 
+	fmt.Printf("Created %s Request in %s\n", structInfo.Name, outputFileName)
+
+	return nil
+}
+
+func generateTemplate(structInfo *StructInfo, outputFile *os.File) error {
 	tmpl, err := template.New("structTemplate").Funcs(template.FuncMap{
 		"sortByNumber": sortByNumber,
 	}).Parse(templateCode)
@@ -80,8 +85,6 @@ func generateRequest(yamlFilePath string, outputBaseDir string) error {
 	}); err != nil {
 		return fmt.Errorf("template error: %v", err)
 	}
-
-	fmt.Printf("Created %s Request in %s\n", structInfo.Name, outputFileName)
 
 	return nil
 }
