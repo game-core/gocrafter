@@ -6,11 +6,12 @@ package di
 import (
 	"github.com/google/wire"
 
+	"github.com/game-core/gocrafter/config/database"
+	userDao "github.com/game-core/gocrafter/infra/dao/user"
+
 	accountController "github.com/game-core/gocrafter/api/presentation/controller/account"
 	accountMiddleware "github.com/game-core/gocrafter/api/presentation/middleware/account"
-	"github.com/game-core/gocrafter/config/database"
 	accountService "github.com/game-core/gocrafter/domain/service/account"
-	userDao "github.com/game-core/gocrafter/infra/dao/user"
 	accountDao "github.com/game-core/gocrafter/infra/dao/user/account"
 )
 
