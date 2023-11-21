@@ -62,33 +62,34 @@ func generateEntity(yamlFile string, outputBaseDir string) error {
 	}
 	defer outputFile.Close()
 
-	fieldsOrdered := make([]string, 0, len(structInfo.Fields))
-	for fieldName := range structInfo.Fields {
-		fieldsOrdered = append(fieldsOrdered, fieldName)
-	}
-
-	tmpl, err := template.New("structTemplate").Funcs(template.FuncMap{
-		"sortByNumber": sortByNumber,
-	}).Parse(templateCode)
-	if err != nil {
-		return fmt.Errorf("error parsing template: %v", err)
-	}
-
-	if err := tmpl.ExecuteTemplate(outputFile, "structTemplate", struct {
-		Name        string
-		Package     string
-		Fields      map[string]StructField
-		FieldsOrder []string
-	}{
-		Name:        structInfo.Name,
-		Package:     structInfo.Package,
-		Fields:      structInfo.Fields,
-		FieldsOrder: fieldsOrdered,
-	}); err != nil {
+	if err := generateTemplate(structInfo, outputFile); err != nil {
 		return fmt.Errorf("template error: %v", err)
 	}
 
 	fmt.Printf("Created %s Entity in %s\n", structInfo.Name, outputFileName)
+
+	return nil
+}
+
+func generateTemplate(structInfo *StructInfo, outputFile *os.File) error {
+	tmpl, err := template.New("structTemplate").Funcs(template.FuncMap{
+		"sortByNumber": sortByNumber,
+	}).Parse(templateCode)
+	if err != nil {
+		return err
+	}
+
+	if err := tmpl.ExecuteTemplate(outputFile, "structTemplate", struct {
+		Name    string
+		Package string
+		Fields  map[string]StructField
+	}{
+		Name:    structInfo.Name,
+		Package: structInfo.Package,
+		Fields:  structInfo.Fields,
+	}); err != nil {
+		return err
+	}
 
 	return nil
 }
