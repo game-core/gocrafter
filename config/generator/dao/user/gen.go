@@ -104,7 +104,7 @@ func generateTemplate(structInfo *StructInfo, outputFile *os.File) error {
 	}
 
 	if err := tmpl.ExecuteTemplate(outputFile, "daoTemplate", data); err != nil {
-		return fmt.Errorf("template error: %v", err)
+		return fmt.Errorf("faild to generateTemplate: %v", err)
 	}
 
 	return nil

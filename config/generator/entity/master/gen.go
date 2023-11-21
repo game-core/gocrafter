@@ -63,7 +63,7 @@ func generateEntity(yamlFile string, outputBaseDir string) error {
 	defer outputFile.Close()
 
 	if err := generateTemplate(structInfo, outputFile); err != nil {
-		return fmt.Errorf("template error: %v", err)
+		return fmt.Errorf("faild to generateTemplate: %v", err)
 	}
 
 	fmt.Printf("Created %s Entity in %s\n", structInfo.Name, outputFileName)
