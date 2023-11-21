@@ -27,14 +27,14 @@ func NewAccountController(
 	}
 }
 
-// @tags        Account
-// @Summary     アカウント登録
-// @Accept      json
-// @Produce     json
-// @Param       body body request.RegisterAccount true "アカウント登録"
-// @Router      /account/register_account [post]
-// @Success     200  {object} account.RegisterAccount
-// @Failure     500  {object}  errorResponse.Error
+// @tags    Account
+// @Summary アカウント登録
+// @Accept  json
+// @Produce json
+// @Param   body body request.RegisterAccount true "アカウント登録"
+// @Router  /account/register_account [post]
+// @Success 200 {object} account.RegisterAccount
+// @Failure 500 {object} errorResponse.Error
 func (a *accountController) RegisterAccount() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		request := &request.RegisterAccount{}
@@ -52,14 +52,14 @@ func (a *accountController) RegisterAccount() echo.HandlerFunc {
 	}
 }
 
-// @tags        Account
-// @Summary     アカウントログイン
-// @Accept      json
-// @Produce     json
-// @Param       body body request.LoginAccount true "アカウントログイン"
-// @Router      /account/login_account [post]
-// @Success     200  {object} account.LoginAccount
-// @Failure     500  {object}  errorResponse.Error
+// @tags    Account
+// @Summary アカウントログイン
+// @Accept  json
+// @Produce json
+// @Param   body body request.LoginAccount true "アカウントログイン"
+// @Router  /account/login_account [post]
+// @Success 200 {object} account.LoginAccount
+// @Failure 500 {object} errorResponse.Error
 func (a *accountController) LoginAccount() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		request := &request.LoginAccount{}
@@ -77,14 +77,14 @@ func (a *accountController) LoginAccount() echo.HandlerFunc {
 	}
 }
 
-// @tags        Account
-// @Summary     アカウント確認
-// @Accept      json
-// @Produce     json
-// @Param       body body request.CheckAccount true "アカウント確認"
-// @Router      /account/check_account [post]
-// @Success     200  {object} account.CheckAccount
-// @Failure     500  {object}  errorResponse.Error
+// @tags    Account
+// @Summary アカウント確認
+// @Accept  json
+// @Produce json
+// @Param   body body request.CheckAccount true "アカウント確認"
+// @Router  /account/check_account [post]
+// @Success 200 {object} account.CheckAccount
+// @Failure 500 {object} errorResponse.Error
 func (a *accountController) CheckAccount() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		request := &request.CheckAccount{}
