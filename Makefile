@@ -10,9 +10,8 @@ docker_wire_gen:
 # 全てのappを自動生成
 docker_app_gen:
 	docker compose -f docker-compose.local.yml exec gen go generate ./config/generator/request/gen.go
-	docker compose -f docker-compose.local.yml exec gen go fmt ./api/presentation/request...
 	docker compose -f docker-compose.local.yml exec gen go generate ./config/generator/response/gen.go
-	docker compose -f docker-compose.local.yml exec gen go fmt ./api/presentation/response...
+	docker compose -f docker-compose.local.yml exec gen go fmt ./...
 
 # requestを自動生成
 docker_request_gen:
@@ -71,6 +70,7 @@ docker_swag_mock:
 docker_db_user:
 	docker compose -f docker-compose.local.yml exec db_user mysql --host=localhost --user=mysql_user --password=mysql_password gocrafter_user
 
+# ローカルDBに接続
 docker_db_master:
 	docker compose -f docker-compose.local.yml exec db_master mysql --host=localhost --user=mysql_user --password=mysql_password gocrafter_master
 
