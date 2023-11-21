@@ -28,7 +28,7 @@ type StructInfo struct {
 	Index   []string               `yaml:"index"`
 }
 
-type methodType struct {
+type MethodType struct {
 	Script string
 }
 
@@ -54,7 +54,7 @@ func New{{.Name}}Dao(conn *database.SqlHandler) {{.Package}}Repository.{{.Reposi
 	}
 }
 
-{{range $methodName, $methodType := .Methods }}
+{{range $methodName, $MethodType := .Methods }}
 	{{.Script}}
 {{end}}
 `
@@ -85,7 +85,7 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 	if err := daoTmpl.ExecuteTemplate(outputFile, "daoTemplate", struct {
 		Name                 string
 		Package              string
-		Methods              map[string]methodType
+		Methods              map[string]MethodType
 		RepositoryImportPath string
 		RepositoryInterface  string
 	}{
@@ -103,12 +103,12 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 	return nil
 }
 
-func generateMethods(structInfo *StructInfo) map[string]methodType {
-	methods := make(map[string]methodType)
+func generateMethods(structInfo *StructInfo) map[string]MethodType {
+	methods := make(map[string]MethodType)
 
 	// FindByID
 	if len(structInfo.Primary) > 0 {
-		methods["FindByID"] = methodType{
+		methods["FindByID"] = MethodType{
 			Script: generateFindByID(structInfo),
 		}
 	}
@@ -116,36 +116,36 @@ func generateMethods(structInfo *StructInfo) map[string]methodType {
 	// FindByIndex
 	for _, index := range structInfo.Index {
 		indexFields := strings.Split(index, ",")
-		methods[fmt.Sprintf("FindBy%s", strings.Join(indexFields, "And"))] = methodType{
+		methods[fmt.Sprintf("FindBy%s", strings.Join(indexFields, "And"))] = MethodType{
 			Script: generateFindByIndex(structInfo, indexFields),
 		}
 	}
 
 	// List
-	methods["List"] = methodType{
+	methods["List"] = MethodType{
 		Script: generateList(structInfo),
 	}
 
 	// ListByIndex
 	for _, index := range structInfo.Index {
 		indexFields := strings.Split(index, ",")
-		methods[fmt.Sprintf("ListBy%s", strings.Join(indexFields, "And"))] = methodType{
+		methods[fmt.Sprintf("ListBy%s", strings.Join(indexFields, "And"))] = MethodType{
 			Script: generateListByIndex(structInfo, indexFields),
 		}
 	}
 
 	// Create
-	methods["Create"] = methodType{
+	methods["Create"] = MethodType{
 		Script: generateCreate(structInfo),
 	}
 
 	// Update
-	methods["Update"] = methodType{
+	methods["Update"] = MethodType{
 		Script: generateUpdate(structInfo),
 	}
 
 	// Delete
-	methods["Delete"] = methodType{
+	methods["Delete"] = MethodType{
 		Script: generateDelete(structInfo),
 	}
 
