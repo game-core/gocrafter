@@ -72,9 +72,9 @@ docker_swag_mock:
 
 # ローカルDBに接続
 docker_db_user:
-	$(DOCKER_COMPOSE) exec db_user mysql --host=localhost --user=mysql_user --password=mysql_password gocrafter_user
+	$(DOCKER_COMPOSE) exec db mysql --host=localhost --user=mysql_user --password=mysql_password gocrafter_user
 
 # ローカルDBに接続
 docker_db_master:
-	$(DOCKER_COMPOSE) exec db_master mysql --host=localhost --user=mysql_user --password=mysql_password gocrafter_master
+	$(DOCKER_COMPOSE) exec db mysql --host=localhost --user=mysql_user --password=mysql_password gocrafter_master
 
