@@ -114,7 +114,7 @@ func (a *accountService) LoginAccount(req *request.LoginAccount) (*response.Logi
 	}, nil
 }
 
-// ChekAccount アカウントを確認する
+// CheckAccount アカウントを確認する
 func (a *accountService) CheckAccount(req *request.CheckAccount) (*response.CheckAccount, error) {
 	ar, err := a.accountRepository.FindByUUID(req.UUID)
 	if err != nil {
