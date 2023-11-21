@@ -1,3 +1,4 @@
+//go:generate mockgen -source=./transaction.go -destination=./transaction_mock.go -package=master
 package master
 
 import (

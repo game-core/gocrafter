@@ -36,6 +36,7 @@ docker_domain_gen:
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/dao/user/gen.go
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/sql/master/gen.go
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/sql/user/gen.go
+	$(DOCKER_COMPOSE) exec gen go generate ./domain/...
 	$(DOCKER_COMPOSE) exec gen go fmt ./...
 
 # modelを自動生成
