@@ -63,11 +63,6 @@ func generateEntity(yamlFilePath string, outputDir string) error {
 	}
 	defer outputFile.Close()
 
-	fieldsOrdered := make([]string, 0, len(structInfo.Fields))
-	for fieldName := range structInfo.Fields {
-		fieldsOrdered = append(fieldsOrdered, fieldName)
-	}
-
 	var primaryStrings []string
 	for _, primary := range structInfo.Primary {
 		for field := range structInfo.Fields {
