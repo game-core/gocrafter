@@ -11,3 +11,8 @@ structure:
     type: string
     nullable: false
     number: 2
+  LoginRewardModelID:
+    name: login_reward_model_id
+    type: int64
+    nullable: false
+    number: 3

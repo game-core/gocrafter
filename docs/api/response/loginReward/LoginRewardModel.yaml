@@ -1,0 +1,18 @@
+name: LoginRewardModel
+package: loginReward
+structure:
+  ID:
+    name: id
+    type: int64
+    nullable: false
+    number: 1
+  Name:
+    name: name
+    type: string
+    nullable: false
+    number: 2
+  Event:
+    name: event
+    type: Event
+    nullable: false
+    number: 3

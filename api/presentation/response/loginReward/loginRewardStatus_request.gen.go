@@ -7,6 +7,8 @@ import (
 type LoginRewardStatuses []LoginRewardStatus
 
 type LoginRewardStatus struct {
+	ID int64 `json:"id"`
+
 	LoginRewardModel LoginRewardModel `json:"login_reward_model"`
 
 	LoginRewardReceiveSteps LoginRewardReceiveSteps `json:"login_reward_receive_steps"`
