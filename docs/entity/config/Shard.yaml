@@ -34,3 +34,4 @@ structure:
 primary:
   - ID
 index:
+  - ShardKey

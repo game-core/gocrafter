@@ -35,18 +35,18 @@ func (m *MockTransactionRepository) EXPECT() *MockTransactionRepositoryMockRecor
 }
 
 // Begin mocks base method.
-func (m *MockTransactionRepository) Begin(accountID int64) (*gorm.DB, error) {
+func (m *MockTransactionRepository) Begin(shardKey int) (*gorm.DB, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Begin", accountID)
+	ret := m.ctrl.Call(m, "Begin", shardKey)
 	ret0, _ := ret[0].(*gorm.DB)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Begin indicates an expected call of Begin.
-func (mr *MockTransactionRepositoryMockRecorder) Begin(accountID interface{}) *gomock.Call {
+func (mr *MockTransactionRepositoryMockRecorder) Begin(shardKey interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Begin", reflect.TypeOf((*MockTransactionRepository)(nil).Begin), accountID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Begin", reflect.TypeOf((*MockTransactionRepository)(nil).Begin), shardKey)
 }
 
 // Commit mocks base method.

@@ -56,10 +56,6 @@ func New{{.Name}}Dao(conn *database.SqlHandler) {{.Package}}Repository.{{.Name}}
 {{range $methodName, $MethodType := .Methods }}
 	{{.Script}}
 {{end}}
-
-func shardKey(accountID int64, shardCount int) int {
-	return int(accountID) % shardCount
-}
 `
 
 func generateDao(yamlFilePath string, outputBaseDir string) error {
@@ -162,9 +158,9 @@ func generateMethods(structInfo *StructInfo) map[string]MethodType {
 
 func generateFindByID(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`func (d *%sDao) FindByID(ID int64, accountID int64) (*%s.%s, error) {
+		`func (d *%sDao) FindByID(ID int64, shardKey int) (*%s.%s, error) {
 			entity := &%s.%s{}
-			res := d.ShardConn.Shards[shardKey(accountID, len(d.ShardConn.Shards))].ReadConn.Where("id = ?", ID).Find(entity)
+			res := d.ShardConn.Shards[shardKey].ReadConn.Where("id = ?", ID).Find(entity)
 			if err := res.Error; err != nil {
 				return nil, err
 			}
@@ -192,9 +188,9 @@ func generateFindByIndex(structInfo *StructInfo, indexFields []string) string {
 	}
 
 	return fmt.Sprintf(
-		`func (d *%sDao) FindBy%s(%s, accountID int64) (*%s.%s, error) {
+		`func (d *%sDao) FindBy%s(%s, shardKey int) (*%s.%s, error) {
 			entity := &%s.%s{}
-			res := d.ShardConn.Shards[shardKey(accountID, len(d.ShardConn.Shards))].ReadConn.%s.Find(entity)
+			res := d.ShardConn.Shards[shardKey].ReadConn.%s.Find(entity)
 			if err := res.Error; err != nil {
 				return nil, err
 			}
@@ -215,9 +211,9 @@ func generateFindByIndex(structInfo *StructInfo, indexFields []string) string {
 
 func generateList(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`func (d *%sDao) List(limit int64, accountID int64) (*%s.%ss, error) {
+		`func (d *%sDao) List(limit int64, shardKey int) (*%s.%ss, error) {
 			entity := &%s.%ss{}
-			res := d.ShardConn.Shards[shardKey(accountID, len(d.ShardConn.Shards))].ReadConn.Limit(limit).Find(entity)
+			res := d.ShardConn.Shards[shardKey].ReadConn.Limit(limit).Find(entity)
 			if err := res.Error; err != nil {
 				return nil, err
 			}
@@ -245,9 +241,9 @@ func generateListByIndex(structInfo *StructInfo, indexFields []string) string {
 	}
 
 	return fmt.Sprintf(
-		`func (d *%sDao) ListBy%s(%s, accountID int64) (*%s.%ss, error) {
+		`func (d *%sDao) ListBy%s(%s, shardKey int) (*%s.%ss, error) {
 			entity := &%s.%ss{}
-			res := d.ShardConn.Shards[shardKey(accountID, len(d.ShardConn.Shards))].ReadConn.%s.Find(entity)
+			res := d.ShardConn.Shards[shardKey].ReadConn.%s.Find(entity)
 			if err := res.Error; err != nil {
 				return nil, err
 			}
@@ -268,12 +264,12 @@ func generateListByIndex(structInfo *StructInfo, indexFields []string) string {
 
 func generateCreate(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`func (d *%sDao) Create(entity *%s.%s, accountID int64, tx *gorm.DB) (*%s.%s, error) {
+		`func (d *%sDao) Create(entity *%s.%s, shardKey int, tx *gorm.DB) (*%s.%s, error) {
 			var conn *gorm.DB
 			if tx != nil {
 				conn = tx
 			} else {
-				conn = d.ShardConn.Shards[shardKey(accountID, len(d.ShardConn.Shards))].WriteConn
+				conn = d.ShardConn.Shards[shardKey].WriteConn
 			}
 		
 			res := conn.Model(&%s.%s{}).Create(entity)
@@ -296,12 +292,12 @@ func generateCreate(structInfo *StructInfo) string {
 
 func generateUpdate(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`func (d *%sDao) Update(entity *%s.%s, accountID int64, tx *gorm.DB) (*%s.%s, error) {
+		`func (d *%sDao) Update(entity *%s.%s, shardKey int, tx *gorm.DB) (*%s.%s, error) {
 			var conn *gorm.DB
 			if tx != nil {
 				conn = tx
 			} else {
-				conn = d.ShardConn.Shards[shardKey(accountID, len(d.ShardConn.Shards))].WriteConn
+				conn = d.ShardConn.Shards[shardKey].WriteConn
 			}
 		
 			res := conn.Model(&%s.%s{}).Where("id = ?", entity.ID).Update(entity)
@@ -324,12 +320,12 @@ func generateUpdate(structInfo *StructInfo) string {
 
 func generateDelete(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`func (d *%sDao) Delete(entity *%s.%s, accountID int64, tx *gorm.DB) error {
+		`func (d *%sDao) Delete(entity *%s.%s, shardKey int, tx *gorm.DB) error {
 			var conn *gorm.DB
 			if tx != nil {
 				conn = tx
 			} else {
-				conn = d.ShardConn.Shards[shardKey(accountID, len(d.ShardConn.Shards))].WriteConn
+				conn = d.ShardConn.Shards[shardKey].WriteConn
 			}
 		
 			res := conn.Model(&%s.%s{}).Where("id = ?", entity.ID).Delete(entity)

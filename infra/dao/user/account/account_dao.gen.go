@@ -18,12 +18,12 @@ func NewAccountDao(conn *database.SqlHandler) accountRepository.AccountRepositor
 	}
 }
 
-func (d *accountDao) Create(entity *account.Account, accountID int64, tx *gorm.DB) (*account.Account, error) {
+func (d *accountDao) Create(entity *account.Account, shardKey int, tx *gorm.DB) (*account.Account, error) {
 	var conn *gorm.DB
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = d.ShardConn.Shards[shardKey(accountID, len(d.ShardConn.Shards))].WriteConn
+		conn = d.ShardConn.Shards[shardKey].WriteConn
 	}
 
 	res := conn.Model(&account.Account{}).Create(entity)
@@ -34,12 +34,12 @@ func (d *accountDao) Create(entity *account.Account, accountID int64, tx *gorm.D
 	return entity, nil
 }
 
-func (d *accountDao) Delete(entity *account.Account, accountID int64, tx *gorm.DB) error {
+func (d *accountDao) Delete(entity *account.Account, shardKey int, tx *gorm.DB) error {
 	var conn *gorm.DB
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = d.ShardConn.Shards[shardKey(accountID, len(d.ShardConn.Shards))].WriteConn
+		conn = d.ShardConn.Shards[shardKey].WriteConn
 	}
 
 	res := conn.Model(&account.Account{}).Where("id = ?", entity.ID).Delete(entity)
@@ -50,9 +50,9 @@ func (d *accountDao) Delete(entity *account.Account, accountID int64, tx *gorm.D
 	return nil
 }
 
-func (d *accountDao) FindByID(ID int64, accountID int64) (*account.Account, error) {
+func (d *accountDao) FindByID(ID int64, shardKey int) (*account.Account, error) {
 	entity := &account.Account{}
-	res := d.ShardConn.Shards[shardKey(accountID, len(d.ShardConn.Shards))].ReadConn.Where("id = ?", ID).Find(entity)
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("id = ?", ID).Find(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -60,9 +60,9 @@ func (d *accountDao) FindByID(ID int64, accountID int64) (*account.Account, erro
 	return entity, nil
 }
 
-func (d *accountDao) FindByIDAndUUID(ID int64, UUID string, accountID int64) (*account.Account, error) {
+func (d *accountDao) FindByIDAndUUID(ID int64, UUID string, shardKey int) (*account.Account, error) {
 	entity := &account.Account{}
-	res := d.ShardConn.Shards[shardKey(accountID, len(d.ShardConn.Shards))].ReadConn.Where("id = ?", ID).Where("uuid = ?", UUID).Find(entity)
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("id = ?", ID).Where("uuid = ?", UUID).Find(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -70,9 +70,9 @@ func (d *accountDao) FindByIDAndUUID(ID int64, UUID string, accountID int64) (*a
 	return entity, nil
 }
 
-func (d *accountDao) FindByUUID(UUID string, accountID int64) (*account.Account, error) {
+func (d *accountDao) FindByUUID(UUID string, shardKey int) (*account.Account, error) {
 	entity := &account.Account{}
-	res := d.ShardConn.Shards[shardKey(accountID, len(d.ShardConn.Shards))].ReadConn.Where("uuid = ?", UUID).Find(entity)
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("uuid = ?", UUID).Find(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -80,9 +80,9 @@ func (d *accountDao) FindByUUID(UUID string, accountID int64) (*account.Account,
 	return entity, nil
 }
 
-func (d *accountDao) List(limit int64, accountID int64) (*account.Accounts, error) {
+func (d *accountDao) List(limit int64, shardKey int) (*account.Accounts, error) {
 	entity := &account.Accounts{}
-	res := d.ShardConn.Shards[shardKey(accountID, len(d.ShardConn.Shards))].ReadConn.Limit(limit).Find(entity)
+	res := d.ShardConn.Shards[shardKey].ReadConn.Limit(limit).Find(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -90,9 +90,9 @@ func (d *accountDao) List(limit int64, accountID int64) (*account.Accounts, erro
 	return entity, nil
 }
 
-func (d *accountDao) ListByIDAndUUID(ID int64, UUID string, accountID int64) (*account.Accounts, error) {
+func (d *accountDao) ListByIDAndUUID(ID int64, UUID string, shardKey int) (*account.Accounts, error) {
 	entity := &account.Accounts{}
-	res := d.ShardConn.Shards[shardKey(accountID, len(d.ShardConn.Shards))].ReadConn.Where("id = ?", ID).Where("uuid = ?", UUID).Find(entity)
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("id = ?", ID).Where("uuid = ?", UUID).Find(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -100,9 +100,9 @@ func (d *accountDao) ListByIDAndUUID(ID int64, UUID string, accountID int64) (*a
 	return entity, nil
 }
 
-func (d *accountDao) ListByUUID(UUID string, accountID int64) (*account.Accounts, error) {
+func (d *accountDao) ListByUUID(UUID string, shardKey int) (*account.Accounts, error) {
 	entity := &account.Accounts{}
-	res := d.ShardConn.Shards[shardKey(accountID, len(d.ShardConn.Shards))].ReadConn.Where("uuid = ?", UUID).Find(entity)
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("uuid = ?", UUID).Find(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -110,12 +110,12 @@ func (d *accountDao) ListByUUID(UUID string, accountID int64) (*account.Accounts
 	return entity, nil
 }
 
-func (d *accountDao) Update(entity *account.Account, accountID int64, tx *gorm.DB) (*account.Account, error) {
+func (d *accountDao) Update(entity *account.Account, shardKey int, tx *gorm.DB) (*account.Account, error) {
 	var conn *gorm.DB
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = d.ShardConn.Shards[shardKey(accountID, len(d.ShardConn.Shards))].WriteConn
+		conn = d.ShardConn.Shards[shardKey].WriteConn
 	}
 
 	res := conn.Model(&account.Account{}).Where("id = ?", entity.ID).Update(entity)
@@ -124,8 +124,4 @@ func (d *accountDao) Update(entity *account.Account, accountID int64, tx *gorm.D
 	}
 
 	return entity, nil
-}
-
-func shardKey(accountID int64, shardCount int) int {
-	return int(accountID) % shardCount
 }

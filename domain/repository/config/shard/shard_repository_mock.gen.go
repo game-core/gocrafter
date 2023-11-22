@@ -79,6 +79,21 @@ func (mr *MockShardRepositoryMockRecorder) FindByID(ID interface{}) *gomock.Call
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByID", reflect.TypeOf((*MockShardRepository)(nil).FindByID), ID)
 }
 
+// FindByShardKey mocks base method.
+func (m *MockShardRepository) FindByShardKey(ShardKey int) (*shard.Shard, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindByShardKey", ShardKey)
+	ret0, _ := ret[0].(*shard.Shard)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindByShardKey indicates an expected call of FindByShardKey.
+func (mr *MockShardRepositoryMockRecorder) FindByShardKey(ShardKey interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByShardKey", reflect.TypeOf((*MockShardRepository)(nil).FindByShardKey), ShardKey)
+}
+
 // List mocks base method.
 func (m *MockShardRepository) List(limit int64) (*shard.Shards, error) {
 	m.ctrl.T.Helper()
@@ -92,6 +107,21 @@ func (m *MockShardRepository) List(limit int64) (*shard.Shards, error) {
 func (mr *MockShardRepositoryMockRecorder) List(limit interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockShardRepository)(nil).List), limit)
+}
+
+// ListByShardKey mocks base method.
+func (m *MockShardRepository) ListByShardKey(ShardKey int) (*shard.Shards, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ListByShardKey", ShardKey)
+	ret0, _ := ret[0].(*shard.Shards)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ListByShardKey indicates an expected call of ListByShardKey.
+func (mr *MockShardRepositoryMockRecorder) ListByShardKey(ShardKey interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListByShardKey", reflect.TypeOf((*MockShardRepository)(nil).ListByShardKey), ShardKey)
 }
 
 // Update mocks base method.

@@ -41,13 +41,13 @@ func NewAccountService(
 // RegisterAccount アカウントを登録する
 func (a *accountService) RegisterAccount(req *request.RegisterAccount) (*response.RegisterAccount, error) {
 	// シャードキーを取得
-	_, err := a.shardService.GetShard()
+	ss, err := a.shardService.GetShard()
 	if err != nil {
 		return nil, err
 	}
 
 	// transaction
-	tx, err := a.transactionRepository.Begin(1)
+	tx, err := a.transactionRepository.Begin(ss.NextShardKey)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +79,7 @@ func (a *accountService) RegisterAccount(req *request.RegisterAccount) (*respons
 		Password: hashedPassword,
 	}
 
-	ar, err := a.accountRepository.Create(account, 1, tx)
+	ar, err := a.accountRepository.Create(account, ss.NextShardKey, tx)
 	if err != nil {
 		return nil, err
 	}

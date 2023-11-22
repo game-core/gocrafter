@@ -1,10 +1,10 @@
 package shard
 
 import (
+	"errors"
 	"log"
 
 	response "github.com/game-core/gocrafter/api/presentation/response/shard"
-	shardEntity "github.com/game-core/gocrafter/domain/entity/config/shard"
 	configRepository "github.com/game-core/gocrafter/domain/repository/config"
 	shardRepository "github.com/game-core/gocrafter/domain/repository/config/shard"
 )
@@ -52,8 +52,12 @@ func (s *shardService) GetShard() (*response.GetShard, error) {
 		return nil, err
 	}
 
+	if len(*srs) == 0 {
+		return nil, errors.New("failed to shardRepository.List")
+	}
+
 	shards := make(response.Shards, len(*srs))
-	minShard := &shardEntity.Shard{}
+	minShard := (*srs)[0]
 
 	for i, sr := range *srs {
 		shard := &response.Shard{
@@ -64,12 +68,13 @@ func (s *shardService) GetShard() (*response.GetShard, error) {
 		}
 		shards[i] = *shard
 
-		if i == 0 || sr.ShardKey < minShard.ShardKey {
-			minShard = &sr
+		if sr.Count < minShard.Count {
+			minShard = sr
 		}
 	}
 
-	if _, err := s.shardRepository.Update(minShard, tx); err != nil {
+	minShard.Count++
+	if _, err := s.shardRepository.Update(&minShard, tx); err != nil {
 		return nil, err
 	}
 

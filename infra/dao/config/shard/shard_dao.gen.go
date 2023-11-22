@@ -62,9 +62,29 @@ func (d *shardDao) FindByID(ID int64) (*shard.Shard, error) {
 	return entity, nil
 }
 
+func (d *shardDao) FindByShardKey(ShardKey int) (*shard.Shard, error) {
+	entity := &shard.Shard{}
+	res := d.Read.Where("shard_key = ?", ShardKey).Find(entity)
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	return entity, nil
+}
+
 func (d *shardDao) List(limit int64) (*shard.Shards, error) {
 	entity := &shard.Shards{}
 	res := d.Read.Limit(limit).Find(entity)
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	return entity, nil
+}
+
+func (d *shardDao) ListByShardKey(ShardKey int) (*shard.Shards, error) {
+	entity := &shard.Shards{}
+	res := d.Read.Where("shard_key = ?", ShardKey).Find(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
