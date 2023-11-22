@@ -1,0 +1,18 @@
+
+CREATE TABLE loginreward (
+
+	id BIGINT NOT NULL AUTO_INCREMENT,
+
+	name VARCHAR(255) NOT NULL,
+
+	event_id BIGINT NOT NULL,
+
+	rewards VARCHAR(255) NOT NULL,
+
+	created_at TIMESTAMP NOT NULL,
+
+	updated_at TIMESTAMP NOT NULL,
+
+	PRIMARY KEY(id),
+	INDEX(name),INDEX(event_id)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
