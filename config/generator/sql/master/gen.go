@@ -251,7 +251,7 @@ func main() {
 	for _, yamlFile := range yamlFiles {
 		err := generateEntity(yamlFile, outputDir)
 		if err != nil {
-			log.Printf("Error generating entity from YAML file %s: %v", yamlFile, err)
+			log.Printf("Error generating sql from YAML file %s: %v", yamlFile, err)
 		}
 	}
 }

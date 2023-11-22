@@ -28,12 +28,16 @@ docker_response_gen:
 
 # 全てのdomainを自動生成
 docker_domain_gen:
+	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/entity/config/gen.go
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/entity/master/gen.go
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/entity/user/gen.go
+	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/repository/config/gen.go
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/repository/master/gen.go
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/repository/user/gen.go
+	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/dao/config/gen.go
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/dao/master/gen.go
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/dao/user/gen.go
+	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/sql/config/gen.go
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/sql/master/gen.go
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/sql/user/gen.go
 	$(DOCKER_COMPOSE) exec gen go generate ./domain/...

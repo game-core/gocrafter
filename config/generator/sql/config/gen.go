@@ -242,8 +242,8 @@ func extractFileName(filePath string) string {
 }
 
 func main() {
-	outputDir := "../../../../docs/sql/user"
-	yamlFiles, err := filepath.Glob("../../../../docs/entity/user/*.yaml")
+	outputDir := "../../../../docs/sql/config"
+	yamlFiles, err := filepath.Glob("../../../../docs/entity/config/*.yaml")
 	if err != nil {
 		log.Fatalf("Error finding YAML files: %v", err)
 	}
