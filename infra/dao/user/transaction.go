@@ -8,17 +8,17 @@ import (
 )
 
 type transactionDao struct {
-	ShardedConn *database.ShardedConn
+	ShardConn *database.ShardConn
 }
 
 func NewTransactionDao(conn *database.SqlHandler) repository.TransactionRepository {
 	return &transactionDao{
-		ShardedConn: conn.User,
+		ShardConn: conn.User,
 	}
 }
 
 func (d *transactionDao) Begin(accountID int64) (tx *gorm.DB, err error) {
-	tx = d.ShardedConn.Shards[shardKey(accountID, len(d.ShardedConn.Shards))].WriteConn.Begin()
+	tx = d.ShardConn.Shards[shardKey(accountID, len(d.ShardConn.Shards))].WriteConn.Begin()
 	if err := tx.Error; err != nil {
 		return tx, err
 	}
