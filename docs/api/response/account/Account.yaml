@@ -5,6 +5,11 @@ structure:
     name: id
     type: int64
     nullable: false
+    number: 1
+  ShardKey:
+    name: shard_key
+    type: int
+    nullable: false
     number: 2
   UUID:
     name: uuid

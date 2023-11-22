@@ -1,13 +1,18 @@
 name: LoginAccount
 package: account
 structure:
+  ShardKey:
+    name: shard_key
+    type: int
+    nullable: false
+    number: 1
   UUID:
     name: uuid
     type: string
     nullable: false
-    number: 3
+    number: 2
   Password:
     name: password
     type: string
     nullable: false
-    number: 5
+    number: 3

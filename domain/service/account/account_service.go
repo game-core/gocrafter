@@ -75,6 +75,7 @@ func (a *accountService) RegisterAccount(req *request.RegisterAccount) (*respons
 
 	account := &accountEntity.Account{
 		UUID:     uuid,
+		ShardKey: ss.NextShardKey,
 		Name:     req.Name,
 		Password: hashedPassword,
 	}
@@ -88,6 +89,7 @@ func (a *accountService) RegisterAccount(req *request.RegisterAccount) (*respons
 		Status: 200,
 		Item: response.Account{
 			ID:       ar.ID,
+			ShardKey: ar.ShardKey,
 			UUID:     ar.UUID,
 			Name:     ar.Name,
 			Password: password,
@@ -98,7 +100,7 @@ func (a *accountService) RegisterAccount(req *request.RegisterAccount) (*respons
 
 // LoginAccount アカウントをログインする
 func (a *accountService) LoginAccount(req *request.LoginAccount) (*response.LoginAccount, error) {
-	ar, err := a.accountRepository.FindByUUID(req.UUID, 1)
+	ar, err := a.accountRepository.FindByUUID(req.UUID, req.ShardKey)
 	if err != nil {
 		return nil, err
 	}
@@ -116,6 +118,7 @@ func (a *accountService) LoginAccount(req *request.LoginAccount) (*response.Logi
 		Status: 200,
 		Item: response.Account{
 			ID:       ar.ID,
+			ShardKey: ar.ShardKey,
 			UUID:     ar.UUID,
 			Name:     ar.Name,
 			Password: req.Password,
@@ -126,7 +129,7 @@ func (a *accountService) LoginAccount(req *request.LoginAccount) (*response.Logi
 
 // CheckAccount アカウントを確認する
 func (a *accountService) CheckAccount(req *request.CheckAccount) (*response.CheckAccount, error) {
-	ar, err := a.accountRepository.FindByUUID(req.UUID, 1)
+	ar, err := a.accountRepository.FindByUUID(req.UUID, req.ShardKey)
 	if err != nil {
 		return nil, err
 	}
@@ -135,6 +138,7 @@ func (a *accountService) CheckAccount(req *request.CheckAccount) (*response.Chec
 		Status: 200,
 		Item: response.Account{
 			ID:       ar.ID,
+			ShardKey: ar.ShardKey,
 			UUID:     ar.UUID,
 			Name:     ar.Name,
 			Password: "",
