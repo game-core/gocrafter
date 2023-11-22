@@ -1,23 +1,23 @@
-package loginReward
+package item
 
 import (
 	"time"
 )
 
-type LoginRewardRewards []LoginRewardReward
+type ItemBoxs []ItemBox
 
-type LoginRewardReward struct {
+type ItemBox struct {
 	ID int64 `json:"id"`
 
-	LoginRewardID int64 `json:"login_reward_id"`
+	ShardKey int `json:"shard_key"`
+
+	UserID int64 `json:"item_id"`
 
 	ItemID int64 `json:"item_id"`
 
-	Name string `json:"name"`
+	Count int `json:"count"`
 
 	CreatedAt time.Time `json:"created_at" gorm:"autoCreateTime"`
-
-	StepNumber int `json:"step_number"`
 
 	UpdatedAt time.Time `json:"updated_at" gorm:"autoUpdateTime"`
 }

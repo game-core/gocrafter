@@ -15,6 +15,8 @@ type LoginRewardStatus struct {
 
 	LoginRewardModelID int64 `json:"login_reward_model_id"`
 
+	LastReceivedAt time.Time `json:"created_at"`
+
 	CreatedAt time.Time `json:"created_at" gorm:"autoCreateTime"`
 
 	UpdatedAt time.Time `json:"updated_at" gorm:"autoUpdateTime"`
