@@ -3,13 +3,18 @@ package database
 import (
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/jinzhu/gorm"
 )
 
 type SqlHandler struct {
-	User   *Conn
+	User   *ShardConn
 	Master *Conn
+}
+
+type ShardConn struct {
+	Shards map[int]*Conn
 }
 
 type Conn struct {
@@ -19,26 +24,43 @@ type Conn struct {
 
 func NewDB() *SqlHandler {
 	return &SqlHandler{
-		User:   userDB(),
+		User:   shardUserDB(),
 		Master: masterDB(),
 	}
 }
 
-func userDB() *Conn {
+func shardUserDB() *ShardConn {
+	shardCountStr := os.Getenv("SHARD_COUNT")
+	shardCount, err := strconv.Atoi(shardCountStr)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	shards := make(map[int]*Conn)
+	for i := 1; i <= shardCount; i++ {
+		shards[i] = userDB(fmt.Sprintf("_%v", i))
+	}
+
+	return &ShardConn{
+		Shards: shards,
+	}
+}
+
+func userDB(shard string) *Conn {
 	readConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		os.Getenv("USER_MYSQL_READ_USER"),
-		os.Getenv("USER_MYSQL_READ_PASSWORD"),
-		os.Getenv("USER_MYSQL_READ_HOST"),
-		os.Getenv("USER_MYSQL_DATABASE"),
+		os.Getenv("USER_MYSQL_READ_USER"+shard),
+		os.Getenv("USER_MYSQL_READ_PASSWORD"+shard),
+		os.Getenv("USER_MYSQL_READ_HOST"+shard),
+		os.Getenv("USER_MYSQL_DATABASE"+shard),
 	)
 
 	writeConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		os.Getenv("USER_MYSQL_WRITE_USER"),
-		os.Getenv("USER_MYSQL_WRITE_PASSWORD"),
-		os.Getenv("USER_MYSQL_WRITE_HOST"),
-		os.Getenv("USER_MYSQL_DATABASE"),
+		os.Getenv("USER_MYSQL_WRITE_USER"+shard),
+		os.Getenv("USER_MYSQL_WRITE_PASSWORD"+shard),
+		os.Getenv("USER_MYSQL_WRITE_HOST"+shard),
+		os.Getenv("USER_MYSQL_DATABASE"+shard),
 	)
 
 	readDB, err := gorm.Open("mysql", readConn)

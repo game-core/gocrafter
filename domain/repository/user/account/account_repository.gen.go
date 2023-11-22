@@ -7,21 +7,21 @@ import (
 )
 
 type AccountRepository interface {
-	Create(entity *account.Account, tx *gorm.DB) (*account.Account, error)
+	Create(entity *account.Account, accountID int64, tx *gorm.DB) (*account.Account, error)
 
-	Delete(entity *account.Account, tx *gorm.DB) error
+	Delete(entity *account.Account, accountID int64, tx *gorm.DB) error
 
-	FindByID(ID int64) (*account.Account, error)
+	FindByID(ID int64, accountID int64) (*account.Account, error)
 
-	FindByIDAndUUID(ID int64, UUID string) (*account.Account, error)
+	FindByIDAndUUID(ID int64, UUID string, accountID int64) (*account.Account, error)
 
-	FindByUUID(UUID string) (*account.Account, error)
+	FindByUUID(UUID string, accountID int64) (*account.Account, error)
 
-	List(limit int64) (*account.Accounts, error)
+	List(limit int64, accountID int64) (*account.Accounts, error)
 
-	ListByIDAndUUID(ID int64, UUID string) (*account.Accounts, error)
+	ListByIDAndUUID(ID int64, UUID string, accountID int64) (*account.Accounts, error)
 
-	ListByUUID(UUID string) (*account.Accounts, error)
+	ListByUUID(UUID string, accountID int64) (*account.Accounts, error)
 
-	Update(entity *account.Account, tx *gorm.DB) (*account.Account, error)
+	Update(entity *account.Account, accountID int64, tx *gorm.DB) (*account.Account, error)
 }

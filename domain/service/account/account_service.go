@@ -37,7 +37,7 @@ func NewAccountService(
 // RegisterAccount アカウントを登録する
 func (a *accountService) RegisterAccount(req *request.RegisterAccount) (*response.RegisterAccount, error) {
 	// transaction
-	tx, err := a.transactionRepository.Begin()
+	tx, err := a.transactionRepository.Begin(1)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +69,7 @@ func (a *accountService) RegisterAccount(req *request.RegisterAccount) (*respons
 		Password: hashedPassword,
 	}
 
-	ar, err := a.accountRepository.Create(account, tx)
+	ar, err := a.accountRepository.Create(account, 1, tx)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +88,7 @@ func (a *accountService) RegisterAccount(req *request.RegisterAccount) (*respons
 
 // LoginAccount アカウントをログインする
 func (a *accountService) LoginAccount(req *request.LoginAccount) (*response.LoginAccount, error) {
-	ar, err := a.accountRepository.FindByUUID(req.UUID)
+	ar, err := a.accountRepository.FindByUUID(req.UUID, 1)
 	if err != nil {
 		return nil, err
 	}
@@ -116,7 +116,7 @@ func (a *accountService) LoginAccount(req *request.LoginAccount) (*response.Logi
 
 // CheckAccount アカウントを確認する
 func (a *accountService) CheckAccount(req *request.CheckAccount) (*response.CheckAccount, error) {
-	ar, err := a.accountRepository.FindByUUID(req.UUID)
+	ar, err := a.accountRepository.FindByUUID(req.UUID, 1)
 	if err != nil {
 		return nil, err
 	}

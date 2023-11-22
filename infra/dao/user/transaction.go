@@ -8,19 +8,17 @@ import (
 )
 
 type transactionDao struct {
-	Read  *gorm.DB
-	Write *gorm.DB
+	ShardedConn *database.ShardedConn
 }
 
 func NewTransactionDao(conn *database.SqlHandler) repository.TransactionRepository {
 	return &transactionDao{
-		Read:  conn.User.ReadConn,
-		Write: conn.User.WriteConn,
+		ShardedConn: conn.User,
 	}
 }
 
-func (transactionDao *transactionDao) Begin() (tx *gorm.DB, err error) {
-	tx = transactionDao.Write.Begin()
+func (d *transactionDao) Begin(accountID int64) (tx *gorm.DB, err error) {
+	tx = d.ShardedConn.Shards[shardKey(accountID, len(d.ShardedConn.Shards))].WriteConn.Begin()
 	if err := tx.Error; err != nil {
 		return tx, err
 	}
@@ -28,7 +26,7 @@ func (transactionDao *transactionDao) Begin() (tx *gorm.DB, err error) {
 	return tx, err
 }
 
-func (transactionDao *transactionDao) Commit(tx *gorm.DB) (err error) {
+func (d *transactionDao) Commit(tx *gorm.DB) (err error) {
 	tx.Commit()
 	if err := tx.Error; err != nil {
 		return err
@@ -37,11 +35,15 @@ func (transactionDao *transactionDao) Commit(tx *gorm.DB) (err error) {
 	return err
 }
 
-func (transactionDao *transactionDao) Rollback(tx *gorm.DB) (err error) {
+func (d *transactionDao) Rollback(tx *gorm.DB) (err error) {
 	tx.Rollback()
 	if err := tx.Error; err != nil {
 		return err
 	}
 
 	return err
+}
+
+func shardKey(accountID int64, shardCount int) int {
+	return int(accountID) % shardCount
 }

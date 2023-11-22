@@ -148,16 +148,16 @@ func generateMethods(structInfo *StructInfo) map[string]MethodType {
 }
 
 func generateFindByID(structInfo *StructInfo) string {
-	return fmt.Sprintf(`FindByID(ID int64) (*%s.%s, error)`, structInfo.Package, structInfo.Name)
+	return fmt.Sprintf(`FindByID(ID int64, accountID int64) (*%s.%s, error)`, structInfo.Package, structInfo.Name)
 }
 
 func generateList(structInfo *StructInfo) string {
-	return fmt.Sprintf(`List(limit int64) (*%s.%ss, error)`, structInfo.Package, structInfo.Name)
+	return fmt.Sprintf(`List(limit int64, accountID int64) (*%s.%ss, error)`, structInfo.Package, structInfo.Name)
 }
 
 func generateCreate(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`Create(entity *%s.%s, tx *gorm.DB) (*%s.%s, error)`,
+		`Create(entity *%s.%s, accountID int64,tx *gorm.DB) (*%s.%s, error)`,
 		structInfo.Package,
 		structInfo.Name,
 		structInfo.Package,
@@ -167,7 +167,7 @@ func generateCreate(structInfo *StructInfo) string {
 
 func generateUpdate(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`Update(entity *%s.%s, tx *gorm.DB) (*%s.%s, error)`,
+		`Update(entity *%s.%s, accountID int64, tx *gorm.DB) (*%s.%s, error)`,
 		structInfo.Package,
 		structInfo.Name,
 		structInfo.Package,
@@ -177,7 +177,7 @@ func generateUpdate(structInfo *StructInfo) string {
 
 func generateDelete(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`Delete(entity *%s.%s, tx *gorm.DB) error`,
+		`Delete(entity *%s.%s, accountID int64, tx *gorm.DB) error`,
 		structInfo.Package,
 		structInfo.Name,
 	)
@@ -193,7 +193,7 @@ func generateFindByIndex(structInfo *StructInfo, indexFields []string) string {
 	}
 
 	return fmt.Sprintf(
-		`FindBy%s(%s) (*%s.%s, error)`,
+		`FindBy%s(%s, accountID int64) (*%s.%s, error)`,
 		strings.Join(indexFields, "And"),
 		strings.Join(paramStrings, ","),
 		structInfo.Package,
@@ -211,7 +211,7 @@ func generateListByIndex(structInfo *StructInfo, indexFields []string) string {
 	}
 
 	return fmt.Sprintf(
-		`ListBy%s(%s) (*%s.%ss, error)`,
+		`ListBy%s(%s, accountID int64) (*%s.%ss, error)`,
 		strings.Join(indexFields, "And"),
 		strings.Join(paramStrings, ","),
 		structInfo.Package,
