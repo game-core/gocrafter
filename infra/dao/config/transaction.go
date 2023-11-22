@@ -1,4 +1,4 @@
-package master
+package config
 
 import (
 	"github.com/jinzhu/gorm"
@@ -14,8 +14,8 @@ type transactionDao struct {
 
 func NewTransactionDao(conn *database.SqlHandler) repository.TransactionRepository {
 	return &transactionDao{
-		Read:  conn.Master.ReadConn,
-		Write: conn.Master.WriteConn,
+		Read:  conn.Config.ReadConn,
+		Write: conn.Config.WriteConn,
 	}
 }
 

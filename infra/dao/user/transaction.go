@@ -17,31 +17,31 @@ func NewTransactionDao(conn *database.SqlHandler) repository.TransactionReposito
 	}
 }
 
-func (d *transactionDao) Begin(accountID int64) (tx *gorm.DB, err error) {
-	tx = d.ShardConn.Shards[shardKey(accountID, len(d.ShardConn.Shards))].WriteConn.Begin()
+func (d *transactionDao) Begin(accountID int64) (*gorm.DB, error) {
+	tx := d.ShardConn.Shards[shardKey(accountID, len(d.ShardConn.Shards))].WriteConn.Begin()
 	if err := tx.Error; err != nil {
-		return tx, err
+		return nil, err
 	}
 
-	return tx, err
+	return tx, nil
 }
 
-func (d *transactionDao) Commit(tx *gorm.DB) (err error) {
+func (d *transactionDao) Commit(tx *gorm.DB) error {
 	tx.Commit()
 	if err := tx.Error; err != nil {
 		return err
 	}
 
-	return err
+	return nil
 }
 
-func (d *transactionDao) Rollback(tx *gorm.DB) (err error) {
+func (d *transactionDao) Rollback(tx *gorm.DB) error {
 	tx.Rollback()
 	if err := tx.Error; err != nil {
 		return err
 	}
 
-	return err
+	return nil
 }
 
 func shardKey(accountID int64, shardCount int) int {
