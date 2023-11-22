@@ -3,6 +3,8 @@ CREATE TABLE shard (
 
 	id BIGINT NOT NULL AUTO_INCREMENT,
 
+	shard_key INT NOT NULL,
+
 	name VARCHAR(255) NOT NULL,
 
 	count INT NOT NULL,
