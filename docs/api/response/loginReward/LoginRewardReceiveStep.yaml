@@ -1,0 +1,8 @@
+name: LoginRewardReceiveStep
+package: loginReward
+structure:
+  StepNumber:
+    name: step_number
+    type: int
+    nullable: false
+    number: 1

@@ -1,0 +1,23 @@
+name: LoginRewardStatus
+package: loginReward
+structure:
+  LoginRewardModel:
+    name: login_reward_model
+    type: LoginRewardModel
+    nullable: false
+    number: 1
+  LoginRewardReceiveSteps:
+    name: login_reward_receive_steps
+    type: LoginRewardReceiveSteps
+    nullable: false
+    number: 2
+  Item:
+    name: item
+    type: Item
+    nullable: false
+    number: 3
+  LastReceivedAt:
+    name: created_at
+    type: time.Time
+    nullable: false
+    number: 4

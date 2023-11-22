@@ -1,0 +1,13 @@
+name: ReceiveLoginReward
+package: loginReward
+structure:
+  Status:
+    name: status
+    type: int64
+    nullable: false
+    number: 1
+  Item:
+    name: item
+    type: LoginRewardStatus
+    nullable: false
+    number: 2

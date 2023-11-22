@@ -1,0 +1,13 @@
+name: ReceiveLoginReward
+package: loginReward
+structure:
+  ShardKey:
+    name: shard_key
+    type: int
+    nullable: false
+    number: 1
+  UUID:
+    name: uuid
+    type: string
+    nullable: false
+    number: 2
