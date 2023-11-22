@@ -33,7 +33,7 @@ package {{.Package}}
 
 {{.Import}}
 
-type {{.Name}}s []{{.Name}}
+type {{.PluralName}} []{{.Name}}
 
 type {{.Name}} struct {
 {{range $field := sortByNumber .Fields}}
@@ -77,15 +77,17 @@ func generateTemplate(structInfo *StructInfo, outputFile *os.File) error {
 	}
 
 	if err := tmpl.ExecuteTemplate(outputFile, "structTemplate", struct {
-		Name    string
-		Package string
-		Import  string
-		Fields  map[string]StructField
+		Name       string
+		PluralName string
+		Package    string
+		Import     string
+		Fields     map[string]StructField
 	}{
-		Name:    structInfo.Name,
-		Package: structInfo.Package,
-		Import:  generateImport(structInfo.Fields),
-		Fields:  structInfo.Fields,
+		Name:       structInfo.Name,
+		PluralName: transform.SingularToPlural(structInfo.Name),
+		Package:    structInfo.Package,
+		Import:     generateImport(structInfo.Fields),
+		Fields:     structInfo.Fields,
 	}); err != nil {
 		return fmt.Errorf("template error: %v", err)
 	}
