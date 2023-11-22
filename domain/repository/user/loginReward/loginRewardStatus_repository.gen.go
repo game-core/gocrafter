@@ -1,4 +1,4 @@
-//go:generate mockgen -source=./loginReward_repository.gen.go -destination=./loginReward_repository_mock.gen.go -package=loginReward
+//go:generate mockgen -source=./loginRewardStatus_repository.gen.go -destination=./loginRewardStatus_repository_mock.gen.go -package=loginReward
 package loginReward
 
 import (

@@ -4,6 +4,7 @@ package main
 
 import (
 	"fmt"
+
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
@@ -11,6 +12,8 @@ import (
 	"path/filepath"
 	"strings"
 	"text/template"
+
+	"github.com/game-core/gocrafter/config/transform"
 )
 
 type StructField struct {
@@ -58,7 +61,7 @@ func generateRepository(yamlFilePath string, outputBaseDir string) error {
 		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
 	}
 
-	outputFileName := filepath.Join(outputDir, fmt.Sprintf("%s_repository.gen.go", structInfo.Package))
+	outputFileName := filepath.Join(outputDir, fmt.Sprintf("%s_repository.gen.go", transform.KebabToCamel(structInfo.Name)))
 	outputFile, err := os.Create(outputFileName)
 	if err != nil {
 		return fmt.Errorf("outputFileName file %s create error: %v", outputFileName, err)
@@ -97,7 +100,7 @@ func generateTemplate(structInfo *StructInfo, outputFile *os.File) error {
 }
 
 func generateMock(structInfo *StructInfo) string {
-	return fmt.Sprintf("//go:generate mockgen -source=./%s_repository.gen.go -destination=./%s_repository_mock.gen.go -package=%s", structInfo.Package, structInfo.Package, structInfo.Package)
+	return fmt.Sprintf("//go:generate mockgen -source=./%s_repository.gen.go -destination=./%s_repository_mock.gen.go -package=%s", transform.KebabToCamel(structInfo.Name), transform.KebabToCamel(structInfo.Name), structInfo.Package)
 }
 
 func generateMethods(structInfo *StructInfo) map[string]MethodType {

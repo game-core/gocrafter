@@ -4,6 +4,7 @@ package main
 
 import (
 	"fmt"
+
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
@@ -11,6 +12,8 @@ import (
 	"path/filepath"
 	"sort"
 	"text/template"
+
+	"github.com/game-core/gocrafter/config/transform"
 )
 
 type StructField struct {
@@ -55,7 +58,7 @@ func generateEntity(yamlFile string, outputBaseDir string) error {
 		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
 	}
 
-	outputFileName := filepath.Join(outputDir, fmt.Sprintf("%s_entity.gen.go", structInfo.Package))
+	outputFileName := filepath.Join(outputDir, fmt.Sprintf("%s_entity.gen.go", transform.KebabToCamel(structInfo.Name)))
 	outputFile, err := os.Create(outputFileName)
 	if err != nil {
 		return fmt.Errorf("outputFileName file %s create error: %v", outputFileName, err)

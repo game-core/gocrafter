@@ -11,21 +11,21 @@ import (
 	loginRewardRepository "github.com/game-core/gocrafter/domain/repository/master/loginReward"
 )
 
-type loginRewardDao struct {
+type loginRewardModelDao struct {
 	Read  *gorm.DB
 	Write *gorm.DB
 	Cache *cache.Cache
 }
 
 func NewLoginRewardModelDao(conn *database.SqlHandler) loginRewardRepository.LoginRewardModelRepository {
-	return &loginRewardDao{
+	return &loginRewardModelDao{
 		Read:  conn.Master.ReadConn,
 		Write: conn.Master.WriteConn,
 		Cache: cache.New(cache.NoExpiration, cache.NoExpiration),
 	}
 }
 
-func (d *loginRewardDao) Create(entity *loginReward.LoginRewardModel, tx *gorm.DB) (*loginReward.LoginRewardModel, error) {
+func (d *loginRewardModelDao) Create(entity *loginReward.LoginRewardModel, tx *gorm.DB) (*loginReward.LoginRewardModel, error) {
 	var conn *gorm.DB
 	if tx != nil {
 		conn = tx
@@ -41,7 +41,7 @@ func (d *loginRewardDao) Create(entity *loginReward.LoginRewardModel, tx *gorm.D
 	return entity, nil
 }
 
-func (d *loginRewardDao) Delete(entity *loginReward.LoginRewardModel, tx *gorm.DB) error {
+func (d *loginRewardModelDao) Delete(entity *loginReward.LoginRewardModel, tx *gorm.DB) error {
 	var conn *gorm.DB
 	if tx != nil {
 		conn = tx
@@ -57,7 +57,7 @@ func (d *loginRewardDao) Delete(entity *loginReward.LoginRewardModel, tx *gorm.D
 	return nil
 }
 
-func (d *loginRewardDao) FindByEventID(EventID int64) (*loginReward.LoginRewardModel, error) {
+func (d *loginRewardModelDao) FindByEventID(EventID int64) (*loginReward.LoginRewardModel, error) {
 	cachedResult, found := d.Cache.Get(cacheKey("FindByEventID", fmt.Sprintf("%d_", EventID)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*loginReward.LoginRewardModel); ok {
@@ -76,7 +76,7 @@ func (d *loginRewardDao) FindByEventID(EventID int64) (*loginReward.LoginRewardM
 	return entity, nil
 }
 
-func (d *loginRewardDao) FindByID(ID int64) (*loginReward.LoginRewardModel, error) {
+func (d *loginRewardModelDao) FindByID(ID int64) (*loginReward.LoginRewardModel, error) {
 	cachedResult, found := d.Cache.Get(cacheKey("FindByID", fmt.Sprintf("%d_", ID)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*loginReward.LoginRewardModel); ok {
@@ -95,7 +95,7 @@ func (d *loginRewardDao) FindByID(ID int64) (*loginReward.LoginRewardModel, erro
 	return entity, nil
 }
 
-func (d *loginRewardDao) FindByName(Name string) (*loginReward.LoginRewardModel, error) {
+func (d *loginRewardModelDao) FindByName(Name string) (*loginReward.LoginRewardModel, error) {
 	cachedResult, found := d.Cache.Get(cacheKey("FindByName", fmt.Sprintf("%s_", Name)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*loginReward.LoginRewardModel); ok {
@@ -114,7 +114,7 @@ func (d *loginRewardDao) FindByName(Name string) (*loginReward.LoginRewardModel,
 	return entity, nil
 }
 
-func (d *loginRewardDao) FindByNameAndEventID(Name string, EventID int64) (*loginReward.LoginRewardModel, error) {
+func (d *loginRewardModelDao) FindByNameAndEventID(Name string, EventID int64) (*loginReward.LoginRewardModel, error) {
 	cachedResult, found := d.Cache.Get(cacheKey("FindByNameAndEventID", fmt.Sprintf("%s_%d_", Name, EventID)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*loginReward.LoginRewardModel); ok {
@@ -133,7 +133,7 @@ func (d *loginRewardDao) FindByNameAndEventID(Name string, EventID int64) (*logi
 	return entity, nil
 }
 
-func (d *loginRewardDao) List(limit int64) (*loginReward.LoginRewardModels, error) {
+func (d *loginRewardModelDao) List(limit int64) (*loginReward.LoginRewardModels, error) {
 	cachedResult, found := d.Cache.Get(cacheKey("List", ""))
 	if found {
 		if cachedEntity, ok := cachedResult.(*loginReward.LoginRewardModels); ok {
@@ -152,7 +152,7 @@ func (d *loginRewardDao) List(limit int64) (*loginReward.LoginRewardModels, erro
 	return entity, nil
 }
 
-func (d *loginRewardDao) ListByEventID(EventID int64) (*loginReward.LoginRewardModels, error) {
+func (d *loginRewardModelDao) ListByEventID(EventID int64) (*loginReward.LoginRewardModels, error) {
 	cachedResult, found := d.Cache.Get(cacheKey("ListByEventID", fmt.Sprintf("%d_", EventID)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*loginReward.LoginRewardModels); ok {
@@ -171,7 +171,7 @@ func (d *loginRewardDao) ListByEventID(EventID int64) (*loginReward.LoginRewardM
 	return entity, nil
 }
 
-func (d *loginRewardDao) ListByName(Name string) (*loginReward.LoginRewardModels, error) {
+func (d *loginRewardModelDao) ListByName(Name string) (*loginReward.LoginRewardModels, error) {
 	cachedResult, found := d.Cache.Get(cacheKey("ListByName", fmt.Sprintf("%s_", Name)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*loginReward.LoginRewardModels); ok {
@@ -190,7 +190,7 @@ func (d *loginRewardDao) ListByName(Name string) (*loginReward.LoginRewardModels
 	return entity, nil
 }
 
-func (d *loginRewardDao) ListByNameAndEventID(Name string, EventID int64) (*loginReward.LoginRewardModels, error) {
+func (d *loginRewardModelDao) ListByNameAndEventID(Name string, EventID int64) (*loginReward.LoginRewardModels, error) {
 	cachedResult, found := d.Cache.Get(cacheKey("ListByNameAndEventID", fmt.Sprintf("%s_%d_", Name, EventID)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*loginReward.LoginRewardModels); ok {
@@ -209,7 +209,7 @@ func (d *loginRewardDao) ListByNameAndEventID(Name string, EventID int64) (*logi
 	return entity, nil
 }
 
-func (d *loginRewardDao) Update(entity *loginReward.LoginRewardModel, tx *gorm.DB) (*loginReward.LoginRewardModel, error) {
+func (d *loginRewardModelDao) Update(entity *loginReward.LoginRewardModel, tx *gorm.DB) (*loginReward.LoginRewardModel, error) {
 	var conn *gorm.DB
 	if tx != nil {
 		conn = tx

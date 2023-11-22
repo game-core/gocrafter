@@ -45,13 +45,13 @@ import (
 	{{.Package}}Repository "github.com/game-core/gocrafter/domain/repository/config/{{.Package}}"
 )
 
-type {{.Package}}Dao struct {
+type {{.CamelName}}Dao struct {
 	Read  *gorm.DB
 	Write *gorm.DB
 }
 
 func New{{.Name}}Dao(conn *database.SqlHandler) {{.Package}}Repository.{{.Name}}Repository {
-	return &{{.Package}}Dao{
+	return &{{.CamelName}}Dao{
 		Read:  conn.Config.ReadConn,
 		Write: conn.Config.WriteConn,
 	}
@@ -73,7 +73,7 @@ func generateDao(yamlFilePath string, outputBaseDir string) error {
 		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
 	}
 
-	outputFileName := filepath.Join(outputDir, fmt.Sprintf("%s_dao.gen.go", structInfo.Package))
+	outputFileName := filepath.Join(outputDir, fmt.Sprintf("%s_dao.gen.go", transform.KebabToCamel(structInfo.Name)))
 	outputFile, err := os.Create(outputFileName)
 	if err != nil {
 		return fmt.Errorf("outputFileName file %s create error: %v", outputFileName, err)
@@ -95,15 +95,17 @@ func generateTemplate(structInfo *StructInfo, outputFile *os.File) error {
 	}
 
 	data := struct {
-		Name    string
-		Package string
-		Table   string
-		Methods map[string]MethodType
+		Name      string
+		CamelName string
+		Package   string
+		Table     string
+		Methods   map[string]MethodType
 	}{
-		Name:    structInfo.Name,
-		Package: structInfo.Package,
-		Table:   transform.CamelToSnake(structInfo.Package),
-		Methods: generateMethods(structInfo),
+		Name:      structInfo.Name,
+		CamelName: transform.KebabToCamel(structInfo.Name),
+		Package:   structInfo.Package,
+		Table:     transform.CamelToSnake(structInfo.Package),
+		Methods:   generateMethods(structInfo),
 	}
 
 	if err := tmpl.ExecuteTemplate(outputFile, "daoTemplate", data); err != nil {
@@ -174,7 +176,7 @@ func generateFindByID(structInfo *StructInfo) string {
 			return entity, nil
 		}
 		`,
-		structInfo.Package,
+		transform.KebabToCamel(structInfo.Name),
 		structInfo.Package,
 		structInfo.Name,
 		structInfo.Package,
@@ -214,7 +216,7 @@ func generateFindByIndex(structInfo *StructInfo, indexFields []string) string {
 			return entity, nil
 		}
 		`,
-		structInfo.Package,
+		transform.KebabToCamel(structInfo.Name),
 		strings.Join(indexFields, "And"),
 		strings.Join(paramStrings, ","),
 		structInfo.Package,
@@ -237,7 +239,7 @@ func generateList(structInfo *StructInfo) string {
 			return entity, nil
 		}
 		`,
-		structInfo.Package,
+		transform.KebabToCamel(structInfo.Name),
 		structInfo.Package,
 		structInfo.Name,
 		structInfo.Package,
@@ -277,7 +279,7 @@ func generateListByIndex(structInfo *StructInfo, indexFields []string) string {
 			return entity, nil
 		}
 		`,
-		structInfo.Package,
+		transform.KebabToCamel(structInfo.Name),
 		strings.Join(indexFields, "And"),
 		strings.Join(paramStrings, ","),
 		structInfo.Package,
@@ -306,7 +308,7 @@ func generateCreate(structInfo *StructInfo) string {
 			return entity, nil
 		}
 		`,
-		structInfo.Package,
+		transform.KebabToCamel(structInfo.Name),
 		structInfo.Package,
 		structInfo.Name,
 		structInfo.Package,
@@ -334,7 +336,7 @@ func generateUpdate(structInfo *StructInfo) string {
 			return entity, nil
 		}
 		`,
-		structInfo.Package,
+		transform.KebabToCamel(structInfo.Name),
 		structInfo.Package,
 		structInfo.Name,
 		structInfo.Package,
@@ -362,7 +364,7 @@ func generateDelete(structInfo *StructInfo) string {
 			return nil
 		}
 		`,
-		structInfo.Package,
+		transform.KebabToCamel(structInfo.Name),
 		structInfo.Package,
 		structInfo.Name,
 		structInfo.Package,
