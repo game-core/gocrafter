@@ -38,10 +38,7 @@ const daoTemplateCode = `
 package {{.Package}}
 
 import (
-	"fmt"
-
 	"github.com/jinzhu/gorm"
-	"github.com/patrickmn/go-cache"
 	
 	"github.com/game-core/gocrafter/config/database"
 	"github.com/game-core/gocrafter/domain/entity/config/{{.Package}}"

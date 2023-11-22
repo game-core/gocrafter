@@ -1,10 +1,11 @@
 package shard
 
 import (
+	"github.com/jinzhu/gorm"
+
 	"github.com/game-core/gocrafter/config/database"
 	"github.com/game-core/gocrafter/domain/entity/config/shard"
 	shardRepository "github.com/game-core/gocrafter/domain/repository/config/shard"
-	"github.com/jinzhu/gorm"
 )
 
 type shardDao struct {

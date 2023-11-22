@@ -1,4 +1,4 @@
-//go:generate mockgen -source=./transaction.go -destination=./transaction_mock.go -package=user
+//go:generate mockgen -source=./transaction.go -destination=./transaction_mock.go -package=config
 package config
 
 import (
