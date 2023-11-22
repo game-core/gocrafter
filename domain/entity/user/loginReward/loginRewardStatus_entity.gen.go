@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-type LoginRewardStatuss []LoginRewardStatus
+type LoginRewardStatuses []LoginRewardStatus
 
 type LoginRewardStatus struct {
 	ID int64 `json:"id"`

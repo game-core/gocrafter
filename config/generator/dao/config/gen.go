@@ -229,8 +229,8 @@ func generateFindByIndex(structInfo *StructInfo, indexFields []string) string {
 
 func generateList(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`func (d *%sDao) List(limit int64) (*%s.%ss, error) {
-			entity := &%s.%ss{}
+		`func (d *%sDao) List(limit int64) (*%s.%s, error) {
+			entity := &%s.%s{}
 			res := d.Read.Limit(limit).Find(entity)
 			if err := res.Error; err != nil {
 				return nil, err
@@ -241,9 +241,9 @@ func generateList(structInfo *StructInfo) string {
 		`,
 		transform.KebabToCamel(structInfo.Name),
 		structInfo.Package,
-		structInfo.Name,
+		transform.SingularToPlural(structInfo.Name),
 		structInfo.Package,
-		structInfo.Name,
+		transform.SingularToPlural(structInfo.Name),
 	)
 }
 
@@ -269,8 +269,8 @@ func generateListByIndex(structInfo *StructInfo, indexFields []string) string {
 	}
 
 	return fmt.Sprintf(
-		`func (d *%sDao) ListBy%s(%s) (*%s.%ss, error) {
-			entity := &%s.%ss{}
+		`func (d *%sDao) ListBy%s(%s) (*%s.%s, error) {
+			entity := &%s.%s{}
 			res := d.Read.%s.Find(entity)
 			if err := res.Error; err != nil {
 				return nil, err
@@ -283,9 +283,9 @@ func generateListByIndex(structInfo *StructInfo, indexFields []string) string {
 		strings.Join(indexFields, "And"),
 		strings.Join(paramStrings, ","),
 		structInfo.Package,
-		structInfo.Name,
+		transform.SingularToPlural(structInfo.Name),
 		structInfo.Package,
-		structInfo.Name,
+		transform.SingularToPlural(structInfo.Name),
 		strings.Join(scriptStrings, "."),
 	)
 }

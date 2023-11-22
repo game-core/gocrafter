@@ -125,10 +125,10 @@ func (mr *MockLoginRewardReceiveStepsRepositoryMockRecorder) FindByLoginRewardSt
 }
 
 // List mocks base method.
-func (m *MockLoginRewardReceiveStepsRepository) List(limit int64, shardKey int) (*loginReward.LoginRewardReceiveStepss, error) {
+func (m *MockLoginRewardReceiveStepsRepository) List(limit int64, shardKey int) (*loginReward.LoginRewardReceiveStepses, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", limit, shardKey)
-	ret0, _ := ret[0].(*loginReward.LoginRewardReceiveStepss)
+	ret0, _ := ret[0].(*loginReward.LoginRewardReceiveStepses)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -140,10 +140,10 @@ func (mr *MockLoginRewardReceiveStepsRepositoryMockRecorder) List(limit, shardKe
 }
 
 // ListByAccountID mocks base method.
-func (m *MockLoginRewardReceiveStepsRepository) ListByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardReceiveStepss, error) {
+func (m *MockLoginRewardReceiveStepsRepository) ListByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardReceiveStepses, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListByAccountID", AccountID, shardKey)
-	ret0, _ := ret[0].(*loginReward.LoginRewardReceiveStepss)
+	ret0, _ := ret[0].(*loginReward.LoginRewardReceiveStepses)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -155,10 +155,10 @@ func (mr *MockLoginRewardReceiveStepsRepositoryMockRecorder) ListByAccountID(Acc
 }
 
 // ListByAccountIDAndLoginRewardStatusID mocks base method.
-func (m *MockLoginRewardReceiveStepsRepository) ListByAccountIDAndLoginRewardStatusID(AccountID, LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStepss, error) {
+func (m *MockLoginRewardReceiveStepsRepository) ListByAccountIDAndLoginRewardStatusID(AccountID, LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStepses, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListByAccountIDAndLoginRewardStatusID", AccountID, LoginRewardStatusID, shardKey)
-	ret0, _ := ret[0].(*loginReward.LoginRewardReceiveStepss)
+	ret0, _ := ret[0].(*loginReward.LoginRewardReceiveStepses)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -170,10 +170,10 @@ func (mr *MockLoginRewardReceiveStepsRepositoryMockRecorder) ListByAccountIDAndL
 }
 
 // ListByLoginRewardStatusID mocks base method.
-func (m *MockLoginRewardReceiveStepsRepository) ListByLoginRewardStatusID(LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStepss, error) {
+func (m *MockLoginRewardReceiveStepsRepository) ListByLoginRewardStatusID(LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStepses, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListByLoginRewardStatusID", LoginRewardStatusID, shardKey)
-	ret0, _ := ret[0].(*loginReward.LoginRewardReceiveStepss)
+	ret0, _ := ret[0].(*loginReward.LoginRewardReceiveStepses)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

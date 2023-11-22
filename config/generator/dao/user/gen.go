@@ -215,8 +215,8 @@ func generateFindByIndex(structInfo *StructInfo, indexFields []string) string {
 
 func generateList(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`func (d *%sDao) List(limit int64, shardKey int) (*%s.%ss, error) {
-			entity := &%s.%ss{}
+		`func (d *%sDao) List(limit int64, shardKey int) (*%s.%s, error) {
+			entity := &%s.%s{}
 			res := d.ShardConn.Shards[shardKey].ReadConn.Limit(limit).Find(entity)
 			if err := res.Error; err != nil {
 				return nil, err
@@ -227,9 +227,9 @@ func generateList(structInfo *StructInfo) string {
 		`,
 		transform.KebabToCamel(structInfo.Name),
 		structInfo.Package,
-		structInfo.Name,
+		transform.SingularToPlural(structInfo.Name),
 		structInfo.Package,
-		structInfo.Name,
+		transform.SingularToPlural(structInfo.Name),
 	)
 }
 
@@ -245,8 +245,8 @@ func generateListByIndex(structInfo *StructInfo, indexFields []string) string {
 	}
 
 	return fmt.Sprintf(
-		`func (d *%sDao) ListBy%s(%s, shardKey int) (*%s.%ss, error) {
-			entity := &%s.%ss{}
+		`func (d *%sDao) ListBy%s(%s, shardKey int) (*%s.%s, error) {
+			entity := &%s.%s{}
 			res := d.ShardConn.Shards[shardKey].ReadConn.%s.Find(entity)
 			if err := res.Error; err != nil {
 				return nil, err
@@ -259,9 +259,9 @@ func generateListByIndex(structInfo *StructInfo, indexFields []string) string {
 		strings.Join(indexFields, "And"),
 		strings.Join(paramStrings, ","),
 		structInfo.Package,
-		structInfo.Name,
+		transform.SingularToPlural(structInfo.Name),
 		structInfo.Package,
-		structInfo.Name,
+		transform.SingularToPlural(structInfo.Name),
 		strings.Join(scriptStrings, "."),
 	)
 }

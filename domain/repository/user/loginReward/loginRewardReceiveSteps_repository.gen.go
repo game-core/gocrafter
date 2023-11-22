@@ -19,13 +19,13 @@ type LoginRewardReceiveStepsRepository interface {
 
 	FindByLoginRewardStatusID(LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveSteps, error)
 
-	List(limit int64, shardKey int) (*loginReward.LoginRewardReceiveStepss, error)
+	List(limit int64, shardKey int) (*loginReward.LoginRewardReceiveStepses, error)
 
-	ListByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardReceiveStepss, error)
+	ListByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardReceiveStepses, error)
 
-	ListByAccountIDAndLoginRewardStatusID(AccountID int64, LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStepss, error)
+	ListByAccountIDAndLoginRewardStatusID(AccountID int64, LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStepses, error)
 
-	ListByLoginRewardStatusID(LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStepss, error)
+	ListByLoginRewardStatusID(LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStepses, error)
 
 	Update(entity *loginReward.LoginRewardReceiveSteps, shardKey int, tx *gorm.DB) (*loginReward.LoginRewardReceiveSteps, error)
 }

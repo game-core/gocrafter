@@ -155,7 +155,7 @@ func generateFindByID(structInfo *StructInfo) string {
 }
 
 func generateList(structInfo *StructInfo) string {
-	return fmt.Sprintf(`List(limit int64) (*%s.%ss, error)`, structInfo.Package, structInfo.Name)
+	return fmt.Sprintf(`List(limit int64) (*%s.%s, error)`, structInfo.Package, transform.SingularToPlural(structInfo.Name))
 }
 
 func generateCreate(structInfo *StructInfo) string {
@@ -214,11 +214,11 @@ func generateListByIndex(structInfo *StructInfo, indexFields []string) string {
 	}
 
 	return fmt.Sprintf(
-		`ListBy%s(%s) (*%s.%ss, error)`,
+		`ListBy%s(%s) (*%s.%s, error)`,
 		strings.Join(indexFields, "And"),
 		strings.Join(paramStrings, ","),
 		structInfo.Package,
-		structInfo.Name,
+		transform.SingularToPlural(structInfo.Name),
 	)
 }
 

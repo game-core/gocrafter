@@ -19,13 +19,13 @@ type LoginRewardStatusRepository interface {
 
 	FindByLoginRewardModelID(LoginRewardModelID int64, shardKey int) (*loginReward.LoginRewardStatus, error)
 
-	List(limit int64, shardKey int) (*loginReward.LoginRewardStatuss, error)
+	List(limit int64, shardKey int) (*loginReward.LoginRewardStatuses, error)
 
-	ListByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardStatuss, error)
+	ListByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardStatuses, error)
 
-	ListByAccountIDAndLoginRewardModelID(AccountID int64, LoginRewardModelID int64, shardKey int) (*loginReward.LoginRewardStatuss, error)
+	ListByAccountIDAndLoginRewardModelID(AccountID int64, LoginRewardModelID int64, shardKey int) (*loginReward.LoginRewardStatuses, error)
 
-	ListByLoginRewardModelID(LoginRewardModelID int64, shardKey int) (*loginReward.LoginRewardStatuss, error)
+	ListByLoginRewardModelID(LoginRewardModelID int64, shardKey int) (*loginReward.LoginRewardStatuses, error)
 
 	Update(entity *loginReward.LoginRewardStatus, shardKey int, tx *gorm.DB) (*loginReward.LoginRewardStatus, error)
 }

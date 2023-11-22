@@ -4,7 +4,6 @@ package main
 
 import (
 	"fmt"
-
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
@@ -38,7 +37,7 @@ import (
 	"time"
 )
 
-type {{.Name}}s []{{.Name}}
+type {{.PluralName}} []{{.Name}}
 
 type {{.Name}} struct {
 {{range $field := sortByNumber .Fields}}
@@ -82,13 +81,15 @@ func generateTemplate(structInfo *StructInfo, outputFile *os.File) error {
 	}
 
 	if err := tmpl.ExecuteTemplate(outputFile, "structTemplate", struct {
-		Name    string
-		Package string
-		Fields  map[string]StructField
+		Name       string
+		PluralName string
+		Package    string
+		Fields     map[string]StructField
 	}{
-		Name:    structInfo.Name,
-		Package: structInfo.Package,
-		Fields:  structInfo.Fields,
+		Name:       structInfo.Name,
+		PluralName: transform.SingularToPlural(structInfo.Name),
+		Package:    structInfo.Package,
+		Fields:     structInfo.Fields,
 	}); err != nil {
 		return err
 	}

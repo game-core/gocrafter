@@ -49,6 +49,8 @@ func SingularToPlural(s string) string {
 	// 通常の変換ルール
 	if strings.HasSuffix(s, "y") && len(s) > 1 && !strings.ContainsAny(string(s[len(s)-2]), "aeiouy") {
 		return s[:len(s)-1] + "ies"
+	} else if strings.HasSuffix(s, "s") {
+		return s + "es"
 	}
 
 	return s + "s"

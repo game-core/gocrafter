@@ -266,15 +266,15 @@ func generateFindByIndex(structInfo *StructInfo, indexFields []string) string {
 
 func generateList(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`func (d *%sDao) List(limit int64) (*%s.%ss, error) {
+		`func (d *%sDao) List(limit int64) (*%s.%s, error) {
 			cachedResult, found := d.Cache.Get(cacheKey("List", ""))
 			if found {
-				if cachedEntity, ok := cachedResult.(*%s.%ss); ok {
+				if cachedEntity, ok := cachedResult.(*%s.%s); ok {
 					return cachedEntity, nil
 				}
 			}
 
-			entity := &%s.%ss{}
+			entity := &%s.%s{}
 			res := d.Read.Limit(limit).Find(entity)
 			if err := res.Error; err != nil {
 				return nil, err
@@ -287,11 +287,11 @@ func generateList(structInfo *StructInfo) string {
 		`,
 		transform.KebabToCamel(structInfo.Name),
 		structInfo.Package,
-		structInfo.Name,
+		transform.SingularToPlural(structInfo.Name),
 		structInfo.Package,
-		structInfo.Name,
+		transform.SingularToPlural(structInfo.Name),
 		structInfo.Package,
-		structInfo.Name,
+		transform.SingularToPlural(structInfo.Name),
 	)
 }
 
@@ -317,15 +317,15 @@ func generateListByIndex(structInfo *StructInfo, indexFields []string) string {
 	}
 
 	return fmt.Sprintf(
-		`func (d *%sDao) ListBy%s(%s) (*%s.%ss, error) {
+		`func (d *%sDao) ListBy%s(%s) (*%s.%s, error) {
 			cachedResult, found := d.Cache.Get(cacheKey("ListBy%s", %s))
 			if found {
-				if cachedEntity, ok := cachedResult.(*%s.%ss); ok {
+				if cachedEntity, ok := cachedResult.(*%s.%s); ok {
 					return cachedEntity, nil
 				}
 			}
 
-			entity := &%s.%ss{}
+			entity := &%s.%s{}
 			res := d.Read.%s.Find(entity)
 			if err := res.Error; err != nil {
 				return nil, err
@@ -340,13 +340,13 @@ func generateListByIndex(structInfo *StructInfo, indexFields []string) string {
 		strings.Join(indexFields, "And"),
 		strings.Join(paramStrings, ","),
 		structInfo.Package,
-		structInfo.Name,
+		transform.SingularToPlural(structInfo.Name),
 		strings.Join(indexFields, "And"),
 		fmt.Sprintf(`fmt.Sprintf("%s", %s)`, strings.Join(sprints, ""), strings.Join(sprintParams, ",")),
 		structInfo.Package,
-		structInfo.Name,
+		transform.SingularToPlural(structInfo.Name),
 		structInfo.Package,
-		structInfo.Name,
+		transform.SingularToPlural(structInfo.Name),
 		strings.Join(scriptStrings, "."),
 		strings.Join(indexFields, "And"),
 		fmt.Sprintf(`fmt.Sprintf("%s", %s)`, strings.Join(sprints, ""), strings.Join(sprintParams, ",")),
