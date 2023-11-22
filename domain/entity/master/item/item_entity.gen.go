@@ -1,17 +1,17 @@
-package loginReward
+package item
 
 import (
 	"time"
 )
 
-type LoginRewardModels []LoginRewardModel
+type Items []Item
 
-type LoginRewardModel struct {
+type Item struct {
 	ID int64 `json:"id"`
 
 	Name string `json:"name"`
 
-	EventID int64 `json:"event_id"`
+	Detail string `json:"detail"`
 
 	CreatedAt time.Time `json:"created_at" gorm:"autoCreateTime"`
 

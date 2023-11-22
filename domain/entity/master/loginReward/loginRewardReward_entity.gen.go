@@ -4,14 +4,16 @@ import (
 	"time"
 )
 
-type LoginRewardModels []LoginRewardModel
+type LoginRewardRewards []LoginRewardReward
 
-type LoginRewardModel struct {
+type LoginRewardReward struct {
 	ID int64 `json:"id"`
 
-	Name string `json:"name"`
+	LoginRewardID int64 `json:"login_reward_id"`
 
-	EventID int64 `json:"event_id"`
+	ItemID int64 `json:"item_id"`
+
+	Name string `json:"name"`
 
 	CreatedAt time.Time `json:"created_at" gorm:"autoCreateTime"`
 

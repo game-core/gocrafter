@@ -1,4 +1,4 @@
-name: LoginRewardReceiveSteps
+name: LoginRewardReceiveStep
 package: loginReward
 structure:
   ID:

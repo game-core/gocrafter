@@ -52,7 +52,7 @@ func generateEntity(yamlFilePath string, outputDir string) error {
 		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
 	}
 
-	fileName := fmt.Sprintf("%s_%s.sql", time.Now().Format("20060102"), structInfo.Package)
+	fileName := fmt.Sprintf("%s_%s.sql", time.Now().Format("20060102"), transform.KebabToCamel(structInfo.Name))
 	if fileExistsWithDifferentDateTime(outputDir, fileName) {
 		return nil
 	}

@@ -4,9 +4,9 @@ import (
 	"time"
 )
 
-type LoginRewardReceiveStepses []LoginRewardReceiveSteps
+type LoginRewardReceiveSteps []LoginRewardReceiveStep
 
-type LoginRewardReceiveSteps struct {
+type LoginRewardReceiveStep struct {
 	ID int64 `json:"id"`
 
 	ShardKey int `json:"shard_key"`

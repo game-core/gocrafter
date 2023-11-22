@@ -7,8 +7,6 @@ CREATE TABLE loginreward (
 
 	event_id BIGINT NOT NULL,
 
-	rewards VARCHAR(255) NOT NULL,
-
 	created_at TIMESTAMP NOT NULL,
 
 	updated_at TIMESTAMP NOT NULL,
