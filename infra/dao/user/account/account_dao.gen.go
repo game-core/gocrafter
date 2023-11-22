@@ -25,7 +25,7 @@ func (d *accountDao) Create(entity *account.Account, accountID int64, tx *gorm.D
 	} else {
 		conn = d.ShardConn.Shards[shardKey(accountID, len(d.ShardConn.Shards))].WriteConn
 	}
-	
+
 	res := conn.Model(&account.Account{}).Create(entity)
 	if err := res.Error; err != nil {
 		return nil, err
