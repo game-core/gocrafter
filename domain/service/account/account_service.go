@@ -11,6 +11,7 @@ import (
 	accountEntity "github.com/game-core/gocrafter/domain/entity/user/account"
 	userRepository "github.com/game-core/gocrafter/domain/repository/user"
 	accountRepository "github.com/game-core/gocrafter/domain/repository/user/account"
+	shardService "github.com/game-core/gocrafter/domain/service/shard"
 )
 
 type AccountService interface {
@@ -20,15 +21,18 @@ type AccountService interface {
 }
 
 type accountService struct {
+	shardService          shardService.ShardService
 	transactionRepository userRepository.TransactionRepository
 	accountRepository     accountRepository.AccountRepository
 }
 
 func NewAccountService(
+	shardService shardService.ShardService,
 	transactionRepository userRepository.TransactionRepository,
 	accountRepository accountRepository.AccountRepository,
 ) AccountService {
 	return &accountService{
+		shardService:          shardService,
 		transactionRepository: transactionRepository,
 		accountRepository:     accountRepository,
 	}
@@ -36,6 +40,12 @@ func NewAccountService(
 
 // RegisterAccount アカウントを登録する
 func (a *accountService) RegisterAccount(req *request.RegisterAccount) (*response.RegisterAccount, error) {
+	// シャードキーを取得
+	_, err := a.shardService.GetShard()
+	if err != nil {
+		return nil, err
+	}
+
 	// transaction
 	tx, err := a.transactionRepository.Begin(1)
 	if err != nil {

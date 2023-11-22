@@ -10,9 +10,12 @@ import (
 	account2 "github.com/game-core/gocrafter/api/presentation/controller/account"
 	"github.com/game-core/gocrafter/api/presentation/middleware/account"
 	"github.com/game-core/gocrafter/config/database"
-	account4 "github.com/game-core/gocrafter/domain/service/account"
+	account3 "github.com/game-core/gocrafter/domain/service/account"
+	"github.com/game-core/gocrafter/domain/service/shard"
+	"github.com/game-core/gocrafter/infra/dao/config"
+	shard2 "github.com/game-core/gocrafter/infra/dao/config/shard"
 	"github.com/game-core/gocrafter/infra/dao/user"
-	account3 "github.com/game-core/gocrafter/infra/dao/user/account"
+	account4 "github.com/game-core/gocrafter/infra/dao/user/account"
 )
 
 // Injectors from wire.go:
@@ -23,10 +26,24 @@ func InitializeAccountMiddleware() account.AccountMiddleware {
 }
 
 func InitializeAccountController() account2.AccountController {
-	sqlHandler := database.NewDB()
-	transactionRepository := user.NewTransactionDao(sqlHandler)
-	accountRepository := account3.NewAccountDao(sqlHandler)
-	accountService := account4.NewAccountService(transactionRepository, accountRepository)
+	accountService := InitializeAccountService()
 	accountController := account2.NewAccountController(accountService)
 	return accountController
+}
+
+func InitializeAccountService() account3.AccountService {
+	shardService := InitializeShardService()
+	sqlHandler := database.NewDB()
+	transactionRepository := user.NewTransactionDao(sqlHandler)
+	accountRepository := account4.NewAccountDao(sqlHandler)
+	accountService := account3.NewAccountService(shardService, transactionRepository, accountRepository)
+	return accountService
+}
+
+func InitializeShardService() shard.ShardService {
+	sqlHandler := database.NewDB()
+	shardRepository := shard2.NewShardDao(sqlHandler)
+	transactionRepository := config.NewTransactionDao(sqlHandler)
+	shardService := shard.NewShardService(shardRepository, transactionRepository)
+	return shardService
 }

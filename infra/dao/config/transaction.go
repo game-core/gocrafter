@@ -4,7 +4,7 @@ import (
 	"github.com/jinzhu/gorm"
 
 	"github.com/game-core/gocrafter/config/database"
-	repository "github.com/game-core/gocrafter/domain/repository/master"
+	repository "github.com/game-core/gocrafter/domain/repository/config"
 )
 
 type transactionDao struct {

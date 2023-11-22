@@ -31,7 +31,7 @@ func NewShardService(
 // GetShard シャード設定を取得する
 func (s *shardService) GetShard() (*response.GetShard, error) {
 	// transaction
-	tx, err := s.transactionRepository.Begin(1)
+	tx, err := s.transactionRepository.Begin()
 	if err != nil {
 		return nil, err
 	}
