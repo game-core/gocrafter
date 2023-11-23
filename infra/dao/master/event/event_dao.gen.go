@@ -76,7 +76,7 @@ func (d *eventDao) FindByID(ID int64) (*event.Event, error) {
 	return entity, nil
 }
 
-func (d *eventDao) FindByName(Name string) (*event.Event, error) {
+func (d *eventDao) FindOrNilByName(Name string) (*event.Event, error) {
 	cachedResult, found := d.Cache.Get(cacheKey("FindByName", fmt.Sprintf("%s_", Name)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*event.Event); ok {
@@ -86,11 +86,36 @@ func (d *eventDao) FindByName(Name string) (*event.Event, error) {
 
 	entity := &event.Event{}
 	res := d.Read.Where("name = ?", Name).Find(entity)
+	if res.RecordNotFound() {
+		return nil, nil
+	}
 	if err := res.Error; err != nil {
 		return nil, err
 	}
 
 	d.Cache.Set(cacheKey("FindByName", fmt.Sprintf("%s_", Name)), entity, cache.DefaultExpiration)
+
+	return entity, nil
+}
+
+func (d *eventDao) FindOrNilByID(ID int64) (*event.Event, error) {
+	cachedResult, found := d.Cache.Get(cacheKey("FindByID", fmt.Sprintf("%d_", ID)))
+	if found {
+		if cachedEntity, ok := cachedResult.(*event.Event); ok {
+			return cachedEntity, nil
+		}
+	}
+
+	entity := &event.Event{}
+	res := d.Read.Where("id = ?", ID).Find(entity)
+	if res.RecordNotFound() {
+		return nil, nil
+	}
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	d.Cache.Set(cacheKey("FindByID", fmt.Sprintf("%d_", ID)), entity, cache.DefaultExpiration)
 
 	return entity, nil
 }

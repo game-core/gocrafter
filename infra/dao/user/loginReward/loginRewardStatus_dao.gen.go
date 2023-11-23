@@ -90,6 +90,58 @@ func (d *loginRewardStatusDao) FindByLoginRewardModelID(LoginRewardModelID int64
 	return entity, nil
 }
 
+func (d *loginRewardStatusDao) FindOrNilByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardStatus, error) {
+	entity := &loginReward.LoginRewardStatus{}
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("user_id = ?", AccountID).Find(entity)
+	if res.RecordNotFound() {
+		return nil, nil
+	}
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	return entity, nil
+}
+
+func (d *loginRewardStatusDao) FindOrNilByAccountIDAndLoginRewardModelID(AccountID int64, LoginRewardModelID int64, shardKey int) (*loginReward.LoginRewardStatus, error) {
+	entity := &loginReward.LoginRewardStatus{}
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("user_id = ?", AccountID).Where("login_reward_model_id = ?", LoginRewardModelID).Find(entity)
+	if res.RecordNotFound() {
+		return nil, nil
+	}
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	return entity, nil
+}
+
+func (d *loginRewardStatusDao) FindOrNilByID(ID int64, shardKey int) (*loginReward.LoginRewardStatus, error) {
+	entity := &loginReward.LoginRewardStatus{}
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("id = ?", ID).Find(entity)
+	if res.RecordNotFound() {
+		return nil, nil
+	}
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	return entity, nil
+}
+
+func (d *loginRewardStatusDao) FindOrNilByLoginRewardModelID(LoginRewardModelID int64, shardKey int) (*loginReward.LoginRewardStatus, error) {
+	entity := &loginReward.LoginRewardStatus{}
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("login_reward_model_id = ?", LoginRewardModelID).Find(entity)
+	if res.RecordNotFound() {
+		return nil, nil
+	}
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	return entity, nil
+}
+
 func (d *loginRewardStatusDao) List(limit int64, shardKey int) (*loginReward.LoginRewardStatuses, error) {
 	entity := &loginReward.LoginRewardStatuses{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Limit(limit).Find(entity)

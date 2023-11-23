@@ -90,6 +90,58 @@ func (d *loginRewardReceiveStepDao) FindByLoginRewardStatusID(LoginRewardStatusI
 	return entity, nil
 }
 
+func (d *loginRewardReceiveStepDao) FindOrNilByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error) {
+	entity := &loginReward.LoginRewardReceiveStep{}
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("user_id = ?", AccountID).Find(entity)
+	if res.RecordNotFound() {
+		return nil, nil
+	}
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	return entity, nil
+}
+
+func (d *loginRewardReceiveStepDao) FindOrNilByAccountIDAndLoginRewardStatusID(AccountID int64, LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error) {
+	entity := &loginReward.LoginRewardReceiveStep{}
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("user_id = ?", AccountID).Where("login_reward_model_id = ?", LoginRewardStatusID).Find(entity)
+	if res.RecordNotFound() {
+		return nil, nil
+	}
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	return entity, nil
+}
+
+func (d *loginRewardReceiveStepDao) FindOrNilByID(ID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error) {
+	entity := &loginReward.LoginRewardReceiveStep{}
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("id = ?", ID).Find(entity)
+	if res.RecordNotFound() {
+		return nil, nil
+	}
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	return entity, nil
+}
+
+func (d *loginRewardReceiveStepDao) FindOrNilByLoginRewardStatusID(LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error) {
+	entity := &loginReward.LoginRewardReceiveStep{}
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("login_reward_model_id = ?", LoginRewardStatusID).Find(entity)
+	if res.RecordNotFound() {
+		return nil, nil
+	}
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	return entity, nil
+}
+
 func (d *loginRewardReceiveStepDao) List(limit int64, shardKey int) (*loginReward.LoginRewardReceiveSteps, error) {
 	entity := &loginReward.LoginRewardReceiveSteps{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Limit(limit).Find(entity)

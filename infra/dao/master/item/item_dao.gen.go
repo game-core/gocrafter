@@ -76,7 +76,7 @@ func (d *itemDao) FindByID(ID int64) (*item.Item, error) {
 	return entity, nil
 }
 
-func (d *itemDao) FindByName(Name string) (*item.Item, error) {
+func (d *itemDao) FindOrNilByName(Name string) (*item.Item, error) {
 	cachedResult, found := d.Cache.Get(cacheKey("FindByName", fmt.Sprintf("%s_", Name)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*item.Item); ok {
@@ -86,11 +86,36 @@ func (d *itemDao) FindByName(Name string) (*item.Item, error) {
 
 	entity := &item.Item{}
 	res := d.Read.Where("name = ?", Name).Find(entity)
+	if res.RecordNotFound() {
+		return nil, nil
+	}
 	if err := res.Error; err != nil {
 		return nil, err
 	}
 
 	d.Cache.Set(cacheKey("FindByName", fmt.Sprintf("%s_", Name)), entity, cache.DefaultExpiration)
+
+	return entity, nil
+}
+
+func (d *itemDao) FindOrNilByID(ID int64) (*item.Item, error) {
+	cachedResult, found := d.Cache.Get(cacheKey("FindByID", fmt.Sprintf("%d_", ID)))
+	if found {
+		if cachedEntity, ok := cachedResult.(*item.Item); ok {
+			return cachedEntity, nil
+		}
+	}
+
+	entity := &item.Item{}
+	res := d.Read.Where("id = ?", ID).Find(entity)
+	if res.RecordNotFound() {
+		return nil, nil
+	}
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	d.Cache.Set(cacheKey("FindByID", fmt.Sprintf("%d_", ID)), entity, cache.DefaultExpiration)
 
 	return entity, nil
 }

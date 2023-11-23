@@ -125,11 +125,26 @@ func generateMethods(structInfo *StructInfo) map[string]MethodType {
 		}
 	}
 
+	// FindOrNilByID
+	if len(structInfo.Primary) > 0 {
+		methods["FindOrNilByID"] = MethodType{
+			Script: generateFindOrNilByID(structInfo),
+		}
+	}
+
 	// FindByIndex
 	for _, index := range structInfo.Index {
 		indexFields := strings.Split(index, ",")
 		methods[fmt.Sprintf("FindBy%s", strings.Join(indexFields, "And"))] = MethodType{
 			Script: generateFindByIndex(structInfo, indexFields),
+		}
+	}
+
+	// FindOrNilByIndex
+	for _, index := range structInfo.Index {
+		indexFields := strings.Split(index, ",")
+		methods[fmt.Sprintf("FindOrNilBy%s", strings.Join(indexFields, "And"))] = MethodType{
+			Script: generateFindOrNilByIndex(structInfo, indexFields),
 		}
 	}
 
@@ -184,6 +199,29 @@ func generateFindByID(structInfo *StructInfo) string {
 	)
 }
 
+func generateFindOrNilByID(structInfo *StructInfo) string {
+	return fmt.Sprintf(
+		`func (d *%sDao) FindOrNilByID(ID int64) (*%s.%s, error) {
+			entity := &%s.%s{}
+			res := d.Read.Where("id = ?", ID).Find(entity)
+			if res.RecordNotFound() {
+				return nil, nil
+			}
+			if err := res.Error; err != nil {
+				return nil, err
+			}
+
+			return entity, nil
+		}
+		`,
+		transform.KebabToCamel(structInfo.Name),
+		structInfo.Package,
+		structInfo.Name,
+		structInfo.Package,
+		structInfo.Name,
+	)
+}
+
 func generateFindByIndex(structInfo *StructInfo, indexFields []string) string {
 	params := make([]struct{ Name, Type string }, len(indexFields))
 	paramStrings := make([]string, len(indexFields))
@@ -209,6 +247,52 @@ func generateFindByIndex(structInfo *StructInfo, indexFields []string) string {
 		`func (d *%sDao) FindBy%s(%s) (*%s.%s, error) {
 			entity := &%s.%s{}
 			res := d.Read.%s.Find(entity)
+			if err := res.Error; err != nil {
+				return nil, err
+			}
+		
+			return entity, nil
+		}
+		`,
+		transform.KebabToCamel(structInfo.Name),
+		strings.Join(indexFields, "And"),
+		strings.Join(paramStrings, ","),
+		structInfo.Package,
+		structInfo.Name,
+		structInfo.Package,
+		structInfo.Name,
+		strings.Join(scriptStrings, "."),
+	)
+}
+
+func generateFindOrNilByIndex(structInfo *StructInfo, indexFields []string) string {
+	params := make([]struct{ Name, Type string }, len(indexFields))
+	paramStrings := make([]string, len(indexFields))
+	scriptStrings := make([]string, len(indexFields))
+	sprints := make([]string, len(indexFields))
+	sprintParams := make([]string, len(indexFields))
+
+	for i, field := range indexFields {
+		params[i] = struct{ Name, Type string }{field, structInfo.Fields[field].Type}
+		paramStrings[i] = fmt.Sprintf("%s %s", field, structInfo.Fields[field].Type)
+		scriptStrings[i] = fmt.Sprintf("Where(\"%s = ?\", %s)", structInfo.Fields[field].Name, field)
+		sprintParams[i] = field
+
+		switch structInfo.Fields[field].Type {
+		case "string":
+			sprints[i] = "%s_"
+		default:
+			sprints[i] = "%d_"
+		}
+	}
+
+	return fmt.Sprintf(
+		`func (d *%sDao) FindOrNilBy%s(%s) (*%s.%s, error) {
+			entity := &%s.%s{}
+			res := d.Read.%s.Find(entity)
+			if res.RecordNotFound() {
+				return nil, nil
+			}
 			if err := res.Error; err != nil {
 				return nil, err
 			}

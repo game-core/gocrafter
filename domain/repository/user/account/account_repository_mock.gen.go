@@ -79,34 +79,49 @@ func (mr *MockAccountRepositoryMockRecorder) FindByID(ID, shardKey interface{}) 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByID", reflect.TypeOf((*MockAccountRepository)(nil).FindByID), ID, shardKey)
 }
 
-// FindByIDAndUUID mocks base method.
-func (m *MockAccountRepository) FindByIDAndUUID(ID int64, UUID string, shardKey int) (*account.Account, error) {
+// FindOrNilByID mocks base method.
+func (m *MockAccountRepository) FindOrNilByID(ID int64, shardKey int) (*account.Account, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindByIDAndUUID", ID, UUID, shardKey)
+	ret := m.ctrl.Call(m, "FindOrNilByID", ID, shardKey)
 	ret0, _ := ret[0].(*account.Account)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindByIDAndUUID indicates an expected call of FindByIDAndUUID.
-func (mr *MockAccountRepositoryMockRecorder) FindByIDAndUUID(ID, UUID, shardKey interface{}) *gomock.Call {
+// FindOrNilByID indicates an expected call of FindOrNilByID.
+func (mr *MockAccountRepositoryMockRecorder) FindOrNilByID(ID, shardKey interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByIDAndUUID", reflect.TypeOf((*MockAccountRepository)(nil).FindByIDAndUUID), ID, UUID, shardKey)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByID", reflect.TypeOf((*MockAccountRepository)(nil).FindOrNilByID), ID, shardKey)
 }
 
-// FindByUUID mocks base method.
-func (m *MockAccountRepository) FindByUUID(UUID string, shardKey int) (*account.Account, error) {
+// FindOrNilByIDAndUUID mocks base method.
+func (m *MockAccountRepository) FindOrNilByIDAndUUID(ID int64, UUID string, shardKey int) (*account.Account, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindByUUID", UUID, shardKey)
+	ret := m.ctrl.Call(m, "FindOrNilByIDAndUUID", ID, UUID, shardKey)
 	ret0, _ := ret[0].(*account.Account)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindByUUID indicates an expected call of FindByUUID.
-func (mr *MockAccountRepositoryMockRecorder) FindByUUID(UUID, shardKey interface{}) *gomock.Call {
+// FindOrNilByIDAndUUID indicates an expected call of FindOrNilByIDAndUUID.
+func (mr *MockAccountRepositoryMockRecorder) FindOrNilByIDAndUUID(ID, UUID, shardKey interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByUUID", reflect.TypeOf((*MockAccountRepository)(nil).FindByUUID), UUID, shardKey)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByIDAndUUID", reflect.TypeOf((*MockAccountRepository)(nil).FindOrNilByIDAndUUID), ID, UUID, shardKey)
+}
+
+// FindOrNilByUUID mocks base method.
+func (m *MockAccountRepository) FindOrNilByUUID(UUID string, shardKey int) (*account.Account, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindOrNilByUUID", UUID, shardKey)
+	ret0, _ := ret[0].(*account.Account)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindOrNilByUUID indicates an expected call of FindOrNilByUUID.
+func (mr *MockAccountRepositoryMockRecorder) FindOrNilByUUID(UUID, shardKey interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByUUID", reflect.TypeOf((*MockAccountRepository)(nil).FindOrNilByUUID), UUID, shardKey)
 }
 
 // List mocks base method.

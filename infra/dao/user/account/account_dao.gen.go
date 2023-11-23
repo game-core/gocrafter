@@ -80,6 +80,45 @@ func (d *accountDao) FindByUUID(UUID string, shardKey int) (*account.Account, er
 	return entity, nil
 }
 
+func (d *accountDao) FindOrNilByID(ID int64, shardKey int) (*account.Account, error) {
+	entity := &account.Account{}
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("id = ?", ID).Find(entity)
+	if res.RecordNotFound() {
+		return nil, nil
+	}
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	return entity, nil
+}
+
+func (d *accountDao) FindOrNilByIDAndUUID(ID int64, UUID string, shardKey int) (*account.Account, error) {
+	entity := &account.Account{}
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("id = ?", ID).Where("uuid = ?", UUID).Find(entity)
+	if res.RecordNotFound() {
+		return nil, nil
+	}
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	return entity, nil
+}
+
+func (d *accountDao) FindOrNilByUUID(UUID string, shardKey int) (*account.Account, error) {
+	entity := &account.Account{}
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("uuid = ?", UUID).Find(entity)
+	if res.RecordNotFound() {
+		return nil, nil
+	}
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	return entity, nil
+}
+
 func (d *accountDao) List(limit int64, shardKey int) (*account.Accounts, error) {
 	entity := &account.Accounts{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Limit(limit).Find(entity)

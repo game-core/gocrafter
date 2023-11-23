@@ -13,9 +13,11 @@ type AccountRepository interface {
 
 	FindByID(ID int64, shardKey int) (*account.Account, error)
 
-	FindByIDAndUUID(ID int64, UUID string, shardKey int) (*account.Account, error)
+	FindOrNilByIDAndUUID(ID int64, UUID string, shardKey int) (*account.Account, error)
 
-	FindByUUID(UUID string, shardKey int) (*account.Account, error)
+	FindOrNilByUUID(UUID string, shardKey int) (*account.Account, error)
+
+	FindOrNilByID(ID int64, shardKey int) (*account.Account, error)
 
 	List(limit int64, shardKey int) (*account.Accounts, error)
 

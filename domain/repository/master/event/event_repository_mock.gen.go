@@ -79,19 +79,34 @@ func (mr *MockEventRepositoryMockRecorder) FindByID(ID interface{}) *gomock.Call
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByID", reflect.TypeOf((*MockEventRepository)(nil).FindByID), ID)
 }
 
-// FindByName mocks base method.
-func (m *MockEventRepository) FindByName(Name string) (*event.Event, error) {
+// FindOrNilByID mocks base method.
+func (m *MockEventRepository) FindOrNilByID(ID int64) (*event.Event, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindByName", Name)
+	ret := m.ctrl.Call(m, "FindOrNilByID", ID)
 	ret0, _ := ret[0].(*event.Event)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindByName indicates an expected call of FindByName.
-func (mr *MockEventRepositoryMockRecorder) FindByName(Name interface{}) *gomock.Call {
+// FindOrNilByID indicates an expected call of FindOrNilByID.
+func (mr *MockEventRepositoryMockRecorder) FindOrNilByID(ID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByName", reflect.TypeOf((*MockEventRepository)(nil).FindByName), Name)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByID", reflect.TypeOf((*MockEventRepository)(nil).FindOrNilByID), ID)
+}
+
+// FindOrNilByName mocks base method.
+func (m *MockEventRepository) FindOrNilByName(Name string) (*event.Event, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindOrNilByName", Name)
+	ret0, _ := ret[0].(*event.Event)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindOrNilByName indicates an expected call of FindOrNilByName.
+func (mr *MockEventRepositoryMockRecorder) FindOrNilByName(Name interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByName", reflect.TypeOf((*MockEventRepository)(nil).FindOrNilByName), Name)
 }
 
 // List mocks base method.

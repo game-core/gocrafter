@@ -111,11 +111,24 @@ func generateMethods(structInfo *StructInfo) map[string]MethodType {
 		Script: generateFindByID(structInfo),
 	}
 
+	// FindOrNilByID
+	methods["FindOrNilByID"] = MethodType{
+		Script: generateFindOrNilByID(structInfo),
+	}
+
 	// FindByIndex
 	for _, index := range structInfo.Index {
 		indexFields := strings.Split(index, ",")
 		methods[fmt.Sprintf("FindBy%s", strings.Join(indexFields, "And"))] = MethodType{
 			Script: generateFindByIndex(structInfo, indexFields),
+		}
+	}
+
+	// FindOrNilByIndex
+	for _, index := range structInfo.Index {
+		indexFields := strings.Split(index, ",")
+		methods[fmt.Sprintf("FindOrNilBy%s", strings.Join(indexFields, "And"))] = MethodType{
+			Script: generateFindOrNilByIndex(structInfo, indexFields),
 		}
 	}
 
@@ -154,6 +167,10 @@ func generateFindByID(structInfo *StructInfo) string {
 	return fmt.Sprintf(`FindByID(ID int64) (*%s.%s, error)`, structInfo.Package, structInfo.Name)
 }
 
+func generateFindOrNilByID(structInfo *StructInfo) string {
+	return fmt.Sprintf(`FindOrNilByID(ID int64) (*%s.%s, error)`, structInfo.Package, structInfo.Name)
+}
+
 func generateList(structInfo *StructInfo) string {
 	return fmt.Sprintf(`List(limit int64) (*%s.%s, error)`, structInfo.Package, transform.SingularToPlural(structInfo.Name))
 }
@@ -181,6 +198,24 @@ func generateUpdate(structInfo *StructInfo) string {
 func generateDelete(structInfo *StructInfo) string {
 	return fmt.Sprintf(
 		`Delete(entity *%s.%s, tx *gorm.DB) error`,
+		structInfo.Package,
+		structInfo.Name,
+	)
+}
+
+func generateFindOrNilByIndex(structInfo *StructInfo, indexFields []string) string {
+	params := make([]struct{ Name, Type string }, len(indexFields))
+	var paramStrings []string
+
+	for i, field := range indexFields {
+		paramStrings = append(paramStrings, fmt.Sprintf("%s %s", field, structInfo.Fields[field].Type))
+		params[i] = struct{ Name, Type string }{field, structInfo.Fields[field].Type}
+	}
+
+	return fmt.Sprintf(
+		`FindOrNilBy%s(%s) (*%s.%s, error)`,
+		strings.Join(indexFields, "And"),
+		strings.Join(paramStrings, ","),
 		structInfo.Package,
 		structInfo.Name,
 	)

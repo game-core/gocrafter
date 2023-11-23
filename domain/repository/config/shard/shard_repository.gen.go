@@ -15,6 +15,10 @@ type ShardRepository interface {
 
 	FindByShardKey(ShardKey int) (*shard.Shard, error)
 
+	FindOrNilByID(ID int64) (*shard.Shard, error)
+
+	FindOrNilByShardKey(ShardKey int) (*shard.Shard, error)
+
 	List(limit int64) (*shard.Shards, error)
 
 	ListByShardKey(ShardKey int) (*shard.Shards, error)

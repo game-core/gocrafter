@@ -13,13 +13,15 @@ type LoginRewardRewardRepository interface {
 
 	FindByID(ID int64) (*loginReward.LoginRewardReward, error)
 
-	FindByItemID(ItemID int64) (*loginReward.LoginRewardReward, error)
+	FindOrNilByItemID(ItemID int64) (*loginReward.LoginRewardReward, error)
 
-	FindByLoginRewardID(LoginRewardID int64) (*loginReward.LoginRewardReward, error)
+	FindOrNilByLoginRewardID(LoginRewardID int64) (*loginReward.LoginRewardReward, error)
 
-	FindByLoginRewardIDAndItemID(LoginRewardID int64, ItemID int64) (*loginReward.LoginRewardReward, error)
+	FindOrNilByLoginRewardIDAndItemID(LoginRewardID int64, ItemID int64) (*loginReward.LoginRewardReward, error)
 
-	FindByName(Name string) (*loginReward.LoginRewardReward, error)
+	FindOrNilByName(Name string) (*loginReward.LoginRewardReward, error)
+
+	FindOrNilByID(ID int64) (*loginReward.LoginRewardReward, error)
 
 	List(limit int64) (*loginReward.LoginRewardRewards, error)
 

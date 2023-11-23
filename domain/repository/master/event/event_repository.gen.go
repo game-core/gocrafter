@@ -13,7 +13,9 @@ type EventRepository interface {
 
 	FindByID(ID int64) (*event.Event, error)
 
-	FindByName(Name string) (*event.Event, error)
+	FindOrNilByName(Name string) (*event.Event, error)
+
+	FindOrNilByID(ID int64) (*event.Event, error)
 
 	List(limit int64) (*event.Events, error)
 

@@ -13,7 +13,9 @@ type ItemRepository interface {
 
 	FindByID(ID int64) (*item.Item, error)
 
-	FindByName(Name string) (*item.Item, error)
+	FindOrNilByName(Name string) (*item.Item, error)
+
+	FindOrNilByID(ID int64) (*item.Item, error)
 
 	List(limit int64) (*item.Items, error)
 

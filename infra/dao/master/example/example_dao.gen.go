@@ -76,7 +76,7 @@ func (d *exampleDao) FindByID(ID int64) (*example.Example, error) {
 	return entity, nil
 }
 
-func (d *exampleDao) FindByIDAndName(ID int64, Name string) (*example.Example, error) {
+func (d *exampleDao) FindOrNilByIDAndName(ID int64, Name string) (*example.Example, error) {
 	cachedResult, found := d.Cache.Get(cacheKey("FindByIDAndName", fmt.Sprintf("%d_%s_", ID, Name)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*example.Example); ok {
@@ -86,6 +86,9 @@ func (d *exampleDao) FindByIDAndName(ID int64, Name string) (*example.Example, e
 
 	entity := &example.Example{}
 	res := d.Read.Where("id = ?", ID).Where("name = ?", Name).Find(entity)
+	if res.RecordNotFound() {
+		return nil, nil
+	}
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -95,7 +98,7 @@ func (d *exampleDao) FindByIDAndName(ID int64, Name string) (*example.Example, e
 	return entity, nil
 }
 
-func (d *exampleDao) FindByName(Name string) (*example.Example, error) {
+func (d *exampleDao) FindOrNilByName(Name string) (*example.Example, error) {
 	cachedResult, found := d.Cache.Get(cacheKey("FindByName", fmt.Sprintf("%s_", Name)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*example.Example); ok {
@@ -105,11 +108,36 @@ func (d *exampleDao) FindByName(Name string) (*example.Example, error) {
 
 	entity := &example.Example{}
 	res := d.Read.Where("name = ?", Name).Find(entity)
+	if res.RecordNotFound() {
+		return nil, nil
+	}
 	if err := res.Error; err != nil {
 		return nil, err
 	}
 
 	d.Cache.Set(cacheKey("FindByName", fmt.Sprintf("%s_", Name)), entity, cache.DefaultExpiration)
+
+	return entity, nil
+}
+
+func (d *exampleDao) FindOrNilByID(ID int64) (*example.Example, error) {
+	cachedResult, found := d.Cache.Get(cacheKey("FindByID", fmt.Sprintf("%d_", ID)))
+	if found {
+		if cachedEntity, ok := cachedResult.(*example.Example); ok {
+			return cachedEntity, nil
+		}
+	}
+
+	entity := &example.Example{}
+	res := d.Read.Where("id = ?", ID).Find(entity)
+	if res.RecordNotFound() {
+		return nil, nil
+	}
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	d.Cache.Set(cacheKey("FindByID", fmt.Sprintf("%d_", ID)), entity, cache.DefaultExpiration)
 
 	return entity, nil
 }

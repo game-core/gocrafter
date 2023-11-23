@@ -94,6 +94,36 @@ func (mr *MockShardRepositoryMockRecorder) FindByShardKey(ShardKey interface{}) 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByShardKey", reflect.TypeOf((*MockShardRepository)(nil).FindByShardKey), ShardKey)
 }
 
+// FindOrNilByID mocks base method.
+func (m *MockShardRepository) FindOrNilByID(ID int64) (*shard.Shard, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindOrNilByID", ID)
+	ret0, _ := ret[0].(*shard.Shard)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindOrNilByID indicates an expected call of FindOrNilByID.
+func (mr *MockShardRepositoryMockRecorder) FindOrNilByID(ID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByID", reflect.TypeOf((*MockShardRepository)(nil).FindOrNilByID), ID)
+}
+
+// FindOrNilByShardKey mocks base method.
+func (m *MockShardRepository) FindOrNilByShardKey(ShardKey int) (*shard.Shard, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindOrNilByShardKey", ShardKey)
+	ret0, _ := ret[0].(*shard.Shard)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindOrNilByShardKey indicates an expected call of FindOrNilByShardKey.
+func (mr *MockShardRepositoryMockRecorder) FindOrNilByShardKey(ShardKey interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByShardKey", reflect.TypeOf((*MockShardRepository)(nil).FindOrNilByShardKey), ShardKey)
+}
+
 // List mocks base method.
 func (m *MockShardRepository) List(limit int64) (*shard.Shards, error) {
 	m.ctrl.T.Helper()

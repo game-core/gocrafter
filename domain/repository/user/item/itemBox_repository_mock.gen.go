@@ -79,49 +79,64 @@ func (mr *MockItemBoxRepositoryMockRecorder) FindByID(ID, shardKey interface{}) 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByID", reflect.TypeOf((*MockItemBoxRepository)(nil).FindByID), ID, shardKey)
 }
 
-// FindByItemID mocks base method.
-func (m *MockItemBoxRepository) FindByItemID(ItemID int64, shardKey int) (*item.ItemBox, error) {
+// FindOrNilByID mocks base method.
+func (m *MockItemBoxRepository) FindOrNilByID(ID int64, shardKey int) (*item.ItemBox, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindByItemID", ItemID, shardKey)
+	ret := m.ctrl.Call(m, "FindOrNilByID", ID, shardKey)
 	ret0, _ := ret[0].(*item.ItemBox)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindByItemID indicates an expected call of FindByItemID.
-func (mr *MockItemBoxRepositoryMockRecorder) FindByItemID(ItemID, shardKey interface{}) *gomock.Call {
+// FindOrNilByID indicates an expected call of FindOrNilByID.
+func (mr *MockItemBoxRepositoryMockRecorder) FindOrNilByID(ID, shardKey interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByItemID", reflect.TypeOf((*MockItemBoxRepository)(nil).FindByItemID), ItemID, shardKey)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByID", reflect.TypeOf((*MockItemBoxRepository)(nil).FindOrNilByID), ID, shardKey)
 }
 
-// FindByUserID mocks base method.
-func (m *MockItemBoxRepository) FindByUserID(UserID int64, shardKey int) (*item.ItemBox, error) {
+// FindOrNilByItemID mocks base method.
+func (m *MockItemBoxRepository) FindOrNilByItemID(ItemID int64, shardKey int) (*item.ItemBox, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindByUserID", UserID, shardKey)
+	ret := m.ctrl.Call(m, "FindOrNilByItemID", ItemID, shardKey)
 	ret0, _ := ret[0].(*item.ItemBox)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindByUserID indicates an expected call of FindByUserID.
-func (mr *MockItemBoxRepositoryMockRecorder) FindByUserID(UserID, shardKey interface{}) *gomock.Call {
+// FindOrNilByItemID indicates an expected call of FindOrNilByItemID.
+func (mr *MockItemBoxRepositoryMockRecorder) FindOrNilByItemID(ItemID, shardKey interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByUserID", reflect.TypeOf((*MockItemBoxRepository)(nil).FindByUserID), UserID, shardKey)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByItemID", reflect.TypeOf((*MockItemBoxRepository)(nil).FindOrNilByItemID), ItemID, shardKey)
 }
 
-// FindByUserIDAndItemID mocks base method.
-func (m *MockItemBoxRepository) FindByUserIDAndItemID(UserID, ItemID int64, shardKey int) (*item.ItemBox, error) {
+// FindOrNilByUserID mocks base method.
+func (m *MockItemBoxRepository) FindOrNilByUserID(UserID int64, shardKey int) (*item.ItemBox, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindByUserIDAndItemID", UserID, ItemID, shardKey)
+	ret := m.ctrl.Call(m, "FindOrNilByUserID", UserID, shardKey)
 	ret0, _ := ret[0].(*item.ItemBox)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindByUserIDAndItemID indicates an expected call of FindByUserIDAndItemID.
-func (mr *MockItemBoxRepositoryMockRecorder) FindByUserIDAndItemID(UserID, ItemID, shardKey interface{}) *gomock.Call {
+// FindOrNilByUserID indicates an expected call of FindOrNilByUserID.
+func (mr *MockItemBoxRepositoryMockRecorder) FindOrNilByUserID(UserID, shardKey interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByUserIDAndItemID", reflect.TypeOf((*MockItemBoxRepository)(nil).FindByUserIDAndItemID), UserID, ItemID, shardKey)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByUserID", reflect.TypeOf((*MockItemBoxRepository)(nil).FindOrNilByUserID), UserID, shardKey)
+}
+
+// FindOrNilByUserIDAndItemID mocks base method.
+func (m *MockItemBoxRepository) FindOrNilByUserIDAndItemID(UserID, ItemID int64, shardKey int) (*item.ItemBox, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindOrNilByUserIDAndItemID", UserID, ItemID, shardKey)
+	ret0, _ := ret[0].(*item.ItemBox)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindOrNilByUserIDAndItemID indicates an expected call of FindOrNilByUserIDAndItemID.
+func (mr *MockItemBoxRepositoryMockRecorder) FindOrNilByUserIDAndItemID(UserID, ItemID, shardKey interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByUserIDAndItemID", reflect.TypeOf((*MockItemBoxRepository)(nil).FindOrNilByUserIDAndItemID), UserID, ItemID, shardKey)
 }
 
 // List mocks base method.

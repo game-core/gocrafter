@@ -79,34 +79,49 @@ func (mr *MockExampleRepositoryMockRecorder) FindByID(ID interface{}) *gomock.Ca
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByID", reflect.TypeOf((*MockExampleRepository)(nil).FindByID), ID)
 }
 
-// FindByIDAndName mocks base method.
-func (m *MockExampleRepository) FindByIDAndName(ID int64, Name string) (*example.Example, error) {
+// FindOrNilByID mocks base method.
+func (m *MockExampleRepository) FindOrNilByID(ID int64) (*example.Example, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindByIDAndName", ID, Name)
+	ret := m.ctrl.Call(m, "FindOrNilByID", ID)
 	ret0, _ := ret[0].(*example.Example)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindByIDAndName indicates an expected call of FindByIDAndName.
-func (mr *MockExampleRepositoryMockRecorder) FindByIDAndName(ID, Name interface{}) *gomock.Call {
+// FindOrNilByID indicates an expected call of FindOrNilByID.
+func (mr *MockExampleRepositoryMockRecorder) FindOrNilByID(ID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByIDAndName", reflect.TypeOf((*MockExampleRepository)(nil).FindByIDAndName), ID, Name)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByID", reflect.TypeOf((*MockExampleRepository)(nil).FindOrNilByID), ID)
 }
 
-// FindByName mocks base method.
-func (m *MockExampleRepository) FindByName(Name string) (*example.Example, error) {
+// FindOrNilByIDAndName mocks base method.
+func (m *MockExampleRepository) FindOrNilByIDAndName(ID int64, Name string) (*example.Example, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindByName", Name)
+	ret := m.ctrl.Call(m, "FindOrNilByIDAndName", ID, Name)
 	ret0, _ := ret[0].(*example.Example)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindByName indicates an expected call of FindByName.
-func (mr *MockExampleRepositoryMockRecorder) FindByName(Name interface{}) *gomock.Call {
+// FindOrNilByIDAndName indicates an expected call of FindOrNilByIDAndName.
+func (mr *MockExampleRepositoryMockRecorder) FindOrNilByIDAndName(ID, Name interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByName", reflect.TypeOf((*MockExampleRepository)(nil).FindByName), Name)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByIDAndName", reflect.TypeOf((*MockExampleRepository)(nil).FindOrNilByIDAndName), ID, Name)
+}
+
+// FindOrNilByName mocks base method.
+func (m *MockExampleRepository) FindOrNilByName(Name string) (*example.Example, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindOrNilByName", Name)
+	ret0, _ := ret[0].(*example.Example)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindOrNilByName indicates an expected call of FindOrNilByName.
+func (mr *MockExampleRepositoryMockRecorder) FindOrNilByName(Name interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByName", reflect.TypeOf((*MockExampleRepository)(nil).FindOrNilByName), Name)
 }
 
 // List mocks base method.
