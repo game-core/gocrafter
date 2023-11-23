@@ -3,7 +3,7 @@ package item
 
 import (
 	"github.com/game-core/gocrafter/domain/entity/master/item"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type ItemRepository interface {
@@ -19,9 +19,9 @@ type ItemRepository interface {
 
 	FindOrNilByName(Name string) (*item.Item, error)
 
-	List(limit int64) (*item.Items, error)
+	List(limit int) (*item.Items, error)
 
 	ListByName(Name string) (*item.Items, error)
 
-	Update(entity *item.Item, tx *gorm.DB) (*item.Item, error)
+	Save(entity *item.Item, tx *gorm.DB) (*item.Item, error)
 }

@@ -8,7 +8,7 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-	gorm "github.com/jinzhu/gorm"
+	gorm "gorm.io/gorm"
 )
 
 // MockTransactionRepository is a mock of TransactionRepository interface.

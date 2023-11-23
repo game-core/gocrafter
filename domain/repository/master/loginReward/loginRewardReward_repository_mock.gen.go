@@ -9,7 +9,7 @@ import (
 
 	loginReward "github.com/game-core/gocrafter/domain/entity/master/loginReward"
 	gomock "github.com/golang/mock/gomock"
-	gorm "github.com/jinzhu/gorm"
+	gorm "gorm.io/gorm"
 )
 
 // MockLoginRewardRewardRepository is a mock of LoginRewardRewardRepository interface.
@@ -215,7 +215,7 @@ func (mr *MockLoginRewardRewardRepositoryMockRecorder) FindOrNilByName(Name inte
 }
 
 // List mocks base method.
-func (m *MockLoginRewardRewardRepository) List(limit int64) (*loginReward.LoginRewardRewards, error) {
+func (m *MockLoginRewardRewardRepository) List(limit int) (*loginReward.LoginRewardRewards, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", limit)
 	ret0, _ := ret[0].(*loginReward.LoginRewardRewards)
@@ -289,17 +289,17 @@ func (mr *MockLoginRewardRewardRepositoryMockRecorder) ListByName(Name interface
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListByName", reflect.TypeOf((*MockLoginRewardRewardRepository)(nil).ListByName), Name)
 }
 
-// Update mocks base method.
-func (m *MockLoginRewardRewardRepository) Update(entity *loginReward.LoginRewardReward, tx *gorm.DB) (*loginReward.LoginRewardReward, error) {
+// Save mocks base method.
+func (m *MockLoginRewardRewardRepository) Save(entity *loginReward.LoginRewardReward, tx *gorm.DB) (*loginReward.LoginRewardReward, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Update", entity, tx)
+	ret := m.ctrl.Call(m, "Save", entity, tx)
 	ret0, _ := ret[0].(*loginReward.LoginRewardReward)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// Update indicates an expected call of Update.
-func (mr *MockLoginRewardRewardRepositoryMockRecorder) Update(entity, tx interface{}) *gomock.Call {
+// Save indicates an expected call of Save.
+func (mr *MockLoginRewardRewardRepositoryMockRecorder) Save(entity, tx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockLoginRewardRewardRepository)(nil).Update), entity, tx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockLoginRewardRewardRepository)(nil).Save), entity, tx)
 }

@@ -3,7 +3,7 @@ package shard
 
 import (
 	"github.com/game-core/gocrafter/domain/entity/config/shard"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type ShardRepository interface {
@@ -19,9 +19,9 @@ type ShardRepository interface {
 
 	FindOrNilByShardKey(ShardKey int) (*shard.Shard, error)
 
-	List(limit int64) (*shard.Shards, error)
+	List(limit int) (*shard.Shards, error)
 
 	ListByShardKey(ShardKey int) (*shard.Shards, error)
 
-	Update(entity *shard.Shard, tx *gorm.DB) (*shard.Shard, error)
+	Save(entity *shard.Shard, tx *gorm.DB) (*shard.Shard, error)
 }

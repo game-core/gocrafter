@@ -75,7 +75,7 @@ func (s *shardService) GetShard() (*response.GetShard, error) {
 	}
 
 	minShard.Count++
-	if _, err := s.shardRepository.Update(&minShard, tx); err != nil {
+	if _, err := s.shardRepository.Save(&minShard, tx); err != nil {
 		return nil, err
 	}
 

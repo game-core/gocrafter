@@ -5,7 +5,8 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 type SqlHandler struct {
@@ -48,18 +49,19 @@ func masterDB() *Conn {
 		os.Getenv("MASTER_MYSQL_DATABASE"),
 	)
 
-	readDB, err := gorm.Open("mysql", readConn)
+	readDB, err := gorm.Open(mysql.New(mysql.Config{
+		DSN: readConn,
+	}), &gorm.Config{})
 	if err != nil {
 		panic(err.Error())
 	}
 
-	writeDB, err := gorm.Open("mysql", writeConn)
+	writeDB, err := gorm.Open(mysql.New(mysql.Config{
+		DSN: writeConn,
+	}), &gorm.Config{})
 	if err != nil {
 		panic(err.Error())
 	}
-
-	readDB.SingularTable(true)
-	writeDB.SingularTable(true)
 
 	return &Conn{
 		ReadConn:  readDB,
@@ -84,18 +86,19 @@ func configDB() *Conn {
 		os.Getenv("CONFIG_MYSQL_DATABASE"),
 	)
 
-	readDB, err := gorm.Open("mysql", readConn)
+	readDB, err := gorm.Open(mysql.New(mysql.Config{
+		DSN: readConn,
+	}), &gorm.Config{})
 	if err != nil {
 		panic(err.Error())
 	}
 
-	writeDB, err := gorm.Open("mysql", writeConn)
+	writeDB, err := gorm.Open(mysql.New(mysql.Config{
+		DSN: writeConn,
+	}), &gorm.Config{})
 	if err != nil {
 		panic(err.Error())
 	}
-
-	readDB.SingularTable(true)
-	writeDB.SingularTable(true)
 
 	return &Conn{
 		ReadConn:  readDB,
@@ -137,18 +140,19 @@ func userDB(shard string) *Conn {
 		os.Getenv("USER_MYSQL_DATABASE"+shard),
 	)
 
-	readDB, err := gorm.Open("mysql", readConn)
+	readDB, err := gorm.Open(mysql.New(mysql.Config{
+		DSN: readConn,
+	}), &gorm.Config{})
 	if err != nil {
 		panic(err.Error())
 	}
 
-	writeDB, err := gorm.Open("mysql", writeConn)
+	writeDB, err := gorm.Open(mysql.New(mysql.Config{
+		DSN: writeConn,
+	}), &gorm.Config{})
 	if err != nil {
 		panic(err.Error())
 	}
-
-	readDB.SingularTable(true)
-	writeDB.SingularTable(true)
 
 	return &Conn{
 		ReadConn:  readDB,

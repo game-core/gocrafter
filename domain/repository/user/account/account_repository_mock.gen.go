@@ -9,7 +9,7 @@ import (
 
 	account "github.com/game-core/gocrafter/domain/entity/user/account"
 	gomock "github.com/golang/mock/gomock"
-	gorm "github.com/jinzhu/gorm"
+	gorm "gorm.io/gorm"
 )
 
 // MockAccountRepository is a mock of AccountRepository interface.
@@ -155,7 +155,7 @@ func (mr *MockAccountRepositoryMockRecorder) FindOrNilByUUID(UUID, shardKey inte
 }
 
 // List mocks base method.
-func (m *MockAccountRepository) List(limit int64, shardKey int) (*account.Accounts, error) {
+func (m *MockAccountRepository) List(limit, shardKey int) (*account.Accounts, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", limit, shardKey)
 	ret0, _ := ret[0].(*account.Accounts)
@@ -199,17 +199,17 @@ func (mr *MockAccountRepositoryMockRecorder) ListByUUID(UUID, shardKey interface
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListByUUID", reflect.TypeOf((*MockAccountRepository)(nil).ListByUUID), UUID, shardKey)
 }
 
-// Update mocks base method.
-func (m *MockAccountRepository) Update(entity *account.Account, shardKey int, tx *gorm.DB) (*account.Account, error) {
+// Save mocks base method.
+func (m *MockAccountRepository) Save(entity *account.Account, shardKey int, tx *gorm.DB) (*account.Account, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Update", entity, shardKey, tx)
+	ret := m.ctrl.Call(m, "Save", entity, shardKey, tx)
 	ret0, _ := ret[0].(*account.Account)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// Update indicates an expected call of Update.
-func (mr *MockAccountRepositoryMockRecorder) Update(entity, shardKey, tx interface{}) *gomock.Call {
+// Save indicates an expected call of Save.
+func (mr *MockAccountRepositoryMockRecorder) Save(entity, shardKey, tx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockAccountRepository)(nil).Update), entity, shardKey, tx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockAccountRepository)(nil).Save), entity, shardKey, tx)
 }

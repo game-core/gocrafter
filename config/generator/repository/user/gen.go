@@ -39,7 +39,7 @@ const repositoryTemplateCode = `
 package {{.Package}}
 
 import (
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 	"github.com/game-core/gocrafter/domain/entity/user/{{.Package}}"
 )
 
@@ -150,9 +150,9 @@ func generateMethods(structInfo *StructInfo) map[string]MethodType {
 		Script: generateCreate(structInfo),
 	}
 
-	// Update
-	methods["Update"] = MethodType{
-		Script: generateUpdate(structInfo),
+	// Save
+	methods["Save"] = MethodType{
+		Script: generateSave(structInfo),
 	}
 
 	// Delete
@@ -172,7 +172,7 @@ func generateFindOrNilByID(structInfo *StructInfo) string {
 }
 
 func generateList(structInfo *StructInfo) string {
-	return fmt.Sprintf(`List(limit int64, shardKey int) (*%s.%s, error)`, structInfo.Package, transform.SingularToPlural(structInfo.Name))
+	return fmt.Sprintf(`List(limit int, shardKey int) (*%s.%s, error)`, structInfo.Package, transform.SingularToPlural(structInfo.Name))
 }
 
 func generateCreate(structInfo *StructInfo) string {
@@ -185,9 +185,9 @@ func generateCreate(structInfo *StructInfo) string {
 	)
 }
 
-func generateUpdate(structInfo *StructInfo) string {
+func generateSave(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`Update(entity *%s.%s, shardKey int, tx *gorm.DB) (*%s.%s, error)`,
+		`Save(entity *%s.%s, shardKey int, tx *gorm.DB) (*%s.%s, error)`,
 		structInfo.Package,
 		structInfo.Name,
 		structInfo.Package,

@@ -9,7 +9,7 @@ import (
 
 	event "github.com/game-core/gocrafter/domain/entity/master/event"
 	gomock "github.com/golang/mock/gomock"
-	gorm "github.com/jinzhu/gorm"
+	gorm "gorm.io/gorm"
 )
 
 // MockEventRepository is a mock of EventRepository interface.
@@ -125,7 +125,7 @@ func (mr *MockEventRepositoryMockRecorder) FindOrNilByName(Name interface{}) *go
 }
 
 // List mocks base method.
-func (m *MockEventRepository) List(limit int64) (*event.Events, error) {
+func (m *MockEventRepository) List(limit int) (*event.Events, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", limit)
 	ret0, _ := ret[0].(*event.Events)
@@ -154,17 +154,17 @@ func (mr *MockEventRepositoryMockRecorder) ListByName(Name interface{}) *gomock.
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListByName", reflect.TypeOf((*MockEventRepository)(nil).ListByName), Name)
 }
 
-// Update mocks base method.
-func (m *MockEventRepository) Update(entity *event.Event, tx *gorm.DB) (*event.Event, error) {
+// Save mocks base method.
+func (m *MockEventRepository) Save(entity *event.Event, tx *gorm.DB) (*event.Event, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Update", entity, tx)
+	ret := m.ctrl.Call(m, "Save", entity, tx)
 	ret0, _ := ret[0].(*event.Event)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// Update indicates an expected call of Update.
-func (mr *MockEventRepositoryMockRecorder) Update(entity, tx interface{}) *gomock.Call {
+// Save indicates an expected call of Save.
+func (mr *MockEventRepositoryMockRecorder) Save(entity, tx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockEventRepository)(nil).Update), entity, tx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockEventRepository)(nil).Save), entity, tx)
 }

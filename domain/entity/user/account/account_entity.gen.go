@@ -21,3 +21,7 @@ type Account struct {
 
 	UpdatedAt time.Time `json:"updated_at" gorm:"autoUpdateTime"`
 }
+
+func (e *Account) TableName() string {
+	return "account"
+}

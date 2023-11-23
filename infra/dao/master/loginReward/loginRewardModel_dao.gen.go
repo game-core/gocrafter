@@ -3,8 +3,8 @@ package loginReward
 import (
 	"fmt"
 
-	"github.com/jinzhu/gorm"
 	"github.com/patrickmn/go-cache"
+	"gorm.io/gorm"
 
 	dbChashe "github.com/game-core/gocrafter/config/cashe"
 	"github.com/game-core/gocrafter/config/database"
@@ -144,7 +144,7 @@ func (d *loginRewardModelDao) FindOrNilByEventName(EventName string) (*loginRewa
 
 	entity := &loginReward.LoginRewardModel{}
 	res := d.Read.Where("event_name = ?", EventName).Find(entity)
-	if res.RecordNotFound() {
+	if res.RowsAffected == 0 {
 		return nil, nil
 	}
 	if err := res.Error; err != nil {
@@ -166,7 +166,7 @@ func (d *loginRewardModelDao) FindOrNilByID(ID int64) (*loginReward.LoginRewardM
 
 	entity := &loginReward.LoginRewardModel{}
 	res := d.Read.Where("id = ?", ID).Find(entity)
-	if res.RecordNotFound() {
+	if res.RowsAffected == 0 {
 		return nil, nil
 	}
 	if err := res.Error; err != nil {
@@ -188,7 +188,7 @@ func (d *loginRewardModelDao) FindOrNilByName(Name string) (*loginReward.LoginRe
 
 	entity := &loginReward.LoginRewardModel{}
 	res := d.Read.Where("name = ?", Name).Find(entity)
-	if res.RecordNotFound() {
+	if res.RowsAffected == 0 {
 		return nil, nil
 	}
 	if err := res.Error; err != nil {
@@ -210,7 +210,7 @@ func (d *loginRewardModelDao) FindOrNilByNameAndEventName(Name string, EventName
 
 	entity := &loginReward.LoginRewardModel{}
 	res := d.Read.Where("name = ?", Name).Where("event_name = ?", EventName).Find(entity)
-	if res.RecordNotFound() {
+	if res.RowsAffected == 0 {
 		return nil, nil
 	}
 	if err := res.Error; err != nil {
@@ -222,7 +222,7 @@ func (d *loginRewardModelDao) FindOrNilByNameAndEventName(Name string, EventName
 	return entity, nil
 }
 
-func (d *loginRewardModelDao) List(limit int64) (*loginReward.LoginRewardModels, error) {
+func (d *loginRewardModelDao) List(limit int) (*loginReward.LoginRewardModels, error) {
 	cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("login_reward_model", "List", ""))
 	if found {
 		if cachedEntity, ok := cachedResult.(*loginReward.LoginRewardModels); ok {
@@ -298,7 +298,7 @@ func (d *loginRewardModelDao) ListByNameAndEventName(Name string, EventName stri
 	return entity, nil
 }
 
-func (d *loginRewardModelDao) Update(entity *loginReward.LoginRewardModel, tx *gorm.DB) (*loginReward.LoginRewardModel, error) {
+func (d *loginRewardModelDao) Save(entity *loginReward.LoginRewardModel, tx *gorm.DB) (*loginReward.LoginRewardModel, error) {
 	var conn *gorm.DB
 	if tx != nil {
 		conn = tx
@@ -306,7 +306,7 @@ func (d *loginRewardModelDao) Update(entity *loginReward.LoginRewardModel, tx *g
 		conn = d.Write
 	}
 
-	res := conn.Model(&loginReward.LoginRewardModel{}).Where("id = ?", entity.ID).Update(entity)
+	res := conn.Model(&loginReward.LoginRewardModel{}).Where("id = ?", entity.ID).Save(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}

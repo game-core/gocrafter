@@ -1,7 +1,7 @@
 package shard
 
 import (
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/game-core/gocrafter/config/database"
 	"github.com/game-core/gocrafter/domain/entity/config/shard"
@@ -75,7 +75,7 @@ func (d *shardDao) FindByShardKey(ShardKey int) (*shard.Shard, error) {
 func (d *shardDao) FindOrNilByID(ID int64) (*shard.Shard, error) {
 	entity := &shard.Shard{}
 	res := d.Read.Where("id = ?", ID).Find(entity)
-	if res.RecordNotFound() {
+	if res.RowsAffected == 0 {
 		return nil, nil
 	}
 	if err := res.Error; err != nil {
@@ -88,7 +88,7 @@ func (d *shardDao) FindOrNilByID(ID int64) (*shard.Shard, error) {
 func (d *shardDao) FindOrNilByShardKey(ShardKey int) (*shard.Shard, error) {
 	entity := &shard.Shard{}
 	res := d.Read.Where("shard_key = ?", ShardKey).Find(entity)
-	if res.RecordNotFound() {
+	if res.RowsAffected == 0 {
 		return nil, nil
 	}
 	if err := res.Error; err != nil {
@@ -98,7 +98,7 @@ func (d *shardDao) FindOrNilByShardKey(ShardKey int) (*shard.Shard, error) {
 	return entity, nil
 }
 
-func (d *shardDao) List(limit int64) (*shard.Shards, error) {
+func (d *shardDao) List(limit int) (*shard.Shards, error) {
 	entity := &shard.Shards{}
 	res := d.Read.Limit(limit).Find(entity)
 	if err := res.Error; err != nil {
@@ -118,7 +118,7 @@ func (d *shardDao) ListByShardKey(ShardKey int) (*shard.Shards, error) {
 	return entity, nil
 }
 
-func (d *shardDao) Update(entity *shard.Shard, tx *gorm.DB) (*shard.Shard, error) {
+func (d *shardDao) Save(entity *shard.Shard, tx *gorm.DB) (*shard.Shard, error) {
 	var conn *gorm.DB
 	if tx != nil {
 		conn = tx
@@ -126,7 +126,7 @@ func (d *shardDao) Update(entity *shard.Shard, tx *gorm.DB) (*shard.Shard, error
 		conn = d.Write
 	}
 
-	res := conn.Model(&shard.Shard{}).Where("id = ?", entity.ID).Update(entity)
+	res := conn.Model(&shard.Shard{}).Where("id = ?", entity.ID).Save(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}

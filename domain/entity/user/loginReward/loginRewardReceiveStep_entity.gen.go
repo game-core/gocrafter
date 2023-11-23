@@ -21,3 +21,7 @@ type LoginRewardReceiveStep struct {
 
 	UpdatedAt time.Time `json:"updated_at" gorm:"autoUpdateTime"`
 }
+
+func (e *LoginRewardReceiveStep) TableName() string {
+	return "login_reward_receive_step"
+}

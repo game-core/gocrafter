@@ -9,7 +9,7 @@ import (
 
 	loginReward "github.com/game-core/gocrafter/domain/entity/user/loginReward"
 	gomock "github.com/golang/mock/gomock"
-	gorm "github.com/jinzhu/gorm"
+	gorm "gorm.io/gorm"
 )
 
 // MockLoginRewardStatusRepository is a mock of LoginRewardStatusRepository interface.
@@ -185,7 +185,7 @@ func (mr *MockLoginRewardStatusRepositoryMockRecorder) FindOrNilByLoginRewardMod
 }
 
 // List mocks base method.
-func (m *MockLoginRewardStatusRepository) List(limit int64, shardKey int) (*loginReward.LoginRewardStatuses, error) {
+func (m *MockLoginRewardStatusRepository) List(limit, shardKey int) (*loginReward.LoginRewardStatuses, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", limit, shardKey)
 	ret0, _ := ret[0].(*loginReward.LoginRewardStatuses)
@@ -244,17 +244,17 @@ func (mr *MockLoginRewardStatusRepositoryMockRecorder) ListByLoginRewardModelNam
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListByLoginRewardModelName", reflect.TypeOf((*MockLoginRewardStatusRepository)(nil).ListByLoginRewardModelName), LoginRewardModelName, shardKey)
 }
 
-// Update mocks base method.
-func (m *MockLoginRewardStatusRepository) Update(entity *loginReward.LoginRewardStatus, shardKey int, tx *gorm.DB) (*loginReward.LoginRewardStatus, error) {
+// Save mocks base method.
+func (m *MockLoginRewardStatusRepository) Save(entity *loginReward.LoginRewardStatus, shardKey int, tx *gorm.DB) (*loginReward.LoginRewardStatus, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Update", entity, shardKey, tx)
+	ret := m.ctrl.Call(m, "Save", entity, shardKey, tx)
 	ret0, _ := ret[0].(*loginReward.LoginRewardStatus)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// Update indicates an expected call of Update.
-func (mr *MockLoginRewardStatusRepositoryMockRecorder) Update(entity, shardKey, tx interface{}) *gomock.Call {
+// Save indicates an expected call of Save.
+func (mr *MockLoginRewardStatusRepositoryMockRecorder) Save(entity, shardKey, tx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockLoginRewardStatusRepository)(nil).Update), entity, shardKey, tx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockLoginRewardStatusRepository)(nil).Save), entity, shardKey, tx)
 }

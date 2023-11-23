@@ -3,7 +3,7 @@ package example
 
 import (
 	"github.com/game-core/gocrafter/domain/entity/master/example"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type ExampleRepository interface {
@@ -23,11 +23,11 @@ type ExampleRepository interface {
 
 	FindOrNilByName(Name string) (*example.Example, error)
 
-	List(limit int64) (*example.Examples, error)
+	List(limit int) (*example.Examples, error)
 
 	ListByIDAndName(ID int64, Name string) (*example.Examples, error)
 
 	ListByName(Name string) (*example.Examples, error)
 
-	Update(entity *example.Example, tx *gorm.DB) (*example.Example, error)
+	Save(entity *example.Example, tx *gorm.DB) (*example.Example, error)
 }

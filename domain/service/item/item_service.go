@@ -73,7 +73,7 @@ func (s *itemService) ReceiveItemInBox(req *request.ReceiveItemInBox) (*response
 	newIb := &userItemEntity.ItemBox{}
 	if ib != nil {
 		ib.Count = ib.Count + 1
-		newIb, err = s.itemBoxRepository.Update(ib, req.ShardKey, tx)
+		newIb, err = s.itemBoxRepository.Save(ib, req.ShardKey, tx)
 		if err != nil {
 			return nil, err
 		}

@@ -9,7 +9,7 @@ import (
 
 	shard "github.com/game-core/gocrafter/domain/entity/config/shard"
 	gomock "github.com/golang/mock/gomock"
-	gorm "github.com/jinzhu/gorm"
+	gorm "gorm.io/gorm"
 )
 
 // MockShardRepository is a mock of ShardRepository interface.
@@ -125,7 +125,7 @@ func (mr *MockShardRepositoryMockRecorder) FindOrNilByShardKey(ShardKey interfac
 }
 
 // List mocks base method.
-func (m *MockShardRepository) List(limit int64) (*shard.Shards, error) {
+func (m *MockShardRepository) List(limit int) (*shard.Shards, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", limit)
 	ret0, _ := ret[0].(*shard.Shards)
@@ -154,17 +154,17 @@ func (mr *MockShardRepositoryMockRecorder) ListByShardKey(ShardKey interface{}) 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListByShardKey", reflect.TypeOf((*MockShardRepository)(nil).ListByShardKey), ShardKey)
 }
 
-// Update mocks base method.
-func (m *MockShardRepository) Update(entity *shard.Shard, tx *gorm.DB) (*shard.Shard, error) {
+// Save mocks base method.
+func (m *MockShardRepository) Save(entity *shard.Shard, tx *gorm.DB) (*shard.Shard, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Update", entity, tx)
+	ret := m.ctrl.Call(m, "Save", entity, tx)
 	ret0, _ := ret[0].(*shard.Shard)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// Update indicates an expected call of Update.
-func (mr *MockShardRepositoryMockRecorder) Update(entity, tx interface{}) *gomock.Call {
+// Save indicates an expected call of Save.
+func (mr *MockShardRepositoryMockRecorder) Save(entity, tx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockShardRepository)(nil).Update), entity, tx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockShardRepository)(nil).Save), entity, tx)
 }

@@ -3,7 +3,7 @@ package item
 
 import (
 	"github.com/game-core/gocrafter/domain/entity/user/item"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type ItemBoxRepository interface {
@@ -27,7 +27,7 @@ type ItemBoxRepository interface {
 
 	FindOrNilByItemName(ItemName string, shardKey int) (*item.ItemBox, error)
 
-	List(limit int64, shardKey int) (*item.ItemBoxs, error)
+	List(limit int, shardKey int) (*item.ItemBoxs, error)
 
 	ListByAccountID(AccountID int64, shardKey int) (*item.ItemBoxs, error)
 
@@ -35,5 +35,5 @@ type ItemBoxRepository interface {
 
 	ListByItemName(ItemName string, shardKey int) (*item.ItemBoxs, error)
 
-	Update(entity *item.ItemBox, shardKey int, tx *gorm.DB) (*item.ItemBox, error)
+	Save(entity *item.ItemBox, shardKey int, tx *gorm.DB) (*item.ItemBox, error)
 }

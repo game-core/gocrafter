@@ -17,3 +17,7 @@ type Item struct {
 
 	UpdatedAt time.Time `json:"updated_at" gorm:"autoUpdateTime"`
 }
+
+func (e *Item) TableName() string {
+	return "item"
+}

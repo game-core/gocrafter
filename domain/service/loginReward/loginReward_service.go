@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	itemRequest "github.com/game-core/gocrafter/api/presentation/request/item"
 	request "github.com/game-core/gocrafter/api/presentation/request/loginReward"
@@ -235,7 +235,7 @@ func (s *loginRewardService) updateLoginRewardStatus(
 ) (*userLoginRewardEntity.LoginRewardStatus, error) {
 	if lrs != nil {
 		lrs.LastReceivedAt = now
-		lrs, err := s.loginRewardStatusRepository.Update(lrs, shardKey, tx)
+		lrs, err := s.loginRewardStatusRepository.Save(lrs, shardKey, tx)
 		if err != nil {
 			return nil, err
 		}

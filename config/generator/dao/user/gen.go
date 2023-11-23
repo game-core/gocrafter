@@ -38,7 +38,7 @@ const daoTemplateCode = `
 package {{.Package}}
 
 import (
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/game-core/gocrafter/config/database"
 	"github.com/game-core/gocrafter/domain/entity/user/{{.Package}}"
@@ -162,9 +162,9 @@ func generateMethods(structInfo *StructInfo) map[string]MethodType {
 		Script: generateCreate(structInfo),
 	}
 
-	// Update
-	methods["Update"] = MethodType{
-		Script: generateUpdate(structInfo),
+	// Save
+	methods["Save"] = MethodType{
+		Script: generateSave(structInfo),
 	}
 
 	// Delete
@@ -200,7 +200,7 @@ func generateFindOrNilByID(structInfo *StructInfo) string {
 		`func (d *%sDao) FindOrNilByID(ID int64, shardKey int) (*%s.%s, error) {
 			entity := &%s.%s{}
 			res := d.ShardConn.Shards[shardKey].ReadConn.Where("id = ?", ID).Find(entity)
-			if res.RecordNotFound() {
+			if res.RowsAffected == 0 {
 				return nil, nil
 			}
 			if err := res.Error; err != nil {
@@ -266,7 +266,7 @@ func generateFindOrNilByIndex(structInfo *StructInfo, indexFields []string) stri
 		`func (d *%sDao) FindOrNilBy%s(%s, shardKey int) (*%s.%s, error) {
 			entity := &%s.%s{}
 			res := d.ShardConn.Shards[shardKey].ReadConn.%s.Find(entity)
-			if res.RecordNotFound() {
+			if res.RowsAffected == 0 {
 				return nil, nil
 			}
 			if err := res.Error; err != nil {
@@ -289,7 +289,7 @@ func generateFindOrNilByIndex(structInfo *StructInfo, indexFields []string) stri
 
 func generateList(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`func (d *%sDao) List(limit int64, shardKey int) (*%s.%s, error) {
+		`func (d *%sDao) List(limit int, shardKey int) (*%s.%s, error) {
 			entity := &%s.%s{}
 			res := d.ShardConn.Shards[shardKey].ReadConn.Limit(limit).Find(entity)
 			if err := res.Error; err != nil {
@@ -368,9 +368,9 @@ func generateCreate(structInfo *StructInfo) string {
 	)
 }
 
-func generateUpdate(structInfo *StructInfo) string {
+func generateSave(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`func (d *%sDao) Update(entity *%s.%s, shardKey int, tx *gorm.DB) (*%s.%s, error) {
+		`func (d *%sDao) Save(entity *%s.%s, shardKey int, tx *gorm.DB) (*%s.%s, error) {
 			var conn *gorm.DB
 			if tx != nil {
 				conn = tx
@@ -378,7 +378,7 @@ func generateUpdate(structInfo *StructInfo) string {
 				conn = d.ShardConn.Shards[shardKey].WriteConn
 			}
 		
-			res := conn.Model(&%s.%s{}).Where("id = ?", entity.ID).Update(entity)
+			res := conn.Model(&%s.%s{}).Where("id = ?", entity.ID).Save(entity)
 			if err := res.Error; err != nil {
 				return nil, err
 			}

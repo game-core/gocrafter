@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/game-core/gocrafter/config/database"
 	repository "github.com/game-core/gocrafter/domain/repository/config"

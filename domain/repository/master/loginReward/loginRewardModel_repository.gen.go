@@ -3,7 +3,7 @@ package loginReward
 
 import (
 	"github.com/game-core/gocrafter/domain/entity/master/loginReward"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type LoginRewardModelRepository interface {
@@ -27,7 +27,7 @@ type LoginRewardModelRepository interface {
 
 	FindOrNilByNameAndEventName(Name string, EventName string) (*loginReward.LoginRewardModel, error)
 
-	List(limit int64) (*loginReward.LoginRewardModels, error)
+	List(limit int) (*loginReward.LoginRewardModels, error)
 
 	ListByEventName(EventName string) (*loginReward.LoginRewardModels, error)
 
@@ -35,5 +35,5 @@ type LoginRewardModelRepository interface {
 
 	ListByNameAndEventName(Name string, EventName string) (*loginReward.LoginRewardModels, error)
 
-	Update(entity *loginReward.LoginRewardModel, tx *gorm.DB) (*loginReward.LoginRewardModel, error)
+	Save(entity *loginReward.LoginRewardModel, tx *gorm.DB) (*loginReward.LoginRewardModel, error)
 }

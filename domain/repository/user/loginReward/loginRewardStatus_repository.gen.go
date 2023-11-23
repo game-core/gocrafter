@@ -3,7 +3,7 @@ package loginReward
 
 import (
 	"github.com/game-core/gocrafter/domain/entity/user/loginReward"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type LoginRewardStatusRepository interface {
@@ -27,7 +27,7 @@ type LoginRewardStatusRepository interface {
 
 	FindOrNilByLoginRewardModelName(LoginRewardModelName string, shardKey int) (*loginReward.LoginRewardStatus, error)
 
-	List(limit int64, shardKey int) (*loginReward.LoginRewardStatuses, error)
+	List(limit int, shardKey int) (*loginReward.LoginRewardStatuses, error)
 
 	ListByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardStatuses, error)
 
@@ -35,5 +35,5 @@ type LoginRewardStatusRepository interface {
 
 	ListByLoginRewardModelName(LoginRewardModelName string, shardKey int) (*loginReward.LoginRewardStatuses, error)
 
-	Update(entity *loginReward.LoginRewardStatus, shardKey int, tx *gorm.DB) (*loginReward.LoginRewardStatus, error)
+	Save(entity *loginReward.LoginRewardStatus, shardKey int, tx *gorm.DB) (*loginReward.LoginRewardStatus, error)
 }

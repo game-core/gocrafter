@@ -3,8 +3,8 @@ package event
 import (
 	"fmt"
 
-	"github.com/jinzhu/gorm"
 	"github.com/patrickmn/go-cache"
+	"gorm.io/gorm"
 
 	dbChashe "github.com/game-core/gocrafter/config/cashe"
 	"github.com/game-core/gocrafter/config/database"
@@ -106,7 +106,7 @@ func (d *eventDao) FindOrNilByID(ID int64) (*event.Event, error) {
 
 	entity := &event.Event{}
 	res := d.Read.Where("id = ?", ID).Find(entity)
-	if res.RecordNotFound() {
+	if res.RowsAffected == 0 {
 		return nil, nil
 	}
 	if err := res.Error; err != nil {
@@ -128,7 +128,7 @@ func (d *eventDao) FindOrNilByName(Name string) (*event.Event, error) {
 
 	entity := &event.Event{}
 	res := d.Read.Where("name = ?", Name).Find(entity)
-	if res.RecordNotFound() {
+	if res.RowsAffected == 0 {
 		return nil, nil
 	}
 	if err := res.Error; err != nil {
@@ -140,7 +140,7 @@ func (d *eventDao) FindOrNilByName(Name string) (*event.Event, error) {
 	return entity, nil
 }
 
-func (d *eventDao) List(limit int64) (*event.Events, error) {
+func (d *eventDao) List(limit int) (*event.Events, error) {
 	cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("event", "List", ""))
 	if found {
 		if cachedEntity, ok := cachedResult.(*event.Events); ok {
@@ -178,7 +178,7 @@ func (d *eventDao) ListByName(Name string) (*event.Events, error) {
 	return entity, nil
 }
 
-func (d *eventDao) Update(entity *event.Event, tx *gorm.DB) (*event.Event, error) {
+func (d *eventDao) Save(entity *event.Event, tx *gorm.DB) (*event.Event, error) {
 	var conn *gorm.DB
 	if tx != nil {
 		conn = tx
@@ -186,7 +186,7 @@ func (d *eventDao) Update(entity *event.Event, tx *gorm.DB) (*event.Event, error
 		conn = d.Write
 	}
 
-	res := conn.Model(&event.Event{}).Where("id = ?", entity.ID).Update(entity)
+	res := conn.Model(&event.Event{}).Where("id = ?", entity.ID).Save(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}

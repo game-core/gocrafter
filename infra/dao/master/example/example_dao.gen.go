@@ -3,8 +3,8 @@ package example
 import (
 	"fmt"
 
-	"github.com/jinzhu/gorm"
 	"github.com/patrickmn/go-cache"
+	"gorm.io/gorm"
 
 	dbChashe "github.com/game-core/gocrafter/config/cashe"
 	"github.com/game-core/gocrafter/config/database"
@@ -125,7 +125,7 @@ func (d *exampleDao) FindOrNilByID(ID int64) (*example.Example, error) {
 
 	entity := &example.Example{}
 	res := d.Read.Where("id = ?", ID).Find(entity)
-	if res.RecordNotFound() {
+	if res.RowsAffected == 0 {
 		return nil, nil
 	}
 	if err := res.Error; err != nil {
@@ -147,7 +147,7 @@ func (d *exampleDao) FindOrNilByIDAndName(ID int64, Name string) (*example.Examp
 
 	entity := &example.Example{}
 	res := d.Read.Where("id = ?", ID).Where("name = ?", Name).Find(entity)
-	if res.RecordNotFound() {
+	if res.RowsAffected == 0 {
 		return nil, nil
 	}
 	if err := res.Error; err != nil {
@@ -169,7 +169,7 @@ func (d *exampleDao) FindOrNilByName(Name string) (*example.Example, error) {
 
 	entity := &example.Example{}
 	res := d.Read.Where("name = ?", Name).Find(entity)
-	if res.RecordNotFound() {
+	if res.RowsAffected == 0 {
 		return nil, nil
 	}
 	if err := res.Error; err != nil {
@@ -181,7 +181,7 @@ func (d *exampleDao) FindOrNilByName(Name string) (*example.Example, error) {
 	return entity, nil
 }
 
-func (d *exampleDao) List(limit int64) (*example.Examples, error) {
+func (d *exampleDao) List(limit int) (*example.Examples, error) {
 	cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("example", "List", ""))
 	if found {
 		if cachedEntity, ok := cachedResult.(*example.Examples); ok {
@@ -238,7 +238,7 @@ func (d *exampleDao) ListByName(Name string) (*example.Examples, error) {
 	return entity, nil
 }
 
-func (d *exampleDao) Update(entity *example.Example, tx *gorm.DB) (*example.Example, error) {
+func (d *exampleDao) Save(entity *example.Example, tx *gorm.DB) (*example.Example, error) {
 	var conn *gorm.DB
 	if tx != nil {
 		conn = tx
@@ -246,7 +246,7 @@ func (d *exampleDao) Update(entity *example.Example, tx *gorm.DB) (*example.Exam
 		conn = d.Write
 	}
 
-	res := conn.Model(&example.Example{}).Where("id = ?", entity.ID).Update(entity)
+	res := conn.Model(&example.Example{}).Where("id = ?", entity.ID).Save(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}

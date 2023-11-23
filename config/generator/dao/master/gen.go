@@ -40,7 +40,7 @@ package {{.Package}}
 import (
 	"fmt"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 	"github.com/patrickmn/go-cache"
 	
 	dbChashe "github.com/game-core/gocrafter/config/cashe"
@@ -172,9 +172,9 @@ func generateMethods(structInfo *StructInfo) map[string]MethodType {
 		Script: generateCreate(structInfo),
 	}
 
-	// Update
-	methods["Update"] = MethodType{
-		Script: generateUpdate(structInfo),
+	// Save
+	methods["Save"] = MethodType{
+		Script: generateSave(structInfo),
 	}
 
 	// Delete
@@ -232,7 +232,7 @@ func generateFindOrNilByID(structInfo *StructInfo) string {
 
 			entity := &%s.%s{}
 			res := d.Read.Where("id = ?", ID).Find(entity)
-			if res.RecordNotFound() {
+			if res.RowsAffected == 0 {
 				return nil, nil
 			}
 			if err := res.Error; err != nil {
@@ -350,7 +350,7 @@ func generateFindOrNilByIndex(structInfo *StructInfo, indexFields []string) stri
 
 			entity := &%s.%s{}
 			res := d.Read.%s.Find(entity)
-			if res.RecordNotFound() {
+			if res.RowsAffected == 0 {
 				return nil, nil
 			}
 			if err := res.Error; err != nil {
@@ -383,7 +383,7 @@ func generateFindOrNilByIndex(structInfo *StructInfo, indexFields []string) stri
 
 func generateList(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`func (d *%sDao) List(limit int64) (*%s.%s, error) {
+		`func (d *%sDao) List(limit int) (*%s.%s, error) {
 			cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("%s", "List", ""))
 			if found {
 				if cachedEntity, ok := cachedResult.(*%s.%s); ok {
@@ -502,9 +502,9 @@ func generateCreate(structInfo *StructInfo) string {
 	)
 }
 
-func generateUpdate(structInfo *StructInfo) string {
+func generateSave(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`func (d *%sDao) Update(entity *%s.%s, tx *gorm.DB) (*%s.%s, error) {
+		`func (d *%sDao) Save(entity *%s.%s, tx *gorm.DB) (*%s.%s, error) {
 			var conn *gorm.DB
 			if tx != nil {
 				conn = tx
@@ -512,7 +512,7 @@ func generateUpdate(structInfo *StructInfo) string {
 				conn = d.Write
 			}
 		
-			res := conn.Model(&%s.%s{}).Where("id = ?", entity.ID).Update(entity)
+			res := conn.Model(&%s.%s{}).Where("id = ?", entity.ID).Save(entity)
 			if err := res.Error; err != nil {
 				return nil, err
 			}

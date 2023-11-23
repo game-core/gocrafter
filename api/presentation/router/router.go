@@ -1,10 +1,10 @@
 package router
 
 import (
-	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	echoSwagger "github.com/swaggo/echo-swagger"
+	_ "gorm.io/driver/mysql"
 
 	"github.com/game-core/gocrafter/api/di"
 	_ "github.com/game-core/gocrafter/docs/swagger/api"

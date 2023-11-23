@@ -9,7 +9,7 @@ import (
 
 	loginReward "github.com/game-core/gocrafter/domain/entity/user/loginReward"
 	gomock "github.com/golang/mock/gomock"
-	gorm "github.com/jinzhu/gorm"
+	gorm "gorm.io/gorm"
 )
 
 // MockLoginRewardReceiveStepRepository is a mock of LoginRewardReceiveStepRepository interface.
@@ -185,7 +185,7 @@ func (mr *MockLoginRewardReceiveStepRepositoryMockRecorder) FindOrNilByLoginRewa
 }
 
 // List mocks base method.
-func (m *MockLoginRewardReceiveStepRepository) List(limit int64, shardKey int) (*loginReward.LoginRewardReceiveSteps, error) {
+func (m *MockLoginRewardReceiveStepRepository) List(limit, shardKey int) (*loginReward.LoginRewardReceiveSteps, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", limit, shardKey)
 	ret0, _ := ret[0].(*loginReward.LoginRewardReceiveSteps)
@@ -244,17 +244,17 @@ func (mr *MockLoginRewardReceiveStepRepositoryMockRecorder) ListByLoginRewardSta
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListByLoginRewardStatusID", reflect.TypeOf((*MockLoginRewardReceiveStepRepository)(nil).ListByLoginRewardStatusID), LoginRewardStatusID, shardKey)
 }
 
-// Update mocks base method.
-func (m *MockLoginRewardReceiveStepRepository) Update(entity *loginReward.LoginRewardReceiveStep, shardKey int, tx *gorm.DB) (*loginReward.LoginRewardReceiveStep, error) {
+// Save mocks base method.
+func (m *MockLoginRewardReceiveStepRepository) Save(entity *loginReward.LoginRewardReceiveStep, shardKey int, tx *gorm.DB) (*loginReward.LoginRewardReceiveStep, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Update", entity, shardKey, tx)
+	ret := m.ctrl.Call(m, "Save", entity, shardKey, tx)
 	ret0, _ := ret[0].(*loginReward.LoginRewardReceiveStep)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// Update indicates an expected call of Update.
-func (mr *MockLoginRewardReceiveStepRepositoryMockRecorder) Update(entity, shardKey, tx interface{}) *gomock.Call {
+// Save indicates an expected call of Save.
+func (mr *MockLoginRewardReceiveStepRepositoryMockRecorder) Save(entity, shardKey, tx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockLoginRewardReceiveStepRepository)(nil).Update), entity, shardKey, tx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockLoginRewardReceiveStepRepository)(nil).Save), entity, shardKey, tx)
 }

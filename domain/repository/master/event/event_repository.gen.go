@@ -3,7 +3,7 @@ package event
 
 import (
 	"github.com/game-core/gocrafter/domain/entity/master/event"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type EventRepository interface {
@@ -19,9 +19,9 @@ type EventRepository interface {
 
 	FindOrNilByName(Name string) (*event.Event, error)
 
-	List(limit int64) (*event.Events, error)
+	List(limit int) (*event.Events, error)
 
 	ListByName(Name string) (*event.Events, error)
 
-	Update(entity *event.Event, tx *gorm.DB) (*event.Event, error)
+	Save(entity *event.Event, tx *gorm.DB) (*event.Event, error)
 }

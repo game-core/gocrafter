@@ -1,7 +1,7 @@
 package loginReward
 
 import (
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/game-core/gocrafter/config/database"
 	"github.com/game-core/gocrafter/domain/entity/user/loginReward"
@@ -93,7 +93,7 @@ func (d *loginRewardStatusDao) FindByLoginRewardModelName(LoginRewardModelName s
 func (d *loginRewardStatusDao) FindOrNilByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardStatus, error) {
 	entity := &loginReward.LoginRewardStatus{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Where("account_id = ?", AccountID).Find(entity)
-	if res.RecordNotFound() {
+	if res.RowsAffected == 0 {
 		return nil, nil
 	}
 	if err := res.Error; err != nil {
@@ -106,7 +106,7 @@ func (d *loginRewardStatusDao) FindOrNilByAccountID(AccountID int64, shardKey in
 func (d *loginRewardStatusDao) FindOrNilByAccountIDAndLoginRewardModelName(AccountID int64, LoginRewardModelName string, shardKey int) (*loginReward.LoginRewardStatus, error) {
 	entity := &loginReward.LoginRewardStatus{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Where("account_id = ?", AccountID).Where("login_reward_model_Name = ?", LoginRewardModelName).Find(entity)
-	if res.RecordNotFound() {
+	if res.RowsAffected == 0 {
 		return nil, nil
 	}
 	if err := res.Error; err != nil {
@@ -119,7 +119,7 @@ func (d *loginRewardStatusDao) FindOrNilByAccountIDAndLoginRewardModelName(Accou
 func (d *loginRewardStatusDao) FindOrNilByID(ID int64, shardKey int) (*loginReward.LoginRewardStatus, error) {
 	entity := &loginReward.LoginRewardStatus{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Where("id = ?", ID).Find(entity)
-	if res.RecordNotFound() {
+	if res.RowsAffected == 0 {
 		return nil, nil
 	}
 	if err := res.Error; err != nil {
@@ -132,7 +132,7 @@ func (d *loginRewardStatusDao) FindOrNilByID(ID int64, shardKey int) (*loginRewa
 func (d *loginRewardStatusDao) FindOrNilByLoginRewardModelName(LoginRewardModelName string, shardKey int) (*loginReward.LoginRewardStatus, error) {
 	entity := &loginReward.LoginRewardStatus{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Where("login_reward_model_Name = ?", LoginRewardModelName).Find(entity)
-	if res.RecordNotFound() {
+	if res.RowsAffected == 0 {
 		return nil, nil
 	}
 	if err := res.Error; err != nil {
@@ -142,7 +142,7 @@ func (d *loginRewardStatusDao) FindOrNilByLoginRewardModelName(LoginRewardModelN
 	return entity, nil
 }
 
-func (d *loginRewardStatusDao) List(limit int64, shardKey int) (*loginReward.LoginRewardStatuses, error) {
+func (d *loginRewardStatusDao) List(limit int, shardKey int) (*loginReward.LoginRewardStatuses, error) {
 	entity := &loginReward.LoginRewardStatuses{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Limit(limit).Find(entity)
 	if err := res.Error; err != nil {
@@ -182,7 +182,7 @@ func (d *loginRewardStatusDao) ListByLoginRewardModelName(LoginRewardModelName s
 	return entity, nil
 }
 
-func (d *loginRewardStatusDao) Update(entity *loginReward.LoginRewardStatus, shardKey int, tx *gorm.DB) (*loginReward.LoginRewardStatus, error) {
+func (d *loginRewardStatusDao) Save(entity *loginReward.LoginRewardStatus, shardKey int, tx *gorm.DB) (*loginReward.LoginRewardStatus, error) {
 	var conn *gorm.DB
 	if tx != nil {
 		conn = tx
@@ -190,7 +190,7 @@ func (d *loginRewardStatusDao) Update(entity *loginReward.LoginRewardStatus, sha
 		conn = d.ShardConn.Shards[shardKey].WriteConn
 	}
 
-	res := conn.Model(&loginReward.LoginRewardStatus{}).Where("id = ?", entity.ID).Update(entity)
+	res := conn.Model(&loginReward.LoginRewardStatus{}).Where("id = ?", entity.ID).Save(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}

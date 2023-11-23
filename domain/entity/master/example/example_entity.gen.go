@@ -19,3 +19,7 @@ type Example struct {
 
 	UpdatedAt time.Time `json:"updated_at" gorm:"autoUpdateTime"`
 }
+
+func (e *Example) TableName() string {
+	return "example"
+}

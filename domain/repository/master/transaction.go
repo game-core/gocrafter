@@ -2,7 +2,7 @@
 package master
 
 import (
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type TransactionRepository interface {

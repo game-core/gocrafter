@@ -44,6 +44,10 @@ type {{.Name}} struct {
 	{{$field.Name}} {{$field.TypeWithPointer}} ` + "`json:\"{{$field.Json}}\"{{if eq $field.Name \"CreatedAt\"}} gorm:\"autoCreateTime\"{{else if eq $field.Name \"UpdatedAt\"}} gorm:\"autoUpdateTime\"{{end}}`" + `
 {{end}}
 }
+
+func (e *{{.Name}}) TableName() string {
+	return "{{.SnakeName}}"
+}
 `
 
 func generateEntity(yamlFile string, outputBaseDir string) error {
@@ -82,11 +86,13 @@ func generateTemplate(structInfo *StructInfo, outputFile *os.File) error {
 
 	if err := tmpl.ExecuteTemplate(outputFile, "structTemplate", struct {
 		Name       string
+		SnakeName  string
 		PluralName string
 		Package    string
 		Fields     map[string]StructField
 	}{
 		Name:       structInfo.Name,
+		SnakeName:  transform.UpperCamelToSnake(structInfo.Name),
 		PluralName: transform.SingularToPlural(structInfo.Name),
 		Package:    structInfo.Package,
 		Fields:     structInfo.Fields,

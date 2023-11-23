@@ -7,7 +7,7 @@ import (
 
 	"github.com/game-core/gocrafter/batch/di"
 	batchLog "github.com/game-core/gocrafter/log"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+	_ "gorm.io/driver/mysql"
 )
 
 func main() {

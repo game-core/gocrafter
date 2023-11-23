@@ -9,7 +9,7 @@ import (
 
 	item "github.com/game-core/gocrafter/domain/entity/user/item"
 	gomock "github.com/golang/mock/gomock"
-	gorm "github.com/jinzhu/gorm"
+	gorm "gorm.io/gorm"
 )
 
 // MockItemBoxRepository is a mock of ItemBoxRepository interface.
@@ -185,7 +185,7 @@ func (mr *MockItemBoxRepositoryMockRecorder) FindOrNilByItemName(ItemName, shard
 }
 
 // List mocks base method.
-func (m *MockItemBoxRepository) List(limit int64, shardKey int) (*item.ItemBoxs, error) {
+func (m *MockItemBoxRepository) List(limit, shardKey int) (*item.ItemBoxs, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", limit, shardKey)
 	ret0, _ := ret[0].(*item.ItemBoxs)
@@ -244,17 +244,17 @@ func (mr *MockItemBoxRepositoryMockRecorder) ListByItemName(ItemName, shardKey i
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListByItemName", reflect.TypeOf((*MockItemBoxRepository)(nil).ListByItemName), ItemName, shardKey)
 }
 
-// Update mocks base method.
-func (m *MockItemBoxRepository) Update(entity *item.ItemBox, shardKey int, tx *gorm.DB) (*item.ItemBox, error) {
+// Save mocks base method.
+func (m *MockItemBoxRepository) Save(entity *item.ItemBox, shardKey int, tx *gorm.DB) (*item.ItemBox, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Update", entity, shardKey, tx)
+	ret := m.ctrl.Call(m, "Save", entity, shardKey, tx)
 	ret0, _ := ret[0].(*item.ItemBox)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// Update indicates an expected call of Update.
-func (mr *MockItemBoxRepositoryMockRecorder) Update(entity, shardKey, tx interface{}) *gomock.Call {
+// Save indicates an expected call of Save.
+func (mr *MockItemBoxRepositoryMockRecorder) Save(entity, shardKey, tx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockItemBoxRepository)(nil).Update), entity, shardKey, tx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockItemBoxRepository)(nil).Save), entity, shardKey, tx)
 }

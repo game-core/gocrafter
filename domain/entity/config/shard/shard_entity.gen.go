@@ -19,3 +19,7 @@ type Shard struct {
 
 	UpdatedAt time.Time `json:"updated_at" gorm:"autoUpdateTime"`
 }
+
+func (e *Shard) TableName() string {
+	return "shard"
+}

@@ -1,7 +1,7 @@
 package master
 
 import (
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/game-core/gocrafter/config/database"
 	repository "github.com/game-core/gocrafter/domain/repository/master"

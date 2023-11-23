@@ -1,7 +1,7 @@
 package loginReward
 
 import (
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/game-core/gocrafter/config/database"
 	"github.com/game-core/gocrafter/domain/entity/user/loginReward"
@@ -93,7 +93,7 @@ func (d *loginRewardReceiveStepDao) FindByLoginRewardStatusID(LoginRewardStatusI
 func (d *loginRewardReceiveStepDao) FindOrNilByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error) {
 	entity := &loginReward.LoginRewardReceiveStep{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Where("user_id = ?", AccountID).Find(entity)
-	if res.RecordNotFound() {
+	if res.RowsAffected == 0 {
 		return nil, nil
 	}
 	if err := res.Error; err != nil {
@@ -106,7 +106,7 @@ func (d *loginRewardReceiveStepDao) FindOrNilByAccountID(AccountID int64, shardK
 func (d *loginRewardReceiveStepDao) FindOrNilByAccountIDAndLoginRewardStatusID(AccountID int64, LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error) {
 	entity := &loginReward.LoginRewardReceiveStep{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Where("user_id = ?", AccountID).Where("login_reward_model_id = ?", LoginRewardStatusID).Find(entity)
-	if res.RecordNotFound() {
+	if res.RowsAffected == 0 {
 		return nil, nil
 	}
 	if err := res.Error; err != nil {
@@ -119,7 +119,7 @@ func (d *loginRewardReceiveStepDao) FindOrNilByAccountIDAndLoginRewardStatusID(A
 func (d *loginRewardReceiveStepDao) FindOrNilByID(ID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error) {
 	entity := &loginReward.LoginRewardReceiveStep{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Where("id = ?", ID).Find(entity)
-	if res.RecordNotFound() {
+	if res.RowsAffected == 0 {
 		return nil, nil
 	}
 	if err := res.Error; err != nil {
@@ -132,7 +132,7 @@ func (d *loginRewardReceiveStepDao) FindOrNilByID(ID int64, shardKey int) (*logi
 func (d *loginRewardReceiveStepDao) FindOrNilByLoginRewardStatusID(LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error) {
 	entity := &loginReward.LoginRewardReceiveStep{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Where("login_reward_model_id = ?", LoginRewardStatusID).Find(entity)
-	if res.RecordNotFound() {
+	if res.RowsAffected == 0 {
 		return nil, nil
 	}
 	if err := res.Error; err != nil {
@@ -142,7 +142,7 @@ func (d *loginRewardReceiveStepDao) FindOrNilByLoginRewardStatusID(LoginRewardSt
 	return entity, nil
 }
 
-func (d *loginRewardReceiveStepDao) List(limit int64, shardKey int) (*loginReward.LoginRewardReceiveSteps, error) {
+func (d *loginRewardReceiveStepDao) List(limit int, shardKey int) (*loginReward.LoginRewardReceiveSteps, error) {
 	entity := &loginReward.LoginRewardReceiveSteps{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Limit(limit).Find(entity)
 	if err := res.Error; err != nil {
@@ -182,7 +182,7 @@ func (d *loginRewardReceiveStepDao) ListByLoginRewardStatusID(LoginRewardStatusI
 	return entity, nil
 }
 
-func (d *loginRewardReceiveStepDao) Update(entity *loginReward.LoginRewardReceiveStep, shardKey int, tx *gorm.DB) (*loginReward.LoginRewardReceiveStep, error) {
+func (d *loginRewardReceiveStepDao) Save(entity *loginReward.LoginRewardReceiveStep, shardKey int, tx *gorm.DB) (*loginReward.LoginRewardReceiveStep, error) {
 	var conn *gorm.DB
 	if tx != nil {
 		conn = tx
@@ -190,7 +190,7 @@ func (d *loginRewardReceiveStepDao) Update(entity *loginReward.LoginRewardReceiv
 		conn = d.ShardConn.Shards[shardKey].WriteConn
 	}
 
-	res := conn.Model(&loginReward.LoginRewardReceiveStep{}).Where("id = ?", entity.ID).Update(entity)
+	res := conn.Model(&loginReward.LoginRewardReceiveStep{}).Where("id = ?", entity.ID).Save(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}

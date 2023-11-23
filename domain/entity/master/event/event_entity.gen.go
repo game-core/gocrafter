@@ -25,3 +25,7 @@ type Event struct {
 
 	UpdatedAt time.Time `json:"updated_at" gorm:"autoUpdateTime"`
 }
+
+func (e *Event) TableName() string {
+	return "event"
+}

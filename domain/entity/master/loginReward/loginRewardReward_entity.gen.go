@@ -21,3 +21,7 @@ type LoginRewardReward struct {
 
 	UpdatedAt time.Time `json:"updated_at" gorm:"autoUpdateTime"`
 }
+
+func (e *LoginRewardReward) TableName() string {
+	return "login_reward_reward"
+}

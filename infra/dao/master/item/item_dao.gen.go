@@ -3,8 +3,8 @@ package item
 import (
 	"fmt"
 
-	"github.com/jinzhu/gorm"
 	"github.com/patrickmn/go-cache"
+	"gorm.io/gorm"
 
 	dbChashe "github.com/game-core/gocrafter/config/cashe"
 	"github.com/game-core/gocrafter/config/database"
@@ -106,7 +106,7 @@ func (d *itemDao) FindOrNilByID(ID int64) (*item.Item, error) {
 
 	entity := &item.Item{}
 	res := d.Read.Where("id = ?", ID).Find(entity)
-	if res.RecordNotFound() {
+	if res.RowsAffected == 0 {
 		return nil, nil
 	}
 	if err := res.Error; err != nil {
@@ -128,7 +128,7 @@ func (d *itemDao) FindOrNilByName(Name string) (*item.Item, error) {
 
 	entity := &item.Item{}
 	res := d.Read.Where("name = ?", Name).Find(entity)
-	if res.RecordNotFound() {
+	if res.RowsAffected == 0 {
 		return nil, nil
 	}
 	if err := res.Error; err != nil {
@@ -140,7 +140,7 @@ func (d *itemDao) FindOrNilByName(Name string) (*item.Item, error) {
 	return entity, nil
 }
 
-func (d *itemDao) List(limit int64) (*item.Items, error) {
+func (d *itemDao) List(limit int) (*item.Items, error) {
 	cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("item", "List", ""))
 	if found {
 		if cachedEntity, ok := cachedResult.(*item.Items); ok {
@@ -178,7 +178,7 @@ func (d *itemDao) ListByName(Name string) (*item.Items, error) {
 	return entity, nil
 }
 
-func (d *itemDao) Update(entity *item.Item, tx *gorm.DB) (*item.Item, error) {
+func (d *itemDao) Save(entity *item.Item, tx *gorm.DB) (*item.Item, error) {
 	var conn *gorm.DB
 	if tx != nil {
 		conn = tx
@@ -186,7 +186,7 @@ func (d *itemDao) Update(entity *item.Item, tx *gorm.DB) (*item.Item, error) {
 		conn = d.Write
 	}
 
-	res := conn.Model(&item.Item{}).Where("id = ?", entity.ID).Update(entity)
+	res := conn.Model(&item.Item{}).Where("id = ?", entity.ID).Save(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
