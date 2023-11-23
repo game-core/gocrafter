@@ -51,7 +51,7 @@ func TestShardService_ListShard(t *testing.T) {
 					m := shardRepository.NewMockShardRepository(ctrl)
 					m.EXPECT().
 						List(
-							int64(64),
+							64,
 						).
 						Return(
 							&shardEntity.Shards{
@@ -75,7 +75,7 @@ func TestShardService_ListShard(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						Update(
+						Save(
 							&shardEntity.Shard{
 								ID:        1,
 								ShardKey:  1,
@@ -144,7 +144,7 @@ func TestShardService_ListShard(t *testing.T) {
 					m := shardRepository.NewMockShardRepository(ctrl)
 					m.EXPECT().
 						List(
-							int64(64),
+							64,
 						).
 						Return(
 							&shardEntity.Shards{
@@ -168,11 +168,11 @@ func TestShardService_ListShard(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						Update(
+						Save(
 							&shardEntity.Shard{
 								ID:        2,
 								ShardKey:  2,
-								Name:      "name1",
+								Name:      "name2",
 								Count:     2,
 								CreatedAt: time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
 								UpdatedAt: time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
@@ -183,7 +183,7 @@ func TestShardService_ListShard(t *testing.T) {
 							&shardEntity.Shard{
 								ID:        2,
 								ShardKey:  2,
-								Name:      "name1",
+								Name:      "name2",
 								Count:     2,
 								CreatedAt: time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
 								UpdatedAt: time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
@@ -258,7 +258,7 @@ func TestShardService_ListShard(t *testing.T) {
 					m := shardRepository.NewMockShardRepository(ctrl)
 					m.EXPECT().
 						List(
-							int64(64),
+							64,
 						).
 						Return(
 							nil,
@@ -294,7 +294,7 @@ func TestShardService_ListShard(t *testing.T) {
 					m := shardRepository.NewMockShardRepository(ctrl)
 					m.EXPECT().
 						List(
-							int64(64),
+							64,
 						).
 						Return(
 							&shardEntity.Shards{},
@@ -330,7 +330,7 @@ func TestShardService_ListShard(t *testing.T) {
 					m := shardRepository.NewMockShardRepository(ctrl)
 					m.EXPECT().
 						List(
-							int64(64),
+							64,
 						).
 						Return(
 							&shardEntity.Shards{
@@ -354,7 +354,7 @@ func TestShardService_ListShard(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						Update(
+						Save(
 							&shardEntity.Shard{
 								ID:        1,
 								ShardKey:  1,
