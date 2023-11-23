@@ -79,6 +79,36 @@ func (mr *MockExampleRepositoryMockRecorder) FindByID(ID interface{}) *gomock.Ca
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByID", reflect.TypeOf((*MockExampleRepository)(nil).FindByID), ID)
 }
 
+// FindByIDAndName mocks base method.
+func (m *MockExampleRepository) FindByIDAndName(ID int64, Name string) (*example.Example, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindByIDAndName", ID, Name)
+	ret0, _ := ret[0].(*example.Example)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindByIDAndName indicates an expected call of FindByIDAndName.
+func (mr *MockExampleRepositoryMockRecorder) FindByIDAndName(ID, Name interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByIDAndName", reflect.TypeOf((*MockExampleRepository)(nil).FindByIDAndName), ID, Name)
+}
+
+// FindByName mocks base method.
+func (m *MockExampleRepository) FindByName(Name string) (*example.Example, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindByName", Name)
+	ret0, _ := ret[0].(*example.Example)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindByName indicates an expected call of FindByName.
+func (mr *MockExampleRepositoryMockRecorder) FindByName(Name interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByName", reflect.TypeOf((*MockExampleRepository)(nil).FindByName), Name)
+}
+
 // FindOrNilByID mocks base method.
 func (m *MockExampleRepository) FindOrNilByID(ID int64) (*example.Example, error) {
 	m.ctrl.T.Helper()

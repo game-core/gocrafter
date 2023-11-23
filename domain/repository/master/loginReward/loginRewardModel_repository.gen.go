@@ -11,15 +11,21 @@ type LoginRewardModelRepository interface {
 
 	Delete(entity *loginReward.LoginRewardModel, tx *gorm.DB) error
 
-	FindOrNilByEventID(EventID int64) (*loginReward.LoginRewardModel, error)
+	FindByEventID(EventID int64) (*loginReward.LoginRewardModel, error)
 
 	FindByID(ID int64) (*loginReward.LoginRewardModel, error)
+
+	FindByName(Name string) (*loginReward.LoginRewardModel, error)
+
+	FindByNameAndEventID(Name string, EventID int64) (*loginReward.LoginRewardModel, error)
+
+	FindOrNilByEventID(EventID int64) (*loginReward.LoginRewardModel, error)
+
+	FindOrNilByID(ID int64) (*loginReward.LoginRewardModel, error)
 
 	FindOrNilByName(Name string) (*loginReward.LoginRewardModel, error)
 
 	FindOrNilByNameAndEventID(Name string, EventID int64) (*loginReward.LoginRewardModel, error)
-
-	FindOrNilByID(ID int64) (*loginReward.LoginRewardModel, error)
 
 	List(limit int64) (*loginReward.LoginRewardModels, error)
 
