@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "This is a sample swagger server.",
-        "title": "Golang",
+        "title": "github.com/game-core/gocrafter",
         "contact": {},
         "license": {
             "name": "Apache 2.0",

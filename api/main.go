@@ -4,7 +4,7 @@ import (
 	"github.com/game-core/gocrafter/api/presentation/router"
 )
 
-// @title Golang
+// @title github.com/game-core/gocrafter
 // @version 1.0
 // @description This is a sample swagger server.
 // @license.name Apache 2.0

@@ -162,7 +162,7 @@ info:
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  title: Golang
+  title: github.com/game-core/gocrafter
   version: "1.0"
 paths:
   /account/check_account:

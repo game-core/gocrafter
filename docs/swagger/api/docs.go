@@ -467,7 +467,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8001",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "Golang",
+	Title:            "github.com/game-core/gocrafter",
 	Description:      "This is a sample swagger server.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
