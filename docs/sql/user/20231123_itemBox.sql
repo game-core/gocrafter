@@ -1,5 +1,5 @@
 
-CREATE TABLE item (
+CREATE TABLE item_box (
 
 	id BIGINT NOT NULL AUTO_INCREMENT,
 

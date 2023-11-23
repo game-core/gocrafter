@@ -11,11 +11,11 @@ type LoginRewardStatus struct {
 
 	ShardKey int `json:"shard_key"`
 
-	AccountID int64 `json:"user_id"`
+	AccountID int64 `json:"account_id"`
 
 	LoginRewardModelName string `json:"login_reward_model_Name"`
 
-	LastReceivedAt time.Time `json:"created_at"`
+	LastReceivedAt time.Time `json:"last_received_at"`
 
 	CreatedAt time.Time `json:"created_at" gorm:"autoCreateTime"`
 

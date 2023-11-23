@@ -11,9 +11,9 @@ type Event struct {
 
 	Name string `json:"name"`
 
-	ResetHour *int `json:"repeat_hour"`
+	ResetHour *int `json:"reset_hour"`
 
-	Repeat bool `json:"repeat"`
+	RepeatSetting bool `json:"repeat_setting"`
 
 	RepeatStartAt *time.Time `json:"repeat_start_at"`
 
@@ -21,7 +21,7 @@ type Event struct {
 
 	EndAt *time.Time `json:"end_at"`
 
-	UpdatedAt time.Time `json:"updated_at" gorm:"autoUpdateTime"`
-
 	CreatedAt time.Time `json:"created_at" gorm:"autoCreateTime"`
+
+	UpdatedAt time.Time `json:"updated_at" gorm:"autoUpdateTime"`
 }

@@ -16,8 +16,8 @@ structure:
     type: int
     nullable: true
     number: 3
-  Repeat:
-    name: repeat
+  RepeatSetting:
+    name: repeat_setting
     type: bool
     nullable: false
     number: 4

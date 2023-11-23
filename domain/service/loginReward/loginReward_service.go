@@ -3,7 +3,6 @@ package loginReward
 
 import (
 	"errors"
-	userRepository "github.com/game-core/gocrafter/domain/repository/user"
 	"log"
 	"time"
 
@@ -18,6 +17,7 @@ import (
 	masterLoginRewardEntity "github.com/game-core/gocrafter/domain/entity/master/loginReward"
 	userLoginRewardEntity "github.com/game-core/gocrafter/domain/entity/user/loginReward"
 	masterLoginRewardRepository "github.com/game-core/gocrafter/domain/repository/master/loginReward"
+	userRepository "github.com/game-core/gocrafter/domain/repository/user"
 	userLoginRewardRepository "github.com/game-core/gocrafter/domain/repository/user/loginReward"
 	eventService "github.com/game-core/gocrafter/domain/service/event"
 	itemService "github.com/game-core/gocrafter/domain/service/item"
@@ -81,7 +81,7 @@ func (s *loginRewardService) GetLoginRewardModel(req *request.GetLoginRewardMode
 			Event: response.Event{
 				ID:            e.ID,
 				Name:          e.Name,
-				Repeat:        e.Repeat,
+				RepeatSetting: e.RepeatSetting,
 				ResetHour:     e.ResetHour,
 				RepeatStartAt: e.RepeatStartAt,
 				StartAt:       e.StartAt,
@@ -158,11 +158,11 @@ func (s *loginRewardService) ReceiveLoginReward(req *request.ReceiveLoginReward,
 				ID:   lrm.ID,
 				Name: lrm.Name,
 				Event: response.Event{
-					ID:      e.ID,
-					Name:    e.Name,
-					Repeat:  e.Repeat,
-					StartAt: e.StartAt,
-					EndAt:   e.EndAt,
+					ID:            e.ID,
+					Name:          e.Name,
+					RepeatSetting: e.RepeatSetting,
+					StartAt:       e.StartAt,
+					EndAt:         e.EndAt,
 				},
 			},
 			Item: response.Item{
@@ -249,14 +249,14 @@ func (s *loginRewardService) getItem(e *masterEventEntity.Event, lrrs *masterLog
 
 // getDayCount 経過日数を取得
 func (s *loginRewardService) getDayCount(e *masterEventEntity.Event, now time.Time) int {
-	if e.Repeat {
+	if e.RepeatSetting {
 		return times.GetDayCount(*e.RepeatStartAt, now)
 	}
 
 	return times.GetDayCount(*e.StartAt, now)
 }
 
-// ステップナンバーの最大値を取得
+// getMaxStepNumber ステップナンバーの最大値を取得
 func (s *loginRewardService) getMaxStepNumber(lrrs *masterLoginRewardEntity.LoginRewardRewards) int {
 	var maxStepNumber int
 	for _, rewards := range *lrrs {
@@ -268,7 +268,7 @@ func (s *loginRewardService) getMaxStepNumber(lrrs *masterLoginRewardEntity.Logi
 	return maxStepNumber
 }
 
-// 最終受け取り日時(lastReceiveAt)が今日のリセット時間(RepeatHour)より後か
+// hasReceived 最終受け取り日時(lastReceiveAt)が今日のリセット時間(RepeatHour)より後か判定
 func (s *loginRewardService) hasReceived(lastReceiveAt, now time.Time, resetHour int) bool {
 	return lastReceiveAt.After(time.Date(now.Year(), now.Month(), now.Day(), resetHour, 0, 0, 0, now.Location()))
 }

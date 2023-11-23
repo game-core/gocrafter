@@ -13,5 +13,5 @@ type LoginRewardStatus struct {
 
 	Item Item `json:"item"`
 
-	LastReceivedAt time.Time `json:"created_at"`
+	LastReceivedAt time.Time `json:"last_received_at"`
 }

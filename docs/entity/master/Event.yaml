@@ -12,12 +12,12 @@ structure:
     nullable: false
     number: 2
   ResetHour:
-    name: repeat_hour
+    name: reset_hour
     type: int
     nullable: true
     number: 3
-  Repeat:
-    name: repeat
+  RepeatSetting:
+    name: repeat_setting
     type: bool
     nullable: false
     number: 4
@@ -45,7 +45,7 @@ structure:
     name: updated_at
     type: time.Time
     nullable: false
-    number: 8
+    number: 9
 primary:
   - ID
 index:

@@ -43,7 +43,7 @@ func (s *eventService) GetEventToEntity(name string, now time.Time) (*eventEntit
 	}
 
 	// 定常イベント開始前の場合
-	if e.Repeat && e.RepeatStartAt.After(now) {
+	if e.RepeatSetting && e.RepeatStartAt.After(now) {
 		return nil, errors.New("before the event period")
 	}
 

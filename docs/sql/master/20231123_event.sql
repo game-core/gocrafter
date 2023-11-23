@@ -5,9 +5,9 @@ CREATE TABLE event (
 
 	name VARCHAR(255) NOT NULL,
 
-	repeat_hour INT DEFAULT NULL,
+	reset_hour INT DEFAULT NULL,
 
-	repeat TINYINT NOT NULL,
+	repeat_setting TINYINT NOT NULL,
 
 	repeat_start_at TIMESTAMP DEFAULT NULL,
 
@@ -15,9 +15,9 @@ CREATE TABLE event (
 
 	end_at TIMESTAMP DEFAULT NULL,
 
-	updated_at TIMESTAMP NOT NULL,
-
 	created_at TIMESTAMP NOT NULL,
+
+	updated_at TIMESTAMP NOT NULL,
 
 	PRIMARY KEY(id),
 	INDEX(name)

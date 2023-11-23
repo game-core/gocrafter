@@ -1,5 +1,5 @@
 
-CREATE TABLE loginreward (
+CREATE TABLE login_reward_model (
 
 	id BIGINT NOT NULL AUTO_INCREMENT,
 

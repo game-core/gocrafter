@@ -104,7 +104,7 @@ func generateTemplate(structInfo *StructInfo, outputFile *os.File, primaryString
 		PrimaryKey string
 		IndexKey   string
 	}{
-		Table:      transform.CamelToSnake(structInfo.Package),
+		Table:      transform.UpperCamelToSnake(structInfo.Name),
 		Fields:     structInfo.Fields,
 		PrimaryKey: strings.Join(primaryStrings, ","),
 		IndexKey:   strings.Join(indexStrings, ","),

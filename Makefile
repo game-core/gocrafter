@@ -75,8 +75,11 @@ docker_swag_mock:
 	$(DOCKER_COMPOSE) exec swagger prism mock ./docs/swagger/api/swagger.yaml --port=8000 --host=0.0.0.0
 
 # ローカルDBに接続
-docker_db_user:
-	$(DOCKER_COMPOSE) exec db mysql --host=localhost --user=mysql_user --password=mysql_password gocrafter_user
+docker_db_user_1:
+	$(DOCKER_COMPOSE) exec db mysql --host=localhost --user=mysql_user --password=mysql_password gocrafter_user_1
+
+docker_db_user_2:
+	$(DOCKER_COMPOSE) exec db mysql --host=localhost --user=mysql_user --password=mysql_password gocrafter_user_2
 
 # ローカルDBに接続
 docker_db_master:

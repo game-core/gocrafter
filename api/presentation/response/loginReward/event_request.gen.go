@@ -13,7 +13,7 @@ type Event struct {
 
 	ResetHour *int `json:"repeat_hour"`
 
-	Repeat bool `json:"repeat"`
+	RepeatSetting bool `json:"repeat_setting"`
 
 	RepeatStartAt *time.Time `json:"repeat_start_at"`
 
