@@ -181,7 +181,7 @@ func (s *loginRewardService) receive(
 	req *request.ReceiveLoginReward,
 	tx *gorm.DB,
 ) (*userLoginRewardEntity.LoginRewardStatus, *masterItemEntity.Item, error) {
-	if lrs != nil && lrs.HasReceived(now, *e.ResetHour) {
+	if lrs != nil && !lrs.HasReceived(now, *e.ResetHour) {
 		return nil, nil, errors.New("already received")
 	}
 
@@ -235,6 +235,7 @@ func (s *loginRewardService) updateLoginRewardStatus(
 ) (*userLoginRewardEntity.LoginRewardStatus, error) {
 	if lrs != nil {
 		lrs.LastReceivedAt = now
+		lrs.LoginRewardModelName = loginRewardModelName
 		lrs, err := s.loginRewardStatusRepository.Save(lrs, shardKey, tx)
 		if err != nil {
 			return nil, err
