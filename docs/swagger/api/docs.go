@@ -136,97 +136,325 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/login_eward/receive_login_reward": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "LoginReward"
+                ],
+                "summary": "ログイン報酬受け取り",
+                "parameters": [
+                    {
+                        "description": "ログイン報酬受け取り",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github.com_game-core_gocrafter_api_presentation_request_loginReward.ReceiveLoginReward"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github.com_game-core_gocrafter_api_presentation_response_loginReward.ReceiveLoginReward"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/login_reward/get_login_reward_model": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "LoginReward"
+                ],
+                "summary": "ログイン報酬モデル取得",
+                "parameters": [
+                    {
+                        "description": "ログイン報酬モデル取得",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github.com_game-core_gocrafter_api_presentation_request_loginReward.GetLoginRewardModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github.com_game-core_gocrafter_api_presentation_response_loginReward.GetLoginRewardModel"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error.Error"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
         "account.Account": {
-            "pointer": "object",
+            "type": "object",
             "properties": {
                 "id": {
-                    "pointer": "integer"
+                    "type": "integer"
                 },
                 "name": {
-                    "pointer": "string"
+                    "type": "string"
                 },
                 "password": {
-                    "pointer": "string"
+                    "type": "string"
+                },
+                "shard_key": {
+                    "type": "integer"
                 },
                 "token": {
-                    "pointer": "string"
+                    "type": "string"
                 },
                 "uuid": {
-                    "pointer": "string"
+                    "type": "string"
                 }
             }
         },
         "error.Error": {
-            "pointer": "object",
+            "type": "object",
             "properties": {
                 "error_message": {
-                    "pointer": "string"
+                    "type": "string"
                 },
                 "status": {
-                    "pointer": "integer"
+                    "type": "integer"
                 }
             }
         },
         "github.com_game-core_gocrafter_api_presentation_request_account.CheckAccount": {
-            "pointer": "object",
+            "type": "object",
             "properties": {
+                "shard_key": {
+                    "type": "integer"
+                },
                 "uuid": {
-                    "pointer": "string"
+                    "type": "string"
                 }
             }
         },
         "github.com_game-core_gocrafter_api_presentation_request_account.LoginAccount": {
-            "pointer": "object",
+            "type": "object",
             "properties": {
                 "password": {
-                    "pointer": "string"
+                    "type": "string"
+                },
+                "shard_key": {
+                    "type": "integer"
                 },
                 "uuid": {
-                    "pointer": "string"
+                    "type": "string"
                 }
             }
         },
         "github.com_game-core_gocrafter_api_presentation_request_account.RegisterAccount": {
-            "pointer": "object",
+            "type": "object",
             "properties": {
                 "name": {
-                    "pointer": "string"
+                    "type": "string"
+                }
+            }
+        },
+        "github.com_game-core_gocrafter_api_presentation_request_loginReward.GetLoginRewardModel": {
+            "type": "object",
+            "properties": {
+                "login_reward_model_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "github.com_game-core_gocrafter_api_presentation_request_loginReward.ReceiveLoginReward": {
+            "type": "object",
+            "properties": {
+                "account_id": {
+                    "type": "integer"
+                },
+                "login_reward_model_name": {
+                    "type": "string"
+                },
+                "shard_key": {
+                    "type": "integer"
+                },
+                "uuid": {
+                    "type": "string"
                 }
             }
         },
         "github.com_game-core_gocrafter_api_presentation_response_account.CheckAccount": {
-            "pointer": "object",
+            "type": "object",
             "properties": {
                 "item": {
                     "$ref": "#/definitions/account.Account"
                 },
                 "status": {
-                    "pointer": "integer"
+                    "type": "integer"
                 }
             }
         },
         "github.com_game-core_gocrafter_api_presentation_response_account.LoginAccount": {
-            "pointer": "object",
+            "type": "object",
             "properties": {
                 "item": {
                     "$ref": "#/definitions/account.Account"
                 },
                 "status": {
-                    "pointer": "integer"
+                    "type": "integer"
                 }
             }
         },
         "github.com_game-core_gocrafter_api_presentation_response_account.RegisterAccount": {
-            "pointer": "object",
+            "type": "object",
             "properties": {
                 "item": {
                     "$ref": "#/definitions/account.Account"
                 },
                 "status": {
-                    "pointer": "integer"
+                    "type": "integer"
+                }
+            }
+        },
+        "github.com_game-core_gocrafter_api_presentation_response_loginReward.GetLoginRewardModel": {
+            "type": "object",
+            "properties": {
+                "login_reward_model": {
+                    "$ref": "#/definitions/loginReward.LoginRewardModel"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github.com_game-core_gocrafter_api_presentation_response_loginReward.ReceiveLoginReward": {
+            "type": "object",
+            "properties": {
+                "item": {
+                    "$ref": "#/definitions/loginReward.LoginRewardStatus"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "loginReward.Event": {
+            "type": "object",
+            "properties": {
+                "end_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "repeat_hour": {
+                    "type": "integer"
+                },
+                "repeat_setting": {
+                    "type": "boolean"
+                },
+                "repeat_start_at": {
+                    "type": "string"
+                },
+                "start_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "loginReward.Item": {
+            "type": "object",
+            "properties": {
+                "detail": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "loginReward.LoginRewardModel": {
+            "type": "object",
+            "properties": {
+                "event": {
+                    "$ref": "#/definitions/loginReward.Event"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "login_reward_reward": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/loginReward.LoginRewardReward"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "loginReward.LoginRewardReward": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "item_name": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "step_number": {
+                    "type": "integer"
+                }
+            }
+        },
+        "loginReward.LoginRewardStatus": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "item": {
+                    "$ref": "#/definitions/loginReward.Item"
+                },
+                "last_received_at": {
+                    "type": "string"
+                },
+                "login_reward_model": {
+                    "$ref": "#/definitions/loginReward.LoginRewardModel"
                 }
             }
         }
@@ -239,7 +467,7 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8001",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "Chat Connect",
+	Title:            "Golang",
 	Description:      "This is a sample swagger server.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
