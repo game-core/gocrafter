@@ -6,6 +6,7 @@ package loginReward
 
 import (
 	reflect "reflect"
+	time "time"
 
 	loginReward "github.com/game-core/gocrafter/api/presentation/request/loginReward"
 	loginReward0 "github.com/game-core/gocrafter/api/presentation/response/loginReward"
@@ -35,17 +36,32 @@ func (m *MockLoginRewardService) EXPECT() *MockLoginRewardServiceMockRecorder {
 	return m.recorder
 }
 
-// ReceiveLoginReward mocks base method.
-func (m *MockLoginRewardService) ReceiveLoginReward(req loginReward.ReceiveLoginReward) (*loginReward0.ReceiveLoginReward, error) {
+// GetLoginRewardModel mocks base method.
+func (m *MockLoginRewardService) GetLoginRewardModel(req *loginReward.GetLoginRewardModel, now time.Time) (*loginReward0.GetLoginRewardModel, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ReceiveLoginReward", req)
+	ret := m.ctrl.Call(m, "GetLoginRewardModel", req, now)
+	ret0, _ := ret[0].(*loginReward0.GetLoginRewardModel)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetLoginRewardModel indicates an expected call of GetLoginRewardModel.
+func (mr *MockLoginRewardServiceMockRecorder) GetLoginRewardModel(req, now interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetLoginRewardModel", reflect.TypeOf((*MockLoginRewardService)(nil).GetLoginRewardModel), req, now)
+}
+
+// ReceiveLoginReward mocks base method.
+func (m *MockLoginRewardService) ReceiveLoginReward(req *loginReward.ReceiveLoginReward, now time.Time) (*loginReward0.ReceiveLoginReward, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ReceiveLoginReward", req, now)
 	ret0, _ := ret[0].(*loginReward0.ReceiveLoginReward)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // ReceiveLoginReward indicates an expected call of ReceiveLoginReward.
-func (mr *MockLoginRewardServiceMockRecorder) ReceiveLoginReward(req interface{}) *gomock.Call {
+func (mr *MockLoginRewardServiceMockRecorder) ReceiveLoginReward(req, now interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReceiveLoginReward", reflect.TypeOf((*MockLoginRewardService)(nil).ReceiveLoginReward), req)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReceiveLoginReward", reflect.TypeOf((*MockLoginRewardService)(nil).ReceiveLoginReward), req, now)
 }

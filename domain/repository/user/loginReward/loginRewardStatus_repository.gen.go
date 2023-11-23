@@ -13,27 +13,27 @@ type LoginRewardStatusRepository interface {
 
 	FindByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardStatus, error)
 
-	FindByAccountIDAndLoginRewardModelID(AccountID int64, LoginRewardModelID int64, shardKey int) (*loginReward.LoginRewardStatus, error)
+	FindByAccountIDAndLoginRewardModelName(AccountID int64, LoginRewardModelName string, shardKey int) (*loginReward.LoginRewardStatus, error)
 
 	FindByID(ID int64, shardKey int) (*loginReward.LoginRewardStatus, error)
 
-	FindByLoginRewardModelID(LoginRewardModelID int64, shardKey int) (*loginReward.LoginRewardStatus, error)
+	FindByLoginRewardModelName(LoginRewardModelName string, shardKey int) (*loginReward.LoginRewardStatus, error)
 
 	FindOrNilByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardStatus, error)
 
-	FindOrNilByAccountIDAndLoginRewardModelID(AccountID int64, LoginRewardModelID int64, shardKey int) (*loginReward.LoginRewardStatus, error)
+	FindOrNilByAccountIDAndLoginRewardModelName(AccountID int64, LoginRewardModelName string, shardKey int) (*loginReward.LoginRewardStatus, error)
 
 	FindOrNilByID(ID int64, shardKey int) (*loginReward.LoginRewardStatus, error)
 
-	FindOrNilByLoginRewardModelID(LoginRewardModelID int64, shardKey int) (*loginReward.LoginRewardStatus, error)
+	FindOrNilByLoginRewardModelName(LoginRewardModelName string, shardKey int) (*loginReward.LoginRewardStatus, error)
 
 	List(limit int64, shardKey int) (*loginReward.LoginRewardStatuses, error)
 
 	ListByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardStatuses, error)
 
-	ListByAccountIDAndLoginRewardModelID(AccountID int64, LoginRewardModelID int64, shardKey int) (*loginReward.LoginRewardStatuses, error)
+	ListByAccountIDAndLoginRewardModelName(AccountID int64, LoginRewardModelName string, shardKey int) (*loginReward.LoginRewardStatuses, error)
 
-	ListByLoginRewardModelID(LoginRewardModelID int64, shardKey int) (*loginReward.LoginRewardStatuses, error)
+	ListByLoginRewardModelName(LoginRewardModelName string, shardKey int) (*loginReward.LoginRewardStatuses, error)
 
 	Update(entity *loginReward.LoginRewardStatus, shardKey int, tx *gorm.DB) (*loginReward.LoginRewardStatus, error)
 }

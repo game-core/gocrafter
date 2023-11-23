@@ -9,5 +9,5 @@ type ReceiveLoginReward struct {
 
 	UUID string `json:"uuid"`
 
-	LoginRewardModelID int64 `json:"login_reward_model_id"`
+	LoginRewardModelName string `json:"login_reward_model_name"`
 }

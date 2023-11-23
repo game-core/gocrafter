@@ -6,6 +6,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/patrickmn/go-cache"
 
+	dbChashe "github.com/game-core/gocrafter/config/cashe"
 	"github.com/game-core/gocrafter/config/database"
 	"github.com/game-core/gocrafter/domain/entity/master/event"
 	eventRepository "github.com/game-core/gocrafter/domain/repository/master/event"
@@ -58,7 +59,7 @@ func (d *eventDao) Delete(entity *event.Event, tx *gorm.DB) error {
 }
 
 func (d *eventDao) FindByID(ID int64) (*event.Event, error) {
-	cachedResult, found := d.Cache.Get(cacheKey("FindByID", fmt.Sprintf("%d_", ID)))
+	cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("event", "FindByID", fmt.Sprintf("%d_", ID)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*event.Event); ok {
 			return cachedEntity, nil
@@ -71,13 +72,54 @@ func (d *eventDao) FindByID(ID int64) (*event.Event, error) {
 		return nil, err
 	}
 
-	d.Cache.Set(cacheKey("FindByID", fmt.Sprintf("%d_", ID)), entity, cache.DefaultExpiration)
+	d.Cache.Set(dbChashe.CreateCacheKey("event", "FindByID", fmt.Sprintf("%d_", ID)), entity, cache.DefaultExpiration)
+
+	return entity, nil
+}
+
+func (d *eventDao) FindByName(Name string) (*event.Event, error) {
+	cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("event", "FindByName", fmt.Sprintf("%s_", Name)))
+	if found {
+		if cachedEntity, ok := cachedResult.(*event.Event); ok {
+			return cachedEntity, nil
+		}
+	}
+
+	entity := &event.Event{}
+	res := d.Read.Where("name = ?", Name).Find(entity)
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	d.Cache.Set(dbChashe.CreateCacheKey("event", "FindByName", fmt.Sprintf("%s_", Name)), entity, cache.DefaultExpiration)
+
+	return entity, nil
+}
+
+func (d *eventDao) FindOrNilByID(ID int64) (*event.Event, error) {
+	cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("event", "FindOrNilByID", fmt.Sprintf("%d_", ID)))
+	if found {
+		if cachedEntity, ok := cachedResult.(*event.Event); ok {
+			return cachedEntity, nil
+		}
+	}
+
+	entity := &event.Event{}
+	res := d.Read.Where("id = ?", ID).Find(entity)
+	if res.RecordNotFound() {
+		return nil, nil
+	}
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	d.Cache.Set(dbChashe.CreateCacheKey("event", "FindByID", fmt.Sprintf("%d_", ID)), entity, cache.DefaultExpiration)
 
 	return entity, nil
 }
 
 func (d *eventDao) FindOrNilByName(Name string) (*event.Event, error) {
-	cachedResult, found := d.Cache.Get(cacheKey("FindByName", fmt.Sprintf("%s_", Name)))
+	cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("event", "FindOrNilByName", fmt.Sprintf("%s_", Name)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*event.Event); ok {
 			return cachedEntity, nil
@@ -93,35 +135,13 @@ func (d *eventDao) FindOrNilByName(Name string) (*event.Event, error) {
 		return nil, err
 	}
 
-	d.Cache.Set(cacheKey("FindByName", fmt.Sprintf("%s_", Name)), entity, cache.DefaultExpiration)
-
-	return entity, nil
-}
-
-func (d *eventDao) FindOrNilByID(ID int64) (*event.Event, error) {
-	cachedResult, found := d.Cache.Get(cacheKey("FindByID", fmt.Sprintf("%d_", ID)))
-	if found {
-		if cachedEntity, ok := cachedResult.(*event.Event); ok {
-			return cachedEntity, nil
-		}
-	}
-
-	entity := &event.Event{}
-	res := d.Read.Where("id = ?", ID).Find(entity)
-	if res.RecordNotFound() {
-		return nil, nil
-	}
-	if err := res.Error; err != nil {
-		return nil, err
-	}
-
-	d.Cache.Set(cacheKey("FindByID", fmt.Sprintf("%d_", ID)), entity, cache.DefaultExpiration)
+	d.Cache.Set(dbChashe.CreateCacheKey("event", "FindByName", fmt.Sprintf("%s_", Name)), entity, cache.DefaultExpiration)
 
 	return entity, nil
 }
 
 func (d *eventDao) List(limit int64) (*event.Events, error) {
-	cachedResult, found := d.Cache.Get(cacheKey("List", ""))
+	cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("event", "List", ""))
 	if found {
 		if cachedEntity, ok := cachedResult.(*event.Events); ok {
 			return cachedEntity, nil
@@ -134,13 +154,13 @@ func (d *eventDao) List(limit int64) (*event.Events, error) {
 		return nil, err
 	}
 
-	d.Cache.Set(cacheKey("List", ""), entity, cache.DefaultExpiration)
+	d.Cache.Set(dbChashe.CreateCacheKey("event", "List", ""), entity, cache.DefaultExpiration)
 
 	return entity, nil
 }
 
 func (d *eventDao) ListByName(Name string) (*event.Events, error) {
-	cachedResult, found := d.Cache.Get(cacheKey("ListByName", fmt.Sprintf("%s_", Name)))
+	cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("event", "ListByName", fmt.Sprintf("%s_", Name)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*event.Events); ok {
 			return cachedEntity, nil
@@ -153,7 +173,7 @@ func (d *eventDao) ListByName(Name string) (*event.Events, error) {
 		return nil, err
 	}
 
-	d.Cache.Set(cacheKey("ListByName", fmt.Sprintf("%s_", Name)), entity, cache.DefaultExpiration)
+	d.Cache.Set(dbChashe.CreateCacheKey("event", "ListByName", fmt.Sprintf("%s_", Name)), entity, cache.DefaultExpiration)
 
 	return entity, nil
 }
@@ -172,8 +192,4 @@ func (d *eventDao) Update(entity *event.Event, tx *gorm.DB) (*event.Event, error
 	}
 
 	return entity, nil
-}
-
-func cacheKey(method string, key string) string {
-	return fmt.Sprintf("event:%s:%s", method, key)
 }

@@ -11,7 +11,11 @@ type Event struct {
 
 	Name string `json:"name"`
 
+	ResetHour *int `json:"repeat_hour"`
+
 	Repeat bool `json:"repeat"`
+
+	RepeatStartAt *time.Time `json:"repeat_start_at"`
 
 	StartAt *time.Time `json:"start_at"`
 

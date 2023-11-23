@@ -4,6 +4,7 @@
 package di
 
 import (
+	shardDao "github.com/game-core/gocrafter/infra/dao/config/shard"
 	"github.com/google/wire"
 
 	"github.com/game-core/gocrafter/config/database"
@@ -11,11 +12,19 @@ import (
 	userDao "github.com/game-core/gocrafter/infra/dao/user"
 
 	accountController "github.com/game-core/gocrafter/api/presentation/controller/account"
+	loginRewardController "github.com/game-core/gocrafter/api/presentation/controller/loginReward"
 	accountMiddleware "github.com/game-core/gocrafter/api/presentation/middleware/account"
 	accountService "github.com/game-core/gocrafter/domain/service/account"
+	eventService "github.com/game-core/gocrafter/domain/service/event"
+	itemService "github.com/game-core/gocrafter/domain/service/item"
+	loginRewardService "github.com/game-core/gocrafter/domain/service/loginReward"
 	shardService "github.com/game-core/gocrafter/domain/service/shard"
-	shardDao "github.com/game-core/gocrafter/infra/dao/config/shard"
+	masterEventDao "github.com/game-core/gocrafter/infra/dao/master/event"
+	masterItemDao "github.com/game-core/gocrafter/infra/dao/master/item"
+	masterLoginRewardDao "github.com/game-core/gocrafter/infra/dao/master/loginReward"
 	accountDao "github.com/game-core/gocrafter/infra/dao/user/account"
+	userItemDao "github.com/game-core/gocrafter/infra/dao/user/item"
+	userLoginRewardDao "github.com/game-core/gocrafter/infra/dao/user/loginReward"
 )
 
 func InitializeAccountMiddleware() accountMiddleware.AccountMiddleware {
@@ -30,6 +39,15 @@ func InitializeAccountController() accountController.AccountController {
 	wire.Build(
 		accountController.NewAccountController,
 		InitializeAccountService,
+	)
+
+	return nil
+}
+
+func InitializeLoginRewardController() loginRewardController.LoginRewardController {
+	wire.Build(
+		loginRewardController.NewLoginRewardController,
+		InitializeLoginRewardService,
 	)
 
 	return nil
@@ -53,6 +71,43 @@ func InitializeShardService() shardService.ShardService {
 		shardService.NewShardService,
 		shardDao.NewShardDao,
 		configDao.NewTransactionDao,
+	)
+
+	return nil
+}
+
+func InitializeLoginRewardService() loginRewardService.LoginRewardService {
+	wire.Build(
+		database.NewDB,
+		loginRewardService.NewLoginRewardService,
+		userLoginRewardDao.NewLoginRewardStatusDao,
+		masterLoginRewardDao.NewLoginRewardRewardDao,
+		masterLoginRewardDao.NewLoginRewardModelDao,
+		userDao.NewTransactionDao,
+		InitializeEventService,
+		InitializeItemService,
+	)
+
+	return nil
+}
+
+func InitializeEventService() eventService.EventService {
+	wire.Build(
+		database.NewDB,
+		eventService.NewEventService,
+		masterEventDao.NewEventDao,
+	)
+
+	return nil
+}
+
+func InitializeItemService() itemService.ItemService {
+	wire.Build(
+		database.NewDB,
+		itemService.NewItemService,
+		masterItemDao.NewItemDao,
+		userItemDao.NewItemBoxDao,
+		userDao.NewTransactionDao,
 	)
 
 	return nil

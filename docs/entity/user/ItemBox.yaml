@@ -11,14 +11,14 @@ structure:
     type: int
     nullable: false
     number: 2
-  UserID:
-    name: item_id
+  AccountID:
+    name: account_id
     type: int64
     nullable: false
     number: 3
-  ItemID:
-    name: item_id
-    type: int64
+  ItemName:
+    name: item_name
+    type: string
     nullable: false
     number: 4
   Count:
@@ -39,6 +39,6 @@ structure:
 primary:
   - ID
 index:
-  - UserID
-  - ItemID
-  - UserID,ItemID
+  - AccountID
+  - ItemName
+  - AccountID,ItemName

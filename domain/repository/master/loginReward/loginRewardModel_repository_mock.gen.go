@@ -64,19 +64,19 @@ func (mr *MockLoginRewardModelRepositoryMockRecorder) Delete(entity, tx interfac
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockLoginRewardModelRepository)(nil).Delete), entity, tx)
 }
 
-// FindByEventID mocks base method.
-func (m *MockLoginRewardModelRepository) FindByEventID(EventID int64) (*loginReward.LoginRewardModel, error) {
+// FindByEventName mocks base method.
+func (m *MockLoginRewardModelRepository) FindByEventName(EventName string) (*loginReward.LoginRewardModel, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindByEventID", EventID)
+	ret := m.ctrl.Call(m, "FindByEventName", EventName)
 	ret0, _ := ret[0].(*loginReward.LoginRewardModel)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindByEventID indicates an expected call of FindByEventID.
-func (mr *MockLoginRewardModelRepositoryMockRecorder) FindByEventID(EventID interface{}) *gomock.Call {
+// FindByEventName indicates an expected call of FindByEventName.
+func (mr *MockLoginRewardModelRepositoryMockRecorder) FindByEventName(EventName interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByEventID", reflect.TypeOf((*MockLoginRewardModelRepository)(nil).FindByEventID), EventID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByEventName", reflect.TypeOf((*MockLoginRewardModelRepository)(nil).FindByEventName), EventName)
 }
 
 // FindByID mocks base method.
@@ -109,34 +109,34 @@ func (mr *MockLoginRewardModelRepositoryMockRecorder) FindByName(Name interface{
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByName", reflect.TypeOf((*MockLoginRewardModelRepository)(nil).FindByName), Name)
 }
 
-// FindByNameAndEventID mocks base method.
-func (m *MockLoginRewardModelRepository) FindByNameAndEventID(Name string, EventID int64) (*loginReward.LoginRewardModel, error) {
+// FindByNameAndEventName mocks base method.
+func (m *MockLoginRewardModelRepository) FindByNameAndEventName(Name, EventName string) (*loginReward.LoginRewardModel, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindByNameAndEventID", Name, EventID)
+	ret := m.ctrl.Call(m, "FindByNameAndEventName", Name, EventName)
 	ret0, _ := ret[0].(*loginReward.LoginRewardModel)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindByNameAndEventID indicates an expected call of FindByNameAndEventID.
-func (mr *MockLoginRewardModelRepositoryMockRecorder) FindByNameAndEventID(Name, EventID interface{}) *gomock.Call {
+// FindByNameAndEventName indicates an expected call of FindByNameAndEventName.
+func (mr *MockLoginRewardModelRepositoryMockRecorder) FindByNameAndEventName(Name, EventName interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByNameAndEventID", reflect.TypeOf((*MockLoginRewardModelRepository)(nil).FindByNameAndEventID), Name, EventID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByNameAndEventName", reflect.TypeOf((*MockLoginRewardModelRepository)(nil).FindByNameAndEventName), Name, EventName)
 }
 
-// FindOrNilByEventID mocks base method.
-func (m *MockLoginRewardModelRepository) FindOrNilByEventID(EventID int64) (*loginReward.LoginRewardModel, error) {
+// FindOrNilByEventName mocks base method.
+func (m *MockLoginRewardModelRepository) FindOrNilByEventName(EventName string) (*loginReward.LoginRewardModel, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindOrNilByEventID", EventID)
+	ret := m.ctrl.Call(m, "FindOrNilByEventName", EventName)
 	ret0, _ := ret[0].(*loginReward.LoginRewardModel)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindOrNilByEventID indicates an expected call of FindOrNilByEventID.
-func (mr *MockLoginRewardModelRepositoryMockRecorder) FindOrNilByEventID(EventID interface{}) *gomock.Call {
+// FindOrNilByEventName indicates an expected call of FindOrNilByEventName.
+func (mr *MockLoginRewardModelRepositoryMockRecorder) FindOrNilByEventName(EventName interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByEventID", reflect.TypeOf((*MockLoginRewardModelRepository)(nil).FindOrNilByEventID), EventID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByEventName", reflect.TypeOf((*MockLoginRewardModelRepository)(nil).FindOrNilByEventName), EventName)
 }
 
 // FindOrNilByID mocks base method.
@@ -169,19 +169,19 @@ func (mr *MockLoginRewardModelRepositoryMockRecorder) FindOrNilByName(Name inter
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByName", reflect.TypeOf((*MockLoginRewardModelRepository)(nil).FindOrNilByName), Name)
 }
 
-// FindOrNilByNameAndEventID mocks base method.
-func (m *MockLoginRewardModelRepository) FindOrNilByNameAndEventID(Name string, EventID int64) (*loginReward.LoginRewardModel, error) {
+// FindOrNilByNameAndEventName mocks base method.
+func (m *MockLoginRewardModelRepository) FindOrNilByNameAndEventName(Name, EventName string) (*loginReward.LoginRewardModel, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindOrNilByNameAndEventID", Name, EventID)
+	ret := m.ctrl.Call(m, "FindOrNilByNameAndEventName", Name, EventName)
 	ret0, _ := ret[0].(*loginReward.LoginRewardModel)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindOrNilByNameAndEventID indicates an expected call of FindOrNilByNameAndEventID.
-func (mr *MockLoginRewardModelRepositoryMockRecorder) FindOrNilByNameAndEventID(Name, EventID interface{}) *gomock.Call {
+// FindOrNilByNameAndEventName indicates an expected call of FindOrNilByNameAndEventName.
+func (mr *MockLoginRewardModelRepositoryMockRecorder) FindOrNilByNameAndEventName(Name, EventName interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByNameAndEventID", reflect.TypeOf((*MockLoginRewardModelRepository)(nil).FindOrNilByNameAndEventID), Name, EventID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByNameAndEventName", reflect.TypeOf((*MockLoginRewardModelRepository)(nil).FindOrNilByNameAndEventName), Name, EventName)
 }
 
 // List mocks base method.
@@ -199,19 +199,19 @@ func (mr *MockLoginRewardModelRepositoryMockRecorder) List(limit interface{}) *g
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockLoginRewardModelRepository)(nil).List), limit)
 }
 
-// ListByEventID mocks base method.
-func (m *MockLoginRewardModelRepository) ListByEventID(EventID int64) (*loginReward.LoginRewardModels, error) {
+// ListByEventName mocks base method.
+func (m *MockLoginRewardModelRepository) ListByEventName(EventName string) (*loginReward.LoginRewardModels, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListByEventID", EventID)
+	ret := m.ctrl.Call(m, "ListByEventName", EventName)
 	ret0, _ := ret[0].(*loginReward.LoginRewardModels)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// ListByEventID indicates an expected call of ListByEventID.
-func (mr *MockLoginRewardModelRepositoryMockRecorder) ListByEventID(EventID interface{}) *gomock.Call {
+// ListByEventName indicates an expected call of ListByEventName.
+func (mr *MockLoginRewardModelRepositoryMockRecorder) ListByEventName(EventName interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListByEventID", reflect.TypeOf((*MockLoginRewardModelRepository)(nil).ListByEventID), EventID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListByEventName", reflect.TypeOf((*MockLoginRewardModelRepository)(nil).ListByEventName), EventName)
 }
 
 // ListByName mocks base method.
@@ -229,19 +229,19 @@ func (mr *MockLoginRewardModelRepositoryMockRecorder) ListByName(Name interface{
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListByName", reflect.TypeOf((*MockLoginRewardModelRepository)(nil).ListByName), Name)
 }
 
-// ListByNameAndEventID mocks base method.
-func (m *MockLoginRewardModelRepository) ListByNameAndEventID(Name string, EventID int64) (*loginReward.LoginRewardModels, error) {
+// ListByNameAndEventName mocks base method.
+func (m *MockLoginRewardModelRepository) ListByNameAndEventName(Name, EventName string) (*loginReward.LoginRewardModels, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListByNameAndEventID", Name, EventID)
+	ret := m.ctrl.Call(m, "ListByNameAndEventName", Name, EventName)
 	ret0, _ := ret[0].(*loginReward.LoginRewardModels)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// ListByNameAndEventID indicates an expected call of ListByNameAndEventID.
-func (mr *MockLoginRewardModelRepositoryMockRecorder) ListByNameAndEventID(Name, EventID interface{}) *gomock.Call {
+// ListByNameAndEventName indicates an expected call of ListByNameAndEventName.
+func (mr *MockLoginRewardModelRepositoryMockRecorder) ListByNameAndEventName(Name, EventName interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListByNameAndEventID", reflect.TypeOf((*MockLoginRewardModelRepository)(nil).ListByNameAndEventID), Name, EventID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListByNameAndEventName", reflect.TypeOf((*MockLoginRewardModelRepository)(nil).ListByNameAndEventName), Name, EventName)
 }
 
 // Update mocks base method.

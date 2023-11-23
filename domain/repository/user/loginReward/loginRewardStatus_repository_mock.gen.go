@@ -79,19 +79,19 @@ func (mr *MockLoginRewardStatusRepositoryMockRecorder) FindByAccountID(AccountID
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByAccountID", reflect.TypeOf((*MockLoginRewardStatusRepository)(nil).FindByAccountID), AccountID, shardKey)
 }
 
-// FindByAccountIDAndLoginRewardModelID mocks base method.
-func (m *MockLoginRewardStatusRepository) FindByAccountIDAndLoginRewardModelID(AccountID, LoginRewardModelID int64, shardKey int) (*loginReward.LoginRewardStatus, error) {
+// FindByAccountIDAndLoginRewardModelName mocks base method.
+func (m *MockLoginRewardStatusRepository) FindByAccountIDAndLoginRewardModelName(AccountID int64, LoginRewardModelName string, shardKey int) (*loginReward.LoginRewardStatus, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindByAccountIDAndLoginRewardModelID", AccountID, LoginRewardModelID, shardKey)
+	ret := m.ctrl.Call(m, "FindByAccountIDAndLoginRewardModelName", AccountID, LoginRewardModelName, shardKey)
 	ret0, _ := ret[0].(*loginReward.LoginRewardStatus)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindByAccountIDAndLoginRewardModelID indicates an expected call of FindByAccountIDAndLoginRewardModelID.
-func (mr *MockLoginRewardStatusRepositoryMockRecorder) FindByAccountIDAndLoginRewardModelID(AccountID, LoginRewardModelID, shardKey interface{}) *gomock.Call {
+// FindByAccountIDAndLoginRewardModelName indicates an expected call of FindByAccountIDAndLoginRewardModelName.
+func (mr *MockLoginRewardStatusRepositoryMockRecorder) FindByAccountIDAndLoginRewardModelName(AccountID, LoginRewardModelName, shardKey interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByAccountIDAndLoginRewardModelID", reflect.TypeOf((*MockLoginRewardStatusRepository)(nil).FindByAccountIDAndLoginRewardModelID), AccountID, LoginRewardModelID, shardKey)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByAccountIDAndLoginRewardModelName", reflect.TypeOf((*MockLoginRewardStatusRepository)(nil).FindByAccountIDAndLoginRewardModelName), AccountID, LoginRewardModelName, shardKey)
 }
 
 // FindByID mocks base method.
@@ -109,19 +109,19 @@ func (mr *MockLoginRewardStatusRepositoryMockRecorder) FindByID(ID, shardKey int
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByID", reflect.TypeOf((*MockLoginRewardStatusRepository)(nil).FindByID), ID, shardKey)
 }
 
-// FindByLoginRewardModelID mocks base method.
-func (m *MockLoginRewardStatusRepository) FindByLoginRewardModelID(LoginRewardModelID int64, shardKey int) (*loginReward.LoginRewardStatus, error) {
+// FindByLoginRewardModelName mocks base method.
+func (m *MockLoginRewardStatusRepository) FindByLoginRewardModelName(LoginRewardModelName string, shardKey int) (*loginReward.LoginRewardStatus, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindByLoginRewardModelID", LoginRewardModelID, shardKey)
+	ret := m.ctrl.Call(m, "FindByLoginRewardModelName", LoginRewardModelName, shardKey)
 	ret0, _ := ret[0].(*loginReward.LoginRewardStatus)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindByLoginRewardModelID indicates an expected call of FindByLoginRewardModelID.
-func (mr *MockLoginRewardStatusRepositoryMockRecorder) FindByLoginRewardModelID(LoginRewardModelID, shardKey interface{}) *gomock.Call {
+// FindByLoginRewardModelName indicates an expected call of FindByLoginRewardModelName.
+func (mr *MockLoginRewardStatusRepositoryMockRecorder) FindByLoginRewardModelName(LoginRewardModelName, shardKey interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByLoginRewardModelID", reflect.TypeOf((*MockLoginRewardStatusRepository)(nil).FindByLoginRewardModelID), LoginRewardModelID, shardKey)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByLoginRewardModelName", reflect.TypeOf((*MockLoginRewardStatusRepository)(nil).FindByLoginRewardModelName), LoginRewardModelName, shardKey)
 }
 
 // FindOrNilByAccountID mocks base method.
@@ -139,19 +139,19 @@ func (mr *MockLoginRewardStatusRepositoryMockRecorder) FindOrNilByAccountID(Acco
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByAccountID", reflect.TypeOf((*MockLoginRewardStatusRepository)(nil).FindOrNilByAccountID), AccountID, shardKey)
 }
 
-// FindOrNilByAccountIDAndLoginRewardModelID mocks base method.
-func (m *MockLoginRewardStatusRepository) FindOrNilByAccountIDAndLoginRewardModelID(AccountID, LoginRewardModelID int64, shardKey int) (*loginReward.LoginRewardStatus, error) {
+// FindOrNilByAccountIDAndLoginRewardModelName mocks base method.
+func (m *MockLoginRewardStatusRepository) FindOrNilByAccountIDAndLoginRewardModelName(AccountID int64, LoginRewardModelName string, shardKey int) (*loginReward.LoginRewardStatus, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindOrNilByAccountIDAndLoginRewardModelID", AccountID, LoginRewardModelID, shardKey)
+	ret := m.ctrl.Call(m, "FindOrNilByAccountIDAndLoginRewardModelName", AccountID, LoginRewardModelName, shardKey)
 	ret0, _ := ret[0].(*loginReward.LoginRewardStatus)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindOrNilByAccountIDAndLoginRewardModelID indicates an expected call of FindOrNilByAccountIDAndLoginRewardModelID.
-func (mr *MockLoginRewardStatusRepositoryMockRecorder) FindOrNilByAccountIDAndLoginRewardModelID(AccountID, LoginRewardModelID, shardKey interface{}) *gomock.Call {
+// FindOrNilByAccountIDAndLoginRewardModelName indicates an expected call of FindOrNilByAccountIDAndLoginRewardModelName.
+func (mr *MockLoginRewardStatusRepositoryMockRecorder) FindOrNilByAccountIDAndLoginRewardModelName(AccountID, LoginRewardModelName, shardKey interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByAccountIDAndLoginRewardModelID", reflect.TypeOf((*MockLoginRewardStatusRepository)(nil).FindOrNilByAccountIDAndLoginRewardModelID), AccountID, LoginRewardModelID, shardKey)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByAccountIDAndLoginRewardModelName", reflect.TypeOf((*MockLoginRewardStatusRepository)(nil).FindOrNilByAccountIDAndLoginRewardModelName), AccountID, LoginRewardModelName, shardKey)
 }
 
 // FindOrNilByID mocks base method.
@@ -169,19 +169,19 @@ func (mr *MockLoginRewardStatusRepositoryMockRecorder) FindOrNilByID(ID, shardKe
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByID", reflect.TypeOf((*MockLoginRewardStatusRepository)(nil).FindOrNilByID), ID, shardKey)
 }
 
-// FindOrNilByLoginRewardModelID mocks base method.
-func (m *MockLoginRewardStatusRepository) FindOrNilByLoginRewardModelID(LoginRewardModelID int64, shardKey int) (*loginReward.LoginRewardStatus, error) {
+// FindOrNilByLoginRewardModelName mocks base method.
+func (m *MockLoginRewardStatusRepository) FindOrNilByLoginRewardModelName(LoginRewardModelName string, shardKey int) (*loginReward.LoginRewardStatus, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindOrNilByLoginRewardModelID", LoginRewardModelID, shardKey)
+	ret := m.ctrl.Call(m, "FindOrNilByLoginRewardModelName", LoginRewardModelName, shardKey)
 	ret0, _ := ret[0].(*loginReward.LoginRewardStatus)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindOrNilByLoginRewardModelID indicates an expected call of FindOrNilByLoginRewardModelID.
-func (mr *MockLoginRewardStatusRepositoryMockRecorder) FindOrNilByLoginRewardModelID(LoginRewardModelID, shardKey interface{}) *gomock.Call {
+// FindOrNilByLoginRewardModelName indicates an expected call of FindOrNilByLoginRewardModelName.
+func (mr *MockLoginRewardStatusRepositoryMockRecorder) FindOrNilByLoginRewardModelName(LoginRewardModelName, shardKey interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByLoginRewardModelID", reflect.TypeOf((*MockLoginRewardStatusRepository)(nil).FindOrNilByLoginRewardModelID), LoginRewardModelID, shardKey)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByLoginRewardModelName", reflect.TypeOf((*MockLoginRewardStatusRepository)(nil).FindOrNilByLoginRewardModelName), LoginRewardModelName, shardKey)
 }
 
 // List mocks base method.
@@ -214,34 +214,34 @@ func (mr *MockLoginRewardStatusRepositoryMockRecorder) ListByAccountID(AccountID
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListByAccountID", reflect.TypeOf((*MockLoginRewardStatusRepository)(nil).ListByAccountID), AccountID, shardKey)
 }
 
-// ListByAccountIDAndLoginRewardModelID mocks base method.
-func (m *MockLoginRewardStatusRepository) ListByAccountIDAndLoginRewardModelID(AccountID, LoginRewardModelID int64, shardKey int) (*loginReward.LoginRewardStatuses, error) {
+// ListByAccountIDAndLoginRewardModelName mocks base method.
+func (m *MockLoginRewardStatusRepository) ListByAccountIDAndLoginRewardModelName(AccountID int64, LoginRewardModelName string, shardKey int) (*loginReward.LoginRewardStatuses, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListByAccountIDAndLoginRewardModelID", AccountID, LoginRewardModelID, shardKey)
+	ret := m.ctrl.Call(m, "ListByAccountIDAndLoginRewardModelName", AccountID, LoginRewardModelName, shardKey)
 	ret0, _ := ret[0].(*loginReward.LoginRewardStatuses)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// ListByAccountIDAndLoginRewardModelID indicates an expected call of ListByAccountIDAndLoginRewardModelID.
-func (mr *MockLoginRewardStatusRepositoryMockRecorder) ListByAccountIDAndLoginRewardModelID(AccountID, LoginRewardModelID, shardKey interface{}) *gomock.Call {
+// ListByAccountIDAndLoginRewardModelName indicates an expected call of ListByAccountIDAndLoginRewardModelName.
+func (mr *MockLoginRewardStatusRepositoryMockRecorder) ListByAccountIDAndLoginRewardModelName(AccountID, LoginRewardModelName, shardKey interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListByAccountIDAndLoginRewardModelID", reflect.TypeOf((*MockLoginRewardStatusRepository)(nil).ListByAccountIDAndLoginRewardModelID), AccountID, LoginRewardModelID, shardKey)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListByAccountIDAndLoginRewardModelName", reflect.TypeOf((*MockLoginRewardStatusRepository)(nil).ListByAccountIDAndLoginRewardModelName), AccountID, LoginRewardModelName, shardKey)
 }
 
-// ListByLoginRewardModelID mocks base method.
-func (m *MockLoginRewardStatusRepository) ListByLoginRewardModelID(LoginRewardModelID int64, shardKey int) (*loginReward.LoginRewardStatuses, error) {
+// ListByLoginRewardModelName mocks base method.
+func (m *MockLoginRewardStatusRepository) ListByLoginRewardModelName(LoginRewardModelName string, shardKey int) (*loginReward.LoginRewardStatuses, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ListByLoginRewardModelID", LoginRewardModelID, shardKey)
+	ret := m.ctrl.Call(m, "ListByLoginRewardModelName", LoginRewardModelName, shardKey)
 	ret0, _ := ret[0].(*loginReward.LoginRewardStatuses)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// ListByLoginRewardModelID indicates an expected call of ListByLoginRewardModelID.
-func (mr *MockLoginRewardStatusRepositoryMockRecorder) ListByLoginRewardModelID(LoginRewardModelID, shardKey interface{}) *gomock.Call {
+// ListByLoginRewardModelName indicates an expected call of ListByLoginRewardModelName.
+func (mr *MockLoginRewardStatusRepositoryMockRecorder) ListByLoginRewardModelName(LoginRewardModelName, shardKey interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListByLoginRewardModelID", reflect.TypeOf((*MockLoginRewardStatusRepository)(nil).ListByLoginRewardModelID), LoginRewardModelID, shardKey)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ListByLoginRewardModelName", reflect.TypeOf((*MockLoginRewardStatusRepository)(nil).ListByLoginRewardModelName), LoginRewardModelName, shardKey)
 }
 
 // Update mocks base method.

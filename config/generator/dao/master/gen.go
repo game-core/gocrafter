@@ -43,6 +43,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/patrickmn/go-cache"
 	
+	dbChashe "github.com/game-core/gocrafter/config/cashe"
 	"github.com/game-core/gocrafter/config/database"
 	"github.com/game-core/gocrafter/domain/entity/master/{{.Package}}"
 	{{.Package}}Repository "github.com/game-core/gocrafter/domain/repository/master/{{.Package}}"
@@ -65,10 +66,6 @@ func New{{.Name}}Dao(conn *database.SqlHandler) {{.Package}}Repository.{{.Name}}
 {{range $methodName, $MethodType := .Methods }}
 	{{.Script}}
 {{end}}
-
-func cacheKey(method string, key string) string {
-	return fmt.Sprintf("{{.Table}}:%s:%s", method, key)
-}
 `
 
 func generateDao(yamlFilePath string, outputBaseDir string) error {
@@ -152,7 +149,7 @@ func generateMethods(structInfo *StructInfo) map[string]MethodType {
 	// FindOrNilByIndex
 	for _, index := range structInfo.Index {
 		indexFields := strings.Split(index, ",")
-		methods[fmt.Sprintf("FindBy%s", strings.Join(indexFields, "And"))] = MethodType{
+		methods[fmt.Sprintf("FindOrNilBy%s", strings.Join(indexFields, "And"))] = MethodType{
 			Script: generateFindOrNilByIndex(structInfo, indexFields),
 		}
 	}
@@ -191,7 +188,7 @@ func generateMethods(structInfo *StructInfo) map[string]MethodType {
 func generateFindByID(structInfo *StructInfo) string {
 	return fmt.Sprintf(
 		`func (d *%sDao) FindByID(ID int64) (*%s.%s, error) {
-			cachedResult, found := d.Cache.Get(cacheKey("FindByID", %s))
+			cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("%s", "FindByID", %s))
 			if found {
 				if cachedEntity, ok := cachedResult.(*%s.%s); ok {
 					return cachedEntity, nil
@@ -204,7 +201,7 @@ func generateFindByID(structInfo *StructInfo) string {
 				return nil, err
 			}
 		
-			d.Cache.Set(cacheKey("FindByID", %s), entity, cache.DefaultExpiration)
+			d.Cache.Set(dbChashe.CreateCacheKey("%s", "FindByID", %s), entity, cache.DefaultExpiration)
 
 			return entity, nil
 		}
@@ -212,11 +209,13 @@ func generateFindByID(structInfo *StructInfo) string {
 		transform.KebabToCamel(structInfo.Name),
 		structInfo.Package,
 		structInfo.Name,
+		transform.UpperCamelToSnake(structInfo.Name),
 		`fmt.Sprintf("%d_", ID)`,
 		structInfo.Package,
 		structInfo.Name,
 		structInfo.Package,
 		structInfo.Name,
+		transform.UpperCamelToSnake(structInfo.Name),
 		`fmt.Sprintf("%d_", ID)`,
 	)
 }
@@ -224,7 +223,7 @@ func generateFindByID(structInfo *StructInfo) string {
 func generateFindOrNilByID(structInfo *StructInfo) string {
 	return fmt.Sprintf(
 		`func (d *%sDao) FindOrNilByID(ID int64) (*%s.%s, error) {
-			cachedResult, found := d.Cache.Get(cacheKey("FindByID", %s))
+			cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("%s", "FindOrNilByID", %s))
 			if found {
 				if cachedEntity, ok := cachedResult.(*%s.%s); ok {
 					return cachedEntity, nil
@@ -240,7 +239,7 @@ func generateFindOrNilByID(structInfo *StructInfo) string {
 				return nil, err
 			}
 		
-			d.Cache.Set(cacheKey("FindByID", %s), entity, cache.DefaultExpiration)
+			d.Cache.Set(dbChashe.CreateCacheKey("%s", "FindByID", %s), entity, cache.DefaultExpiration)
 
 			return entity, nil
 		}
@@ -248,11 +247,13 @@ func generateFindOrNilByID(structInfo *StructInfo) string {
 		transform.KebabToCamel(structInfo.Name),
 		structInfo.Package,
 		structInfo.Name,
+		transform.UpperCamelToSnake(structInfo.Name),
 		`fmt.Sprintf("%d_", ID)`,
 		structInfo.Package,
 		structInfo.Name,
 		structInfo.Package,
 		structInfo.Name,
+		transform.UpperCamelToSnake(structInfo.Name),
 		`fmt.Sprintf("%d_", ID)`,
 	)
 }
@@ -280,7 +281,7 @@ func generateFindByIndex(structInfo *StructInfo, indexFields []string) string {
 
 	return fmt.Sprintf(
 		`func (d *%sDao) FindBy%s(%s) (*%s.%s, error) {
-			cachedResult, found := d.Cache.Get(cacheKey("FindBy%s", %s))
+			cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("%s", "FindBy%s", %s))
 			if found {
 				if cachedEntity, ok := cachedResult.(*%s.%s); ok {
 					return cachedEntity, nil
@@ -293,7 +294,7 @@ func generateFindByIndex(structInfo *StructInfo, indexFields []string) string {
 				return nil, err
 			}
 
-			d.Cache.Set(cacheKey("FindBy%s", %s), entity, cache.DefaultExpiration)
+			d.Cache.Set(dbChashe.CreateCacheKey("%s", "FindBy%s", %s), entity, cache.DefaultExpiration)
 		
 			return entity, nil
 		}
@@ -303,6 +304,7 @@ func generateFindByIndex(structInfo *StructInfo, indexFields []string) string {
 		strings.Join(paramStrings, ","),
 		structInfo.Package,
 		structInfo.Name,
+		transform.UpperCamelToSnake(structInfo.Name),
 		strings.Join(indexFields, "And"),
 		fmt.Sprintf(`fmt.Sprintf("%s", %s)`, strings.Join(sprints, ""), strings.Join(sprintParams, ",")),
 		structInfo.Package,
@@ -310,6 +312,7 @@ func generateFindByIndex(structInfo *StructInfo, indexFields []string) string {
 		structInfo.Package,
 		structInfo.Name,
 		strings.Join(scriptStrings, "."),
+		transform.UpperCamelToSnake(structInfo.Name),
 		strings.Join(indexFields, "And"),
 		fmt.Sprintf(`fmt.Sprintf("%s", %s)`, strings.Join(sprints, ""), strings.Join(sprintParams, ",")),
 	)
@@ -338,7 +341,7 @@ func generateFindOrNilByIndex(structInfo *StructInfo, indexFields []string) stri
 
 	return fmt.Sprintf(
 		`func (d *%sDao) FindOrNilBy%s(%s) (*%s.%s, error) {
-			cachedResult, found := d.Cache.Get(cacheKey("FindBy%s", %s))
+			cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("%s", "FindOrNilBy%s", %s))
 			if found {
 				if cachedEntity, ok := cachedResult.(*%s.%s); ok {
 					return cachedEntity, nil
@@ -354,7 +357,7 @@ func generateFindOrNilByIndex(structInfo *StructInfo, indexFields []string) stri
 				return nil, err
 			}
 
-			d.Cache.Set(cacheKey("FindBy%s", %s), entity, cache.DefaultExpiration)
+			d.Cache.Set(dbChashe.CreateCacheKey("%s", "FindBy%s", %s), entity, cache.DefaultExpiration)
 		
 			return entity, nil
 		}
@@ -364,6 +367,7 @@ func generateFindOrNilByIndex(structInfo *StructInfo, indexFields []string) stri
 		strings.Join(paramStrings, ","),
 		structInfo.Package,
 		structInfo.Name,
+		transform.UpperCamelToSnake(structInfo.Name),
 		strings.Join(indexFields, "And"),
 		fmt.Sprintf(`fmt.Sprintf("%s", %s)`, strings.Join(sprints, ""), strings.Join(sprintParams, ",")),
 		structInfo.Package,
@@ -371,6 +375,7 @@ func generateFindOrNilByIndex(structInfo *StructInfo, indexFields []string) stri
 		structInfo.Package,
 		structInfo.Name,
 		strings.Join(scriptStrings, "."),
+		transform.UpperCamelToSnake(structInfo.Name),
 		strings.Join(indexFields, "And"),
 		fmt.Sprintf(`fmt.Sprintf("%s", %s)`, strings.Join(sprints, ""), strings.Join(sprintParams, ",")),
 	)
@@ -379,7 +384,7 @@ func generateFindOrNilByIndex(structInfo *StructInfo, indexFields []string) stri
 func generateList(structInfo *StructInfo) string {
 	return fmt.Sprintf(
 		`func (d *%sDao) List(limit int64) (*%s.%s, error) {
-			cachedResult, found := d.Cache.Get(cacheKey("List", ""))
+			cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("%s", "List", ""))
 			if found {
 				if cachedEntity, ok := cachedResult.(*%s.%s); ok {
 					return cachedEntity, nil
@@ -392,7 +397,7 @@ func generateList(structInfo *StructInfo) string {
 				return nil, err
 			}
 
-			d.Cache.Set(cacheKey("List", ""), entity, cache.DefaultExpiration)
+			d.Cache.Set(dbChashe.CreateCacheKey("%s", "List", ""), entity, cache.DefaultExpiration)
 		
 			return entity, nil
 		}
@@ -400,10 +405,12 @@ func generateList(structInfo *StructInfo) string {
 		transform.KebabToCamel(structInfo.Name),
 		structInfo.Package,
 		transform.SingularToPlural(structInfo.Name),
+		transform.UpperCamelToSnake(structInfo.Name),
 		structInfo.Package,
 		transform.SingularToPlural(structInfo.Name),
 		structInfo.Package,
 		transform.SingularToPlural(structInfo.Name),
+		transform.UpperCamelToSnake(structInfo.Name),
 	)
 }
 
@@ -430,7 +437,7 @@ func generateListByIndex(structInfo *StructInfo, indexFields []string) string {
 
 	return fmt.Sprintf(
 		`func (d *%sDao) ListBy%s(%s) (*%s.%s, error) {
-			cachedResult, found := d.Cache.Get(cacheKey("ListBy%s", %s))
+			cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("%s", "ListBy%s", %s))
 			if found {
 				if cachedEntity, ok := cachedResult.(*%s.%s); ok {
 					return cachedEntity, nil
@@ -443,7 +450,7 @@ func generateListByIndex(structInfo *StructInfo, indexFields []string) string {
 				return nil, err
 			}
 
-			d.Cache.Set(cacheKey("ListBy%s", %s), entity, cache.DefaultExpiration)
+			d.Cache.Set(dbChashe.CreateCacheKey("%s", "ListBy%s", %s), entity, cache.DefaultExpiration)
 		
 			return entity, nil
 		}
@@ -453,6 +460,7 @@ func generateListByIndex(structInfo *StructInfo, indexFields []string) string {
 		strings.Join(paramStrings, ","),
 		structInfo.Package,
 		transform.SingularToPlural(structInfo.Name),
+		transform.UpperCamelToSnake(structInfo.Name),
 		strings.Join(indexFields, "And"),
 		fmt.Sprintf(`fmt.Sprintf("%s", %s)`, strings.Join(sprints, ""), strings.Join(sprintParams, ",")),
 		structInfo.Package,
@@ -460,6 +468,7 @@ func generateListByIndex(structInfo *StructInfo, indexFields []string) string {
 		structInfo.Package,
 		transform.SingularToPlural(structInfo.Name),
 		strings.Join(scriptStrings, "."),
+		transform.UpperCamelToSnake(structInfo.Name),
 		strings.Join(indexFields, "And"),
 		fmt.Sprintf(`fmt.Sprintf("%s", %s)`, strings.Join(sprints, ""), strings.Join(sprintParams, ",")),
 	)

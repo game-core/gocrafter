@@ -2,6 +2,7 @@ package transform
 
 import (
 	"strings"
+	"unicode"
 )
 
 // CamelToSnake キャメルケースからスネークケースに変換
@@ -11,9 +12,31 @@ func CamelToSnake(s string) string {
 	}), "_"))
 }
 
+// UpperCamelToSnake アッパーキャメルケースからスネークケースに変換
+func UpperCamelToSnake(s string) string {
+	var result strings.Builder
+	result.WriteRune(unicode.ToLower(rune(s[0])))
+
+	for _, char := range s[1:] {
+		if unicode.IsUpper(char) {
+			result.WriteRune('_')
+			result.WriteRune(unicode.ToLower(char))
+		} else {
+			result.WriteRune(char)
+		}
+	}
+
+	return result.String()
+}
+
 // KebabToCamel ケバブケースからキャメルケースに変換
 func KebabToCamel(s string) string {
 	return strings.ToLower(s[:1]) + s[1:]
+}
+
+// KebabToSnake ケバブケースからスネークケースに変換
+func KebabToSnake(s string) string {
+	return strings.Replace(strings.ToLower(s), "-", "_", -1)
 }
 
 // SingularToPlural 単数形から複数形に変換

@@ -8,4 +8,6 @@ type LoginRewardModel struct {
 	Name string `json:"name"`
 
 	Event Event `json:"event"`
+
+	LoginRewardRewards LoginRewardRewards `json:"login_reward_reward"`
 }

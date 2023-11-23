@@ -50,6 +50,26 @@ func (d *itemBoxDao) Delete(entity *item.ItemBox, shardKey int, tx *gorm.DB) err
 	return nil
 }
 
+func (d *itemBoxDao) FindByAccountID(AccountID int64, shardKey int) (*item.ItemBox, error) {
+	entity := &item.ItemBox{}
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("account_id = ?", AccountID).Find(entity)
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	return entity, nil
+}
+
+func (d *itemBoxDao) FindByAccountIDAndItemName(AccountID int64, ItemName string, shardKey int) (*item.ItemBox, error) {
+	entity := &item.ItemBox{}
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("account_id = ?", AccountID).Where("item_name = ?", ItemName).Find(entity)
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	return entity, nil
+}
+
 func (d *itemBoxDao) FindByID(ID int64, shardKey int) (*item.ItemBox, error) {
 	entity := &item.ItemBox{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Where("id = ?", ID).Find(entity)
@@ -60,9 +80,9 @@ func (d *itemBoxDao) FindByID(ID int64, shardKey int) (*item.ItemBox, error) {
 	return entity, nil
 }
 
-func (d *itemBoxDao) FindByItemID(ItemID int64, shardKey int) (*item.ItemBox, error) {
+func (d *itemBoxDao) FindByItemName(ItemName string, shardKey int) (*item.ItemBox, error) {
 	entity := &item.ItemBox{}
-	res := d.ShardConn.Shards[shardKey].ReadConn.Where("item_id = ?", ItemID).Find(entity)
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("item_name = ?", ItemName).Find(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -70,9 +90,12 @@ func (d *itemBoxDao) FindByItemID(ItemID int64, shardKey int) (*item.ItemBox, er
 	return entity, nil
 }
 
-func (d *itemBoxDao) FindByUserID(UserID int64, shardKey int) (*item.ItemBox, error) {
+func (d *itemBoxDao) FindOrNilByAccountID(AccountID int64, shardKey int) (*item.ItemBox, error) {
 	entity := &item.ItemBox{}
-	res := d.ShardConn.Shards[shardKey].ReadConn.Where("item_id = ?", UserID).Find(entity)
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("account_id = ?", AccountID).Find(entity)
+	if res.RecordNotFound() {
+		return nil, nil
+	}
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -80,9 +103,12 @@ func (d *itemBoxDao) FindByUserID(UserID int64, shardKey int) (*item.ItemBox, er
 	return entity, nil
 }
 
-func (d *itemBoxDao) FindByUserIDAndItemID(UserID int64, ItemID int64, shardKey int) (*item.ItemBox, error) {
+func (d *itemBoxDao) FindOrNilByAccountIDAndItemName(AccountID int64, ItemName string, shardKey int) (*item.ItemBox, error) {
 	entity := &item.ItemBox{}
-	res := d.ShardConn.Shards[shardKey].ReadConn.Where("item_id = ?", UserID).Where("item_id = ?", ItemID).Find(entity)
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("account_id = ?", AccountID).Where("item_name = ?", ItemName).Find(entity)
+	if res.RecordNotFound() {
+		return nil, nil
+	}
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -103,35 +129,9 @@ func (d *itemBoxDao) FindOrNilByID(ID int64, shardKey int) (*item.ItemBox, error
 	return entity, nil
 }
 
-func (d *itemBoxDao) FindOrNilByItemID(ItemID int64, shardKey int) (*item.ItemBox, error) {
+func (d *itemBoxDao) FindOrNilByItemName(ItemName string, shardKey int) (*item.ItemBox, error) {
 	entity := &item.ItemBox{}
-	res := d.ShardConn.Shards[shardKey].ReadConn.Where("item_id = ?", ItemID).Find(entity)
-	if res.RecordNotFound() {
-		return nil, nil
-	}
-	if err := res.Error; err != nil {
-		return nil, err
-	}
-
-	return entity, nil
-}
-
-func (d *itemBoxDao) FindOrNilByUserID(UserID int64, shardKey int) (*item.ItemBox, error) {
-	entity := &item.ItemBox{}
-	res := d.ShardConn.Shards[shardKey].ReadConn.Where("item_id = ?", UserID).Find(entity)
-	if res.RecordNotFound() {
-		return nil, nil
-	}
-	if err := res.Error; err != nil {
-		return nil, err
-	}
-
-	return entity, nil
-}
-
-func (d *itemBoxDao) FindOrNilByUserIDAndItemID(UserID int64, ItemID int64, shardKey int) (*item.ItemBox, error) {
-	entity := &item.ItemBox{}
-	res := d.ShardConn.Shards[shardKey].ReadConn.Where("item_id = ?", UserID).Where("item_id = ?", ItemID).Find(entity)
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("item_name = ?", ItemName).Find(entity)
 	if res.RecordNotFound() {
 		return nil, nil
 	}
@@ -152,9 +152,9 @@ func (d *itemBoxDao) List(limit int64, shardKey int) (*item.ItemBoxs, error) {
 	return entity, nil
 }
 
-func (d *itemBoxDao) ListByItemID(ItemID int64, shardKey int) (*item.ItemBoxs, error) {
+func (d *itemBoxDao) ListByAccountID(AccountID int64, shardKey int) (*item.ItemBoxs, error) {
 	entity := &item.ItemBoxs{}
-	res := d.ShardConn.Shards[shardKey].ReadConn.Where("item_id = ?", ItemID).Find(entity)
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("account_id = ?", AccountID).Find(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -162,9 +162,9 @@ func (d *itemBoxDao) ListByItemID(ItemID int64, shardKey int) (*item.ItemBoxs, e
 	return entity, nil
 }
 
-func (d *itemBoxDao) ListByUserID(UserID int64, shardKey int) (*item.ItemBoxs, error) {
+func (d *itemBoxDao) ListByAccountIDAndItemName(AccountID int64, ItemName string, shardKey int) (*item.ItemBoxs, error) {
 	entity := &item.ItemBoxs{}
-	res := d.ShardConn.Shards[shardKey].ReadConn.Where("item_id = ?", UserID).Find(entity)
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("account_id = ?", AccountID).Where("item_name = ?", ItemName).Find(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -172,9 +172,9 @@ func (d *itemBoxDao) ListByUserID(UserID int64, shardKey int) (*item.ItemBoxs, e
 	return entity, nil
 }
 
-func (d *itemBoxDao) ListByUserIDAndItemID(UserID int64, ItemID int64, shardKey int) (*item.ItemBoxs, error) {
+func (d *itemBoxDao) ListByItemName(ItemName string, shardKey int) (*item.ItemBoxs, error) {
 	entity := &item.ItemBoxs{}
-	res := d.ShardConn.Shards[shardKey].ReadConn.Where("item_id = ?", UserID).Where("item_id = ?", ItemID).Find(entity)
+	res := d.ShardConn.Shards[shardKey].ReadConn.Where("item_name = ?", ItemName).Find(entity)
 	if err := res.Error; err != nil {
 		return nil, err
 	}

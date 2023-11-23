@@ -16,9 +16,9 @@ structure:
     type: int64
     nullable: false
     number: 3
-  LoginRewardModelID:
-    name: login_reward_model_id
-    type: int64
+  LoginRewardModelName:
+    name: login_reward_model_Name
+    type: string
     nullable: false
     number: 4
   LastReceivedAt:
@@ -40,5 +40,5 @@ primary:
   - ID
 index:
   - AccountID
-  - LoginRewardModelID
-  - AccountID,LoginRewardModelID
+  - LoginRewardModelName
+  - AccountID,LoginRewardModelName

@@ -8,14 +8,23 @@ package di
 
 import (
 	account2 "github.com/game-core/gocrafter/api/presentation/controller/account"
+	"github.com/game-core/gocrafter/api/presentation/controller/loginReward"
 	"github.com/game-core/gocrafter/api/presentation/middleware/account"
 	"github.com/game-core/gocrafter/config/database"
 	account3 "github.com/game-core/gocrafter/domain/service/account"
+	"github.com/game-core/gocrafter/domain/service/event"
+	"github.com/game-core/gocrafter/domain/service/item"
+	loginReward2 "github.com/game-core/gocrafter/domain/service/loginReward"
 	"github.com/game-core/gocrafter/domain/service/shard"
 	"github.com/game-core/gocrafter/infra/dao/config"
 	shard2 "github.com/game-core/gocrafter/infra/dao/config/shard"
+	event2 "github.com/game-core/gocrafter/infra/dao/master/event"
+	item2 "github.com/game-core/gocrafter/infra/dao/master/item"
+	loginReward4 "github.com/game-core/gocrafter/infra/dao/master/loginReward"
 	"github.com/game-core/gocrafter/infra/dao/user"
 	account4 "github.com/game-core/gocrafter/infra/dao/user/account"
+	item3 "github.com/game-core/gocrafter/infra/dao/user/item"
+	loginReward3 "github.com/game-core/gocrafter/infra/dao/user/loginReward"
 )
 
 // Injectors from wire.go:
@@ -29,6 +38,12 @@ func InitializeAccountController() account2.AccountController {
 	accountService := InitializeAccountService()
 	accountController := account2.NewAccountController(accountService)
 	return accountController
+}
+
+func InitializeLoginRewardController() loginReward.LoginRewardController {
+	loginRewardService := InitializeLoginRewardService()
+	loginRewardController := loginReward.NewLoginRewardController(loginRewardService)
+	return loginRewardController
 }
 
 func InitializeAccountService() account3.AccountService {
@@ -46,4 +61,32 @@ func InitializeShardService() shard.ShardService {
 	transactionRepository := config.NewTransactionDao(sqlHandler)
 	shardService := shard.NewShardService(shardRepository, transactionRepository)
 	return shardService
+}
+
+func InitializeLoginRewardService() loginReward2.LoginRewardService {
+	sqlHandler := database.NewDB()
+	transactionRepository := user.NewTransactionDao(sqlHandler)
+	loginRewardStatusRepository := loginReward3.NewLoginRewardStatusDao(sqlHandler)
+	loginRewardModelRepository := loginReward4.NewLoginRewardModelDao(sqlHandler)
+	loginRewardRewardRepository := loginReward4.NewLoginRewardRewardDao(sqlHandler)
+	eventService := InitializeEventService()
+	itemService := InitializeItemService()
+	loginRewardService := loginReward2.NewLoginRewardService(transactionRepository, loginRewardStatusRepository, loginRewardModelRepository, loginRewardRewardRepository, eventService, itemService)
+	return loginRewardService
+}
+
+func InitializeEventService() event.EventService {
+	sqlHandler := database.NewDB()
+	eventRepository := event2.NewEventDao(sqlHandler)
+	eventService := event.NewEventService(eventRepository)
+	return eventService
+}
+
+func InitializeItemService() item.ItemService {
+	sqlHandler := database.NewDB()
+	transactionRepository := user.NewTransactionDao(sqlHandler)
+	itemRepository := item2.NewItemDao(sqlHandler)
+	itemBoxRepository := item3.NewItemBoxDao(sqlHandler)
+	itemService := item.NewItemService(transactionRepository, itemRepository, itemBoxRepository)
+	return itemService
 }

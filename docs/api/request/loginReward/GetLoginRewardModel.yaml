@@ -1,0 +1,8 @@
+name: GetLoginRewardModel
+package: loginReward
+structure:
+  LoginRewardModelName:
+    name: login_reward_model_name
+    type: string
+    nullable: false
+    number: 1

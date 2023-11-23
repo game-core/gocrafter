@@ -11,7 +11,7 @@ type LoginRewardModel struct {
 
 	Name string `json:"name"`
 
-	EventID int64 `json:"event_id"`
+	EventName string `json:"event_name"`
 
 	CreatedAt time.Time `json:"created_at" gorm:"autoCreateTime"`
 

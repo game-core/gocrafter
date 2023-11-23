@@ -11,29 +11,29 @@ type ItemBoxRepository interface {
 
 	Delete(entity *item.ItemBox, shardKey int, tx *gorm.DB) error
 
+	FindByAccountID(AccountID int64, shardKey int) (*item.ItemBox, error)
+
+	FindByAccountIDAndItemName(AccountID int64, ItemName string, shardKey int) (*item.ItemBox, error)
+
 	FindByID(ID int64, shardKey int) (*item.ItemBox, error)
 
-	FindByItemID(ItemID int64, shardKey int) (*item.ItemBox, error)
+	FindByItemName(ItemName string, shardKey int) (*item.ItemBox, error)
 
-	FindByUserID(UserID int64, shardKey int) (*item.ItemBox, error)
+	FindOrNilByAccountID(AccountID int64, shardKey int) (*item.ItemBox, error)
 
-	FindByUserIDAndItemID(UserID int64, ItemID int64, shardKey int) (*item.ItemBox, error)
+	FindOrNilByAccountIDAndItemName(AccountID int64, ItemName string, shardKey int) (*item.ItemBox, error)
 
 	FindOrNilByID(ID int64, shardKey int) (*item.ItemBox, error)
 
-	FindOrNilByItemID(ItemID int64, shardKey int) (*item.ItemBox, error)
-
-	FindOrNilByUserID(UserID int64, shardKey int) (*item.ItemBox, error)
-
-	FindOrNilByUserIDAndItemID(UserID int64, ItemID int64, shardKey int) (*item.ItemBox, error)
+	FindOrNilByItemName(ItemName string, shardKey int) (*item.ItemBox, error)
 
 	List(limit int64, shardKey int) (*item.ItemBoxs, error)
 
-	ListByItemID(ItemID int64, shardKey int) (*item.ItemBoxs, error)
+	ListByAccountID(AccountID int64, shardKey int) (*item.ItemBoxs, error)
 
-	ListByUserID(UserID int64, shardKey int) (*item.ItemBoxs, error)
+	ListByAccountIDAndItemName(AccountID int64, ItemName string, shardKey int) (*item.ItemBoxs, error)
 
-	ListByUserIDAndItemID(UserID int64, ItemID int64, shardKey int) (*item.ItemBoxs, error)
+	ListByItemName(ItemName string, shardKey int) (*item.ItemBoxs, error)
 
 	Update(entity *item.ItemBox, shardKey int, tx *gorm.DB) (*item.ItemBox, error)
 }

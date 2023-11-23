@@ -11,9 +11,9 @@ type ItemBox struct {
 
 	ShardKey int `json:"shard_key"`
 
-	UserID int64 `json:"item_id"`
+	AccountID int64 `json:"account_id"`
 
-	ItemID int64 `json:"item_id"`
+	ItemName string `json:"item_name"`
 
 	Count int `json:"count"`
 

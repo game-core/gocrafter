@@ -1,0 +1,18 @@
+name: ReceiveItemInBox
+package: item
+structure:
+  ShardKey:
+    name: shard_key
+    type: int
+    nullable: false
+    number: 1
+  AccountID:
+    name: account_id
+    type: int64
+    nullable: false
+    number: 2
+  ItemName:
+    name: item_name
+    type: string
+    nullable: false
+    number: 3

@@ -11,9 +11,9 @@ structure:
     type: string
     nullable: false
     number: 2
-  EventID:
-    name: event_id
-    type: int64
+  EventName:
+    name: event_name
+    type: string
     nullable: false
     number: 3
   CreatedAt:
@@ -30,5 +30,5 @@ primary:
   - ID
 index:
   - Name
-  - EventID
-  - Name,EventID
+  - EventName
+  - Name,EventName

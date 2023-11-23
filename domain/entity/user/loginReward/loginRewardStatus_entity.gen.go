@@ -13,7 +13,7 @@ type LoginRewardStatus struct {
 
 	AccountID int64 `json:"user_id"`
 
-	LoginRewardModelID int64 `json:"login_reward_model_id"`
+	LoginRewardModelName string `json:"login_reward_model_Name"`
 
 	LastReceivedAt time.Time `json:"created_at"`
 

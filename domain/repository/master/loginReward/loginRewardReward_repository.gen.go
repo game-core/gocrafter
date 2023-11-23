@@ -13,31 +13,31 @@ type LoginRewardRewardRepository interface {
 
 	FindByID(ID int64) (*loginReward.LoginRewardReward, error)
 
-	FindByItemID(ItemID int64) (*loginReward.LoginRewardReward, error)
+	FindByItemName(ItemName string) (*loginReward.LoginRewardReward, error)
 
-	FindByLoginRewardID(LoginRewardID int64) (*loginReward.LoginRewardReward, error)
+	FindByLoginRewardModelName(LoginRewardModelName string) (*loginReward.LoginRewardReward, error)
 
-	FindByLoginRewardIDAndItemID(LoginRewardID int64, ItemID int64) (*loginReward.LoginRewardReward, error)
+	FindByLoginRewardModelNameAndItemName(LoginRewardModelName string, ItemName string) (*loginReward.LoginRewardReward, error)
 
 	FindByName(Name string) (*loginReward.LoginRewardReward, error)
 
 	FindOrNilByID(ID int64) (*loginReward.LoginRewardReward, error)
 
-	FindOrNilByItemID(ItemID int64) (*loginReward.LoginRewardReward, error)
+	FindOrNilByItemName(ItemName string) (*loginReward.LoginRewardReward, error)
 
-	FindOrNilByLoginRewardID(LoginRewardID int64) (*loginReward.LoginRewardReward, error)
+	FindOrNilByLoginRewardModelName(LoginRewardModelName string) (*loginReward.LoginRewardReward, error)
 
-	FindOrNilByLoginRewardIDAndItemID(LoginRewardID int64, ItemID int64) (*loginReward.LoginRewardReward, error)
+	FindOrNilByLoginRewardModelNameAndItemName(LoginRewardModelName string, ItemName string) (*loginReward.LoginRewardReward, error)
 
 	FindOrNilByName(Name string) (*loginReward.LoginRewardReward, error)
 
 	List(limit int64) (*loginReward.LoginRewardRewards, error)
 
-	ListByItemID(ItemID int64) (*loginReward.LoginRewardRewards, error)
+	ListByItemName(ItemName string) (*loginReward.LoginRewardRewards, error)
 
-	ListByLoginRewardID(LoginRewardID int64) (*loginReward.LoginRewardRewards, error)
+	ListByLoginRewardModelName(LoginRewardModelName string) (*loginReward.LoginRewardRewards, error)
 
-	ListByLoginRewardIDAndItemID(LoginRewardID int64, ItemID int64) (*loginReward.LoginRewardRewards, error)
+	ListByLoginRewardModelNameAndItemName(LoginRewardModelName string, ItemName string) (*loginReward.LoginRewardRewards, error)
 
 	ListByName(Name string) (*loginReward.LoginRewardRewards, error)
 

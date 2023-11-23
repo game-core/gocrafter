@@ -5,9 +5,9 @@ CREATE TABLE item (
 
 	shard_key INT NOT NULL,
 
-	item_id BIGINT NOT NULL,
+	account_id BIGINT NOT NULL,
 
-	item_id BIGINT NOT NULL,
+	item_name VARCHAR(255) NOT NULL,
 
 	count INT NOT NULL,
 
@@ -16,5 +16,5 @@ CREATE TABLE item (
 	updated_at TIMESTAMP NOT NULL,
 
 	PRIMARY KEY(id),
-	INDEX(item_id),INDEX(item_id)
+	INDEX(account_id),INDEX(item_name)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

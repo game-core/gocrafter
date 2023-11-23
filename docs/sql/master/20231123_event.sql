@@ -5,15 +5,19 @@ CREATE TABLE event (
 
 	name VARCHAR(255) NOT NULL,
 
+	repeat_hour INT DEFAULT NULL,
+
 	repeat TINYINT NOT NULL,
+
+	repeat_start_at TIMESTAMP DEFAULT NULL,
 
 	start_at TIMESTAMP DEFAULT NULL,
 
 	end_at TIMESTAMP DEFAULT NULL,
 
-	created_at TIMESTAMP NOT NULL,
-
 	updated_at TIMESTAMP NOT NULL,
+
+	created_at TIMESTAMP NOT NULL,
 
 	PRIMARY KEY(id),
 	INDEX(name)

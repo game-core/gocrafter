@@ -14,6 +14,7 @@ import (
 func Init() {
 	// di: wire ./api/di/wire.go
 	accountController := di.InitializeAccountController()
+	loginRewardController := di.InitializeLoginRewardController()
 	accountMiddleware := di.InitializeAccountMiddleware()
 
 	e := echo.New()
@@ -26,6 +27,7 @@ func Init() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
+	// アカウント関連
 	account := e.Group("/account")
 	account.POST("/register_account", accountController.RegisterAccount())
 	account.POST("/login_account", accountController.LoginAccount())
@@ -33,6 +35,11 @@ func Init() {
 	accountWithToken := e.Group("/account")
 	accountWithToken.Use(accountMiddleware.AccountMiddleware)
 	accountWithToken.POST("/check_account", accountController.CheckAccount())
+
+	// ログイン報酬関係
+	loginReward := e.Group("/login_reward")
+	loginReward.Use(accountMiddleware.AccountMiddleware)
+	loginReward.POST("/receive_login_reward", loginRewardController.ReceiveLoginReward())
 
 	e.Logger.Fatal(e.Start(":8000"))
 }

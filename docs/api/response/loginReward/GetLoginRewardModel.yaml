@@ -1,0 +1,13 @@
+name: GetLoginRewardModel
+package: loginReward
+structure:
+  Status:
+    name: status
+    type: int64
+    nullable: false
+    number: 1
+  Item:
+    name: login_reward_model
+    type: LoginRewardModel
+    nullable: false
+    number: 2

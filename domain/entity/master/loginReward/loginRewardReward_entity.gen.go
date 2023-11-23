@@ -9,9 +9,9 @@ type LoginRewardRewards []LoginRewardReward
 type LoginRewardReward struct {
 	ID int64 `json:"id"`
 
-	LoginRewardID int64 `json:"login_reward_id"`
+	LoginRewardModelName string `json:"login_reward_model_name"`
 
-	ItemID int64 `json:"item_id"`
+	ItemName string `json:"item_name"`
 
 	Name string `json:"name"`
 
