@@ -127,7 +127,7 @@ func generateMethods(structInfo *StructInfo) map[string]MethodType {
 	// FindOrNilByIndex
 	for _, index := range structInfo.Index {
 		indexFields := strings.Split(index, ",")
-		methods[fmt.Sprintf("FindBy%s", strings.Join(indexFields, "And"))] = MethodType{
+		methods[fmt.Sprintf("FindOrNilBy%s", strings.Join(indexFields, "And"))] = MethodType{
 			Script: generateFindOrNilByIndex(structInfo, indexFields),
 		}
 	}

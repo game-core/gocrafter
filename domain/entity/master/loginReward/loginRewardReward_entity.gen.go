@@ -15,9 +15,9 @@ type LoginRewardReward struct {
 
 	Name string `json:"name"`
 
-	StepNumber int `json:"step_number"`
-
 	CreatedAt time.Time `json:"created_at" gorm:"autoCreateTime"`
+
+	StepNumber int `json:"step_number"`
 
 	UpdatedAt time.Time `json:"updated_at" gorm:"autoUpdateTime"`
 }

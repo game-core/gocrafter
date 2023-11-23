@@ -11,15 +11,21 @@ type LoginRewardReceiveStepRepository interface {
 
 	Delete(entity *loginReward.LoginRewardReceiveStep, shardKey int, tx *gorm.DB) error
 
+	FindByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error)
+
+	FindByAccountIDAndLoginRewardStatusID(AccountID int64, LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error)
+
+	FindByID(ID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error)
+
+	FindByLoginRewardStatusID(LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error)
+
 	FindOrNilByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error)
 
 	FindOrNilByAccountIDAndLoginRewardStatusID(AccountID int64, LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error)
 
-	FindByID(ID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error)
+	FindOrNilByID(ID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error)
 
 	FindOrNilByLoginRewardStatusID(LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error)
-
-	FindOrNilByID(ID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error)
 
 	List(limit int64, shardKey int) (*loginReward.LoginRewardReceiveSteps, error)
 

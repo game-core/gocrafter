@@ -13,13 +13,19 @@ type ItemBoxRepository interface {
 
 	FindByID(ID int64, shardKey int) (*item.ItemBox, error)
 
+	FindByItemID(ItemID int64, shardKey int) (*item.ItemBox, error)
+
+	FindByUserID(UserID int64, shardKey int) (*item.ItemBox, error)
+
+	FindByUserIDAndItemID(UserID int64, ItemID int64, shardKey int) (*item.ItemBox, error)
+
+	FindOrNilByID(ID int64, shardKey int) (*item.ItemBox, error)
+
 	FindOrNilByItemID(ItemID int64, shardKey int) (*item.ItemBox, error)
 
 	FindOrNilByUserID(UserID int64, shardKey int) (*item.ItemBox, error)
 
 	FindOrNilByUserIDAndItemID(UserID int64, ItemID int64, shardKey int) (*item.ItemBox, error)
-
-	FindOrNilByID(ID int64, shardKey int) (*item.ItemBox, error)
 
 	List(limit int64, shardKey int) (*item.ItemBoxs, error)
 

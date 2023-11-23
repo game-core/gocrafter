@@ -79,6 +79,36 @@ func (mr *MockAccountRepositoryMockRecorder) FindByID(ID, shardKey interface{}) 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByID", reflect.TypeOf((*MockAccountRepository)(nil).FindByID), ID, shardKey)
 }
 
+// FindByIDAndUUID mocks base method.
+func (m *MockAccountRepository) FindByIDAndUUID(ID int64, UUID string, shardKey int) (*account.Account, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindByIDAndUUID", ID, UUID, shardKey)
+	ret0, _ := ret[0].(*account.Account)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindByIDAndUUID indicates an expected call of FindByIDAndUUID.
+func (mr *MockAccountRepositoryMockRecorder) FindByIDAndUUID(ID, UUID, shardKey interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByIDAndUUID", reflect.TypeOf((*MockAccountRepository)(nil).FindByIDAndUUID), ID, UUID, shardKey)
+}
+
+// FindByUUID mocks base method.
+func (m *MockAccountRepository) FindByUUID(UUID string, shardKey int) (*account.Account, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindByUUID", UUID, shardKey)
+	ret0, _ := ret[0].(*account.Account)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindByUUID indicates an expected call of FindByUUID.
+func (mr *MockAccountRepositoryMockRecorder) FindByUUID(UUID, shardKey interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByUUID", reflect.TypeOf((*MockAccountRepository)(nil).FindByUUID), UUID, shardKey)
+}
+
 // FindOrNilByID mocks base method.
 func (m *MockAccountRepository) FindOrNilByID(ID int64, shardKey int) (*account.Account, error) {
 	m.ctrl.T.Helper()
