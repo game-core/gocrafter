@@ -39,6 +39,7 @@ func Init() {
 	// ログイン報酬関係
 	loginReward := e.Group("/login_reward")
 	loginReward.Use(accountMiddleware.AccountMiddleware)
+	loginReward.POST("/get_login_reward_model", loginRewardController.GetLoginRewardModel())
 	loginReward.POST("/receive_login_reward", loginRewardController.ReceiveLoginReward())
 
 	e.Logger.Fatal(e.Start(":8000"))
