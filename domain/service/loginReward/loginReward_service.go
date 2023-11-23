@@ -11,7 +11,6 @@ import (
 	itemRequest "github.com/game-core/gocrafter/api/presentation/request/item"
 	request "github.com/game-core/gocrafter/api/presentation/request/loginReward"
 	response "github.com/game-core/gocrafter/api/presentation/response/loginReward"
-	"github.com/game-core/gocrafter/config/times"
 	masterEventEntity "github.com/game-core/gocrafter/domain/entity/master/event"
 	masterItemEntity "github.com/game-core/gocrafter/domain/entity/master/item"
 	masterLoginRewardEntity "github.com/game-core/gocrafter/domain/entity/master/loginReward"
@@ -111,42 +110,17 @@ func (s *loginRewardService) ReceiveLoginReward(req *request.ReceiveLoginReward,
 		}
 	}()
 
-	// ログイン報酬モデルを取得
 	lrm, lrrs, e, err := s.getLoginRewardModelAndRewardsAndEvent(req.LoginRewardModelName, now)
 	if err != nil {
 		return nil, err
 	}
 
-	// ログイン報酬ステータスを取得
 	lrs, err := s.loginRewardStatusRepository.FindOrNilByLoginRewardModelName(lrm.Name, req.ShardKey)
 	if err != nil {
 		return nil, err
 	}
 
-	// 既に今日の報酬を受け取っている場合
-	if lrs != nil && s.hasReceived(lrs.LastReceivedAt, now, *e.ResetHour) {
-		return nil, errors.New("already received")
-	}
-
-	// アイテム取得
-	item, err := s.getItem(e, lrrs, now)
-	if err != nil {
-		return nil, err
-	}
-
-	// アイテム受け取り
-	if _, err := s.itemService.ReceiveItemInBox(
-		&itemRequest.ReceiveItemInBox{
-			ShardKey:  req.ShardKey,
-			AccountID: req.AccountID,
-			ItemName:  item.Name,
-		},
-	); err != nil {
-		return nil, err
-	}
-
-	// 受け取りステータスを更新
-	newLrs, err := s.updateLoginRewardStatus(lrs, now, lrm.Name, req.AccountID, req.ShardKey, tx)
+	newLrs, item, err := s.receive(lrs, lrrs, e, now, req, tx)
 	if err != nil {
 		return nil, err
 	}
@@ -175,8 +149,11 @@ func (s *loginRewardService) ReceiveLoginReward(req *request.ReceiveLoginReward,
 	}, nil
 }
 
-// ログイン報酬モデル、報酬一覧、イベントを取得
-func (s *loginRewardService) getLoginRewardModelAndRewardsAndEvent(loginRewardModelName string, now time.Time) (*masterLoginRewardEntity.LoginRewardModel, *masterLoginRewardEntity.LoginRewardRewards, *masterEventEntity.Event, error) {
+// getLoginRewardModelAndRewardsAndEvent ログイン報酬モデル、報酬一覧、イベントを取得
+func (s *loginRewardService) getLoginRewardModelAndRewardsAndEvent(
+	loginRewardModelName string,
+	now time.Time,
+) (*masterLoginRewardEntity.LoginRewardModel, *masterLoginRewardEntity.LoginRewardRewards, *masterEventEntity.Event, error) {
 	lrm, err := s.loginRewardModelRepository.FindByName(loginRewardModelName)
 	if err != nil {
 		return nil, nil, nil, err
@@ -195,8 +172,67 @@ func (s *loginRewardService) getLoginRewardModelAndRewardsAndEvent(loginRewardMo
 	return lrm, lrrs, e, nil
 }
 
+// receive 受け取り
+func (s *loginRewardService) receive(
+	lrs *userLoginRewardEntity.LoginRewardStatus,
+	lrrs *masterLoginRewardEntity.LoginRewardRewards,
+	e *masterEventEntity.Event,
+	now time.Time,
+	req *request.ReceiveLoginReward,
+	tx *gorm.DB,
+) (*userLoginRewardEntity.LoginRewardStatus, *masterItemEntity.Item, error) {
+	if lrs != nil && lrs.HasReceived(now, *e.ResetHour) {
+		return nil, nil, errors.New("already received")
+	}
+
+	item, err := s.receiveItem(lrrs, e, now, req.AccountID, req.ShardKey)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	newLrs, err := s.updateLoginRewardStatus(lrs, now, req.LoginRewardModelName, req.AccountID, req.ShardKey, tx)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return newLrs, item, nil
+}
+
+// receiveItem アイテムを受け取り
+func (s *loginRewardService) receiveItem(
+	lrrs *masterLoginRewardEntity.LoginRewardRewards,
+	e *masterEventEntity.Event,
+	now time.Time,
+	accountID int64,
+	shardKey int,
+) (*masterItemEntity.Item, error) {
+	item, err := s.itemService.GetItemToEntity(lrrs.GetItemName(e.GetDayCount(now)))
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := s.itemService.ReceiveItemInBox(
+		&itemRequest.ReceiveItemInBox{
+			ShardKey:  shardKey,
+			AccountID: accountID,
+			ItemName:  item.Name,
+		},
+	); err != nil {
+		return nil, err
+	}
+
+	return item, nil
+}
+
 // updateLoginRewardStatus 受け取りステータスを更新
-func (s *loginRewardService) updateLoginRewardStatus(lrs *userLoginRewardEntity.LoginRewardStatus, now time.Time, loginRewardModelName string, accountID int64, shardKey int, tx *gorm.DB) (*userLoginRewardEntity.LoginRewardStatus, error) {
+func (s *loginRewardService) updateLoginRewardStatus(
+	lrs *userLoginRewardEntity.LoginRewardStatus,
+	now time.Time,
+	loginRewardModelName string,
+	accountID int64,
+	shardKey int,
+	tx *gorm.DB,
+) (*userLoginRewardEntity.LoginRewardStatus, error) {
 	if lrs != nil {
 		lrs.LastReceivedAt = now
 		lrs, err := s.loginRewardStatusRepository.Update(lrs, shardKey, tx)
@@ -221,54 +257,4 @@ func (s *loginRewardService) updateLoginRewardStatus(lrs *userLoginRewardEntity.
 	}
 
 	return lrs, nil
-}
-
-// getItem アイテムを取得
-func (s *loginRewardService) getItem(e *masterEventEntity.Event, lrrs *masterLoginRewardEntity.LoginRewardRewards, now time.Time) (*masterItemEntity.Item, error) {
-	maxStepNumber := s.getMaxStepNumber(lrrs)
-	dayCount := s.getDayCount(e, now)
-	if maxStepNumber < dayCount && maxStepNumber > 0 {
-		dayCount %= maxStepNumber
-	}
-
-	var itemName string
-	for _, rewards := range *lrrs {
-		if dayCount == rewards.StepNumber {
-			itemName = rewards.ItemName
-		}
-	}
-
-	// アイテム取得
-	i, err := s.itemService.GetItemToEntity(itemName)
-	if err != nil {
-		return nil, err
-	}
-
-	return i, nil
-}
-
-// getDayCount 経過日数を取得
-func (s *loginRewardService) getDayCount(e *masterEventEntity.Event, now time.Time) int {
-	if e.RepeatSetting {
-		return times.GetDayCount(*e.RepeatStartAt, now)
-	}
-
-	return times.GetDayCount(*e.StartAt, now)
-}
-
-// getMaxStepNumber ステップナンバーの最大値を取得
-func (s *loginRewardService) getMaxStepNumber(lrrs *masterLoginRewardEntity.LoginRewardRewards) int {
-	var maxStepNumber int
-	for _, rewards := range *lrrs {
-		if rewards.StepNumber > maxStepNumber {
-			maxStepNumber = rewards.StepNumber
-		}
-	}
-
-	return maxStepNumber
-}
-
-// hasReceived 最終受け取り日時(lastReceiveAt)が今日のリセット時間(RepeatHour)より後か判定
-func (s *loginRewardService) hasReceived(lastReceiveAt, now time.Time, resetHour int) bool {
-	return lastReceiveAt.After(time.Date(now.Year(), now.Month(), now.Day(), resetHour, 0, 0, 0, now.Location()))
 }
