@@ -37,6 +37,7 @@ docker_domain_gen:
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/dao/config/gen.go
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/dao/master/gen.go
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/dao/user/gen.go
+	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/enum/gen.go
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/sql/config/gen.go
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/sql/master/gen.go
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/sql/user/gen.go
@@ -60,6 +61,11 @@ docker_dao_gen:
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/dao/master/gen.go
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/dao/user/gen.go
 	$(DOCKER_COMPOSE) exec gen go fmt ./infra/dao/...
+
+# modelを自動生成
+docker_enum_gen:
+	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/enum/gen.go
+	$(DOCKER_COMPOSE) exec gen go fmt ./domain/enum/...
 
 # sqlを自動生成
 docker_sql_gen:
