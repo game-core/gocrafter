@@ -3,7 +3,7 @@ package account
 type LoginAccounts []LoginAccount
 
 type LoginAccount struct {
-	ShardKey int `json:"shard_key"`
+	ShardKey string `json:"shard_key"`
 
 	UUID string `json:"uuid"`
 

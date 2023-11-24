@@ -13,15 +13,15 @@ type ShardRepository interface {
 
 	FindByID(ID int64) (*shard.Shard, error)
 
-	FindByShardKey(ShardKey int) (*shard.Shard, error)
+	FindByShardKey(ShardKey string) (*shard.Shard, error)
 
 	FindOrNilByID(ID int64) (*shard.Shard, error)
 
-	FindOrNilByShardKey(ShardKey int) (*shard.Shard, error)
+	FindOrNilByShardKey(ShardKey string) (*shard.Shard, error)
 
 	List(limit int) (*shard.Shards, error)
 
-	ListByShardKey(ShardKey int) (*shard.Shards, error)
+	ListByShardKey(ShardKey string) (*shard.Shards, error)
 
 	Save(entity *shard.Shard, tx *gorm.DB) (*shard.Shard, error)
 }

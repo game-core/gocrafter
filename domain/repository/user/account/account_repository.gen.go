@@ -7,27 +7,27 @@ import (
 )
 
 type AccountRepository interface {
-	Create(entity *account.Account, shardKey int, tx *gorm.DB) (*account.Account, error)
+	Create(entity *account.Account, shardKey string, tx *gorm.DB) (*account.Account, error)
 
-	Delete(entity *account.Account, shardKey int, tx *gorm.DB) error
+	Delete(entity *account.Account, shardKey string, tx *gorm.DB) error
 
-	FindByID(ID int64, shardKey int) (*account.Account, error)
+	FindByID(ID int64, shardKey string) (*account.Account, error)
 
-	FindByIDAndUUID(ID int64, UUID string, shardKey int) (*account.Account, error)
+	FindByIDAndUUID(ID int64, UUID string, shardKey string) (*account.Account, error)
 
-	FindByUUID(UUID string, shardKey int) (*account.Account, error)
+	FindByUUID(UUID string, shardKey string) (*account.Account, error)
 
-	FindOrNilByID(ID int64, shardKey int) (*account.Account, error)
+	FindOrNilByID(ID int64, shardKey string) (*account.Account, error)
 
-	FindOrNilByIDAndUUID(ID int64, UUID string, shardKey int) (*account.Account, error)
+	FindOrNilByIDAndUUID(ID int64, UUID string, shardKey string) (*account.Account, error)
 
-	FindOrNilByUUID(UUID string, shardKey int) (*account.Account, error)
+	FindOrNilByUUID(UUID string, shardKey string) (*account.Account, error)
 
-	List(limit int, shardKey int) (*account.Accounts, error)
+	List(limit int, shardKey string) (*account.Accounts, error)
 
-	ListByIDAndUUID(ID int64, UUID string, shardKey int) (*account.Accounts, error)
+	ListByIDAndUUID(ID int64, UUID string, shardKey string) (*account.Accounts, error)
 
-	ListByUUID(UUID string, shardKey int) (*account.Accounts, error)
+	ListByUUID(UUID string, shardKey string) (*account.Accounts, error)
 
-	Save(entity *account.Account, shardKey int, tx *gorm.DB) (*account.Account, error)
+	Save(entity *account.Account, shardKey string, tx *gorm.DB) (*account.Account, error)
 }

@@ -3,7 +3,7 @@ CREATE TABLE item_box (
 
 	id BIGINT NOT NULL AUTO_INCREMENT,
 
-	shard_key INT NOT NULL,
+	shard_key VARCHAR(255) NOT NULL,
 
 	account_id BIGINT NOT NULL,
 

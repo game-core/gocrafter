@@ -7,8 +7,8 @@ structure:
     nullable: false
     number: 1
   NextShardKey:
-    name: shard_key
-    type: int
+    name: next_shard_key
+    type: string
     nullable: false
     number: 2
   Shards:

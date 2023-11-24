@@ -7,33 +7,33 @@ import (
 )
 
 type LoginRewardReceiveStepRepository interface {
-	Create(entity *loginReward.LoginRewardReceiveStep, shardKey int, tx *gorm.DB) (*loginReward.LoginRewardReceiveStep, error)
+	Create(entity *loginReward.LoginRewardReceiveStep, shardKey string, tx *gorm.DB) (*loginReward.LoginRewardReceiveStep, error)
 
-	Delete(entity *loginReward.LoginRewardReceiveStep, shardKey int, tx *gorm.DB) error
+	Delete(entity *loginReward.LoginRewardReceiveStep, shardKey string, tx *gorm.DB) error
 
-	FindByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error)
+	FindByAccountID(AccountID int64, shardKey string) (*loginReward.LoginRewardReceiveStep, error)
 
-	FindByAccountIDAndLoginRewardStatusID(AccountID int64, LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error)
+	FindByAccountIDAndLoginRewardStatusID(AccountID int64, LoginRewardStatusID int64, shardKey string) (*loginReward.LoginRewardReceiveStep, error)
 
-	FindByID(ID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error)
+	FindByID(ID int64, shardKey string) (*loginReward.LoginRewardReceiveStep, error)
 
-	FindByLoginRewardStatusID(LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error)
+	FindByLoginRewardStatusID(LoginRewardStatusID int64, shardKey string) (*loginReward.LoginRewardReceiveStep, error)
 
-	FindOrNilByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error)
+	FindOrNilByAccountID(AccountID int64, shardKey string) (*loginReward.LoginRewardReceiveStep, error)
 
-	FindOrNilByAccountIDAndLoginRewardStatusID(AccountID int64, LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error)
+	FindOrNilByAccountIDAndLoginRewardStatusID(AccountID int64, LoginRewardStatusID int64, shardKey string) (*loginReward.LoginRewardReceiveStep, error)
 
-	FindOrNilByID(ID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error)
+	FindOrNilByID(ID int64, shardKey string) (*loginReward.LoginRewardReceiveStep, error)
 
-	FindOrNilByLoginRewardStatusID(LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error)
+	FindOrNilByLoginRewardStatusID(LoginRewardStatusID int64, shardKey string) (*loginReward.LoginRewardReceiveStep, error)
 
-	List(limit int, shardKey int) (*loginReward.LoginRewardReceiveSteps, error)
+	List(limit int, shardKey string) (*loginReward.LoginRewardReceiveSteps, error)
 
-	ListByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardReceiveSteps, error)
+	ListByAccountID(AccountID int64, shardKey string) (*loginReward.LoginRewardReceiveSteps, error)
 
-	ListByAccountIDAndLoginRewardStatusID(AccountID int64, LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveSteps, error)
+	ListByAccountIDAndLoginRewardStatusID(AccountID int64, LoginRewardStatusID int64, shardKey string) (*loginReward.LoginRewardReceiveSteps, error)
 
-	ListByLoginRewardStatusID(LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveSteps, error)
+	ListByLoginRewardStatusID(LoginRewardStatusID int64, shardKey string) (*loginReward.LoginRewardReceiveSteps, error)
 
-	Save(entity *loginReward.LoginRewardReceiveStep, shardKey int, tx *gorm.DB) (*loginReward.LoginRewardReceiveStep, error)
+	Save(entity *loginReward.LoginRewardReceiveStep, shardKey string, tx *gorm.DB) (*loginReward.LoginRewardReceiveStep, error)
 }

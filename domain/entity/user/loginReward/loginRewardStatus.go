@@ -11,5 +11,5 @@ func (e *LoginRewardStatus) HasReceived(now time.Time, resetHour int) bool {
 		return e.LastReceivedAt.Add(24 * time.Hour).Before(now)
 	}
 
-	return e.LastReceivedAt.Before(resetTime.Add(24 * time.Hour))
+	return e.LastReceivedAt.Before(resetTime)
 }

@@ -128,6 +128,7 @@ func (s *loginRewardService) ReceiveLoginReward(req *request.ReceiveLoginReward,
 	return &response.ReceiveLoginReward{
 		Status: 200,
 		Item: response.LoginRewardStatus{
+			ID: newLrs.ID,
 			LoginRewardModel: response.LoginRewardModel{
 				ID:   lrm.ID,
 				Name: lrm.Name,
@@ -204,7 +205,7 @@ func (s *loginRewardService) receiveItem(
 	e *masterEventEntity.Event,
 	now time.Time,
 	accountID int64,
-	shardKey int,
+	shardKey string,
 ) (*masterItemEntity.Item, error) {
 	item, err := s.itemService.GetItemToEntity(lrrs.GetItemName(e.GetDayCount(now)))
 	if err != nil {
@@ -230,7 +231,7 @@ func (s *loginRewardService) updateLoginRewardStatus(
 	now time.Time,
 	loginRewardModelName string,
 	accountID int64,
-	shardKey int,
+	shardKey string,
 	tx *gorm.DB,
 ) (*userLoginRewardEntity.LoginRewardStatus, error) {
 	if lrs != nil {

@@ -177,7 +177,7 @@ func generateMethods(structInfo *StructInfo) map[string]MethodType {
 
 func generateFindByID(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`func (d *%sDao) FindByID(ID int64, shardKey int) (*%s.%s, error) {
+		`func (d *%sDao) FindByID(ID int64, shardKey string) (*%s.%s, error) {
 			entity := &%s.%s{}
 			res := d.ShardConn.Shards[shardKey].ReadConn.Where("id = ?", ID).Find(entity)
 			if err := res.Error; err != nil {
@@ -197,7 +197,7 @@ func generateFindByID(structInfo *StructInfo) string {
 
 func generateFindOrNilByID(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`func (d *%sDao) FindOrNilByID(ID int64, shardKey int) (*%s.%s, error) {
+		`func (d *%sDao) FindOrNilByID(ID int64, shardKey string) (*%s.%s, error) {
 			entity := &%s.%s{}
 			res := d.ShardConn.Shards[shardKey].ReadConn.Where("id = ?", ID).Find(entity)
 			if res.RowsAffected == 0 {
@@ -230,7 +230,7 @@ func generateFindByIndex(structInfo *StructInfo, indexFields []string) string {
 	}
 
 	return fmt.Sprintf(
-		`func (d *%sDao) FindBy%s(%s, shardKey int) (*%s.%s, error) {
+		`func (d *%sDao) FindBy%s(%s, shardKey string) (*%s.%s, error) {
 			entity := &%s.%s{}
 			res := d.ShardConn.Shards[shardKey].ReadConn.%s.Find(entity)
 			if err := res.Error; err != nil {
@@ -263,7 +263,7 @@ func generateFindOrNilByIndex(structInfo *StructInfo, indexFields []string) stri
 	}
 
 	return fmt.Sprintf(
-		`func (d *%sDao) FindOrNilBy%s(%s, shardKey int) (*%s.%s, error) {
+		`func (d *%sDao) FindOrNilBy%s(%s, shardKey string) (*%s.%s, error) {
 			entity := &%s.%s{}
 			res := d.ShardConn.Shards[shardKey].ReadConn.%s.Find(entity)
 			if res.RowsAffected == 0 {
@@ -289,7 +289,7 @@ func generateFindOrNilByIndex(structInfo *StructInfo, indexFields []string) stri
 
 func generateList(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`func (d *%sDao) List(limit int, shardKey int) (*%s.%s, error) {
+		`func (d *%sDao) List(limit int, shardKey string) (*%s.%s, error) {
 			entity := &%s.%s{}
 			res := d.ShardConn.Shards[shardKey].ReadConn.Limit(limit).Find(entity)
 			if err := res.Error; err != nil {
@@ -319,7 +319,7 @@ func generateListByIndex(structInfo *StructInfo, indexFields []string) string {
 	}
 
 	return fmt.Sprintf(
-		`func (d *%sDao) ListBy%s(%s, shardKey int) (*%s.%s, error) {
+		`func (d *%sDao) ListBy%s(%s, shardKey string) (*%s.%s, error) {
 			entity := &%s.%s{}
 			res := d.ShardConn.Shards[shardKey].ReadConn.%s.Find(entity)
 			if err := res.Error; err != nil {
@@ -342,7 +342,7 @@ func generateListByIndex(structInfo *StructInfo, indexFields []string) string {
 
 func generateCreate(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`func (d *%sDao) Create(entity *%s.%s, shardKey int, tx *gorm.DB) (*%s.%s, error) {
+		`func (d *%sDao) Create(entity *%s.%s, shardKey string, tx *gorm.DB) (*%s.%s, error) {
 			var conn *gorm.DB
 			if tx != nil {
 				conn = tx
@@ -370,7 +370,7 @@ func generateCreate(structInfo *StructInfo) string {
 
 func generateSave(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`func (d *%sDao) Save(entity *%s.%s, shardKey int, tx *gorm.DB) (*%s.%s, error) {
+		`func (d *%sDao) Save(entity *%s.%s, shardKey string, tx *gorm.DB) (*%s.%s, error) {
 			var conn *gorm.DB
 			if tx != nil {
 				conn = tx
@@ -398,7 +398,7 @@ func generateSave(structInfo *StructInfo) string {
 
 func generateDelete(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`func (d *%sDao) Delete(entity *%s.%s, shardKey int, tx *gorm.DB) error {
+		`func (d *%sDao) Delete(entity *%s.%s, shardKey string, tx *gorm.DB) error {
 			var conn *gorm.DB
 			if tx != nil {
 				conn = tx

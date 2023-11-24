@@ -5,7 +5,7 @@ type Shards []Shard
 type Shard struct {
 	ID int64 `json:"id"`
 
-	ShardKey int `json:"shard_key"`
+	ShardKey string `json:"shard_key"`
 
 	Name string `json:"name"`
 

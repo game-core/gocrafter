@@ -35,7 +35,7 @@ func (m *MockTransactionRepository) EXPECT() *MockTransactionRepositoryMockRecor
 }
 
 // Begin mocks base method.
-func (m *MockTransactionRepository) Begin(shardKey int) (*gorm.DB, error) {
+func (m *MockTransactionRepository) Begin(shardKey string) (*gorm.DB, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Begin", shardKey)
 	ret0, _ := ret[0].(*gorm.DB)

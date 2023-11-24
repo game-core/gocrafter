@@ -17,7 +17,7 @@ func NewTransactionDao(conn *database.SqlHandler) repository.TransactionReposito
 	}
 }
 
-func (d *transactionDao) Begin(shardKey int) (*gorm.DB, error) {
+func (d *transactionDao) Begin(shardKey string) (*gorm.DB, error) {
 	tx := d.ShardConn.Shards[shardKey].WriteConn.Begin()
 	if err := tx.Error; err != nil {
 		return nil, err

@@ -8,7 +8,7 @@ structure:
     number: 1
   ShardKey:
     name: shard_key
-    type: int
+    type: string
     nullable: false
     number: 2
   Name:

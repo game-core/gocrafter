@@ -164,20 +164,20 @@ func generateMethods(structInfo *StructInfo) map[string]MethodType {
 }
 
 func generateFindByID(structInfo *StructInfo) string {
-	return fmt.Sprintf(`FindByID(ID int64, shardKey int) (*%s.%s, error)`, structInfo.Package, structInfo.Name)
+	return fmt.Sprintf(`FindByID(ID int64, shardKey string) (*%s.%s, error)`, structInfo.Package, structInfo.Name)
 }
 
 func generateFindOrNilByID(structInfo *StructInfo) string {
-	return fmt.Sprintf(`FindOrNilByID(ID int64, shardKey int) (*%s.%s, error)`, structInfo.Package, structInfo.Name)
+	return fmt.Sprintf(`FindOrNilByID(ID int64, shardKey string) (*%s.%s, error)`, structInfo.Package, structInfo.Name)
 }
 
 func generateList(structInfo *StructInfo) string {
-	return fmt.Sprintf(`List(limit int, shardKey int) (*%s.%s, error)`, structInfo.Package, transform.SingularToPlural(structInfo.Name))
+	return fmt.Sprintf(`List(limit int, shardKey string) (*%s.%s, error)`, structInfo.Package, transform.SingularToPlural(structInfo.Name))
 }
 
 func generateCreate(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`Create(entity *%s.%s, shardKey int,tx *gorm.DB) (*%s.%s, error)`,
+		`Create(entity *%s.%s, shardKey string,tx *gorm.DB) (*%s.%s, error)`,
 		structInfo.Package,
 		structInfo.Name,
 		structInfo.Package,
@@ -187,7 +187,7 @@ func generateCreate(structInfo *StructInfo) string {
 
 func generateSave(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`Save(entity *%s.%s, shardKey int, tx *gorm.DB) (*%s.%s, error)`,
+		`Save(entity *%s.%s, shardKey string, tx *gorm.DB) (*%s.%s, error)`,
 		structInfo.Package,
 		structInfo.Name,
 		structInfo.Package,
@@ -197,7 +197,7 @@ func generateSave(structInfo *StructInfo) string {
 
 func generateDelete(structInfo *StructInfo) string {
 	return fmt.Sprintf(
-		`Delete(entity *%s.%s, shardKey int, tx *gorm.DB) error`,
+		`Delete(entity *%s.%s, shardKey string, tx *gorm.DB) error`,
 		structInfo.Package,
 		structInfo.Name,
 	)
@@ -213,7 +213,7 @@ func generateFindByIndex(structInfo *StructInfo, indexFields []string) string {
 	}
 
 	return fmt.Sprintf(
-		`FindBy%s(%s, shardKey int) (*%s.%s, error)`,
+		`FindBy%s(%s, shardKey string) (*%s.%s, error)`,
 		strings.Join(indexFields, "And"),
 		strings.Join(paramStrings, ","),
 		structInfo.Package,
@@ -231,7 +231,7 @@ func generateFindOrNilByIndex(structInfo *StructInfo, indexFields []string) stri
 	}
 
 	return fmt.Sprintf(
-		`FindOrNilBy%s(%s, shardKey int) (*%s.%s, error)`,
+		`FindOrNilBy%s(%s, shardKey string) (*%s.%s, error)`,
 		strings.Join(indexFields, "And"),
 		strings.Join(paramStrings, ","),
 		structInfo.Package,
@@ -249,7 +249,7 @@ func generateListByIndex(structInfo *StructInfo, indexFields []string) string {
 	}
 
 	return fmt.Sprintf(
-		`ListBy%s(%s, shardKey int) (*%s.%s, error)`,
+		`ListBy%s(%s, shardKey string) (*%s.%s, error)`,
 		strings.Join(indexFields, "And"),
 		strings.Join(paramStrings, ","),
 		structInfo.Package,

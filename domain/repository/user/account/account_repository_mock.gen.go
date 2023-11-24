@@ -36,7 +36,7 @@ func (m *MockAccountRepository) EXPECT() *MockAccountRepositoryMockRecorder {
 }
 
 // Create mocks base method.
-func (m *MockAccountRepository) Create(entity *account.Account, shardKey int, tx *gorm.DB) (*account.Account, error) {
+func (m *MockAccountRepository) Create(entity *account.Account, shardKey string, tx *gorm.DB) (*account.Account, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", entity, shardKey, tx)
 	ret0, _ := ret[0].(*account.Account)
@@ -51,7 +51,7 @@ func (mr *MockAccountRepositoryMockRecorder) Create(entity, shardKey, tx interfa
 }
 
 // Delete mocks base method.
-func (m *MockAccountRepository) Delete(entity *account.Account, shardKey int, tx *gorm.DB) error {
+func (m *MockAccountRepository) Delete(entity *account.Account, shardKey string, tx *gorm.DB) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Delete", entity, shardKey, tx)
 	ret0, _ := ret[0].(error)
@@ -65,7 +65,7 @@ func (mr *MockAccountRepositoryMockRecorder) Delete(entity, shardKey, tx interfa
 }
 
 // FindByID mocks base method.
-func (m *MockAccountRepository) FindByID(ID int64, shardKey int) (*account.Account, error) {
+func (m *MockAccountRepository) FindByID(ID int64, shardKey string) (*account.Account, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByID", ID, shardKey)
 	ret0, _ := ret[0].(*account.Account)
@@ -80,7 +80,7 @@ func (mr *MockAccountRepositoryMockRecorder) FindByID(ID, shardKey interface{}) 
 }
 
 // FindByIDAndUUID mocks base method.
-func (m *MockAccountRepository) FindByIDAndUUID(ID int64, UUID string, shardKey int) (*account.Account, error) {
+func (m *MockAccountRepository) FindByIDAndUUID(ID int64, UUID, shardKey string) (*account.Account, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByIDAndUUID", ID, UUID, shardKey)
 	ret0, _ := ret[0].(*account.Account)
@@ -95,7 +95,7 @@ func (mr *MockAccountRepositoryMockRecorder) FindByIDAndUUID(ID, UUID, shardKey 
 }
 
 // FindByUUID mocks base method.
-func (m *MockAccountRepository) FindByUUID(UUID string, shardKey int) (*account.Account, error) {
+func (m *MockAccountRepository) FindByUUID(UUID, shardKey string) (*account.Account, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByUUID", UUID, shardKey)
 	ret0, _ := ret[0].(*account.Account)
@@ -110,7 +110,7 @@ func (mr *MockAccountRepositoryMockRecorder) FindByUUID(UUID, shardKey interface
 }
 
 // FindOrNilByID mocks base method.
-func (m *MockAccountRepository) FindOrNilByID(ID int64, shardKey int) (*account.Account, error) {
+func (m *MockAccountRepository) FindOrNilByID(ID int64, shardKey string) (*account.Account, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindOrNilByID", ID, shardKey)
 	ret0, _ := ret[0].(*account.Account)
@@ -125,7 +125,7 @@ func (mr *MockAccountRepositoryMockRecorder) FindOrNilByID(ID, shardKey interfac
 }
 
 // FindOrNilByIDAndUUID mocks base method.
-func (m *MockAccountRepository) FindOrNilByIDAndUUID(ID int64, UUID string, shardKey int) (*account.Account, error) {
+func (m *MockAccountRepository) FindOrNilByIDAndUUID(ID int64, UUID, shardKey string) (*account.Account, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindOrNilByIDAndUUID", ID, UUID, shardKey)
 	ret0, _ := ret[0].(*account.Account)
@@ -140,7 +140,7 @@ func (mr *MockAccountRepositoryMockRecorder) FindOrNilByIDAndUUID(ID, UUID, shar
 }
 
 // FindOrNilByUUID mocks base method.
-func (m *MockAccountRepository) FindOrNilByUUID(UUID string, shardKey int) (*account.Account, error) {
+func (m *MockAccountRepository) FindOrNilByUUID(UUID, shardKey string) (*account.Account, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindOrNilByUUID", UUID, shardKey)
 	ret0, _ := ret[0].(*account.Account)
@@ -155,7 +155,7 @@ func (mr *MockAccountRepositoryMockRecorder) FindOrNilByUUID(UUID, shardKey inte
 }
 
 // List mocks base method.
-func (m *MockAccountRepository) List(limit, shardKey int) (*account.Accounts, error) {
+func (m *MockAccountRepository) List(limit int, shardKey string) (*account.Accounts, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", limit, shardKey)
 	ret0, _ := ret[0].(*account.Accounts)
@@ -170,7 +170,7 @@ func (mr *MockAccountRepositoryMockRecorder) List(limit, shardKey interface{}) *
 }
 
 // ListByIDAndUUID mocks base method.
-func (m *MockAccountRepository) ListByIDAndUUID(ID int64, UUID string, shardKey int) (*account.Accounts, error) {
+func (m *MockAccountRepository) ListByIDAndUUID(ID int64, UUID, shardKey string) (*account.Accounts, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListByIDAndUUID", ID, UUID, shardKey)
 	ret0, _ := ret[0].(*account.Accounts)
@@ -185,7 +185,7 @@ func (mr *MockAccountRepositoryMockRecorder) ListByIDAndUUID(ID, UUID, shardKey 
 }
 
 // ListByUUID mocks base method.
-func (m *MockAccountRepository) ListByUUID(UUID string, shardKey int) (*account.Accounts, error) {
+func (m *MockAccountRepository) ListByUUID(UUID, shardKey string) (*account.Accounts, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListByUUID", UUID, shardKey)
 	ret0, _ := ret[0].(*account.Accounts)
@@ -200,7 +200,7 @@ func (mr *MockAccountRepositoryMockRecorder) ListByUUID(UUID, shardKey interface
 }
 
 // Save mocks base method.
-func (m *MockAccountRepository) Save(entity *account.Account, shardKey int, tx *gorm.DB) (*account.Account, error) {
+func (m *MockAccountRepository) Save(entity *account.Account, shardKey string, tx *gorm.DB) (*account.Account, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Save", entity, shardKey, tx)
 	ret0, _ := ret[0].(*account.Account)

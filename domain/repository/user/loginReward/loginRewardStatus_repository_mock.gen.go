@@ -36,7 +36,7 @@ func (m *MockLoginRewardStatusRepository) EXPECT() *MockLoginRewardStatusReposit
 }
 
 // Create mocks base method.
-func (m *MockLoginRewardStatusRepository) Create(entity *loginReward.LoginRewardStatus, shardKey int, tx *gorm.DB) (*loginReward.LoginRewardStatus, error) {
+func (m *MockLoginRewardStatusRepository) Create(entity *loginReward.LoginRewardStatus, shardKey string, tx *gorm.DB) (*loginReward.LoginRewardStatus, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", entity, shardKey, tx)
 	ret0, _ := ret[0].(*loginReward.LoginRewardStatus)
@@ -51,7 +51,7 @@ func (mr *MockLoginRewardStatusRepositoryMockRecorder) Create(entity, shardKey, 
 }
 
 // Delete mocks base method.
-func (m *MockLoginRewardStatusRepository) Delete(entity *loginReward.LoginRewardStatus, shardKey int, tx *gorm.DB) error {
+func (m *MockLoginRewardStatusRepository) Delete(entity *loginReward.LoginRewardStatus, shardKey string, tx *gorm.DB) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Delete", entity, shardKey, tx)
 	ret0, _ := ret[0].(error)
@@ -65,7 +65,7 @@ func (mr *MockLoginRewardStatusRepositoryMockRecorder) Delete(entity, shardKey, 
 }
 
 // FindByAccountID mocks base method.
-func (m *MockLoginRewardStatusRepository) FindByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardStatus, error) {
+func (m *MockLoginRewardStatusRepository) FindByAccountID(AccountID int64, shardKey string) (*loginReward.LoginRewardStatus, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByAccountID", AccountID, shardKey)
 	ret0, _ := ret[0].(*loginReward.LoginRewardStatus)
@@ -80,7 +80,7 @@ func (mr *MockLoginRewardStatusRepositoryMockRecorder) FindByAccountID(AccountID
 }
 
 // FindByAccountIDAndLoginRewardModelName mocks base method.
-func (m *MockLoginRewardStatusRepository) FindByAccountIDAndLoginRewardModelName(AccountID int64, LoginRewardModelName string, shardKey int) (*loginReward.LoginRewardStatus, error) {
+func (m *MockLoginRewardStatusRepository) FindByAccountIDAndLoginRewardModelName(AccountID int64, LoginRewardModelName, shardKey string) (*loginReward.LoginRewardStatus, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByAccountIDAndLoginRewardModelName", AccountID, LoginRewardModelName, shardKey)
 	ret0, _ := ret[0].(*loginReward.LoginRewardStatus)
@@ -95,7 +95,7 @@ func (mr *MockLoginRewardStatusRepositoryMockRecorder) FindByAccountIDAndLoginRe
 }
 
 // FindByID mocks base method.
-func (m *MockLoginRewardStatusRepository) FindByID(ID int64, shardKey int) (*loginReward.LoginRewardStatus, error) {
+func (m *MockLoginRewardStatusRepository) FindByID(ID int64, shardKey string) (*loginReward.LoginRewardStatus, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByID", ID, shardKey)
 	ret0, _ := ret[0].(*loginReward.LoginRewardStatus)
@@ -110,7 +110,7 @@ func (mr *MockLoginRewardStatusRepositoryMockRecorder) FindByID(ID, shardKey int
 }
 
 // FindByLoginRewardModelName mocks base method.
-func (m *MockLoginRewardStatusRepository) FindByLoginRewardModelName(LoginRewardModelName string, shardKey int) (*loginReward.LoginRewardStatus, error) {
+func (m *MockLoginRewardStatusRepository) FindByLoginRewardModelName(LoginRewardModelName, shardKey string) (*loginReward.LoginRewardStatus, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByLoginRewardModelName", LoginRewardModelName, shardKey)
 	ret0, _ := ret[0].(*loginReward.LoginRewardStatus)
@@ -125,7 +125,7 @@ func (mr *MockLoginRewardStatusRepositoryMockRecorder) FindByLoginRewardModelNam
 }
 
 // FindOrNilByAccountID mocks base method.
-func (m *MockLoginRewardStatusRepository) FindOrNilByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardStatus, error) {
+func (m *MockLoginRewardStatusRepository) FindOrNilByAccountID(AccountID int64, shardKey string) (*loginReward.LoginRewardStatus, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindOrNilByAccountID", AccountID, shardKey)
 	ret0, _ := ret[0].(*loginReward.LoginRewardStatus)
@@ -140,7 +140,7 @@ func (mr *MockLoginRewardStatusRepositoryMockRecorder) FindOrNilByAccountID(Acco
 }
 
 // FindOrNilByAccountIDAndLoginRewardModelName mocks base method.
-func (m *MockLoginRewardStatusRepository) FindOrNilByAccountIDAndLoginRewardModelName(AccountID int64, LoginRewardModelName string, shardKey int) (*loginReward.LoginRewardStatus, error) {
+func (m *MockLoginRewardStatusRepository) FindOrNilByAccountIDAndLoginRewardModelName(AccountID int64, LoginRewardModelName, shardKey string) (*loginReward.LoginRewardStatus, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindOrNilByAccountIDAndLoginRewardModelName", AccountID, LoginRewardModelName, shardKey)
 	ret0, _ := ret[0].(*loginReward.LoginRewardStatus)
@@ -155,7 +155,7 @@ func (mr *MockLoginRewardStatusRepositoryMockRecorder) FindOrNilByAccountIDAndLo
 }
 
 // FindOrNilByID mocks base method.
-func (m *MockLoginRewardStatusRepository) FindOrNilByID(ID int64, shardKey int) (*loginReward.LoginRewardStatus, error) {
+func (m *MockLoginRewardStatusRepository) FindOrNilByID(ID int64, shardKey string) (*loginReward.LoginRewardStatus, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindOrNilByID", ID, shardKey)
 	ret0, _ := ret[0].(*loginReward.LoginRewardStatus)
@@ -170,7 +170,7 @@ func (mr *MockLoginRewardStatusRepositoryMockRecorder) FindOrNilByID(ID, shardKe
 }
 
 // FindOrNilByLoginRewardModelName mocks base method.
-func (m *MockLoginRewardStatusRepository) FindOrNilByLoginRewardModelName(LoginRewardModelName string, shardKey int) (*loginReward.LoginRewardStatus, error) {
+func (m *MockLoginRewardStatusRepository) FindOrNilByLoginRewardModelName(LoginRewardModelName, shardKey string) (*loginReward.LoginRewardStatus, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindOrNilByLoginRewardModelName", LoginRewardModelName, shardKey)
 	ret0, _ := ret[0].(*loginReward.LoginRewardStatus)
@@ -185,7 +185,7 @@ func (mr *MockLoginRewardStatusRepositoryMockRecorder) FindOrNilByLoginRewardMod
 }
 
 // List mocks base method.
-func (m *MockLoginRewardStatusRepository) List(limit, shardKey int) (*loginReward.LoginRewardStatuses, error) {
+func (m *MockLoginRewardStatusRepository) List(limit int, shardKey string) (*loginReward.LoginRewardStatuses, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", limit, shardKey)
 	ret0, _ := ret[0].(*loginReward.LoginRewardStatuses)
@@ -200,7 +200,7 @@ func (mr *MockLoginRewardStatusRepositoryMockRecorder) List(limit, shardKey inte
 }
 
 // ListByAccountID mocks base method.
-func (m *MockLoginRewardStatusRepository) ListByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardStatuses, error) {
+func (m *MockLoginRewardStatusRepository) ListByAccountID(AccountID int64, shardKey string) (*loginReward.LoginRewardStatuses, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListByAccountID", AccountID, shardKey)
 	ret0, _ := ret[0].(*loginReward.LoginRewardStatuses)
@@ -215,7 +215,7 @@ func (mr *MockLoginRewardStatusRepositoryMockRecorder) ListByAccountID(AccountID
 }
 
 // ListByAccountIDAndLoginRewardModelName mocks base method.
-func (m *MockLoginRewardStatusRepository) ListByAccountIDAndLoginRewardModelName(AccountID int64, LoginRewardModelName string, shardKey int) (*loginReward.LoginRewardStatuses, error) {
+func (m *MockLoginRewardStatusRepository) ListByAccountIDAndLoginRewardModelName(AccountID int64, LoginRewardModelName, shardKey string) (*loginReward.LoginRewardStatuses, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListByAccountIDAndLoginRewardModelName", AccountID, LoginRewardModelName, shardKey)
 	ret0, _ := ret[0].(*loginReward.LoginRewardStatuses)
@@ -230,7 +230,7 @@ func (mr *MockLoginRewardStatusRepositoryMockRecorder) ListByAccountIDAndLoginRe
 }
 
 // ListByLoginRewardModelName mocks base method.
-func (m *MockLoginRewardStatusRepository) ListByLoginRewardModelName(LoginRewardModelName string, shardKey int) (*loginReward.LoginRewardStatuses, error) {
+func (m *MockLoginRewardStatusRepository) ListByLoginRewardModelName(LoginRewardModelName, shardKey string) (*loginReward.LoginRewardStatuses, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListByLoginRewardModelName", LoginRewardModelName, shardKey)
 	ret0, _ := ret[0].(*loginReward.LoginRewardStatuses)
@@ -245,7 +245,7 @@ func (mr *MockLoginRewardStatusRepositoryMockRecorder) ListByLoginRewardModelNam
 }
 
 // Save mocks base method.
-func (m *MockLoginRewardStatusRepository) Save(entity *loginReward.LoginRewardStatus, shardKey int, tx *gorm.DB) (*loginReward.LoginRewardStatus, error) {
+func (m *MockLoginRewardStatusRepository) Save(entity *loginReward.LoginRewardStatus, shardKey string, tx *gorm.DB) (*loginReward.LoginRewardStatus, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Save", entity, shardKey, tx)
 	ret0, _ := ret[0].(*loginReward.LoginRewardStatus)

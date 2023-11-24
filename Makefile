@@ -81,7 +81,9 @@ docker_db_user_1:
 docker_db_user_2:
 	$(DOCKER_COMPOSE) exec db mysql --host=localhost --user=mysql_user --password=mysql_password gocrafter_user_2
 
-# ローカルDBに接続
 docker_db_master:
 	$(DOCKER_COMPOSE) exec db mysql --host=localhost --user=mysql_user --password=mysql_password gocrafter_master
+
+docker_db_config:
+	$(DOCKER_COMPOSE) exec db mysql --host=localhost --user=mysql_user --password=mysql_password gocrafter_config
 

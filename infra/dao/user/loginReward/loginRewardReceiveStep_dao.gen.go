@@ -18,7 +18,7 @@ func NewLoginRewardReceiveStepDao(conn *database.SqlHandler) loginRewardReposito
 	}
 }
 
-func (d *loginRewardReceiveStepDao) Create(entity *loginReward.LoginRewardReceiveStep, shardKey int, tx *gorm.DB) (*loginReward.LoginRewardReceiveStep, error) {
+func (d *loginRewardReceiveStepDao) Create(entity *loginReward.LoginRewardReceiveStep, shardKey string, tx *gorm.DB) (*loginReward.LoginRewardReceiveStep, error) {
 	var conn *gorm.DB
 	if tx != nil {
 		conn = tx
@@ -34,7 +34,7 @@ func (d *loginRewardReceiveStepDao) Create(entity *loginReward.LoginRewardReceiv
 	return entity, nil
 }
 
-func (d *loginRewardReceiveStepDao) Delete(entity *loginReward.LoginRewardReceiveStep, shardKey int, tx *gorm.DB) error {
+func (d *loginRewardReceiveStepDao) Delete(entity *loginReward.LoginRewardReceiveStep, shardKey string, tx *gorm.DB) error {
 	var conn *gorm.DB
 	if tx != nil {
 		conn = tx
@@ -50,7 +50,7 @@ func (d *loginRewardReceiveStepDao) Delete(entity *loginReward.LoginRewardReceiv
 	return nil
 }
 
-func (d *loginRewardReceiveStepDao) FindByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error) {
+func (d *loginRewardReceiveStepDao) FindByAccountID(AccountID int64, shardKey string) (*loginReward.LoginRewardReceiveStep, error) {
 	entity := &loginReward.LoginRewardReceiveStep{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Where("user_id = ?", AccountID).Find(entity)
 	if err := res.Error; err != nil {
@@ -60,7 +60,7 @@ func (d *loginRewardReceiveStepDao) FindByAccountID(AccountID int64, shardKey in
 	return entity, nil
 }
 
-func (d *loginRewardReceiveStepDao) FindByAccountIDAndLoginRewardStatusID(AccountID int64, LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error) {
+func (d *loginRewardReceiveStepDao) FindByAccountIDAndLoginRewardStatusID(AccountID int64, LoginRewardStatusID int64, shardKey string) (*loginReward.LoginRewardReceiveStep, error) {
 	entity := &loginReward.LoginRewardReceiveStep{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Where("user_id = ?", AccountID).Where("login_reward_model_id = ?", LoginRewardStatusID).Find(entity)
 	if err := res.Error; err != nil {
@@ -70,7 +70,7 @@ func (d *loginRewardReceiveStepDao) FindByAccountIDAndLoginRewardStatusID(Accoun
 	return entity, nil
 }
 
-func (d *loginRewardReceiveStepDao) FindByID(ID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error) {
+func (d *loginRewardReceiveStepDao) FindByID(ID int64, shardKey string) (*loginReward.LoginRewardReceiveStep, error) {
 	entity := &loginReward.LoginRewardReceiveStep{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Where("id = ?", ID).Find(entity)
 	if err := res.Error; err != nil {
@@ -80,7 +80,7 @@ func (d *loginRewardReceiveStepDao) FindByID(ID int64, shardKey int) (*loginRewa
 	return entity, nil
 }
 
-func (d *loginRewardReceiveStepDao) FindByLoginRewardStatusID(LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error) {
+func (d *loginRewardReceiveStepDao) FindByLoginRewardStatusID(LoginRewardStatusID int64, shardKey string) (*loginReward.LoginRewardReceiveStep, error) {
 	entity := &loginReward.LoginRewardReceiveStep{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Where("login_reward_model_id = ?", LoginRewardStatusID).Find(entity)
 	if err := res.Error; err != nil {
@@ -90,7 +90,7 @@ func (d *loginRewardReceiveStepDao) FindByLoginRewardStatusID(LoginRewardStatusI
 	return entity, nil
 }
 
-func (d *loginRewardReceiveStepDao) FindOrNilByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error) {
+func (d *loginRewardReceiveStepDao) FindOrNilByAccountID(AccountID int64, shardKey string) (*loginReward.LoginRewardReceiveStep, error) {
 	entity := &loginReward.LoginRewardReceiveStep{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Where("user_id = ?", AccountID).Find(entity)
 	if res.RowsAffected == 0 {
@@ -103,7 +103,7 @@ func (d *loginRewardReceiveStepDao) FindOrNilByAccountID(AccountID int64, shardK
 	return entity, nil
 }
 
-func (d *loginRewardReceiveStepDao) FindOrNilByAccountIDAndLoginRewardStatusID(AccountID int64, LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error) {
+func (d *loginRewardReceiveStepDao) FindOrNilByAccountIDAndLoginRewardStatusID(AccountID int64, LoginRewardStatusID int64, shardKey string) (*loginReward.LoginRewardReceiveStep, error) {
 	entity := &loginReward.LoginRewardReceiveStep{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Where("user_id = ?", AccountID).Where("login_reward_model_id = ?", LoginRewardStatusID).Find(entity)
 	if res.RowsAffected == 0 {
@@ -116,7 +116,7 @@ func (d *loginRewardReceiveStepDao) FindOrNilByAccountIDAndLoginRewardStatusID(A
 	return entity, nil
 }
 
-func (d *loginRewardReceiveStepDao) FindOrNilByID(ID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error) {
+func (d *loginRewardReceiveStepDao) FindOrNilByID(ID int64, shardKey string) (*loginReward.LoginRewardReceiveStep, error) {
 	entity := &loginReward.LoginRewardReceiveStep{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Where("id = ?", ID).Find(entity)
 	if res.RowsAffected == 0 {
@@ -129,7 +129,7 @@ func (d *loginRewardReceiveStepDao) FindOrNilByID(ID int64, shardKey int) (*logi
 	return entity, nil
 }
 
-func (d *loginRewardReceiveStepDao) FindOrNilByLoginRewardStatusID(LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveStep, error) {
+func (d *loginRewardReceiveStepDao) FindOrNilByLoginRewardStatusID(LoginRewardStatusID int64, shardKey string) (*loginReward.LoginRewardReceiveStep, error) {
 	entity := &loginReward.LoginRewardReceiveStep{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Where("login_reward_model_id = ?", LoginRewardStatusID).Find(entity)
 	if res.RowsAffected == 0 {
@@ -142,7 +142,7 @@ func (d *loginRewardReceiveStepDao) FindOrNilByLoginRewardStatusID(LoginRewardSt
 	return entity, nil
 }
 
-func (d *loginRewardReceiveStepDao) List(limit int, shardKey int) (*loginReward.LoginRewardReceiveSteps, error) {
+func (d *loginRewardReceiveStepDao) List(limit int, shardKey string) (*loginReward.LoginRewardReceiveSteps, error) {
 	entity := &loginReward.LoginRewardReceiveSteps{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Limit(limit).Find(entity)
 	if err := res.Error; err != nil {
@@ -152,7 +152,7 @@ func (d *loginRewardReceiveStepDao) List(limit int, shardKey int) (*loginReward.
 	return entity, nil
 }
 
-func (d *loginRewardReceiveStepDao) ListByAccountID(AccountID int64, shardKey int) (*loginReward.LoginRewardReceiveSteps, error) {
+func (d *loginRewardReceiveStepDao) ListByAccountID(AccountID int64, shardKey string) (*loginReward.LoginRewardReceiveSteps, error) {
 	entity := &loginReward.LoginRewardReceiveSteps{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Where("user_id = ?", AccountID).Find(entity)
 	if err := res.Error; err != nil {
@@ -162,7 +162,7 @@ func (d *loginRewardReceiveStepDao) ListByAccountID(AccountID int64, shardKey in
 	return entity, nil
 }
 
-func (d *loginRewardReceiveStepDao) ListByAccountIDAndLoginRewardStatusID(AccountID int64, LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveSteps, error) {
+func (d *loginRewardReceiveStepDao) ListByAccountIDAndLoginRewardStatusID(AccountID int64, LoginRewardStatusID int64, shardKey string) (*loginReward.LoginRewardReceiveSteps, error) {
 	entity := &loginReward.LoginRewardReceiveSteps{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Where("user_id = ?", AccountID).Where("login_reward_model_id = ?", LoginRewardStatusID).Find(entity)
 	if err := res.Error; err != nil {
@@ -172,7 +172,7 @@ func (d *loginRewardReceiveStepDao) ListByAccountIDAndLoginRewardStatusID(Accoun
 	return entity, nil
 }
 
-func (d *loginRewardReceiveStepDao) ListByLoginRewardStatusID(LoginRewardStatusID int64, shardKey int) (*loginReward.LoginRewardReceiveSteps, error) {
+func (d *loginRewardReceiveStepDao) ListByLoginRewardStatusID(LoginRewardStatusID int64, shardKey string) (*loginReward.LoginRewardReceiveSteps, error) {
 	entity := &loginReward.LoginRewardReceiveSteps{}
 	res := d.ShardConn.Shards[shardKey].ReadConn.Where("login_reward_model_id = ?", LoginRewardStatusID).Find(entity)
 	if err := res.Error; err != nil {
@@ -182,7 +182,7 @@ func (d *loginRewardReceiveStepDao) ListByLoginRewardStatusID(LoginRewardStatusI
 	return entity, nil
 }
 
-func (d *loginRewardReceiveStepDao) Save(entity *loginReward.LoginRewardReceiveStep, shardKey int, tx *gorm.DB) (*loginReward.LoginRewardReceiveStep, error) {
+func (d *loginRewardReceiveStepDao) Save(entity *loginReward.LoginRewardReceiveStep, shardKey string, tx *gorm.DB) (*loginReward.LoginRewardReceiveStep, error) {
 	var conn *gorm.DB
 	if tx != nil {
 		conn = tx

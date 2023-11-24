@@ -62,7 +62,7 @@ func (d *shardDao) FindByID(ID int64) (*shard.Shard, error) {
 	return entity, nil
 }
 
-func (d *shardDao) FindByShardKey(ShardKey int) (*shard.Shard, error) {
+func (d *shardDao) FindByShardKey(ShardKey string) (*shard.Shard, error) {
 	entity := &shard.Shard{}
 	res := d.Read.Where("shard_key = ?", ShardKey).Find(entity)
 	if err := res.Error; err != nil {
@@ -85,7 +85,7 @@ func (d *shardDao) FindOrNilByID(ID int64) (*shard.Shard, error) {
 	return entity, nil
 }
 
-func (d *shardDao) FindOrNilByShardKey(ShardKey int) (*shard.Shard, error) {
+func (d *shardDao) FindOrNilByShardKey(ShardKey string) (*shard.Shard, error) {
 	entity := &shard.Shard{}
 	res := d.Read.Where("shard_key = ?", ShardKey).Find(entity)
 	if res.RowsAffected == 0 {
@@ -108,7 +108,7 @@ func (d *shardDao) List(limit int) (*shard.Shards, error) {
 	return entity, nil
 }
 
-func (d *shardDao) ListByShardKey(ShardKey int) (*shard.Shards, error) {
+func (d *shardDao) ListByShardKey(ShardKey string) (*shard.Shards, error) {
 	entity := &shard.Shards{}
 	res := d.Read.Where("shard_key = ?", ShardKey).Find(entity)
 	if err := res.Error; err != nil {

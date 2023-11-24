@@ -36,7 +36,7 @@ func (m *MockItemBoxRepository) EXPECT() *MockItemBoxRepositoryMockRecorder {
 }
 
 // Create mocks base method.
-func (m *MockItemBoxRepository) Create(entity *item.ItemBox, shardKey int, tx *gorm.DB) (*item.ItemBox, error) {
+func (m *MockItemBoxRepository) Create(entity *item.ItemBox, shardKey string, tx *gorm.DB) (*item.ItemBox, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Create", entity, shardKey, tx)
 	ret0, _ := ret[0].(*item.ItemBox)
@@ -51,7 +51,7 @@ func (mr *MockItemBoxRepositoryMockRecorder) Create(entity, shardKey, tx interfa
 }
 
 // Delete mocks base method.
-func (m *MockItemBoxRepository) Delete(entity *item.ItemBox, shardKey int, tx *gorm.DB) error {
+func (m *MockItemBoxRepository) Delete(entity *item.ItemBox, shardKey string, tx *gorm.DB) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Delete", entity, shardKey, tx)
 	ret0, _ := ret[0].(error)
@@ -65,7 +65,7 @@ func (mr *MockItemBoxRepositoryMockRecorder) Delete(entity, shardKey, tx interfa
 }
 
 // FindByAccountID mocks base method.
-func (m *MockItemBoxRepository) FindByAccountID(AccountID int64, shardKey int) (*item.ItemBox, error) {
+func (m *MockItemBoxRepository) FindByAccountID(AccountID int64, shardKey string) (*item.ItemBox, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByAccountID", AccountID, shardKey)
 	ret0, _ := ret[0].(*item.ItemBox)
@@ -80,7 +80,7 @@ func (mr *MockItemBoxRepositoryMockRecorder) FindByAccountID(AccountID, shardKey
 }
 
 // FindByAccountIDAndItemName mocks base method.
-func (m *MockItemBoxRepository) FindByAccountIDAndItemName(AccountID int64, ItemName string, shardKey int) (*item.ItemBox, error) {
+func (m *MockItemBoxRepository) FindByAccountIDAndItemName(AccountID int64, ItemName, shardKey string) (*item.ItemBox, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByAccountIDAndItemName", AccountID, ItemName, shardKey)
 	ret0, _ := ret[0].(*item.ItemBox)
@@ -95,7 +95,7 @@ func (mr *MockItemBoxRepositoryMockRecorder) FindByAccountIDAndItemName(AccountI
 }
 
 // FindByID mocks base method.
-func (m *MockItemBoxRepository) FindByID(ID int64, shardKey int) (*item.ItemBox, error) {
+func (m *MockItemBoxRepository) FindByID(ID int64, shardKey string) (*item.ItemBox, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByID", ID, shardKey)
 	ret0, _ := ret[0].(*item.ItemBox)
@@ -110,7 +110,7 @@ func (mr *MockItemBoxRepositoryMockRecorder) FindByID(ID, shardKey interface{}) 
 }
 
 // FindByItemName mocks base method.
-func (m *MockItemBoxRepository) FindByItemName(ItemName string, shardKey int) (*item.ItemBox, error) {
+func (m *MockItemBoxRepository) FindByItemName(ItemName, shardKey string) (*item.ItemBox, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByItemName", ItemName, shardKey)
 	ret0, _ := ret[0].(*item.ItemBox)
@@ -125,7 +125,7 @@ func (mr *MockItemBoxRepositoryMockRecorder) FindByItemName(ItemName, shardKey i
 }
 
 // FindOrNilByAccountID mocks base method.
-func (m *MockItemBoxRepository) FindOrNilByAccountID(AccountID int64, shardKey int) (*item.ItemBox, error) {
+func (m *MockItemBoxRepository) FindOrNilByAccountID(AccountID int64, shardKey string) (*item.ItemBox, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindOrNilByAccountID", AccountID, shardKey)
 	ret0, _ := ret[0].(*item.ItemBox)
@@ -140,7 +140,7 @@ func (mr *MockItemBoxRepositoryMockRecorder) FindOrNilByAccountID(AccountID, sha
 }
 
 // FindOrNilByAccountIDAndItemName mocks base method.
-func (m *MockItemBoxRepository) FindOrNilByAccountIDAndItemName(AccountID int64, ItemName string, shardKey int) (*item.ItemBox, error) {
+func (m *MockItemBoxRepository) FindOrNilByAccountIDAndItemName(AccountID int64, ItemName, shardKey string) (*item.ItemBox, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindOrNilByAccountIDAndItemName", AccountID, ItemName, shardKey)
 	ret0, _ := ret[0].(*item.ItemBox)
@@ -155,7 +155,7 @@ func (mr *MockItemBoxRepositoryMockRecorder) FindOrNilByAccountIDAndItemName(Acc
 }
 
 // FindOrNilByID mocks base method.
-func (m *MockItemBoxRepository) FindOrNilByID(ID int64, shardKey int) (*item.ItemBox, error) {
+func (m *MockItemBoxRepository) FindOrNilByID(ID int64, shardKey string) (*item.ItemBox, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindOrNilByID", ID, shardKey)
 	ret0, _ := ret[0].(*item.ItemBox)
@@ -170,7 +170,7 @@ func (mr *MockItemBoxRepositoryMockRecorder) FindOrNilByID(ID, shardKey interfac
 }
 
 // FindOrNilByItemName mocks base method.
-func (m *MockItemBoxRepository) FindOrNilByItemName(ItemName string, shardKey int) (*item.ItemBox, error) {
+func (m *MockItemBoxRepository) FindOrNilByItemName(ItemName, shardKey string) (*item.ItemBox, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindOrNilByItemName", ItemName, shardKey)
 	ret0, _ := ret[0].(*item.ItemBox)
@@ -185,7 +185,7 @@ func (mr *MockItemBoxRepositoryMockRecorder) FindOrNilByItemName(ItemName, shard
 }
 
 // List mocks base method.
-func (m *MockItemBoxRepository) List(limit, shardKey int) (*item.ItemBoxs, error) {
+func (m *MockItemBoxRepository) List(limit int, shardKey string) (*item.ItemBoxs, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "List", limit, shardKey)
 	ret0, _ := ret[0].(*item.ItemBoxs)
@@ -200,7 +200,7 @@ func (mr *MockItemBoxRepositoryMockRecorder) List(limit, shardKey interface{}) *
 }
 
 // ListByAccountID mocks base method.
-func (m *MockItemBoxRepository) ListByAccountID(AccountID int64, shardKey int) (*item.ItemBoxs, error) {
+func (m *MockItemBoxRepository) ListByAccountID(AccountID int64, shardKey string) (*item.ItemBoxs, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListByAccountID", AccountID, shardKey)
 	ret0, _ := ret[0].(*item.ItemBoxs)
@@ -215,7 +215,7 @@ func (mr *MockItemBoxRepositoryMockRecorder) ListByAccountID(AccountID, shardKey
 }
 
 // ListByAccountIDAndItemName mocks base method.
-func (m *MockItemBoxRepository) ListByAccountIDAndItemName(AccountID int64, ItemName string, shardKey int) (*item.ItemBoxs, error) {
+func (m *MockItemBoxRepository) ListByAccountIDAndItemName(AccountID int64, ItemName, shardKey string) (*item.ItemBoxs, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListByAccountIDAndItemName", AccountID, ItemName, shardKey)
 	ret0, _ := ret[0].(*item.ItemBoxs)
@@ -230,7 +230,7 @@ func (mr *MockItemBoxRepositoryMockRecorder) ListByAccountIDAndItemName(AccountI
 }
 
 // ListByItemName mocks base method.
-func (m *MockItemBoxRepository) ListByItemName(ItemName string, shardKey int) (*item.ItemBoxs, error) {
+func (m *MockItemBoxRepository) ListByItemName(ItemName, shardKey string) (*item.ItemBoxs, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListByItemName", ItemName, shardKey)
 	ret0, _ := ret[0].(*item.ItemBoxs)
@@ -245,7 +245,7 @@ func (mr *MockItemBoxRepositoryMockRecorder) ListByItemName(ItemName, shardKey i
 }
 
 // Save mocks base method.
-func (m *MockItemBoxRepository) Save(entity *item.ItemBox, shardKey int, tx *gorm.DB) (*item.ItemBox, error) {
+func (m *MockItemBoxRepository) Save(entity *item.ItemBox, shardKey string, tx *gorm.DB) (*item.ItemBox, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Save", entity, shardKey, tx)
 	ret0, _ := ret[0].(*item.ItemBox)

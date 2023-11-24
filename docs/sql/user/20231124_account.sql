@@ -3,7 +3,7 @@ CREATE TABLE account (
 
 	id BIGINT NOT NULL AUTO_INCREMENT,
 
-	shard_key INT NOT NULL,
+	shard_key VARCHAR(255) NOT NULL,
 
 	uuid VARCHAR(255) NOT NULL,
 

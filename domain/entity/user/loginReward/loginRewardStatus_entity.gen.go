@@ -9,7 +9,7 @@ type LoginRewardStatuses []LoginRewardStatus
 type LoginRewardStatus struct {
 	ID int64 `json:"id"`
 
-	ShardKey int `json:"shard_key"`
+	ShardKey string `json:"shard_key"`
 
 	AccountID int64 `json:"account_id"`
 

@@ -3,7 +3,7 @@ package: item
 structure:
   ShardKey:
     name: shard_key
-    type: int
+    type: string
     nullable: false
     number: 1
   AccountID:

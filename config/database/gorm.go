@@ -16,7 +16,7 @@ type SqlHandler struct {
 }
 
 type ShardConn struct {
-	Shards map[int]*Conn
+	Shards map[string]*Conn
 }
 
 type Conn struct {
@@ -113,9 +113,9 @@ func shardUserDB() *ShardConn {
 		panic(err.Error())
 	}
 
-	shards := make(map[int]*Conn)
+	shards := make(map[string]*Conn)
 	for i := 1; i <= shardCount; i++ {
-		shards[i] = userDB(fmt.Sprintf("_%v", i))
+		shards[os.Getenv(fmt.Sprintf("USER_MYSQL_SHARD_KEY_%v", i))] = userDB(fmt.Sprintf("_%v", i))
 	}
 
 	return &ShardConn{
@@ -126,18 +126,18 @@ func shardUserDB() *ShardConn {
 func userDB(shard string) *Conn {
 	readConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		os.Getenv("USER_MYSQL_READ_USER"+shard),
-		os.Getenv("USER_MYSQL_READ_PASSWORD"+shard),
-		os.Getenv("USER_MYSQL_READ_HOST"+shard),
-		os.Getenv("USER_MYSQL_DATABASE"+shard),
+		os.Getenv(fmt.Sprintf("USER_MYSQL_READ_USER%s", shard)),
+		os.Getenv(fmt.Sprintf("USER_MYSQL_READ_PASSWORD%s", shard)),
+		os.Getenv(fmt.Sprintf("USER_MYSQL_READ_HOST%s", shard)),
+		os.Getenv(fmt.Sprintf("USER_MYSQL_DATABASE%s", shard)),
 	)
 
 	writeConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		os.Getenv("USER_MYSQL_WRITE_USER"+shard),
-		os.Getenv("USER_MYSQL_WRITE_PASSWORD"+shard),
-		os.Getenv("USER_MYSQL_WRITE_HOST"+shard),
-		os.Getenv("USER_MYSQL_DATABASE"+shard),
+		os.Getenv(fmt.Sprintf("USER_MYSQL_WRITE_USER%s", shard)),
+		os.Getenv(fmt.Sprintf("USER_MYSQL_WRITE_PASSWORD%s", shard)),
+		os.Getenv(fmt.Sprintf("USER_MYSQL_WRITE_HOST%s", shard)),
+		os.Getenv(fmt.Sprintf("USER_MYSQL_DATABASE%s", shard)),
 	)
 
 	readDB, err := gorm.Open(mysql.New(mysql.Config{

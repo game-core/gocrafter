@@ -7,33 +7,33 @@ import (
 )
 
 type ItemBoxRepository interface {
-	Create(entity *item.ItemBox, shardKey int, tx *gorm.DB) (*item.ItemBox, error)
+	Create(entity *item.ItemBox, shardKey string, tx *gorm.DB) (*item.ItemBox, error)
 
-	Delete(entity *item.ItemBox, shardKey int, tx *gorm.DB) error
+	Delete(entity *item.ItemBox, shardKey string, tx *gorm.DB) error
 
-	FindByAccountID(AccountID int64, shardKey int) (*item.ItemBox, error)
+	FindByAccountID(AccountID int64, shardKey string) (*item.ItemBox, error)
 
-	FindByAccountIDAndItemName(AccountID int64, ItemName string, shardKey int) (*item.ItemBox, error)
+	FindByAccountIDAndItemName(AccountID int64, ItemName string, shardKey string) (*item.ItemBox, error)
 
-	FindByID(ID int64, shardKey int) (*item.ItemBox, error)
+	FindByID(ID int64, shardKey string) (*item.ItemBox, error)
 
-	FindByItemName(ItemName string, shardKey int) (*item.ItemBox, error)
+	FindByItemName(ItemName string, shardKey string) (*item.ItemBox, error)
 
-	FindOrNilByAccountID(AccountID int64, shardKey int) (*item.ItemBox, error)
+	FindOrNilByAccountID(AccountID int64, shardKey string) (*item.ItemBox, error)
 
-	FindOrNilByAccountIDAndItemName(AccountID int64, ItemName string, shardKey int) (*item.ItemBox, error)
+	FindOrNilByAccountIDAndItemName(AccountID int64, ItemName string, shardKey string) (*item.ItemBox, error)
 
-	FindOrNilByID(ID int64, shardKey int) (*item.ItemBox, error)
+	FindOrNilByID(ID int64, shardKey string) (*item.ItemBox, error)
 
-	FindOrNilByItemName(ItemName string, shardKey int) (*item.ItemBox, error)
+	FindOrNilByItemName(ItemName string, shardKey string) (*item.ItemBox, error)
 
-	List(limit int, shardKey int) (*item.ItemBoxs, error)
+	List(limit int, shardKey string) (*item.ItemBoxs, error)
 
-	ListByAccountID(AccountID int64, shardKey int) (*item.ItemBoxs, error)
+	ListByAccountID(AccountID int64, shardKey string) (*item.ItemBoxs, error)
 
-	ListByAccountIDAndItemName(AccountID int64, ItemName string, shardKey int) (*item.ItemBoxs, error)
+	ListByAccountIDAndItemName(AccountID int64, ItemName string, shardKey string) (*item.ItemBoxs, error)
 
-	ListByItemName(ItemName string, shardKey int) (*item.ItemBoxs, error)
+	ListByItemName(ItemName string, shardKey string) (*item.ItemBoxs, error)
 
-	Save(entity *item.ItemBox, shardKey int, tx *gorm.DB) (*item.ItemBox, error)
+	Save(entity *item.ItemBox, shardKey string, tx *gorm.DB) (*item.ItemBox, error)
 }

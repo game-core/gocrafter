@@ -9,7 +9,7 @@ type Accounts []Account
 type Account struct {
 	ID int64 `json:"id"`
 
-	ShardKey int `json:"shard_key"`
+	ShardKey string `json:"shard_key"`
 
 	UUID string `json:"uuid"`
 
