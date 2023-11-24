@@ -7,7 +7,7 @@ import (
 )
 
 type ExampleService interface {
-	ListExample(limit int64) (*response.ListExample, error)
+	ListExample(limit int) (*response.ListExample, error)
 }
 
 type exampleService struct {
@@ -23,7 +23,7 @@ func NewExampleService(
 }
 
 // ListExample 一覧を取得する
-func (e *exampleService) ListExample(limit int64) (*response.ListExample, error) {
+func (e *exampleService) ListExample(limit int) (*response.ListExample, error) {
 	ers, err := e.exampleRepository.List(limit)
 	if err != nil {
 		return nil, err
