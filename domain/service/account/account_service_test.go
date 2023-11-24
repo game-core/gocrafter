@@ -43,17 +43,17 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 						Return(
 							&shardResponse.GetShard{
 								Status:       200,
-								NextShardKey: 1,
+								NextShardKey: "SHARD_1",
 								Shards: &shardResponse.Shards{
 									{
 										ID:       1,
-										ShardKey: 1,
+										ShardKey: "SHARD_1",
 										Name:     "name1",
 										Count:    1,
 									},
 									{
 										ID:       2,
-										ShardKey: 2,
+										ShardKey: "SHARD_2",
 										Name:     "name2",
 										Count:    2,
 									},
@@ -66,7 +66,7 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 				transactionRepository: func(ctrl *gomock.Controller) userRepository.TransactionRepository {
 					m := userRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
-						Begin(1).
+						Begin("SHARD_1").
 						Return(
 							nil,
 							nil,
@@ -85,13 +85,13 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 					m.EXPECT().
 						Create(
 							gomock.Any(),
-							1,
+							"SHARD_1",
 							nil,
 						).
 						Return(
 							&accountEntity.Account{
 								UUID:      "uuid",
-								ShardKey:  1,
+								ShardKey:  "SHARD_1",
 								Name:      "name",
 								Password:  "password",
 								CreatedAt: time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
@@ -111,7 +111,7 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 				Status: 200,
 				Item: response.Account{
 					ID:       0,
-					ShardKey: 1,
+					ShardKey: "SHARD_1",
 					UUID:     "uuid",
 					Name:     "name",
 					Password: "password",
@@ -130,17 +130,17 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 						Return(
 							&shardResponse.GetShard{
 								Status:       200,
-								NextShardKey: 1,
+								NextShardKey: "SHARD_1",
 								Shards: &shardResponse.Shards{
 									{
 										ID:       1,
-										ShardKey: 1,
+										ShardKey: "SHARD_1",
 										Name:     "name1",
 										Count:    1,
 									},
 									{
 										ID:       2,
-										ShardKey: 2,
+										ShardKey: "SHARD_2",
 										Name:     "name2",
 										Count:    2,
 									},
@@ -153,7 +153,7 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 				transactionRepository: func(ctrl *gomock.Controller) userRepository.TransactionRepository {
 					m := userRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
-						Begin(1).
+						Begin("SHARD_1").
 						Return(
 							nil,
 							nil,
@@ -172,7 +172,7 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 					m.EXPECT().
 						Create(
 							gomock.Any(),
-							1,
+							"SHARD_1",
 							nil,
 						).
 						Return(
@@ -200,17 +200,17 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 						Return(
 							&shardResponse.GetShard{
 								Status:       200,
-								NextShardKey: 1,
+								NextShardKey: "SHARD_1",
 								Shards: &shardResponse.Shards{
 									{
 										ID:       1,
-										ShardKey: 1,
+										ShardKey: "SHARD_1",
 										Name:     "name1",
 										Count:    1,
 									},
 									{
 										ID:       2,
-										ShardKey: 2,
+										ShardKey: "SHARD_2",
 										Name:     "name2",
 										Count:    2,
 									},
@@ -223,7 +223,7 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 				transactionRepository: func(ctrl *gomock.Controller) userRepository.TransactionRepository {
 					m := userRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
-						Begin(1).
+						Begin("SHARD_1").
 						Return(
 							nil,
 							errors.New("transactionRepository.Begin"),
@@ -321,12 +321,12 @@ func TestAccountService_LoginAccount(t *testing.T) {
 					m.EXPECT().
 						FindByUUID(
 							"uuid",
-							1,
+							"SHARD_1",
 						).
 						Return(
 							&accountEntity.Account{
 								UUID:      "uuid",
-								ShardKey:  1,
+								ShardKey:  "SHARD_1",
 								Name:      "name",
 								Password:  "$2a$10$DHKndG0mMDkIy2G0p4H2f.YsrxX5TZdwqlB9eWO8xEwvhdlErS3Kq",
 								CreatedAt: time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
@@ -339,7 +339,7 @@ func TestAccountService_LoginAccount(t *testing.T) {
 			},
 			args: args{
 				req: &request.LoginAccount{
-					ShardKey: 1,
+					ShardKey: "SHARD_1",
 					UUID:     "uuid",
 					Password: "txbw-V8xmREN12sx88zo",
 				},
@@ -348,7 +348,7 @@ func TestAccountService_LoginAccount(t *testing.T) {
 				Status: 200,
 				Item: response.Account{
 					ID:       0,
-					ShardKey: 1,
+					ShardKey: "SHARD_1",
 					UUID:     "uuid",
 					Name:     "name",
 					Password: "txbw-V8xmREN12sx88zo",
@@ -365,7 +365,7 @@ func TestAccountService_LoginAccount(t *testing.T) {
 					m.EXPECT().
 						FindByUUID(
 							"uuid",
-							1,
+							"SHARD_1",
 						).
 						Return(
 							nil,
@@ -376,7 +376,7 @@ func TestAccountService_LoginAccount(t *testing.T) {
 			},
 			args: args{
 				req: &request.LoginAccount{
-					ShardKey: 1,
+					ShardKey: "SHARD_1",
 					UUID:     "uuid",
 					Password: "txbw-V8xmREN12sx88zo",
 				},
@@ -430,7 +430,7 @@ func TestAccountService_CheckAccount(t *testing.T) {
 					m.EXPECT().
 						FindByUUID(
 							"uuid",
-							1,
+							"SHARD_1",
 						).
 						Return(
 							&accountEntity.Account{
@@ -447,7 +447,7 @@ func TestAccountService_CheckAccount(t *testing.T) {
 			},
 			args: args{
 				req: &request.CheckAccount{
-					ShardKey: 1,
+					ShardKey: "SHARD_1",
 					UUID:     "uuid",
 				},
 			},
@@ -471,7 +471,7 @@ func TestAccountService_CheckAccount(t *testing.T) {
 					m.EXPECT().
 						FindByUUID(
 							"uuid",
-							1,
+							"SHARD_1",
 						).
 						Return(
 							nil,
@@ -482,7 +482,7 @@ func TestAccountService_CheckAccount(t *testing.T) {
 			},
 			args: args{
 				req: &request.CheckAccount{
-					ShardKey: 1,
+					ShardKey: "SHARD_1",
 					UUID:     "uuid",
 				},
 			},

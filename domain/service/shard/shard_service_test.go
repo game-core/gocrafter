@@ -57,7 +57,7 @@ func TestShardService_ListShard(t *testing.T) {
 							&shardEntity.Shards{
 								{
 									ID:        1,
-									ShardKey:  1,
+									ShardKey:  "SHARD_1",
 									Name:      "name1",
 									Count:     1,
 									CreatedAt: time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
@@ -65,7 +65,7 @@ func TestShardService_ListShard(t *testing.T) {
 								},
 								{
 									ID:        2,
-									ShardKey:  2,
+									ShardKey:  "SHARD_2",
 									Name:      "name2",
 									Count:     2,
 									CreatedAt: time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
@@ -78,7 +78,7 @@ func TestShardService_ListShard(t *testing.T) {
 						Save(
 							&shardEntity.Shard{
 								ID:        1,
-								ShardKey:  1,
+								ShardKey:  "SHARD_1",
 								Name:      "name1",
 								Count:     2,
 								CreatedAt: time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
@@ -89,7 +89,7 @@ func TestShardService_ListShard(t *testing.T) {
 						Return(
 							&shardEntity.Shard{
 								ID:        1,
-								ShardKey:  1,
+								ShardKey:  "SHARD_2",
 								Name:      "name1",
 								Count:     2,
 								CreatedAt: time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
@@ -102,17 +102,17 @@ func TestShardService_ListShard(t *testing.T) {
 			},
 			want: &response.GetShard{
 				Status:       200,
-				NextShardKey: 1,
+				NextShardKey: "SHARD_1",
 				Shards: &response.Shards{
 					{
 						ID:       1,
-						ShardKey: 1,
+						ShardKey: "SHARD_1",
 						Name:     "name1",
 						Count:    1,
 					},
 					{
 						ID:       2,
-						ShardKey: 2,
+						ShardKey: "SHARD_2",
 						Name:     "name2",
 						Count:    2,
 					},
@@ -150,7 +150,7 @@ func TestShardService_ListShard(t *testing.T) {
 							&shardEntity.Shards{
 								{
 									ID:        1,
-									ShardKey:  1,
+									ShardKey:  "SHARD_1",
 									Name:      "name1",
 									Count:     2,
 									CreatedAt: time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
@@ -158,7 +158,7 @@ func TestShardService_ListShard(t *testing.T) {
 								},
 								{
 									ID:        2,
-									ShardKey:  2,
+									ShardKey:  "SHARD_2",
 									Name:      "name2",
 									Count:     1,
 									CreatedAt: time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
@@ -171,7 +171,7 @@ func TestShardService_ListShard(t *testing.T) {
 						Save(
 							&shardEntity.Shard{
 								ID:        2,
-								ShardKey:  2,
+								ShardKey:  "SHARD_2",
 								Name:      "name2",
 								Count:     2,
 								CreatedAt: time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
@@ -182,7 +182,7 @@ func TestShardService_ListShard(t *testing.T) {
 						Return(
 							&shardEntity.Shard{
 								ID:        2,
-								ShardKey:  2,
+								ShardKey:  "SHARD_2",
 								Name:      "name2",
 								Count:     2,
 								CreatedAt: time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
@@ -195,17 +195,17 @@ func TestShardService_ListShard(t *testing.T) {
 			},
 			want: &response.GetShard{
 				Status:       200,
-				NextShardKey: 2,
+				NextShardKey: "SHARD_2",
 				Shards: &response.Shards{
 					{
 						ID:       1,
-						ShardKey: 1,
+						ShardKey: "SHARD_1",
 						Name:     "name1",
 						Count:    2,
 					},
 					{
 						ID:       2,
-						ShardKey: 2,
+						ShardKey: "SHARD_2",
 						Name:     "name2",
 						Count:    1,
 					},
@@ -336,7 +336,7 @@ func TestShardService_ListShard(t *testing.T) {
 							&shardEntity.Shards{
 								{
 									ID:        1,
-									ShardKey:  1,
+									ShardKey:  "SHARD_1",
 									Name:      "name1",
 									Count:     1,
 									CreatedAt: time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
@@ -344,7 +344,7 @@ func TestShardService_ListShard(t *testing.T) {
 								},
 								{
 									ID:        2,
-									ShardKey:  2,
+									ShardKey:  "SHARD_2",
 									Name:      "name2",
 									Count:     2,
 									CreatedAt: time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
@@ -357,7 +357,7 @@ func TestShardService_ListShard(t *testing.T) {
 						Save(
 							&shardEntity.Shard{
 								ID:        1,
-								ShardKey:  1,
+								ShardKey:  "SHARD_1",
 								Name:      "name1",
 								Count:     2,
 								CreatedAt: time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),

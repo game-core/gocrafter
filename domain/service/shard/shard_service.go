@@ -6,6 +6,7 @@ import (
 	"log"
 
 	response "github.com/game-core/gocrafter/api/presentation/response/shard"
+	shardEntity "github.com/game-core/gocrafter/domain/entity/config/shard"
 	configRepository "github.com/game-core/gocrafter/domain/repository/config"
 	shardRepository "github.com/game-core/gocrafter/domain/repository/config/shard"
 )
@@ -48,34 +49,20 @@ func (s *shardService) GetShard() (*response.GetShard, error) {
 		}
 	}()
 
-	srs, err := s.shardRepository.List(64)
+	ss, err := s.shardRepository.List(64)
 	if err != nil {
 		return nil, err
 	}
 
-	if len(*srs) == 0 {
+	if len(*ss) == 0 {
 		return nil, errors.New("failed to shardRepository.List")
 	}
 
-	shards := make(response.Shards, len(*srs))
-	minShard := (*srs)[0]
-
-	for i, sr := range *srs {
-		shard := &response.Shard{
-			ID:       sr.ID,
-			ShardKey: sr.ShardKey,
-			Name:     sr.Name,
-			Count:    sr.Count,
-		}
-		shards[i] = *shard
-
-		if sr.Count < minShard.Count {
-			minShard = sr
-		}
-	}
-
+	shards := make(response.Shards, len(*ss))
+	minShard := s.getMinShard(ss, shards)
 	minShard.Count++
-	if _, err := s.shardRepository.Save(&minShard, tx); err != nil {
+
+	if _, err := s.shardRepository.Save(minShard, tx); err != nil {
 		return nil, err
 	}
 
@@ -84,4 +71,25 @@ func (s *shardService) GetShard() (*response.GetShard, error) {
 		NextShardKey: minShard.ShardKey,
 		Shards:       &shards,
 	}, nil
+}
+
+// getMinShard 最小のシャードを取得
+func (s *shardService) getMinShard(ss *shardEntity.Shards, shards response.Shards) *shardEntity.Shard {
+	minShard := (*ss)[0]
+
+	for i, s := range *ss {
+		shard := &response.Shard{
+			ID:       s.ID,
+			ShardKey: s.ShardKey,
+			Name:     s.Name,
+			Count:    s.Count,
+		}
+		shards[i] = *shard
+
+		if s.Count < minShard.Count {
+			minShard = s
+		}
+	}
+
+	return &minShard
 }
