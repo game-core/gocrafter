@@ -68,7 +68,6 @@ func (s *loginRewardService) GetLoginRewardModel(req *request.GetLoginRewardMode
 	items := make(response.Items, len(*rewardItems))
 	for i, ri := range *rewardItems {
 		item := response.Item{
-			ID:    ri.ID,
 			Name:  ri.Name,
 			Count: ri.Count,
 		}
@@ -146,7 +145,6 @@ func (s *loginRewardService) ReceiveLoginReward(req *request.ReceiveLoginReward,
 	items := make(response.Items, len(*rewardItems))
 	for i, ri := range *rewardItems {
 		item := response.Item{
-			ID:    ri.ID,
 			Name:  ri.Name,
 			Count: ri.Count,
 		}
