@@ -6,13 +6,13 @@ structure:
     type: int64
     nullable: false
     number: 1
-  StepNumber:
-    name: step_number
-    type: int
+  Name:
+    name: name
+    type: string
     nullable: false
     number: 2
-  Count:
-    name: count
+  StepNumber:
+    name: step_number
     type: int
     nullable: false
     number: 3

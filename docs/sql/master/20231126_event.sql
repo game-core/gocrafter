@@ -5,7 +5,7 @@ CREATE TABLE event (
 
 	name VARCHAR(255) NOT NULL,
 
-	reset_hour INT DEFAULT NULL,
+	reset_hour INT NOT NULL,
 
 	repeat_setting TINYINT NOT NULL,
 

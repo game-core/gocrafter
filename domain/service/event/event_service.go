@@ -2,14 +2,12 @@
 package event
 
 import (
-	"time"
-
 	eventEntity "github.com/game-core/gocrafter/domain/entity/master/event"
 	eventRepository "github.com/game-core/gocrafter/domain/repository/master/event"
 )
 
 type EventService interface {
-	GetEventToEntity(name string, now time.Time) (*eventEntity.Event, error)
+	GetEventToEntity(name string) (*eventEntity.Event, error)
 }
 
 type eventService struct {
@@ -25,7 +23,7 @@ func NewEventService(
 }
 
 // GetEventToEntity イベントをEntityで取得する
-func (s *eventService) GetEventToEntity(name string, now time.Time) (*eventEntity.Event, error) {
+func (s *eventService) GetEventToEntity(name string) (*eventEntity.Event, error) {
 	e, err := s.eventRepository.FindByName(name)
 	if err != nil {
 		return nil, err

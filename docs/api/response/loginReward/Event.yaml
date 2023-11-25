@@ -14,7 +14,7 @@ structure:
   ResetHour:
     name: repeat_hour
     type: int
-    nullable: true
+    nullable: false
     number: 3
   RepeatSetting:
     name: repeat_setting

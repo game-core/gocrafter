@@ -11,7 +11,7 @@ type Event struct {
 
 	Name string `json:"name"`
 
-	ResetHour *int `json:"reset_hour"`
+	ResetHour int `json:"reset_hour"`
 
 	RepeatSetting bool `json:"repeat_setting"`
 

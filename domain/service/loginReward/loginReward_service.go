@@ -60,7 +60,7 @@ func (s *loginRewardService) GetLoginRewardModel(req *request.GetLoginRewardMode
 		return nil, err
 	}
 
-	rewards, err := s.getRewards(lrrs)
+	rewards, err := response.GetRewardResponses(lrrs)
 	if err != nil {
 		return nil, err
 	}
@@ -118,7 +118,7 @@ func (s *loginRewardService) ReceiveLoginReward(req *request.ReceiveLoginReward,
 		return nil, err
 	}
 
-	items, err := s.getItems(lrrs.GetItems(e.GetDayCount(now)))
+	items, err := response.GetItemResponses(lrrs.GetItems(e.GetDayCount(now)))
 	if err != nil {
 		return nil, err
 	}
@@ -130,11 +130,12 @@ func (s *loginRewardService) ReceiveLoginReward(req *request.ReceiveLoginReward,
 			LoginRewardModel: response.LoginRewardModel{
 				ID:   lrm.ID,
 				Name: lrm.Name,
-
 				Event: response.Event{
 					ID:            e.ID,
 					Name:          e.Name,
+					ResetHour:     e.ResetHour,
 					RepeatSetting: e.RepeatSetting,
+					RepeatStartAt: e.RepeatStartAt,
 					StartAt:       e.StartAt,
 					EndAt:         e.EndAt,
 				},
@@ -143,43 +144,6 @@ func (s *loginRewardService) ReceiveLoginReward(req *request.ReceiveLoginReward,
 			LastReceivedAt: lrs.LastReceivedAt,
 		},
 	}, nil
-}
-
-// getItems アイテム一覧レスポンスを取得する
-func (s *loginRewardService) getItems(itemString string) (items response.Items, err error) {
-	rewardItems := &masterLoginRewardEntity.LoginRewardItems{}
-	if err := rewardItems.ToEntities(itemString); err != nil {
-		return nil, err
-	}
-
-	for _, ri := range *rewardItems {
-		item := response.Item{
-			Name:  ri.Name,
-			Count: ri.Count,
-		}
-		items = append(items, item)
-	}
-
-	return items, nil
-}
-
-// getRewards 報酬一覧レスポンスを取得する
-func (s *loginRewardService) getRewards(lrrs *masterLoginRewardEntity.LoginRewardRewards) (rewards response.LoginRewardRewards, err error) {
-	for _, lrr := range *lrrs {
-		items, err := s.getItems(lrrs.GetItems(lrr.StepNumber))
-		if err != nil {
-			return nil, err
-		}
-
-		reward := &response.LoginRewardReward{
-			ID:         lrr.ID,
-			Items:      items,
-			StepNumber: lrr.StepNumber,
-		}
-		rewards = append(rewards, *reward)
-	}
-
-	return rewards, nil
 }
 
 // getLoginRewardModelAndRewardsAndEvent ログイン報酬モデル、報酬一覧、イベントを取得
@@ -194,7 +158,7 @@ func (s *loginRewardService) getLoginRewardModelAndRewardsAndEvent(loginRewardMo
 		return nil, nil, nil, err
 	}
 
-	e, err := s.eventService.GetEventToEntity(lrm.EventName, now)
+	e, err := s.eventService.GetEventToEntity(lrm.EventName)
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -208,7 +172,7 @@ func (s *loginRewardService) getLoginRewardModelAndRewardsAndEvent(loginRewardMo
 
 // receive 受け取り
 func (s *loginRewardService) receive(lrs *userLoginRewardEntity.LoginRewardStatus, lrrs *masterLoginRewardEntity.LoginRewardRewards, e *masterEventEntity.Event, now time.Time, req *request.ReceiveLoginReward, tx *gorm.DB) (*userLoginRewardEntity.LoginRewardStatus, error) {
-	if lrs != nil && !lrs.HasReceived(now, *e.ResetHour) {
+	if lrs != nil && !lrs.HasReceived(now, e.ResetHour) {
 		return nil, errors.New("already received")
 	}
 

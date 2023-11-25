@@ -5,9 +5,9 @@ type LoginRewardRewards []LoginRewardReward
 type LoginRewardReward struct {
 	ID int64 `json:"id"`
 
-	StepNumber int `json:"step_number"`
+	Name string `json:"name"`
 
-	Count int `json:"count"`
+	StepNumber int `json:"step_number"`
 
 	Items Items `json:"items"`
 }

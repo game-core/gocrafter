@@ -6,7 +6,6 @@ package event
 
 import (
 	reflect "reflect"
-	time "time"
 
 	event "github.com/game-core/gocrafter/domain/entity/master/event"
 	gomock "github.com/golang/mock/gomock"
@@ -36,16 +35,16 @@ func (m *MockEventService) EXPECT() *MockEventServiceMockRecorder {
 }
 
 // GetEventToEntity mocks base method.
-func (m *MockEventService) GetEventToEntity(name string, now time.Time) (*event.Event, error) {
+func (m *MockEventService) GetEventToEntity(name string) (*event.Event, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetEventToEntity", name, now)
+	ret := m.ctrl.Call(m, "GetEventToEntity", name)
 	ret0, _ := ret[0].(*event.Event)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetEventToEntity indicates an expected call of GetEventToEntity.
-func (mr *MockEventServiceMockRecorder) GetEventToEntity(name, now interface{}) *gomock.Call {
+func (mr *MockEventServiceMockRecorder) GetEventToEntity(name interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetEventToEntity", reflect.TypeOf((*MockEventService)(nil).GetEventToEntity), name, now)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetEventToEntity", reflect.TypeOf((*MockEventService)(nil).GetEventToEntity), name)
 }

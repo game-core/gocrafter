@@ -19,7 +19,6 @@ func TestExampleService_GetEventToEntity(t *testing.T) {
 	}
 	type args struct {
 		name string
-		now  time.Time
 	}
 	tests := []struct {
 		name    string
@@ -41,7 +40,7 @@ func TestExampleService_GetEventToEntity(t *testing.T) {
 							&masterEventEntity.Event{
 								ID:            1,
 								Name:          "event",
-								ResetHour:     nil,
+								ResetHour:     9,
 								RepeatSetting: false,
 								RepeatStartAt: nil,
 								StartAt:       pointer.TimeToPointer(time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC)),
@@ -60,7 +59,7 @@ func TestExampleService_GetEventToEntity(t *testing.T) {
 			want: &masterEventEntity.Event{
 				ID:            1,
 				Name:          "event",
-				ResetHour:     nil,
+				ResetHour:     9,
 				RepeatSetting: false,
 				RepeatStartAt: nil,
 				StartAt:       pointer.TimeToPointer(time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC)),
@@ -101,7 +100,7 @@ func TestExampleService_GetEventToEntity(t *testing.T) {
 				eventRepository: tt.fields.eventRepository(ctrl),
 			}
 
-			got, err := s.GetEventToEntity(tt.args.name, tt.args.now)
+			got, err := s.GetEventToEntity(tt.args.name)
 			if !reflect.DeepEqual(err, tt.wantErr) {
 				t.Errorf("GetEventToEntity() error = %v, wantErr %v", err, tt.wantErr)
 				return

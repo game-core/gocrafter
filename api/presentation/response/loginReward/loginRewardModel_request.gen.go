@@ -9,5 +9,5 @@ type LoginRewardModel struct {
 
 	Event Event `json:"event"`
 
-	LoginRewardRewards LoginRewardRewards `json:"login_reward_reward"`
+	LoginRewardRewards LoginRewardRewards `json:"login_reward_rewards"`
 }
