@@ -11,7 +11,7 @@ type LoginRewardStatus struct {
 
 	LoginRewardModel LoginRewardModel `json:"login_reward_model"`
 
-	Item Item `json:"item"`
+	Items Items `json:"items"`
 
 	LastReceivedAt time.Time `json:"last_received_at"`
 }

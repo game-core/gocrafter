@@ -11,13 +11,11 @@ type LoginRewardReward struct {
 
 	LoginRewardModelName string `json:"login_reward_model_name"`
 
-	ItemName string `json:"item_name"`
-
 	Name string `json:"name"`
 
 	StepNumber int `json:"step_number"`
 
-	Count int `json:"count"`
+	Items string `json:"items"`
 
 	CreatedAt time.Time `json:"created_at" gorm:"autoCreateTime"`
 

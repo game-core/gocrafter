@@ -6,8 +6,8 @@ structure:
     type: int64
     nullable: false
     number: 1
-  Item:
-    name: item
-    type: Item
+  Items:
+    name: items
+    type: Items
     nullable: false
     number: 2

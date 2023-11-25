@@ -11,8 +11,8 @@ func (es *LoginRewardRewards) GetMaxStepNumber() (maxStepNumber int) {
 	return maxStepNumber
 }
 
-// GetItemName アイテム名を取得
-func (es *LoginRewardRewards) GetItemName(dayCount int) (itemName string) {
+// GetItems アイテムを取得
+func (es *LoginRewardRewards) GetItems(dayCount int) (items string) {
 	maxStepNumber := es.GetMaxStepNumber()
 	if maxStepNumber < dayCount && maxStepNumber > 0 {
 		dayCount %= maxStepNumber
@@ -20,25 +20,9 @@ func (es *LoginRewardRewards) GetItemName(dayCount int) (itemName string) {
 
 	for _, rewards := range *es {
 		if dayCount == rewards.StepNumber {
-			itemName = rewards.ItemName
+			items = rewards.Items
 		}
 	}
 
-	return itemName
-}
-
-// GetItemCount アイテム数を取得
-func (es *LoginRewardRewards) GetItemCount(dayCount int) (itemCount int) {
-	maxStepNumber := es.GetMaxStepNumber()
-	if maxStepNumber < dayCount && maxStepNumber > 0 {
-		dayCount %= maxStepNumber
-	}
-
-	for _, rewards := range *es {
-		if dayCount == rewards.StepNumber {
-			itemCount = rewards.Count
-		}
-	}
-
-	return itemCount
+	return items
 }

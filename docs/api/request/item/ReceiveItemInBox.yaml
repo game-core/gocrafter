@@ -11,13 +11,8 @@ structure:
     type: int64
     nullable: false
     number: 2
-  ItemName:
-    name: item_name
-    type: string
+  Items:
+    name: items
+    type: Items
     nullable: false
     number: 3
-  Count:
-    name: count
-    type: int
-    nullable: false
-    number: 4

@@ -77,25 +77,6 @@ func (d *loginRewardRewardDao) FindByID(ID int64) (*loginReward.LoginRewardRewar
 	return entity, nil
 }
 
-func (d *loginRewardRewardDao) FindByItemName(ItemName string) (*loginReward.LoginRewardReward, error) {
-	cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("login_reward_reward", "FindByItemName", fmt.Sprintf("%s_", ItemName)))
-	if found {
-		if cachedEntity, ok := cachedResult.(*loginReward.LoginRewardReward); ok {
-			return cachedEntity, nil
-		}
-	}
-
-	entity := &loginReward.LoginRewardReward{}
-	res := d.Read.Where("item_name = ?", ItemName).Find(entity)
-	if err := res.Error; err != nil {
-		return nil, err
-	}
-
-	d.Cache.Set(dbChashe.CreateCacheKey("login_reward_reward", "FindByItemName", fmt.Sprintf("%s_", ItemName)), entity, cache.DefaultExpiration)
-
-	return entity, nil
-}
-
 func (d *loginRewardRewardDao) FindByLoginRewardModelName(LoginRewardModelName string) (*loginReward.LoginRewardReward, error) {
 	cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("login_reward_reward", "FindByLoginRewardModelName", fmt.Sprintf("%s_", LoginRewardModelName)))
 	if found {
@@ -111,25 +92,6 @@ func (d *loginRewardRewardDao) FindByLoginRewardModelName(LoginRewardModelName s
 	}
 
 	d.Cache.Set(dbChashe.CreateCacheKey("login_reward_reward", "FindByLoginRewardModelName", fmt.Sprintf("%s_", LoginRewardModelName)), entity, cache.DefaultExpiration)
-
-	return entity, nil
-}
-
-func (d *loginRewardRewardDao) FindByLoginRewardModelNameAndItemName(LoginRewardModelName string, ItemName string) (*loginReward.LoginRewardReward, error) {
-	cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("login_reward_reward", "FindByLoginRewardModelNameAndItemName", fmt.Sprintf("%s_%s_", LoginRewardModelName, ItemName)))
-	if found {
-		if cachedEntity, ok := cachedResult.(*loginReward.LoginRewardReward); ok {
-			return cachedEntity, nil
-		}
-	}
-
-	entity := &loginReward.LoginRewardReward{}
-	res := d.Read.Where("login_reward_model_name = ?", LoginRewardModelName).Where("item_name = ?", ItemName).Find(entity)
-	if err := res.Error; err != nil {
-		return nil, err
-	}
-
-	d.Cache.Set(dbChashe.CreateCacheKey("login_reward_reward", "FindByLoginRewardModelNameAndItemName", fmt.Sprintf("%s_%s_", LoginRewardModelName, ItemName)), entity, cache.DefaultExpiration)
 
 	return entity, nil
 }
@@ -175,28 +137,6 @@ func (d *loginRewardRewardDao) FindOrNilByID(ID int64) (*loginReward.LoginReward
 	return entity, nil
 }
 
-func (d *loginRewardRewardDao) FindOrNilByItemName(ItemName string) (*loginReward.LoginRewardReward, error) {
-	cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("login_reward_reward", "FindOrNilByItemName", fmt.Sprintf("%s_", ItemName)))
-	if found {
-		if cachedEntity, ok := cachedResult.(*loginReward.LoginRewardReward); ok {
-			return cachedEntity, nil
-		}
-	}
-
-	entity := &loginReward.LoginRewardReward{}
-	res := d.Read.Where("item_name = ?", ItemName).Find(entity)
-	if res.RowsAffected == 0 {
-		return nil, nil
-	}
-	if err := res.Error; err != nil {
-		return nil, err
-	}
-
-	d.Cache.Set(dbChashe.CreateCacheKey("login_reward_reward", "FindByItemName", fmt.Sprintf("%s_", ItemName)), entity, cache.DefaultExpiration)
-
-	return entity, nil
-}
-
 func (d *loginRewardRewardDao) FindOrNilByLoginRewardModelName(LoginRewardModelName string) (*loginReward.LoginRewardReward, error) {
 	cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("login_reward_reward", "FindOrNilByLoginRewardModelName", fmt.Sprintf("%s_", LoginRewardModelName)))
 	if found {
@@ -215,28 +155,6 @@ func (d *loginRewardRewardDao) FindOrNilByLoginRewardModelName(LoginRewardModelN
 	}
 
 	d.Cache.Set(dbChashe.CreateCacheKey("login_reward_reward", "FindByLoginRewardModelName", fmt.Sprintf("%s_", LoginRewardModelName)), entity, cache.DefaultExpiration)
-
-	return entity, nil
-}
-
-func (d *loginRewardRewardDao) FindOrNilByLoginRewardModelNameAndItemName(LoginRewardModelName string, ItemName string) (*loginReward.LoginRewardReward, error) {
-	cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("login_reward_reward", "FindOrNilByLoginRewardModelNameAndItemName", fmt.Sprintf("%s_%s_", LoginRewardModelName, ItemName)))
-	if found {
-		if cachedEntity, ok := cachedResult.(*loginReward.LoginRewardReward); ok {
-			return cachedEntity, nil
-		}
-	}
-
-	entity := &loginReward.LoginRewardReward{}
-	res := d.Read.Where("login_reward_model_name = ?", LoginRewardModelName).Where("item_name = ?", ItemName).Find(entity)
-	if res.RowsAffected == 0 {
-		return nil, nil
-	}
-	if err := res.Error; err != nil {
-		return nil, err
-	}
-
-	d.Cache.Set(dbChashe.CreateCacheKey("login_reward_reward", "FindByLoginRewardModelNameAndItemName", fmt.Sprintf("%s_%s_", LoginRewardModelName, ItemName)), entity, cache.DefaultExpiration)
 
 	return entity, nil
 }
@@ -282,25 +200,6 @@ func (d *loginRewardRewardDao) List(limit int) (*loginReward.LoginRewardRewards,
 	return entity, nil
 }
 
-func (d *loginRewardRewardDao) ListByItemName(ItemName string) (*loginReward.LoginRewardRewards, error) {
-	cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("login_reward_reward", "ListByItemName", fmt.Sprintf("%s_", ItemName)))
-	if found {
-		if cachedEntity, ok := cachedResult.(*loginReward.LoginRewardRewards); ok {
-			return cachedEntity, nil
-		}
-	}
-
-	entity := &loginReward.LoginRewardRewards{}
-	res := d.Read.Where("item_name = ?", ItemName).Find(entity)
-	if err := res.Error; err != nil {
-		return nil, err
-	}
-
-	d.Cache.Set(dbChashe.CreateCacheKey("login_reward_reward", "ListByItemName", fmt.Sprintf("%s_", ItemName)), entity, cache.DefaultExpiration)
-
-	return entity, nil
-}
-
 func (d *loginRewardRewardDao) ListByLoginRewardModelName(LoginRewardModelName string) (*loginReward.LoginRewardRewards, error) {
 	cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("login_reward_reward", "ListByLoginRewardModelName", fmt.Sprintf("%s_", LoginRewardModelName)))
 	if found {
@@ -316,25 +215,6 @@ func (d *loginRewardRewardDao) ListByLoginRewardModelName(LoginRewardModelName s
 	}
 
 	d.Cache.Set(dbChashe.CreateCacheKey("login_reward_reward", "ListByLoginRewardModelName", fmt.Sprintf("%s_", LoginRewardModelName)), entity, cache.DefaultExpiration)
-
-	return entity, nil
-}
-
-func (d *loginRewardRewardDao) ListByLoginRewardModelNameAndItemName(LoginRewardModelName string, ItemName string) (*loginReward.LoginRewardRewards, error) {
-	cachedResult, found := d.Cache.Get(dbChashe.CreateCacheKey("login_reward_reward", "ListByLoginRewardModelNameAndItemName", fmt.Sprintf("%s_%s_", LoginRewardModelName, ItemName)))
-	if found {
-		if cachedEntity, ok := cachedResult.(*loginReward.LoginRewardRewards); ok {
-			return cachedEntity, nil
-		}
-	}
-
-	entity := &loginReward.LoginRewardRewards{}
-	res := d.Read.Where("login_reward_model_name = ?", LoginRewardModelName).Where("item_name = ?", ItemName).Find(entity)
-	if err := res.Error; err != nil {
-		return nil, err
-	}
-
-	d.Cache.Set(dbChashe.CreateCacheKey("login_reward_reward", "ListByLoginRewardModelNameAndItemName", fmt.Sprintf("%s_%s_", LoginRewardModelName, ItemName)), entity, cache.DefaultExpiration)
 
 	return entity, nil
 }

@@ -12,7 +12,6 @@ import (
 	request "github.com/game-core/gocrafter/api/presentation/request/loginReward"
 	response "github.com/game-core/gocrafter/api/presentation/response/loginReward"
 	masterEventEntity "github.com/game-core/gocrafter/domain/entity/master/event"
-	masterItemEntity "github.com/game-core/gocrafter/domain/entity/master/item"
 	masterLoginRewardEntity "github.com/game-core/gocrafter/domain/entity/master/loginReward"
 	userLoginRewardEntity "github.com/game-core/gocrafter/domain/entity/user/loginReward"
 	masterLoginRewardRepository "github.com/game-core/gocrafter/domain/repository/master/loginReward"
@@ -61,12 +60,26 @@ func (s *loginRewardService) GetLoginRewardModel(req *request.GetLoginRewardMode
 		return nil, err
 	}
 
+	rewardItems := &masterLoginRewardEntity.LoginRewardItems{}
+	if err := rewardItems.ToEntities(lrrs.GetItems(e.GetDayCount(now))); err != nil {
+		return nil, err
+	}
+
+	items := make(response.Items, len(*rewardItems))
+	for i, ri := range *rewardItems {
+		item := response.Item{
+			ID:    ri.ID,
+			Name:  ri.Name,
+			Count: ri.Count,
+		}
+		items[i] = item
+	}
+
 	rewards := make(response.LoginRewardRewards, len(*lrrs))
 	for i, lrr := range *lrrs {
 		reward := &response.LoginRewardReward{
 			ID:         lrr.ID,
-			ItemName:   lrr.ItemName,
-			Name:       lrr.Name,
+			Items:      items,
 			StepNumber: lrr.StepNumber,
 		}
 		rewards[i] = *reward
@@ -120,15 +133,30 @@ func (s *loginRewardService) ReceiveLoginReward(req *request.ReceiveLoginReward,
 		return nil, err
 	}
 
-	newLrs, item, err := s.receive(lrs, lrrs, e, now, req, tx)
+	lrs, err = s.receive(lrs, lrrs, e, now, req, tx)
 	if err != nil {
 		return nil, err
+	}
+
+	rewardItems := &masterLoginRewardEntity.LoginRewardItems{}
+	if err := rewardItems.ToEntities(lrrs.GetItems(e.GetDayCount(now))); err != nil {
+		return nil, err
+	}
+
+	items := make(response.Items, len(*rewardItems))
+	for i, ri := range *rewardItems {
+		item := response.Item{
+			ID:    ri.ID,
+			Name:  ri.Name,
+			Count: ri.Count,
+		}
+		items[i] = item
 	}
 
 	return &response.ReceiveLoginReward{
 		Status: 200,
 		Item: response.LoginRewardStatus{
-			ID: newLrs.ID,
+			ID: lrs.ID,
 			LoginRewardModel: response.LoginRewardModel{
 				ID:   lrm.ID,
 				Name: lrm.Name,
@@ -141,13 +169,8 @@ func (s *loginRewardService) ReceiveLoginReward(req *request.ReceiveLoginReward,
 					EndAt:         e.EndAt,
 				},
 			},
-			Item: response.Item{
-				ID:     item.ID,
-				Name:   item.Name,
-				Detail: item.Name,
-				Count:  lrrs.GetItemCount(e.GetDayCount(now)),
-			},
-			LastReceivedAt: newLrs.LastReceivedAt,
+			Items:          items,
+			LastReceivedAt: lrs.LastReceivedAt,
 		},
 	}, nil
 }
@@ -183,22 +206,21 @@ func (s *loginRewardService) receive(
 	now time.Time,
 	req *request.ReceiveLoginReward,
 	tx *gorm.DB,
-) (*userLoginRewardEntity.LoginRewardStatus, *masterItemEntity.Item, error) {
+) (*userLoginRewardEntity.LoginRewardStatus, error) {
 	if lrs != nil && !lrs.HasReceived(now, *e.ResetHour) {
-		return nil, nil, errors.New("already received")
+		return nil, errors.New("already received")
 	}
 
-	item, err := s.receiveItem(lrrs, e, now, req.AccountID, req.ShardKey)
+	if err := s.receiveItem(lrrs, e, now, req.AccountID, req.ShardKey); err != nil {
+		return nil, err
+	}
+
+	res, err := s.updateLoginRewardStatus(lrs, now, req.LoginRewardModelName, req.AccountID, req.ShardKey, tx)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
-	newLrs, err := s.updateLoginRewardStatus(lrs, now, req.LoginRewardModelName, req.AccountID, req.ShardKey, tx)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	return newLrs, item, nil
+	return res, nil
 }
 
 // receiveItem アイテムを受け取り
@@ -208,24 +230,34 @@ func (s *loginRewardService) receiveItem(
 	now time.Time,
 	accountID int64,
 	shardKey string,
-) (*masterItemEntity.Item, error) {
-	item, err := s.itemService.GetItemToEntity(lrrs.GetItemName(e.GetDayCount(now)))
-	if err != nil {
-		return nil, err
+) error {
+	rewardItems := &masterLoginRewardEntity.LoginRewardItems{}
+
+	if err := rewardItems.ToEntities(lrrs.GetItems(e.GetDayCount(now))); err != nil {
+		return err
+	}
+
+	items := make(itemRequest.Items, len(*rewardItems))
+	for i, ri := range *rewardItems {
+		item := itemRequest.Item{
+			ID:    ri.ID,
+			Name:  ri.Name,
+			Count: ri.Count,
+		}
+		items[i] = item
 	}
 
 	if _, err := s.itemService.ReceiveItemInBox(
 		&itemRequest.ReceiveItemInBox{
 			ShardKey:  shardKey,
 			AccountID: accountID,
-			ItemName:  item.Name,
-			Count:     lrrs.GetItemCount(e.GetDayCount(now)),
+			Items:     items,
 		},
 	); err != nil {
-		return nil, err
+		return err
 	}
 
-	return item, nil
+	return nil
 }
 
 // updateLoginRewardStatus 受け取りステータスを更新
@@ -239,7 +271,6 @@ func (s *loginRewardService) updateLoginRewardStatus(
 ) (*userLoginRewardEntity.LoginRewardStatus, error) {
 	if lrs == nil {
 		lrs = &userLoginRewardEntity.LoginRewardStatus{
-			ID:                   1,
 			ShardKey:             shardKey,
 			AccountID:            accountID,
 			LoginRewardModelName: loginRewardModelName,
@@ -250,10 +281,10 @@ func (s *loginRewardService) updateLoginRewardStatus(
 		lrs.LastReceivedAt = now
 	}
 
-	lrs, err := s.loginRewardStatusRepository.Save(lrs, shardKey, tx)
+	res, err := s.loginRewardStatusRepository.Save(lrs, shardKey, tx)
 	if err != nil {
 		return nil, err
 	}
 
-	return lrs, nil
+	return res, nil
 }

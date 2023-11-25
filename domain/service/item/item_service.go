@@ -2,6 +2,7 @@
 package item
 
 import (
+	"gorm.io/gorm"
 	"log"
 
 	request "github.com/game-core/gocrafter/api/presentation/request/item"
@@ -65,37 +66,52 @@ func (s *itemService) ReceiveItemInBox(req *request.ReceiveItemInBox) (*response
 		}
 	}()
 
-	i, err := s.itemRepository.FindByName(req.ItemName)
+	items, err := s.receiveItemBox(&req.Items, req.AccountID, req.ShardKey, tx)
 	if err != nil {
-		return nil, err
-	}
-
-	ib, err := s.itemBoxRepository.FindOrNilByAccountIDAndItemName(req.AccountID, req.ItemName, req.ShardKey)
-	if err != nil {
-		return nil, err
-	}
-
-	if ib == nil {
-		ib = &userItemEntity.ItemBox{
-			ShardKey:  req.ShardKey,
-			AccountID: req.AccountID,
-			ItemName:  req.ItemName,
-			Count:     req.Count,
-		}
-	} else {
-		ib.Count = ib.Count + req.Count
-	}
-
-	if _, err := s.itemBoxRepository.Save(ib, req.ShardKey, tx); err != nil {
 		return nil, err
 	}
 
 	return &response.ReceiveItemInBox{
 		Status: 200,
-		Item: response.Item{
-			ID:     i.ID,
-			Name:   i.Name,
-			Detail: i.Detail,
-		},
+		Items:  *items,
 	}, nil
+}
+
+// receiveItemBox
+func (s *itemService) receiveItemBox(items *request.Items, accountID int64, shardKey string, tx *gorm.DB) (*response.Items, error) {
+	itemEntities := make(response.Items, len(*items))
+	for _, item := range *items {
+		i, err := s.itemRepository.FindByName(item.Name)
+		if err != nil {
+			return nil, err
+		}
+
+		ib, err := s.itemBoxRepository.FindOrNilByAccountIDAndItemName(accountID, i.Name, shardKey)
+		if err != nil {
+			return nil, err
+		}
+
+		if ib == nil {
+			ib = &userItemEntity.ItemBox{
+				ShardKey:  shardKey,
+				AccountID: accountID,
+				ItemName:  item.Name,
+				Count:     item.Count,
+			}
+		} else {
+			ib.Count = ib.Count + item.Count
+		}
+
+		if _, err := s.itemBoxRepository.Save(ib, shardKey, tx); err != nil {
+			return nil, err
+		}
+
+		itemEntities = append(itemEntities, response.Item{
+			ID:     item.ID,
+			Name:   item.Name,
+			Detail: item.Detail,
+		})
+	}
+
+	return &itemEntities, nil
 }
