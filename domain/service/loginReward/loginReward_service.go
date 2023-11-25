@@ -193,6 +193,10 @@ func (s *loginRewardService) getLoginRewardModelAndRewardsAndEvent(
 		return nil, nil, nil, err
 	}
 
+	if !e.IsEventPeriod(now) {
+		return nil, nil, nil, errors.New("outside the event period")
+	}
+
 	return lrm, lrrs, e, nil
 }
 
