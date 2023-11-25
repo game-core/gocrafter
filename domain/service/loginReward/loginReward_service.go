@@ -113,7 +113,7 @@ func (s *loginRewardService) ReceiveLoginReward(req *request.ReceiveLoginReward,
 		return nil, err
 	}
 
-	lrs, err = s.receive(lrs, lrrs, e, now, req, tx)
+	lrs, err = s.receive(lrs, lrrs, e, req, now, tx)
 	if err != nil {
 		return nil, err
 	}
@@ -171,7 +171,7 @@ func (s *loginRewardService) getLoginRewardModelAndRewardsAndEvent(loginRewardMo
 }
 
 // receive 受け取り
-func (s *loginRewardService) receive(lrs *userLoginRewardEntity.LoginRewardStatus, lrrs *masterLoginRewardEntity.LoginRewardRewards, e *masterEventEntity.Event, now time.Time, req *request.ReceiveLoginReward, tx *gorm.DB) (*userLoginRewardEntity.LoginRewardStatus, error) {
+func (s *loginRewardService) receive(lrs *userLoginRewardEntity.LoginRewardStatus, lrrs *masterLoginRewardEntity.LoginRewardRewards, e *masterEventEntity.Event, req *request.ReceiveLoginReward, now time.Time, tx *gorm.DB) (*userLoginRewardEntity.LoginRewardStatus, error) {
 	if lrs != nil && !lrs.HasReceived(now, e.ResetHour) {
 		return nil, errors.New("already received")
 	}
@@ -195,13 +195,13 @@ func (s *loginRewardService) receiveItem(lrrs *masterLoginRewardEntity.LoginRewa
 		return err
 	}
 
-	items := make(itemRequest.Items, len(*rewardItems))
-	for i, ri := range *rewardItems {
+	var items itemRequest.Items
+	for _, ri := range *rewardItems {
 		item := itemRequest.Item{
 			Name:  ri.Name,
 			Count: ri.Count,
 		}
-		items[i] = item
+		items = append(items, item)
 	}
 
 	if _, err := s.itemService.ReceiveItemInBox(

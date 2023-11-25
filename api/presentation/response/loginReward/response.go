@@ -1,7 +1,6 @@
 package loginReward
 
 import (
-	"errors"
 	masterLoginRewardEntity "github.com/game-core/gocrafter/domain/entity/master/loginReward"
 )
 
@@ -9,7 +8,7 @@ import (
 func GetItemResponses(itemString string) (items Items, err error) {
 	rewardItems := &masterLoginRewardEntity.LoginRewardItems{}
 	if err := rewardItems.ToEntities(itemString); err != nil {
-		return nil, errors.New(err.Error())
+		return nil, err
 	}
 
 	for _, ri := range *rewardItems {
