@@ -128,18 +128,9 @@ func (s *loginRewardService) ReceiveLoginReward(req *request.ReceiveLoginReward,
 		return nil, err
 	}
 
-	rewardItems := &masterLoginRewardEntity.LoginRewardItems{}
-	if err := rewardItems.ToEntities(lrrs.GetItems(e.GetDayCount(now))); err != nil {
+	items, err := s.getItems(lrrs.GetItems(e.GetDayCount(now)))
+	if err != nil {
 		return nil, err
-	}
-
-	items := make(response.Items, len(*rewardItems))
-	for i, ri := range *rewardItems {
-		item := response.Item{
-			Name:  ri.Name,
-			Count: ri.Count,
-		}
-		items[i] = item
 	}
 
 	return &response.ReceiveLoginReward{
