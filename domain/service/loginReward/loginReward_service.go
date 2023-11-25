@@ -60,22 +60,13 @@ func (s *loginRewardService) GetLoginRewardModel(req *request.GetLoginRewardMode
 		return nil, err
 	}
 
-	rewardItems := &masterLoginRewardEntity.LoginRewardItems{}
-	if err := rewardItems.ToEntities(lrrs.GetItems(e.GetDayCount(now))); err != nil {
-		return nil, err
-	}
-
-	items := make(response.Items, len(*rewardItems))
-	for i, ri := range *rewardItems {
-		item := response.Item{
-			Name:  ri.Name,
-			Count: ri.Count,
-		}
-		items[i] = item
-	}
-
 	rewards := make(response.LoginRewardRewards, len(*lrrs))
 	for i, lrr := range *lrrs {
+		items, err := s.getItems(lrrs.GetItems(lrr.StepNumber))
+		if err != nil {
+			return nil, err
+		}
+
 		reward := &response.LoginRewardReward{
 			ID:         lrr.ID,
 			Items:      items,
@@ -173,11 +164,26 @@ func (s *loginRewardService) ReceiveLoginReward(req *request.ReceiveLoginReward,
 	}, nil
 }
 
+// getItems アイテム一覧レスポンスを取得する
+func (s *loginRewardService) getItems(itemString string) (items response.Items, err error) {
+	rewardItems := &masterLoginRewardEntity.LoginRewardItems{}
+	if err := rewardItems.ToEntities(itemString); err != nil {
+		return nil, err
+	}
+
+	for _, ri := range *rewardItems {
+		item := response.Item{
+			Name:  ri.Name,
+			Count: ri.Count,
+		}
+		items = append(items, item)
+	}
+
+	return items, nil
+}
+
 // getLoginRewardModelAndRewardsAndEvent ログイン報酬モデル、報酬一覧、イベントを取得
-func (s *loginRewardService) getLoginRewardModelAndRewardsAndEvent(
-	loginRewardModelName string,
-	now time.Time,
-) (*masterLoginRewardEntity.LoginRewardModel, *masterLoginRewardEntity.LoginRewardRewards, *masterEventEntity.Event, error) {
+func (s *loginRewardService) getLoginRewardModelAndRewardsAndEvent(loginRewardModelName string, now time.Time) (*masterLoginRewardEntity.LoginRewardModel, *masterLoginRewardEntity.LoginRewardRewards, *masterEventEntity.Event, error) {
 	lrm, err := s.loginRewardModelRepository.FindByName(loginRewardModelName)
 	if err != nil {
 		return nil, nil, nil, err
@@ -201,14 +207,7 @@ func (s *loginRewardService) getLoginRewardModelAndRewardsAndEvent(
 }
 
 // receive 受け取り
-func (s *loginRewardService) receive(
-	lrs *userLoginRewardEntity.LoginRewardStatus,
-	lrrs *masterLoginRewardEntity.LoginRewardRewards,
-	e *masterEventEntity.Event,
-	now time.Time,
-	req *request.ReceiveLoginReward,
-	tx *gorm.DB,
-) (*userLoginRewardEntity.LoginRewardStatus, error) {
+func (s *loginRewardService) receive(lrs *userLoginRewardEntity.LoginRewardStatus, lrrs *masterLoginRewardEntity.LoginRewardRewards, e *masterEventEntity.Event, now time.Time, req *request.ReceiveLoginReward, tx *gorm.DB) (*userLoginRewardEntity.LoginRewardStatus, error) {
 	if lrs != nil && !lrs.HasReceived(now, *e.ResetHour) {
 		return nil, errors.New("already received")
 	}
@@ -226,15 +225,8 @@ func (s *loginRewardService) receive(
 }
 
 // receiveItem アイテムを受け取り
-func (s *loginRewardService) receiveItem(
-	lrrs *masterLoginRewardEntity.LoginRewardRewards,
-	e *masterEventEntity.Event,
-	now time.Time,
-	accountID int64,
-	shardKey string,
-) error {
+func (s *loginRewardService) receiveItem(lrrs *masterLoginRewardEntity.LoginRewardRewards, e *masterEventEntity.Event, now time.Time, accountID int64, shardKey string) error {
 	rewardItems := &masterLoginRewardEntity.LoginRewardItems{}
-
 	if err := rewardItems.ToEntities(lrrs.GetItems(e.GetDayCount(now))); err != nil {
 		return err
 	}
@@ -262,14 +254,7 @@ func (s *loginRewardService) receiveItem(
 }
 
 // updateLoginRewardStatus 受け取りステータスを更新
-func (s *loginRewardService) updateLoginRewardStatus(
-	lrs *userLoginRewardEntity.LoginRewardStatus,
-	now time.Time,
-	loginRewardModelName string,
-	accountID int64,
-	shardKey string,
-	tx *gorm.DB,
-) (*userLoginRewardEntity.LoginRewardStatus, error) {
+func (s *loginRewardService) updateLoginRewardStatus(lrs *userLoginRewardEntity.LoginRewardStatus, now time.Time, loginRewardModelName string, accountID int64, shardKey string, tx *gorm.DB) (*userLoginRewardEntity.LoginRewardStatus, error) {
 	if lrs == nil {
 		lrs = &userLoginRewardEntity.LoginRewardStatus{
 			ShardKey:             shardKey,
