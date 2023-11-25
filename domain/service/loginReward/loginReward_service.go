@@ -60,19 +60,9 @@ func (s *loginRewardService) GetLoginRewardModel(req *request.GetLoginRewardMode
 		return nil, err
 	}
 
-	rewards := make(response.LoginRewardRewards, len(*lrrs))
-	for i, lrr := range *lrrs {
-		items, err := s.getItems(lrrs.GetItems(lrr.StepNumber))
-		if err != nil {
-			return nil, err
-		}
-
-		reward := &response.LoginRewardReward{
-			ID:         lrr.ID,
-			Items:      items,
-			StepNumber: lrr.StepNumber,
-		}
-		rewards[i] = *reward
+	rewards, err := s.getRewards(lrrs)
+	if err != nil {
+		return nil, err
 	}
 
 	return &response.GetLoginRewardModel{
@@ -171,6 +161,25 @@ func (s *loginRewardService) getItems(itemString string) (items response.Items, 
 	}
 
 	return items, nil
+}
+
+// getRewards 報酬一覧レスポンスを取得する
+func (s *loginRewardService) getRewards(lrrs *masterLoginRewardEntity.LoginRewardRewards) (rewards response.LoginRewardRewards, err error) {
+	for _, lrr := range *lrrs {
+		items, err := s.getItems(lrrs.GetItems(lrr.StepNumber))
+		if err != nil {
+			return nil, err
+		}
+
+		reward := &response.LoginRewardReward{
+			ID:         lrr.ID,
+			Items:      items,
+			StepNumber: lrr.StepNumber,
+		}
+		rewards = append(rewards, *reward)
+	}
+
+	return rewards, nil
 }
 
 // getLoginRewardModelAndRewardsAndEvent ログイン報酬モデル、報酬一覧、イベントを取得
