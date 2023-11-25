@@ -19,7 +19,7 @@ func TestExampleService_ListExample(t *testing.T) {
 		exampleRepository func(ctrl *gomock.Controller) exampleRepository.ExampleRepository
 	}
 	type args struct {
-		limit int64
+		limit int
 	}
 	tests := []struct {
 		name    string
@@ -35,7 +35,7 @@ func TestExampleService_ListExample(t *testing.T) {
 					m := exampleRepository.NewMockExampleRepository(ctrl)
 					m.EXPECT().
 						List(
-							int64(10),
+							10,
 						).
 						Return(
 							&exampleEntity.Examples{
@@ -98,7 +98,7 @@ func TestExampleService_ListExample(t *testing.T) {
 					m := exampleRepository.NewMockExampleRepository(ctrl)
 					m.EXPECT().
 						List(
-							int64(10),
+							10,
 						).
 						Return(
 							nil,
