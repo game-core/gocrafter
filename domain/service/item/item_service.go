@@ -107,9 +107,9 @@ func (s *itemService) receiveItemBox(items *request.Items, accountID int64, shar
 		}
 
 		itemEntities = append(itemEntities, response.Item{
-			ID:     item.ID,
-			Name:   item.Name,
-			Detail: item.Detail,
+			ID:     i.ID,
+			Name:   i.Name,
+			Detail: i.Detail,
 		})
 	}
 

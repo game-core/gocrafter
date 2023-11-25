@@ -238,7 +238,6 @@ func (s *loginRewardService) receiveItem(
 	items := make(itemRequest.Items, len(*rewardItems))
 	for i, ri := range *rewardItems {
 		item := itemRequest.Item{
-			ID:    ri.ID,
 			Name:  ri.Name,
 			Count: ri.Count,
 		}
