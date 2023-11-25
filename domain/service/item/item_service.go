@@ -66,7 +66,7 @@ func (s *itemService) ReceiveItemInBox(req *request.ReceiveItemInBox) (*response
 		}
 	}()
 
-	items, err := s.receiveItemBox(&req.Items, req.AccountID, req.ShardKey, tx)
+	items, err := s.receiveItemInBox(&req.Items, req.AccountID, req.ShardKey, tx)
 	if err != nil {
 		return nil, err
 	}
@@ -78,8 +78,8 @@ func (s *itemService) ReceiveItemInBox(req *request.ReceiveItemInBox) (*response
 }
 
 // receiveItemBox
-func (s *itemService) receiveItemBox(items *request.Items, accountID int64, shardKey string, tx *gorm.DB) (*response.Items, error) {
-	itemEntities := make(response.Items, len(*items))
+func (s *itemService) receiveItemInBox(items *request.Items, accountID int64, shardKey string, tx *gorm.DB) (*response.Items, error) {
+	var itemEntities response.Items
 	for _, item := range *items {
 		i, err := s.itemRepository.FindByName(item.Name)
 		if err != nil {
@@ -110,6 +110,7 @@ func (s *itemService) receiveItemBox(items *request.Items, accountID int64, shar
 			ID:     i.ID,
 			Name:   i.Name,
 			Detail: i.Detail,
+			Count:  item.Count,
 		})
 	}
 
