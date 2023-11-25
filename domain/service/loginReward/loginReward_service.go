@@ -132,6 +132,7 @@ func (s *loginRewardService) ReceiveLoginReward(req *request.ReceiveLoginReward,
 			LoginRewardModel: response.LoginRewardModel{
 				ID:   lrm.ID,
 				Name: lrm.Name,
+
 				Event: response.Event{
 					ID:            e.ID,
 					Name:          e.Name,
@@ -144,6 +145,7 @@ func (s *loginRewardService) ReceiveLoginReward(req *request.ReceiveLoginReward,
 				ID:     item.ID,
 				Name:   item.Name,
 				Detail: item.Name,
+				Count:  lrrs.GetItemCount(e.GetDayCount(now)),
 			},
 			LastReceivedAt: newLrs.LastReceivedAt,
 		},
@@ -217,6 +219,7 @@ func (s *loginRewardService) receiveItem(
 			ShardKey:  shardKey,
 			AccountID: accountID,
 			ItemName:  item.Name,
+			Count:     lrrs.GetItemCount(e.GetDayCount(now)),
 		},
 	); err != nil {
 		return nil, err
@@ -234,26 +237,20 @@ func (s *loginRewardService) updateLoginRewardStatus(
 	shardKey string,
 	tx *gorm.DB,
 ) (*userLoginRewardEntity.LoginRewardStatus, error) {
-	if lrs != nil {
-		lrs.LastReceivedAt = now
-		lrs.LoginRewardModelName = loginRewardModelName
-		lrs, err := s.loginRewardStatusRepository.Save(lrs, shardKey, tx)
-		if err != nil {
-			return nil, err
-		}
-
-		return lrs, nil
-	}
-
-	lrs, err := s.loginRewardStatusRepository.Create(
-		&userLoginRewardEntity.LoginRewardStatus{
+	if lrs == nil {
+		lrs = &userLoginRewardEntity.LoginRewardStatus{
 			ID:                   1,
 			ShardKey:             shardKey,
 			AccountID:            accountID,
 			LoginRewardModelName: loginRewardModelName,
 			LastReceivedAt:       now,
-		}, shardKey, tx,
-	)
+		}
+	} else {
+		lrs.LoginRewardModelName = loginRewardModelName
+		lrs.LastReceivedAt = now
+	}
+
+	lrs, err := s.loginRewardStatusRepository.Save(lrs, shardKey, tx)
 	if err != nil {
 		return nil, err
 	}

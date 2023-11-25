@@ -39,25 +39,25 @@ func NewAccountService(
 }
 
 // RegisterAccount アカウントを登録する
-func (a *accountService) RegisterAccount(req *request.RegisterAccount) (*response.RegisterAccount, error) {
+func (s *accountService) RegisterAccount(req *request.RegisterAccount) (*response.RegisterAccount, error) {
 	// シャードキーを取得
-	ss, err := a.shardService.GetShard()
+	ss, err := s.shardService.GetShard()
 	if err != nil {
 		return nil, err
 	}
 
 	// transaction
-	tx, err := a.transactionRepository.Begin(ss.NextShardKey)
+	tx, err := s.transactionRepository.Begin(ss.NextShardKey)
 	if err != nil {
 		return nil, err
 	}
 	defer func() {
 		if err != nil {
-			if err := a.transactionRepository.Rollback(tx); err != nil {
+			if err := s.transactionRepository.Rollback(tx); err != nil {
 				log.Panicln(err)
 			}
 		} else {
-			if err := a.transactionRepository.Commit(tx); err != nil {
+			if err := s.transactionRepository.Commit(tx); err != nil {
 				log.Panicln(err)
 			}
 		}
@@ -80,7 +80,7 @@ func (a *accountService) RegisterAccount(req *request.RegisterAccount) (*respons
 		Password: hashedPassword,
 	}
 
-	ar, err := a.accountRepository.Create(account, ss.NextShardKey, tx)
+	ar, err := s.accountRepository.Create(account, ss.NextShardKey, tx)
 	if err != nil {
 		return nil, err
 	}
@@ -99,8 +99,8 @@ func (a *accountService) RegisterAccount(req *request.RegisterAccount) (*respons
 }
 
 // LoginAccount アカウントをログインする
-func (a *accountService) LoginAccount(req *request.LoginAccount) (*response.LoginAccount, error) {
-	ar, err := a.accountRepository.FindByUUID(req.UUID, req.ShardKey)
+func (s *accountService) LoginAccount(req *request.LoginAccount) (*response.LoginAccount, error) {
+	ar, err := s.accountRepository.FindByUUID(req.UUID, req.ShardKey)
 	if err != nil {
 		return nil, err
 	}
@@ -128,8 +128,8 @@ func (a *accountService) LoginAccount(req *request.LoginAccount) (*response.Logi
 }
 
 // CheckAccount アカウントを確認する
-func (a *accountService) CheckAccount(req *request.CheckAccount) (*response.CheckAccount, error) {
-	ar, err := a.accountRepository.FindByUUID(req.UUID, req.ShardKey)
+func (s *accountService) CheckAccount(req *request.CheckAccount) (*response.CheckAccount, error) {
+	ar, err := s.accountRepository.FindByUUID(req.UUID, req.ShardKey)
 	if err != nil {
 		return nil, err
 	}

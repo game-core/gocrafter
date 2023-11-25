@@ -26,16 +26,21 @@ structure:
     type: string
     nullable: false
     number: 4
+  Count:
+    name: count
+    type: int
+    nullable: false
+    number: 5
   CreatedAt:
     name: created_at
     type: time.Time
     nullable: false
-    number: 5
+    number: 6
   UpdatedAt:
     name: updated_at
     type: time.Time
     nullable: false
-    number: 6
+    number: 7
 primary:
   - ID
 index:

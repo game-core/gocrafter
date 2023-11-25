@@ -11,6 +11,8 @@ CREATE TABLE login_reward_reward (
 
 	step_number INT NOT NULL,
 
+	count INT NOT NULL,
+
 	created_at TIMESTAMP NOT NULL,
 
 	updated_at TIMESTAMP NOT NULL,

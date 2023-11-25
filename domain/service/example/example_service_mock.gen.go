@@ -35,7 +35,7 @@ func (m *MockExampleService) EXPECT() *MockExampleServiceMockRecorder {
 }
 
 // ListExample mocks base method.
-func (m *MockExampleService) ListExample(limit int64) (*example.ListExample, error) {
+func (m *MockExampleService) ListExample(limit int) (*example.ListExample, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ListExample", limit)
 	ret0, _ := ret[0].(*example.ListExample)

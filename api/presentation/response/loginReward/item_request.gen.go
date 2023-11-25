@@ -8,4 +8,6 @@ type Item struct {
 	Name string `json:"name"`
 
 	Detail string `json:"detail"`
+
+	Count int `json:"count"`
 }

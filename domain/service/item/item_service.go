@@ -65,34 +65,28 @@ func (s *itemService) ReceiveItemInBox(req *request.ReceiveItemInBox) (*response
 		}
 	}()
 
+	i, err := s.itemRepository.FindByName(req.ItemName)
+	if err != nil {
+		return nil, err
+	}
+
 	ib, err := s.itemBoxRepository.FindOrNilByAccountIDAndItemName(req.AccountID, req.ItemName, req.ShardKey)
 	if err != nil {
 		return nil, err
 	}
 
-	newIb := &userItemEntity.ItemBox{}
-	if ib != nil {
-		ib.Count = ib.Count + 1
-		newIb, err = s.itemBoxRepository.Save(ib, req.ShardKey, tx)
-		if err != nil {
-			return nil, err
+	if ib == nil {
+		ib = &userItemEntity.ItemBox{
+			ShardKey:  req.ShardKey,
+			AccountID: req.AccountID,
+			ItemName:  req.ItemName,
+			Count:     req.Count,
 		}
 	} else {
-		newIb, err = s.itemBoxRepository.Create(
-			&userItemEntity.ItemBox{
-				ShardKey:  req.ShardKey,
-				AccountID: req.AccountID,
-				ItemName:  req.ItemName,
-				Count:     1,
-			}, req.ShardKey, tx,
-		)
-		if err != nil {
-			return nil, err
-		}
+		ib.Count = ib.Count + req.Count
 	}
 
-	i, err := s.itemRepository.FindByName(newIb.ItemName)
-	if err != nil {
+	if _, err := s.itemBoxRepository.Save(ib, req.ShardKey, tx); err != nil {
 		return nil, err
 	}
 

@@ -8,4 +8,6 @@ type ReceiveItemInBox struct {
 	AccountID int64 `json:"account_id"`
 
 	ItemName string `json:"item_name"`
+
+	Count int `json:"count"`
 }
