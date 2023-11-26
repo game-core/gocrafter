@@ -60,7 +60,7 @@ func (s *loginRewardService) GetLoginRewardModel(req *request.GetLoginRewardMode
 		return nil, err
 	}
 
-	rewards, err := response.GetRewardResponses(lrrs)
+	rewards, err := response.ToRewards(lrrs)
 	if err != nil {
 		return nil, err
 	}
@@ -118,7 +118,7 @@ func (s *loginRewardService) ReceiveLoginReward(req *request.ReceiveLoginReward,
 		return nil, err
 	}
 
-	items, err := response.GetItemResponses(lrrs.GetItems(e.GetDayCount(now)))
+	items, err := response.ToItems(lrrs.GetItems(e.GetDayCount(now)))
 	if err != nil {
 		return nil, err
 	}
