@@ -29,19 +29,8 @@ func (e *exampleService) ListExample(limit int) (*response.ListExample, error) {
 		return nil, err
 	}
 
-	examples := make(response.Examples, len(*ers))
-	for i, er := range *ers {
-		example := &response.Example{
-			ID:     er.ID,
-			Name:   er.Name,
-			Detail: er.Detail,
-			Count:  er.Count,
-		}
-		examples[i] = *example
-	}
-
 	return &response.ListExample{
 		Status: 200,
-		Items:  &examples,
+		Items:  response.ToExamples(ers),
 	}, nil
 }
