@@ -11,3 +11,12 @@ type LoginRewardReward struct {
 
 	Items Items `json:"items"`
 }
+
+func ToLoginRewardReward(ID int64, Name string, StepNumber int, Items Items) *LoginRewardReward {
+	return &LoginRewardReward{
+		ID:         ID,
+		Name:       Name,
+		StepNumber: StepNumber,
+		Items:      Items,
+	}
+}

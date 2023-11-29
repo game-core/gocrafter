@@ -11,3 +11,12 @@ type Example struct {
 
 	Count int `json:"count"`
 }
+
+func ToExample(ID int64, Name string, Detail *string, Count int) *Example {
+	return &Example{
+		ID:     ID,
+		Name:   Name,
+		Detail: Detail,
+		Count:  Count,
+	}
+}

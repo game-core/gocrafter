@@ -7,3 +7,10 @@ type LoginRewardReceiveStep struct {
 
 	StepNumber int `json:"step_number"`
 }
+
+func ToLoginRewardReceiveStep(ID int64, StepNumber int) *LoginRewardReceiveStep {
+	return &LoginRewardReceiveStep{
+		ID:         ID,
+		StepNumber: StepNumber,
+	}
+}

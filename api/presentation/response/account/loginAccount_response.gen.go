@@ -7,3 +7,10 @@ type LoginAccount struct {
 
 	Item Account `json:"item"`
 }
+
+func ToLoginAccount(Status int64, Item Account) *LoginAccount {
+	return &LoginAccount{
+		Status: Status,
+		Item:   Item,
+	}
+}

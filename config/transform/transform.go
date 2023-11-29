@@ -12,6 +12,20 @@ func CamelToSnake(s string) string {
 	}), "_"))
 }
 
+// SnakeToUpperCamel スネークケースからキャメルケースに変換
+func SnakeToUpperCamel(s string) string {
+	parts := strings.Split(s, "_")
+	for i := range parts {
+		switch strings.ToUpper(parts[i]) {
+		case "ID", "UUID":
+			parts[i] = strings.ToUpper(parts[i])
+		default:
+			parts[i] = strings.Title(parts[i])
+		}
+	}
+	return strings.Join(parts, "")
+}
+
 // UpperCamelToSnake アッパーキャメルケースからスネークケースに変換
 func UpperCamelToSnake(s string) string {
 	var result strings.Builder

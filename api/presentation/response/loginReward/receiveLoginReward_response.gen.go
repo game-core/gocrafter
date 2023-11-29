@@ -7,3 +7,10 @@ type ReceiveLoginReward struct {
 
 	Item LoginRewardStatus `json:"item"`
 }
+
+func ToReceiveLoginReward(Status int64, Item LoginRewardStatus) *ReceiveLoginReward {
+	return &ReceiveLoginReward{
+		Status: Status,
+		Item:   Item,
+	}
+}

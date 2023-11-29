@@ -7,3 +7,10 @@ type RegisterAccount struct {
 
 	Item Account `json:"item"`
 }
+
+func ToRegisterAccount(Status int64, Item Account) *RegisterAccount {
+	return &RegisterAccount{
+		Status: Status,
+		Item:   Item,
+	}
+}

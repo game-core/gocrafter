@@ -7,3 +7,10 @@ type ReceiveItemInBox struct {
 
 	Items Items `json:"items"`
 }
+
+func ToReceiveItemInBox(Status int64, Items Items) *ReceiveItemInBox {
+	return &ReceiveItemInBox{
+		Status: Status,
+		Items:  Items,
+	}
+}

@@ -15,3 +15,12 @@ type LoginRewardStatus struct {
 
 	LastReceivedAt time.Time `json:"last_received_at"`
 }
+
+func ToLoginRewardStatus(ID int64, LoginRewardModel LoginRewardModel, Items Items, LastReceivedAt time.Time) *LoginRewardStatus {
+	return &LoginRewardStatus{
+		ID:               ID,
+		LoginRewardModel: LoginRewardModel,
+		Items:            Items,
+		LastReceivedAt:   LastReceivedAt,
+	}
+}

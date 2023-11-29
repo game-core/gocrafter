@@ -7,3 +7,10 @@ type ListExample struct {
 
 	Items *Examples `json:"items"`
 }
+
+func ToListExample(Status int64, Items *Examples) *ListExample {
+	return &ListExample{
+		Status: Status,
+		Items:  Items,
+	}
+}

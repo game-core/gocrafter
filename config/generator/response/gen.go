@@ -10,6 +10,7 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
+	"strings"
 	"text/template"
 
 	"github.com/game-core/gocrafter/config/transform"
@@ -40,6 +41,8 @@ type {{.Name}} struct {
 	{{$field.Name}} {{$field.TypeWithPointer}} ` + "`json:\"{{$field.Json}}\"{{if eq $field.Name \"CreatedAt\"}} gorm:\"autoCreateTime\"{{else if eq $field.Name \"UpdatedAt\"}} gorm:\"autoUpdateTime\"{{end}}`" + `
 {{end}}
 }
+
+{{.Script}}
 `
 
 func generateResponse(yamlFilePath string, outputBaseDir string) error {
@@ -53,7 +56,7 @@ func generateResponse(yamlFilePath string, outputBaseDir string) error {
 		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
 	}
 
-	outputFileName := filepath.Join(outputDir, fmt.Sprintf("%s_request.gen.go", transform.KebabToCamel(structInfo.Name)))
+	outputFileName := filepath.Join(outputDir, fmt.Sprintf("%s_response.gen.go", transform.KebabToCamel(structInfo.Name)))
 	outputFile, err := os.Create(outputFileName)
 	if err != nil {
 		return fmt.Errorf("outputFileName file %s create error: %v", outputFileName, err)
@@ -82,12 +85,14 @@ func generateTemplate(structInfo *StructInfo, outputFile *os.File) error {
 		Package    string
 		Import     string
 		Fields     map[string]StructField
+		Script     string
 	}{
 		Name:       structInfo.Name,
 		PluralName: transform.SingularToPlural(structInfo.Name),
 		Package:    structInfo.Package,
 		Import:     generateImport(structInfo.Fields),
 		Fields:     structInfo.Fields,
+		Script:     generateOutput(structInfo),
 	}); err != nil {
 		return fmt.Errorf("template error: %v", err)
 	}
@@ -163,6 +168,31 @@ func getTypeWithPointer(fieldInfo StructField) string {
 	}
 
 	return fieldInfo.Type
+}
+
+func generateOutput(structInfo *StructInfo) string {
+	fields := sortByNumber(structInfo.Fields)
+	paramStrings := make([]string, len(fields))
+	returnStrings := make([]string, len(fields))
+
+	for i, field := range fields {
+		paramStrings[i] = fmt.Sprintf("%s %s", transform.SnakeToUpperCamel(field.FieldInfo.Name), getTypeWithPointer(field.FieldInfo))
+		returnStrings[i] = fmt.Sprintf("%s: %s,", transform.SnakeToUpperCamel(field.FieldInfo.Name), transform.SnakeToUpperCamel(field.FieldInfo.Name))
+	}
+
+	return fmt.Sprintf(
+		`func To%s(%s) *%s {
+			return &%s{
+				%s
+			}
+		}
+		`,
+		structInfo.Name,
+		strings.Join(paramStrings, ","),
+		structInfo.Name,
+		structInfo.Name,
+		strings.Join(returnStrings, "\n"),
+	)
 }
 
 func main() {
