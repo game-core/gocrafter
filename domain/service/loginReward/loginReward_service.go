@@ -65,23 +65,23 @@ func (s *loginRewardService) GetLoginRewardModel(req *request.GetLoginRewardMode
 		return nil, err
 	}
 
-	return &response.GetLoginRewardModel{
-		Status: 200,
-		Item: response.LoginRewardModel{
-			ID:   lrm.ID,
-			Name: lrm.Name,
-			Event: response.Event{
-				ID:            e.ID,
-				Name:          e.Name,
-				RepeatSetting: e.RepeatSetting,
-				ResetHour:     e.ResetHour,
-				RepeatStartAt: e.RepeatStartAt,
-				StartAt:       e.StartAt,
-				EndAt:         e.EndAt,
-			},
-			LoginRewardRewards: rewards,
-		},
-	}, nil
+	return response.ToGetLoginRewardModel(
+		200,
+		*response.ToLoginRewardModel(
+			lrm.ID,
+			lrm.Name,
+			*response.ToEvent(
+				e.ID,
+				e.Name,
+				e.ResetHour,
+				e.RepeatSetting,
+				e.RepeatStartAt,
+				e.StartAt,
+				e.EndAt,
+			),
+			rewards,
+		),
+	), nil
 }
 
 // ReceiveLoginReward 受け取る
@@ -118,32 +118,38 @@ func (s *loginRewardService) ReceiveLoginReward(req *request.ReceiveLoginReward,
 		return nil, err
 	}
 
+	rewards, err := response.ToRewards(lrrs)
+	if err != nil {
+		return nil, err
+	}
+
 	items, err := response.ToItems(lrrs.GetItems(e.GetDayCount(now)))
 	if err != nil {
 		return nil, err
 	}
 
-	return &response.ReceiveLoginReward{
-		Status: 200,
-		Item: response.LoginRewardStatus{
-			ID: lrs.ID,
-			LoginRewardModel: response.LoginRewardModel{
-				ID:   lrm.ID,
-				Name: lrm.Name,
-				Event: response.Event{
-					ID:            e.ID,
-					Name:          e.Name,
-					ResetHour:     e.ResetHour,
-					RepeatSetting: e.RepeatSetting,
-					RepeatStartAt: e.RepeatStartAt,
-					StartAt:       e.StartAt,
-					EndAt:         e.EndAt,
-				},
-			},
-			Items:          items,
-			LastReceivedAt: lrs.LastReceivedAt,
-		},
-	}, nil
+	return response.ToReceiveLoginReward(
+		200,
+		*response.ToLoginRewardStatus(
+			lrs.ID,
+			*response.ToLoginRewardModel(
+				lrm.ID,
+				lrm.Name,
+				*response.ToEvent(
+					e.ID,
+					e.Name,
+					e.ResetHour,
+					e.RepeatSetting,
+					e.RepeatStartAt,
+					e.StartAt,
+					e.EndAt,
+				),
+				rewards,
+			),
+			items,
+			lrs.LastReceivedAt,
+		),
+	), nil
 }
 
 // getLoginRewardModelAndRewardsAndEvent ログイン報酬モデル、報酬一覧、イベントを取得

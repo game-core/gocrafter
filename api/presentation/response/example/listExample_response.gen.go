@@ -5,12 +5,12 @@ type ListExamples []ListExample
 type ListExample struct {
 	Status int64 `json:"status"`
 
-	Items *Examples `json:"items"`
+	Examples *Examples `json:"examples"`
 }
 
-func ToListExample(Status int64, Items *Examples) *ListExample {
+func ToListExample(Status int64, Examples *Examples) *ListExample {
 	return &ListExample{
-		Status: Status,
-		Items:  Items,
+		Status:   Status,
+		Examples: Examples,
 	}
 }

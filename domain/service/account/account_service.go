@@ -85,17 +85,7 @@ func (s *accountService) RegisterAccount(req *request.RegisterAccount) (*respons
 		return nil, err
 	}
 
-	return &response.RegisterAccount{
-		Status: 200,
-		Item: response.Account{
-			ID:       ar.ID,
-			ShardKey: ar.ShardKey,
-			UUID:     ar.UUID,
-			Name:     ar.Name,
-			Password: password,
-			Token:    "",
-		},
-	}, nil
+	return response.ToRegisterAccount(200, *response.ToAccount(ar.ID, ar.ShardKey, ar.UUID, ar.Name, password, "")), nil
 }
 
 // LoginAccount アカウントをログインする
@@ -114,17 +104,7 @@ func (s *accountService) LoginAccount(req *request.LoginAccount) (*response.Logi
 		return nil, errors.New("faild to token.GenerateAuthToken")
 	}
 
-	return &response.LoginAccount{
-		Status: 200,
-		Item: response.Account{
-			ID:       ar.ID,
-			ShardKey: ar.ShardKey,
-			UUID:     ar.UUID,
-			Name:     ar.Name,
-			Password: req.Password,
-			Token:    token,
-		},
-	}, nil
+	return response.ToLoginAccount(200, *response.ToAccount(ar.ID, ar.ShardKey, ar.UUID, ar.Name, req.Password, token)), nil
 }
 
 // CheckAccount アカウントを確認する
@@ -134,15 +114,5 @@ func (s *accountService) CheckAccount(req *request.CheckAccount) (*response.Chec
 		return nil, err
 	}
 
-	return &response.CheckAccount{
-		Status: 200,
-		Item: response.Account{
-			ID:       ar.ID,
-			ShardKey: ar.ShardKey,
-			UUID:     ar.UUID,
-			Name:     ar.Name,
-			Password: "",
-			Token:    "",
-		},
-	}, nil
+	return response.ToCheckAccount(200, *response.ToAccount(ar.ID, ar.ShardKey, ar.UUID, ar.Name, "", "")), nil
 }

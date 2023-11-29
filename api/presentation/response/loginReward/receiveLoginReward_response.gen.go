@@ -5,12 +5,12 @@ type ReceiveLoginRewards []ReceiveLoginReward
 type ReceiveLoginReward struct {
 	Status int64 `json:"status"`
 
-	Item LoginRewardStatus `json:"item"`
+	LoginRewardStatus LoginRewardStatus `json:"login_reward_status"`
 }
 
-func ToReceiveLoginReward(Status int64, Item LoginRewardStatus) *ReceiveLoginReward {
+func ToReceiveLoginReward(Status int64, LoginRewardStatus LoginRewardStatus) *ReceiveLoginReward {
 	return &ReceiveLoginReward{
-		Status: Status,
-		Item:   Item,
+		Status:            Status,
+		LoginRewardStatus: LoginRewardStatus,
 	}
 }

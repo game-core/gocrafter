@@ -6,8 +6,8 @@ structure:
     type: int64
     nullable: false
     number: 1
-  Item:
-    name: item
+  LoginRewardStatus:
+    name: login_reward_status
     type: LoginRewardStatus
     nullable: false
     number: 2

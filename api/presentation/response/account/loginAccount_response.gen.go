@@ -5,12 +5,12 @@ type LoginAccounts []LoginAccount
 type LoginAccount struct {
 	Status int64 `json:"status"`
 
-	Item Account `json:"item"`
+	Account Account `json:"account"`
 }
 
-func ToLoginAccount(Status int64, Item Account) *LoginAccount {
+func ToLoginAccount(Status int64, Account Account) *LoginAccount {
 	return &LoginAccount{
-		Status: Status,
-		Item:   Item,
+		Status:  Status,
+		Account: Account,
 	}
 }

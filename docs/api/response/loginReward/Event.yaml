@@ -12,7 +12,7 @@ structure:
     nullable: false
     number: 2
   ResetHour:
-    name: repeat_hour
+    name: reset_hour
     type: int
     nullable: false
     number: 3

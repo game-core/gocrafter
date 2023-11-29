@@ -29,8 +29,5 @@ func (e *exampleService) ListExample(limit int) (*response.ListExample, error) {
 		return nil, err
 	}
 
-	return &response.ListExample{
-		Status: 200,
-		Items:  response.ToExamples(ers),
-	}, nil
+	return response.ToListExample(200, response.ToExamples(ers)), nil
 }

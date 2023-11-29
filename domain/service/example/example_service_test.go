@@ -71,7 +71,7 @@ func TestExampleService_ListExample(t *testing.T) {
 			},
 			want: &response.ListExample{
 				Status: 200,
-				Items: &response.Examples{
+				Examples: &response.Examples{
 					{
 						Name:   "name1",
 						Detail: pointer.StringToPointer("detail1"),

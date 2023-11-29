@@ -6,7 +6,7 @@ structure:
     type: int64
     nullable: false
     number: 1
-  Item:
+  LoginRewardModel:
     name: login_reward_model
     type: LoginRewardModel
     nullable: false

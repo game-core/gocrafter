@@ -6,8 +6,8 @@ structure:
     type: int64
     nullable: false
     number: 1
-  Item:
-    name: item
+  Account:
+    name: account
     type: Account
     nullable: false
     number: 2

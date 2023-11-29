@@ -123,7 +123,7 @@ func TestExampleService_GetLoginRewardModel(t *testing.T) {
 			},
 			want: &response.GetLoginRewardModel{
 				Status: 200,
-				Item: response.LoginRewardModel{
+				LoginRewardModel: response.LoginRewardModel{
 					ID:   1,
 					Name: "loginReward",
 					Event: response.Event{
@@ -469,7 +469,7 @@ func TestExampleService_ReceiveLoginReward(t *testing.T) {
 			},
 			want: &response.ReceiveLoginReward{
 				Status: 200,
-				Item: response.LoginRewardStatus{
+				LoginRewardStatus: response.LoginRewardStatus{
 					ID: 1,
 					LoginRewardModel: response.LoginRewardModel{
 						ID:   1,
@@ -482,6 +482,53 @@ func TestExampleService_ReceiveLoginReward(t *testing.T) {
 							RepeatStartAt: pointer.TimeToPointer(time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC)),
 							StartAt:       nil,
 							EndAt:         nil,
+						},
+						LoginRewardRewards: response.LoginRewardRewards{
+							{
+								ID:         1,
+								Name:       "reward1",
+								StepNumber: 0,
+								Items: response.Items{
+									{
+										Name:  "item1",
+										Count: 1,
+									},
+									{
+										Name:  "item2",
+										Count: 2,
+									},
+								},
+							},
+							{
+								ID:         2,
+								Name:       "reward2",
+								StepNumber: 1,
+								Items: response.Items{
+									{
+										Name:  "item1",
+										Count: 1,
+									},
+									{
+										Name:  "item2",
+										Count: 2,
+									},
+								},
+							},
+							{
+								ID:         3,
+								Name:       "reward3",
+								StepNumber: 2,
+								Items: response.Items{
+									{
+										Name:  "item1",
+										Count: 1,
+									},
+									{
+										Name:  "item2",
+										Count: 2,
+									},
+								},
+							},
 						},
 					},
 					Items: response.Items{

@@ -71,10 +71,7 @@ func (s *itemService) ReceiveItemInBox(req *request.ReceiveItemInBox) (*response
 		return nil, err
 	}
 
-	return &response.ReceiveItemInBox{
-		Status: 200,
-		Items:  *items,
-	}, nil
+	return response.ToReceiveItemInBox(200, *items), nil
 }
 
 // receiveItemBox

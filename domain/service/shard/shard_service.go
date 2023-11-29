@@ -66,11 +66,7 @@ func (s *shardService) GetShard() (*response.GetShard, error) {
 		return nil, err
 	}
 
-	return &response.GetShard{
-		Status:       200,
-		NextShardKey: minShard.ShardKey,
-		Shards:       &shards,
-	}, nil
+	return response.ToGetShard(200, minShard.ShardKey, &shards), nil
 }
 
 // getMinShard 最小のシャードを取得

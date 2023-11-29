@@ -5,12 +5,12 @@ type CheckAccounts []CheckAccount
 type CheckAccount struct {
 	Status int64 `json:"status"`
 
-	Item Account `json:"item"`
+	Account Account `json:"account"`
 }
 
-func ToCheckAccount(Status int64, Item Account) *CheckAccount {
+func ToCheckAccount(Status int64, Account Account) *CheckAccount {
 	return &CheckAccount{
-		Status: Status,
-		Item:   Item,
+		Status:  Status,
+		Account: Account,
 	}
 }

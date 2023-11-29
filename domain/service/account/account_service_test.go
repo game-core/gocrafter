@@ -109,7 +109,7 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 			},
 			want: &response.RegisterAccount{
 				Status: 200,
-				Item: response.Account{
+				Account: response.Account{
 					ID:       0,
 					ShardKey: "SHARD_1",
 					UUID:     "uuid",
@@ -290,7 +290,7 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 				return
 			}
 			if got != nil {
-				got.Item.Password = "password"
+				got.Account.Password = "password"
 			}
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("RegisterAccount() = %v, want %v", got, tt.want)
@@ -346,7 +346,7 @@ func TestAccountService_LoginAccount(t *testing.T) {
 			},
 			want: &response.LoginAccount{
 				Status: 200,
-				Item: response.Account{
+				Account: response.Account{
 					ID:       0,
 					ShardKey: "SHARD_1",
 					UUID:     "uuid",
@@ -399,7 +399,7 @@ func TestAccountService_LoginAccount(t *testing.T) {
 				return
 			}
 			if got != nil {
-				got.Item.Token = "token"
+				got.Account.Token = "token"
 			}
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("LoginAccount() = %v, want %v", got, tt.want)
@@ -453,7 +453,7 @@ func TestAccountService_CheckAccount(t *testing.T) {
 			},
 			want: &response.CheckAccount{
 				Status: 200,
-				Item: response.Account{
+				Account: response.Account{
 					ID:       0,
 					UUID:     "uuid",
 					Name:     "name",

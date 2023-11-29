@@ -5,12 +5,12 @@ type RegisterAccounts []RegisterAccount
 type RegisterAccount struct {
 	Status int64 `json:"status"`
 
-	Item Account `json:"item"`
+	Account Account `json:"account"`
 }
 
-func ToRegisterAccount(Status int64, Item Account) *RegisterAccount {
+func ToRegisterAccount(Status int64, Account Account) *RegisterAccount {
 	return &RegisterAccount{
-		Status: Status,
-		Item:   Item,
+		Status:  Status,
+		Account: Account,
 	}
 }
