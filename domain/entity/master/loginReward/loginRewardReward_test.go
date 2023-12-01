@@ -94,6 +94,35 @@ func TestExampleService_GetItems(t *testing.T) {
 			},
 			want: "[{\"name\":\"item1\",\"count\":1},{\"name\":\"item2\",\"count\":2}]",
 		},
+		{
+			name: "正常：取得できる（リピートなし）",
+			fields: fields{
+				rewards: &LoginRewardRewards{
+					{
+						ID:                   1,
+						LoginRewardModelName: "loginReward",
+						Name:                 "reward1",
+						StepNumber:           0,
+						Items:                "[{\"name\":\"item1\",\"count\":1},{\"name\":\"item2\",\"count\":2}]",
+						CreatedAt:            time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
+						UpdatedAt:            time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
+					},
+					{
+						ID:                   2,
+						LoginRewardModelName: "loginReward",
+						Name:                 "reward2",
+						StepNumber:           1,
+						Items:                "[{\"name\":\"item1\",\"count\":1},{\"name\":\"item2\",\"count\":3}]",
+						CreatedAt:            time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
+						UpdatedAt:            time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
+					},
+				},
+			},
+			args: args{
+				dayCount: 1,
+			},
+			want: "[{\"name\":\"item1\",\"count\":1},{\"name\":\"item2\",\"count\":3}]",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
