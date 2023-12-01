@@ -6,7 +6,8 @@ import (
 )
 
 type TransactionRepository interface {
-	Begin(shardKey string) (tx *gorm.DB, err error)
-	Commit(tx *gorm.DB) (err error)
-	Rollback(tx *gorm.DB) (err error)
+	Begin(shardKey string) (*gorm.DB, error)
+	Commit(tx *gorm.DB) error
+	Rollback(tx *gorm.DB) error
+	CommitOrRollback(tx *gorm.DB, err error) error
 }

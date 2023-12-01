@@ -63,6 +63,20 @@ func (mr *MockTransactionRepositoryMockRecorder) Commit(tx interface{}) *gomock.
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Commit", reflect.TypeOf((*MockTransactionRepository)(nil).Commit), tx)
 }
 
+// CommitOrRollback mocks base method.
+func (m *MockTransactionRepository) CommitOrRollback(tx *gorm.DB, err error) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CommitOrRollback", tx, err)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CommitOrRollback indicates an expected call of CommitOrRollback.
+func (mr *MockTransactionRepositoryMockRecorder) CommitOrRollback(tx, err interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CommitOrRollback", reflect.TypeOf((*MockTransactionRepository)(nil).CommitOrRollback), tx, err)
+}
+
 // Rollback mocks base method.
 func (m *MockTransactionRepository) Rollback(tx *gorm.DB) error {
 	m.ctrl.T.Helper()

@@ -45,3 +45,19 @@ func (d *transactionDao) Rollback(tx *gorm.DB) error {
 
 	return nil
 }
+
+func (d *transactionDao) CommitOrRollback(tx *gorm.DB, err error) error {
+	if err != nil {
+		tx.Rollback()
+		if err := tx.Error; err != nil {
+			return err
+		}
+	} else {
+		tx.Commit()
+		if err := tx.Error; err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
