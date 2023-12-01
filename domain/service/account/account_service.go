@@ -52,14 +52,8 @@ func (s *accountService) RegisterAccount(req *request.RegisterAccount) (*respons
 		return nil, err
 	}
 	defer func() {
-		if err != nil {
-			if err := s.transactionRepository.Rollback(tx); err != nil {
-				log.Panicln(err)
-			}
-		} else {
-			if err := s.transactionRepository.Commit(tx); err != nil {
-				log.Panicln(err)
-			}
+		if err := s.transactionRepository.CommitOrRollback(tx, err); err != nil {
+			log.Panicln(err)
 		}
 	}()
 

@@ -133,8 +133,9 @@ func TestExampleService_ReceiveItemInBox(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						Commit(
+						CommitOrRollback(
 							gomock.Any(),
+							nil,
 						).
 						Return(
 							nil,
@@ -334,7 +335,8 @@ func TestExampleService_ReceiveItemInBox(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						Rollback(
+						CommitOrRollback(
+							gomock.Any(),
 							gomock.Any(),
 						).
 						Return(

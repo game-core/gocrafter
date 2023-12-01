@@ -72,8 +72,9 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						Commit(
+						CommitOrRollback(
 							gomock.Any(),
+							nil,
 						).
 						Return(
 							nil,
@@ -153,13 +154,16 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 				transactionRepository: func(ctrl *gomock.Controller) userRepository.TransactionRepository {
 					m := userRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
-						Begin("SHARD_1").
+						Begin(
+							"SHARD_1",
+						).
 						Return(
 							nil,
 							nil,
 						)
 					m.EXPECT().
-						Rollback(
+						CommitOrRollback(
+							gomock.Any(),
 							gomock.Any(),
 						).
 						Return(

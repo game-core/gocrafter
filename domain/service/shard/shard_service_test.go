@@ -14,7 +14,7 @@ import (
 	shardRepository "github.com/game-core/gocrafter/domain/repository/config/shard"
 )
 
-func TestShardService_ListShard(t *testing.T) {
+func TestShardService_GetShard(t *testing.T) {
 	type fields struct {
 		transactionRepository func(ctrl *gomock.Controller) configRepository.TransactionRepository
 		shardRepository       func(ctrl *gomock.Controller) shardRepository.ShardRepository
@@ -39,8 +39,9 @@ func TestShardService_ListShard(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						Commit(
+						CommitOrRollback(
 							gomock.Any(),
+							nil,
 						).
 						Return(
 							nil,
@@ -132,8 +133,9 @@ func TestShardService_ListShard(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						Commit(
+						CommitOrRollback(
 							gomock.Any(),
+							nil,
 						).
 						Return(
 							nil,
@@ -246,7 +248,8 @@ func TestShardService_ListShard(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						Rollback(
+						CommitOrRollback(
+							gomock.Any(),
 							gomock.Any(),
 						).
 						Return(
@@ -282,7 +285,8 @@ func TestShardService_ListShard(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						Commit(
+						CommitOrRollback(
+							gomock.Any(),
 							gomock.Any(),
 						).
 						Return(
@@ -318,7 +322,8 @@ func TestShardService_ListShard(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						Commit(
+						CommitOrRollback(
+							gomock.Any(),
 							gomock.Any(),
 						).
 						Return(

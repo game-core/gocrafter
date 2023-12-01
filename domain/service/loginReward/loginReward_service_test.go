@@ -302,8 +302,9 @@ func TestExampleService_ReceiveLoginReward(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						Commit(
+						CommitOrRollback(
 							gomock.Any(),
+							nil,
 						).
 						Return(
 							nil,
@@ -608,7 +609,8 @@ func TestExampleService_ReceiveLoginReward(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						Rollback(
+						CommitOrRollback(
+							gomock.Any(),
 							gomock.Any(),
 						).
 						Return(
@@ -671,7 +673,8 @@ func TestExampleService_ReceiveLoginReward(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						Rollback(
+						CommitOrRollback(
+							gomock.Any(),
 							gomock.Any(),
 						).
 						Return(
@@ -803,7 +806,8 @@ func TestExampleService_ReceiveLoginReward(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						Rollback(
+						CommitOrRollback(
+							gomock.Any(),
 							gomock.Any(),
 						).
 						Return(
@@ -951,7 +955,8 @@ func TestExampleService_ReceiveLoginReward(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						Rollback(
+						CommitOrRollback(
+							gomock.Any(),
 							gomock.Any(),
 						).
 						Return(
@@ -1125,7 +1130,8 @@ func TestExampleService_ReceiveLoginReward(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						Rollback(
+						CommitOrRollback(
+							gomock.Any(),
 							gomock.Any(),
 						).
 						Return(
