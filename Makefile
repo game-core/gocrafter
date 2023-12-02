@@ -16,6 +16,8 @@ docker_app_gen:
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/auth/response/gen.go
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/api/request/gen.go
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/api/response/gen.go
+	$(DOCKER_COMPOSE) exec gen wire auth/di/wire.go
+	$(DOCKER_COMPOSE) exec gen wire api/di/wire.go
 	$(DOCKER_COMPOSE) exec gen go fmt ./...
 
 # 全てのdomainを自動生成
@@ -43,6 +45,7 @@ docker_domain_gen:
 # Swaggerを自動生成
 docker_swag_gen:
 	$(DOCKER_COMPOSE) exec api swag init --dir=api --output=docs/swagger/api
+	$(DOCKER_COMPOSE) exec auth swag init --dir=auth --output=docs/swagger/auth
 
 # Swaggerのモックサーバーを起動
 docker_swag_mock:
