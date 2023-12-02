@@ -48,6 +48,15 @@ func (s *accountService) RegisterAccount(req *request.RegisterAccount) (*respons
 		}
 	}()
 
+	a, err := s.accountRepository.FindOrNilByEmail(req.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	if a != nil {
+		return nil, errors.New("email already exists")
+	}
+
 	hashedPassword, err := key.GenerateHashPassword(req.Password)
 	if err != nil {
 		return nil, err
@@ -59,29 +68,29 @@ func (s *accountService) RegisterAccount(req *request.RegisterAccount) (*respons
 		Password: hashedPassword,
 	}
 
-	ar, err := s.accountRepository.Create(account, tx)
+	a, err = s.accountRepository.Create(account, tx)
 	if err != nil {
 		return nil, err
 	}
 
-	return response.ToRegisterAccount(200, *response.ToAccount(ar.ID, ar.Name, ar.Email, req.Password, "")), nil
+	return response.ToRegisterAccount(200, *response.ToAccount(a.ID, a.Name, a.Email, req.Password, "")), nil
 }
 
 // LoginAccount アカウントをログインする
 func (s *accountService) LoginAccount(req *request.LoginAccount) (*response.LoginAccount, error) {
-	ar, err := s.accountRepository.FindByEmail(req.Email)
+	a, err := s.accountRepository.FindByEmail(req.Email)
 	if err != nil {
 		return nil, err
 	}
 
-	if !key.CheckPassword(req.Password, ar.Password) {
+	if !key.CheckPassword(req.Password, a.Password) {
 		return nil, errors.New("faild to key.CheckPassword")
 	}
 
-	token, err := token.GenerateAuthTokenByEmail(ar.Email, ar.Name)
+	token, err := token.GenerateAuthTokenByEmail(a.Email, a.Name)
 	if err != nil {
 		return nil, errors.New("faild to token.GenerateAuthToken")
 	}
 
-	return response.ToLoginAccount(200, *response.ToAccount(ar.ID, ar.Name, ar.Email, req.Password, token)), nil
+	return response.ToLoginAccount(200, *response.ToAccount(a.ID, a.Name, a.Email, req.Password, token)), nil
 }
