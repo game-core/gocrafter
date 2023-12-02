@@ -31,7 +31,17 @@ func GeneratePassword() (string, string, error) {
 	return password, string(hashedPassword), nil
 }
 
-// Checkassword パスワードを検証する
+// GenerateHashPassword ハッシュパスワードを生成する
+func GenerateHashPassword(password string) (string, error) {
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+
+	return string(hashedPassword), nil
+}
+
+// CheckPassword パスワードを検証する
 func CheckPassword(password, hashPassword string) bool {
 	if err := bcrypt.CompareHashAndPassword([]byte(hashPassword), []byte(password)); err != nil {
 		return false

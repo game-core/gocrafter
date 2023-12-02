@@ -230,7 +230,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "shard_key": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "token": {
                     "type": "string"
@@ -255,7 +255,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "shard_key": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "uuid": {
                     "type": "string"
@@ -269,7 +269,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "shard_key": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "uuid": {
                     "type": "string"
@@ -302,7 +302,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "shard_key": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "uuid": {
                     "type": "string"
@@ -312,7 +312,7 @@ const docTemplate = `{
         "github.com_game-core_gocrafter_api_presentation_response_account.CheckAccount": {
             "type": "object",
             "properties": {
-                "item": {
+                "account": {
                     "$ref": "#/definitions/account.Account"
                 },
                 "status": {
@@ -323,7 +323,7 @@ const docTemplate = `{
         "github.com_game-core_gocrafter_api_presentation_response_account.LoginAccount": {
             "type": "object",
             "properties": {
-                "item": {
+                "account": {
                     "$ref": "#/definitions/account.Account"
                 },
                 "status": {
@@ -334,7 +334,7 @@ const docTemplate = `{
         "github.com_game-core_gocrafter_api_presentation_response_account.RegisterAccount": {
             "type": "object",
             "properties": {
-                "item": {
+                "account": {
                     "$ref": "#/definitions/account.Account"
                 },
                 "status": {
@@ -356,7 +356,7 @@ const docTemplate = `{
         "github.com_game-core_gocrafter_api_presentation_response_loginReward.ReceiveLoginReward": {
             "type": "object",
             "properties": {
-                "item": {
+                "login_reward_status": {
                     "$ref": "#/definitions/loginReward.LoginRewardStatus"
                 },
                 "status": {
@@ -376,14 +376,14 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "repeat_hour": {
-                    "type": "integer"
-                },
                 "repeat_setting": {
                     "type": "boolean"
                 },
                 "repeat_start_at": {
                     "type": "string"
+                },
+                "reset_hour": {
+                    "type": "integer"
                 },
                 "start_at": {
                     "type": "string"
@@ -393,10 +393,7 @@ const docTemplate = `{
         "loginReward.Item": {
             "type": "object",
             "properties": {
-                "detail": {
-                    "type": "string"
-                },
-                "id": {
+                "count": {
                     "type": "integer"
                 },
                 "name": {
@@ -413,7 +410,7 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "login_reward_reward": {
+                "login_reward_rewards": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/loginReward.LoginRewardReward"
@@ -430,8 +427,11 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "item_name": {
-                    "type": "string"
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/loginReward.Item"
+                    }
                 },
                 "name": {
                     "type": "string"
@@ -447,8 +447,11 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "item": {
-                    "$ref": "#/definitions/loginReward.Item"
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/loginReward.Item"
+                    }
                 },
                 "last_received_at": {
                     "type": "string"

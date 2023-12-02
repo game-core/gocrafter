@@ -9,7 +9,7 @@ definitions:
       password:
         type: string
       shard_key:
-        type: integer
+        type: string
       token:
         type: string
       uuid:
@@ -25,7 +25,7 @@ definitions:
   github.com_game-core_gocrafter_api_presentation_request_account.CheckAccount:
     properties:
       shard_key:
-        type: integer
+        type: string
       uuid:
         type: string
     type: object
@@ -34,7 +34,7 @@ definitions:
       password:
         type: string
       shard_key:
-        type: integer
+        type: string
       uuid:
         type: string
     type: object
@@ -55,27 +55,27 @@ definitions:
       login_reward_model_name:
         type: string
       shard_key:
-        type: integer
+        type: string
       uuid:
         type: string
     type: object
   github.com_game-core_gocrafter_api_presentation_response_account.CheckAccount:
     properties:
-      item:
+      account:
         $ref: '#/definitions/account.Account'
       status:
         type: integer
     type: object
   github.com_game-core_gocrafter_api_presentation_response_account.LoginAccount:
     properties:
-      item:
+      account:
         $ref: '#/definitions/account.Account'
       status:
         type: integer
     type: object
   github.com_game-core_gocrafter_api_presentation_response_account.RegisterAccount:
     properties:
-      item:
+      account:
         $ref: '#/definitions/account.Account'
       status:
         type: integer
@@ -89,7 +89,7 @@ definitions:
     type: object
   github.com_game-core_gocrafter_api_presentation_response_loginReward.ReceiveLoginReward:
     properties:
-      item:
+      login_reward_status:
         $ref: '#/definitions/loginReward.LoginRewardStatus'
       status:
         type: integer
@@ -102,20 +102,18 @@ definitions:
         type: integer
       name:
         type: string
-      repeat_hour:
-        type: integer
       repeat_setting:
         type: boolean
       repeat_start_at:
         type: string
+      reset_hour:
+        type: integer
       start_at:
         type: string
     type: object
   loginReward.Item:
     properties:
-      detail:
-        type: string
-      id:
+      count:
         type: integer
       name:
         type: string
@@ -126,7 +124,7 @@ definitions:
         $ref: '#/definitions/loginReward.Event'
       id:
         type: integer
-      login_reward_reward:
+      login_reward_rewards:
         items:
           $ref: '#/definitions/loginReward.LoginRewardReward'
         type: array
@@ -137,8 +135,10 @@ definitions:
     properties:
       id:
         type: integer
-      item_name:
-        type: string
+      items:
+        items:
+          $ref: '#/definitions/loginReward.Item'
+        type: array
       name:
         type: string
       step_number:
@@ -148,8 +148,10 @@ definitions:
     properties:
       id:
         type: integer
-      item:
-        $ref: '#/definitions/loginReward.Item'
+      items:
+        items:
+          $ref: '#/definitions/loginReward.Item'
+        type: array
       last_received_at:
         type: string
       login_reward_model:

@@ -62,7 +62,7 @@ services:
     build:
       target: dev
       context: .
-      dockerfile: ./docker/api/Dockerfile
+      dockerfile: ./docker/auth/Dockerfile
     volumes:
       - ./:/go/src/app
     ports:
