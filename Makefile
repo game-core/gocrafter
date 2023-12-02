@@ -12,8 +12,10 @@ docker_wire_gen:
 
 # apiを自動生成
 docker_app_gen:
+	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/auth/request/gen.go
+	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/auth/response/gen.go
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/api/request/gen.go
-	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/apiresponse/gen.go
+	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/api/response/gen.go
 	$(DOCKER_COMPOSE) exec gen go fmt ./...
 
 # 全てのdomainを自動生成
