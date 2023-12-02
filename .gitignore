@@ -3,6 +3,7 @@
 .idea
 
 /tmp
+/log/admin_debug.log
 /log/auth_debug.log
 /log/api_debug.log
 /log/batch_debug.log

@@ -15,8 +15,8 @@ type exampleDao struct {
 
 func NewExampleDao(conn *database.SqlHandler) exampleRepository.ExampleRepository {
 	return &exampleDao{
-		Read:  conn.Auth.ReadConn,
-		Write: conn.Auth.WriteConn,
+		Read:  conn.Admin.ReadConn,
+		Write: conn.Admin.WriteConn,
 	}
 }
 
