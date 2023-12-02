@@ -11,6 +11,7 @@ import (
 
 type AccountController interface {
 	RegisterAccount() echo.HandlerFunc
+	LoginAccount() echo.HandlerFunc
 }
 
 type accountController struct {
@@ -39,6 +40,31 @@ func (a *accountController) RegisterAccount() echo.HandlerFunc {
 		c.Bind(req)
 
 		res, err := a.accountService.RegisterAccount(req)
+		if err != nil {
+			return c.JSON(500, &errorResponse.Error{
+				Status:       500,
+				ErrorMessage: err.Error(),
+			})
+		}
+
+		return c.JSON(200, res)
+	}
+}
+
+// @tags    Account
+// @Summary アカウントログイン
+// @Accept  json
+// @Produce json
+// @Param   body body request.LoginAccount true "アカウントログイン"
+// @Router  /account/login_account [post]
+// @Success 200 {object} account.LoginAccount
+// @Failure 500 {object} errorResponse.Error
+func (a *accountController) LoginAccount() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		req := &request.LoginAccount{}
+		c.Bind(req)
+
+		res, err := a.accountService.LoginAccount(req)
 		if err != nil {
 			return c.JSON(500, &errorResponse.Error{
 				Status:       500,

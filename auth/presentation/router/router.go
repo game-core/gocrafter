@@ -28,6 +28,7 @@ func Init() {
 	// アカウント関連
 	account := e.Group("/account")
 	account.POST("/register_account", accountController.RegisterAccount())
+	account.POST("/login_account", accountController.LoginAccount())
 
 	e.Logger.Fatal(e.Start(":8000"))
 }

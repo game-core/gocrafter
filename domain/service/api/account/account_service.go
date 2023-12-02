@@ -94,7 +94,7 @@ func (s *accountService) LoginAccount(req *request.LoginAccount) (*response.Logi
 		return nil, errors.New("faild to key.CheckPassword")
 	}
 
-	token, err := token.GenerateAuthToken(ar.UUID, ar.Name)
+	token, err := token.GenerateAuthTokenByUUID(ar.UUID, ar.Name)
 	if err != nil {
 		return nil, errors.New("faild to token.GenerateAuthToken")
 	}

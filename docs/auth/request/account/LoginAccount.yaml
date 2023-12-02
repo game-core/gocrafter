@@ -1,0 +1,13 @@
+name: LoginAccount
+package: account
+structure:
+  Email:
+    name: email
+    type: string
+    nullable: false
+    number: 1
+  Password:
+    name: password
+    type: string
+    nullable: false
+    number: 2

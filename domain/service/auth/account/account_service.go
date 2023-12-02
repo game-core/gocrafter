@@ -2,6 +2,8 @@
 package account
 
 import (
+	"errors"
+	"github.com/game-core/gocrafter/config/token"
 	"log"
 
 	"github.com/game-core/gocrafter/config/key"
@@ -15,6 +17,7 @@ import (
 
 type AccountService interface {
 	RegisterAccount(req *request.RegisterAccount) (*response.RegisterAccount, error)
+	LoginAccount(req *request.LoginAccount) (*response.LoginAccount, error)
 }
 
 type accountService struct {
@@ -62,4 +65,23 @@ func (s *accountService) RegisterAccount(req *request.RegisterAccount) (*respons
 	}
 
 	return response.ToRegisterAccount(200, *response.ToAccount(ar.ID, ar.Name, ar.Email, req.Password, "")), nil
+}
+
+// LoginAccount アカウントをログインする
+func (s *accountService) LoginAccount(req *request.LoginAccount) (*response.LoginAccount, error) {
+	ar, err := s.accountRepository.FindByEmail(req.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	if !key.CheckPassword(req.Password, ar.Password) {
+		return nil, errors.New("faild to key.CheckPassword")
+	}
+
+	token, err := token.GenerateAuthTokenByEmail(ar.Email, ar.Name)
+	if err != nil {
+		return nil, errors.New("faild to token.GenerateAuthToken")
+	}
+
+	return response.ToLoginAccount(200, *response.ToAccount(ar.ID, ar.Name, ar.Email, req.Password, token)), nil
 }
