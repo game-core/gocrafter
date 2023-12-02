@@ -2,8 +2,7 @@ package example
 
 import (
 	"fmt"
-
-	exampleService "github.com/game-core/gocrafter/domain/service/example"
+	exampleService "github.com/game-core/gocrafter/domain/service/api/example"
 )
 
 type ExampleCommand interface {

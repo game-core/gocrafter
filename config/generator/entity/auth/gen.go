@@ -10,7 +10,6 @@ import (
 	"os"
 	"path/filepath"
 	"sort"
-	"strings"
 	"text/template"
 
 	"github.com/game-core/gocrafter/config/transform"
@@ -27,12 +26,16 @@ type StructInfo struct {
 	Name    string                 `yaml:"name"`
 	Package string                 `yaml:"package"`
 	Fields  map[string]StructField `yaml:"structure"`
+	Primary []string               `yaml:"primary"`
+	Index   []string               `yaml:"index"`
 }
 
 const templateCode = `
 package {{.Package}}
 
-{{.Import}}
+import (
+	"time"
+)
 
 type {{.PluralName}} []{{.Name}}
 
@@ -42,11 +45,13 @@ type {{.Name}} struct {
 {{end}}
 }
 
-{{.Script}}
+func (e *{{.Name}}) TableName() string {
+	return "{{.SnakeName}}"
+}
 `
 
-func generateResponse(yamlFilePath string, outputBaseDir string) error {
-	structInfo, err := getStructInfo(yamlFilePath)
+func generateEntity(yamlFile string, outputBaseDir string) error {
+	structInfo, err := getStructInfo(yamlFile)
 	if err != nil {
 		return err
 	}
@@ -56,7 +61,7 @@ func generateResponse(yamlFilePath string, outputBaseDir string) error {
 		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
 	}
 
-	outputFileName := filepath.Join(outputDir, fmt.Sprintf("%s_response.gen.go", transform.KebabToCamel(structInfo.Name)))
+	outputFileName := filepath.Join(outputDir, fmt.Sprintf("%s_entity.gen.go", transform.KebabToCamel(structInfo.Name)))
 	outputFile, err := os.Create(outputFileName)
 	if err != nil {
 		return fmt.Errorf("outputFileName file %s create error: %v", outputFileName, err)
@@ -66,7 +71,7 @@ func generateResponse(yamlFilePath string, outputBaseDir string) error {
 		return fmt.Errorf("faild to generateTemplate: %v", err)
 	}
 
-	fmt.Printf("Created %s Response in %s\n", structInfo.Name, outputFileName)
+	fmt.Printf("Created %s Entity in %s\n", structInfo.Name, outputFileName)
 
 	return nil
 }
@@ -76,25 +81,23 @@ func generateTemplate(structInfo *StructInfo, outputFile *os.File) error {
 		"sortByNumber": sortByNumber,
 	}).Parse(templateCode)
 	if err != nil {
-		return fmt.Errorf("error parsing template: %v", err)
+		return err
 	}
 
 	if err := tmpl.ExecuteTemplate(outputFile, "structTemplate", struct {
 		Name       string
+		SnakeName  string
 		PluralName string
 		Package    string
-		Import     string
 		Fields     map[string]StructField
-		Script     string
 	}{
 		Name:       structInfo.Name,
+		SnakeName:  transform.UpperCamelToSnake(structInfo.Name),
 		PluralName: transform.SingularToPlural(structInfo.Name),
 		Package:    structInfo.Package,
-		Import:     generateImport(structInfo.Fields),
 		Fields:     structInfo.Fields,
-		Script:     generateOutput(structInfo),
 	}); err != nil {
-		return fmt.Errorf("template error: %v", err)
+		return err
 	}
 
 	return nil
@@ -134,20 +137,6 @@ func sortByNumber(fields map[string]StructField) []struct {
 	return sortedFields
 }
 
-func generateImport(fields map[string]StructField) string {
-	for _, fieldInfo := range fields {
-		if fieldInfo.Type == "time.Time" {
-			return fmt.Sprintf(
-				`import (
-				"time"
-				)`,
-			)
-		}
-	}
-
-	return ""
-}
-
 func getStructInfo(yamlFilePath string) (*StructInfo, error) {
 	yamlData, err := ioutil.ReadFile(yamlFilePath)
 	if err != nil {
@@ -170,41 +159,17 @@ func getTypeWithPointer(fieldInfo StructField) string {
 	return fieldInfo.Type
 }
 
-func generateOutput(structInfo *StructInfo) string {
-	fields := sortByNumber(structInfo.Fields)
-	paramStrings := make([]string, len(fields))
-	returnStrings := make([]string, len(fields))
-
-	for i, field := range fields {
-		paramStrings[i] = fmt.Sprintf("%s %s", transform.SnakeToUpperCamel(field.FieldInfo.Name), getTypeWithPointer(field.FieldInfo))
-		returnStrings[i] = fmt.Sprintf("%s: %s,", transform.SnakeToUpperCamel(field.FieldInfo.Name), transform.SnakeToUpperCamel(field.FieldInfo.Name))
-	}
-
-	return fmt.Sprintf(
-		`func To%s(%s) *%s {
-			return &%s{
-				%s
-			}
-		}
-		`,
-		structInfo.Name,
-		strings.Join(paramStrings, ","),
-		structInfo.Name,
-		structInfo.Name,
-		strings.Join(returnStrings, "\n"),
-	)
-}
-
 func main() {
-	userOutput := "../../../api/presentation/response"
-	userYamlFiles, err := filepath.Glob("../../../docs/api/response/**/*.yaml")
+	outputBaseDir := "../../../../domain/entity/auth"
+	yamlFiles, err := filepath.Glob("../../../../docs/entity/auth/*.yaml")
 	if err != nil {
 		log.Fatalf("Error finding YAML files: %v", err)
 	}
 
-	for _, yamlFile := range userYamlFiles {
-		if err := generateResponse(yamlFile, userOutput); err != nil {
-			log.Printf("Error generating response from YAML file %s: %v", yamlFile, err)
+	for _, yamlFile := range yamlFiles {
+		err := generateEntity(yamlFile, outputBaseDir)
+		if err != nil {
+			log.Printf("Error generating entity from YAML file %s: %v", yamlFile, err)
 		}
 	}
 }

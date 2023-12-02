@@ -10,21 +10,11 @@ docker_up:
 docker_wire_gen:
 	$(DOCKER_COMPOSE) exec gen wire api/di/wire.go
 
-# 全てのappを自動生成
+# apiを自動生成
 docker_app_gen:
-	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/request/gen.go
-	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/response/gen.go
+	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/api/request/gen.go
+	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/apiresponse/gen.go
 	$(DOCKER_COMPOSE) exec gen go fmt ./...
-
-# requestを自動生成
-docker_request_gen:
-	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/request/gen.go
-	$(DOCKER_COMPOSE) exec gen go fmt ./api/presentation/request...
-
-# responseを自動生成
-docker_response_gen:
-	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/response/gen.go
-	$(DOCKER_COMPOSE) exec gen go fmt ./api/presentation/response...
 
 # 全てのdomainを自動生成
 docker_domain_gen:
@@ -43,34 +33,6 @@ docker_domain_gen:
 	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/sql/user/gen.go
 	$(DOCKER_COMPOSE) exec gen go generate ./domain/...
 	$(DOCKER_COMPOSE) exec gen go fmt ./...
-
-# modelを自動生成
-docker_entity_gen:
-	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/entity/master/gen.go
-	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/entity/user/gen.go
-	$(DOCKER_COMPOSE) exec gen go fmt ./domain/entity/...
-
-# repositoryを自動生成
-docker_repository_gen:
-	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/repository/master/gen.go
-	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/repository/user/gen.go
-	$(DOCKER_COMPOSE) exec gen go fmt ./domain/repository/...
-
-# daoを自動生成
-docker_dao_gen:
-	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/dao/master/gen.go
-	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/dao/user/gen.go
-	$(DOCKER_COMPOSE) exec gen go fmt ./infra/dao/...
-
-# modelを自動生成
-docker_enum_gen:
-	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/enum/gen.go
-	$(DOCKER_COMPOSE) exec gen go fmt ./domain/enum/...
-
-# sqlを自動生成
-docker_sql_gen:
-	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/sql/master/gen.go
-	$(DOCKER_COMPOSE) exec gen go generate ./config/generator/sql/user/gen.go
 
 # Swaggerを自動生成
 docker_swag_gen:

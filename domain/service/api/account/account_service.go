@@ -3,6 +3,8 @@ package account
 
 import (
 	"errors"
+	"log"
+
 	request "github.com/game-core/gocrafter/api/presentation/request/account"
 	response "github.com/game-core/gocrafter/api/presentation/response/account"
 	"github.com/game-core/gocrafter/config/key"
@@ -10,8 +12,7 @@ import (
 	accountEntity "github.com/game-core/gocrafter/domain/entity/user/account"
 	userRepository "github.com/game-core/gocrafter/domain/repository/user"
 	accountRepository "github.com/game-core/gocrafter/domain/repository/user/account"
-	shardService "github.com/game-core/gocrafter/domain/service/shard"
-	"log"
+	shardService "github.com/game-core/gocrafter/domain/service/api/shard"
 )
 
 type AccountService interface {

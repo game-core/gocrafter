@@ -7,7 +7,7 @@ import (
 	request "github.com/game-core/gocrafter/api/presentation/request/loginReward"
 	errorResponse "github.com/game-core/gocrafter/api/presentation/response/error"
 	_ "github.com/game-core/gocrafter/api/presentation/response/loginReward"
-	loginRewardService "github.com/game-core/gocrafter/domain/service/loginReward"
+	loginRewardService "github.com/game-core/gocrafter/domain/service/api/loginReward"
 )
 
 type LoginRewardController interface {

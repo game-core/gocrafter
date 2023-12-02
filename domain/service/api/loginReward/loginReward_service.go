@@ -17,8 +17,8 @@ import (
 	masterLoginRewardRepository "github.com/game-core/gocrafter/domain/repository/master/loginReward"
 	userRepository "github.com/game-core/gocrafter/domain/repository/user"
 	userLoginRewardRepository "github.com/game-core/gocrafter/domain/repository/user/loginReward"
-	eventService "github.com/game-core/gocrafter/domain/service/event"
-	itemService "github.com/game-core/gocrafter/domain/service/item"
+	eventService "github.com/game-core/gocrafter/domain/service/api/event"
+	itemService "github.com/game-core/gocrafter/domain/service/api/item"
 )
 
 type LoginRewardService interface {

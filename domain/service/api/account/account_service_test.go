@@ -2,6 +2,7 @@ package account
 
 import (
 	"errors"
+	"github.com/game-core/gocrafter/domain/service/api/shard"
 	"reflect"
 	"testing"
 	"time"
@@ -14,12 +15,11 @@ import (
 	accountEntity "github.com/game-core/gocrafter/domain/entity/user/account"
 	userRepository "github.com/game-core/gocrafter/domain/repository/user"
 	accountRepository "github.com/game-core/gocrafter/domain/repository/user/account"
-	shardService "github.com/game-core/gocrafter/domain/service/shard"
 )
 
 func TestAccountService_RegisterAccount(t *testing.T) {
 	type fields struct {
-		shardService          func(ctrl *gomock.Controller) shardService.ShardService
+		shardService          func(ctrl *gomock.Controller) shard.ShardService
 		transactionRepository func(ctrl *gomock.Controller) userRepository.TransactionRepository
 		accountRepository     func(ctrl *gomock.Controller) accountRepository.AccountRepository
 	}
@@ -36,8 +36,8 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 		{
 			name: "正常：登録できる",
 			fields: fields{
-				shardService: func(ctrl *gomock.Controller) shardService.ShardService {
-					m := shardService.NewMockShardService(ctrl)
+				shardService: func(ctrl *gomock.Controller) shard.ShardService {
+					m := shard.NewMockShardService(ctrl)
 					m.EXPECT().
 						GetShard().
 						Return(
@@ -124,8 +124,8 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 		{
 			name: "異常：エラー(accountRepository.Create)",
 			fields: fields{
-				shardService: func(ctrl *gomock.Controller) shardService.ShardService {
-					m := shardService.NewMockShardService(ctrl)
+				shardService: func(ctrl *gomock.Controller) shard.ShardService {
+					m := shard.NewMockShardService(ctrl)
 					m.EXPECT().
 						GetShard().
 						Return(
@@ -197,8 +197,8 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 		{
 			name: "異常：エラー（transactionRepository.Begin）",
 			fields: fields{
-				shardService: func(ctrl *gomock.Controller) shardService.ShardService {
-					m := shardService.NewMockShardService(ctrl)
+				shardService: func(ctrl *gomock.Controller) shard.ShardService {
+					m := shard.NewMockShardService(ctrl)
 					m.EXPECT().
 						GetShard().
 						Return(
@@ -250,8 +250,8 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 		{
 			name: "異常：エラー（shardService.GetShard）",
 			fields: fields{
-				shardService: func(ctrl *gomock.Controller) shardService.ShardService {
-					m := shardService.NewMockShardService(ctrl)
+				shardService: func(ctrl *gomock.Controller) shard.ShardService {
+					m := shard.NewMockShardService(ctrl)
 					m.EXPECT().
 						GetShard().
 						Return(

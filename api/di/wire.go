@@ -4,7 +4,6 @@
 package di
 
 import (
-	shardDao "github.com/game-core/gocrafter/infra/dao/config/shard"
 	"github.com/google/wire"
 
 	"github.com/game-core/gocrafter/config/database"
@@ -14,11 +13,12 @@ import (
 	accountController "github.com/game-core/gocrafter/api/presentation/controller/account"
 	loginRewardController "github.com/game-core/gocrafter/api/presentation/controller/loginReward"
 	accountMiddleware "github.com/game-core/gocrafter/api/presentation/middleware/account"
-	accountService "github.com/game-core/gocrafter/domain/service/account"
-	eventService "github.com/game-core/gocrafter/domain/service/event"
-	itemService "github.com/game-core/gocrafter/domain/service/item"
-	loginRewardService "github.com/game-core/gocrafter/domain/service/loginReward"
-	shardService "github.com/game-core/gocrafter/domain/service/shard"
+	accountService "github.com/game-core/gocrafter/domain/service/api/account"
+	eventService "github.com/game-core/gocrafter/domain/service/api/event"
+	itemService "github.com/game-core/gocrafter/domain/service/api/item"
+	loginRewardService "github.com/game-core/gocrafter/domain/service/api/loginReward"
+	shardService "github.com/game-core/gocrafter/domain/service/api/shard"
+	shardDao "github.com/game-core/gocrafter/infra/dao/config/shard"
 	masterEventDao "github.com/game-core/gocrafter/infra/dao/master/event"
 	masterItemDao "github.com/game-core/gocrafter/infra/dao/master/item"
 	masterLoginRewardDao "github.com/game-core/gocrafter/infra/dao/master/loginReward"

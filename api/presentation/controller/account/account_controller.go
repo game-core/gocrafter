@@ -6,7 +6,7 @@ import (
 	request "github.com/game-core/gocrafter/api/presentation/request/account"
 	_ "github.com/game-core/gocrafter/api/presentation/response/account"
 	errorResponse "github.com/game-core/gocrafter/api/presentation/response/error"
-	accountService "github.com/game-core/gocrafter/domain/service/account"
+	accountService "github.com/game-core/gocrafter/domain/service/api/account"
 )
 
 type AccountController interface {

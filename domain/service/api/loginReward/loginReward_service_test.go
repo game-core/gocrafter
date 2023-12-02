@@ -2,6 +2,8 @@ package loginReward
 
 import (
 	"errors"
+	"github.com/game-core/gocrafter/domain/service/api/event"
+	"github.com/game-core/gocrafter/domain/service/api/item"
 	"gorm.io/gorm"
 	"reflect"
 	"testing"
@@ -19,15 +21,13 @@ import (
 	masterLoginRewardRepository "github.com/game-core/gocrafter/domain/repository/master/loginReward"
 	userRepository "github.com/game-core/gocrafter/domain/repository/user"
 	userLoginRewardRepository "github.com/game-core/gocrafter/domain/repository/user/loginReward"
-	eventService "github.com/game-core/gocrafter/domain/service/event"
-	itemService "github.com/game-core/gocrafter/domain/service/item"
 )
 
 func TestExampleService_GetLoginRewardModel(t *testing.T) {
 	type fields struct {
 		loginRewardModelRepository  func(ctrl *gomock.Controller) masterLoginRewardRepository.LoginRewardModelRepository
 		loginRewardRewardRepository func(ctrl *gomock.Controller) masterLoginRewardRepository.LoginRewardRewardRepository
-		eventService                func(ctrl *gomock.Controller) eventService.EventService
+		eventService                func(ctrl *gomock.Controller) event.EventService
 	}
 	type args struct {
 		req *request.GetLoginRewardModel
@@ -92,8 +92,8 @@ func TestExampleService_GetLoginRewardModel(t *testing.T) {
 						)
 					return m
 				},
-				eventService: func(ctrl *gomock.Controller) eventService.EventService {
-					m := eventService.NewMockEventService(ctrl)
+				eventService: func(ctrl *gomock.Controller) event.EventService {
+					m := event.NewMockEventService(ctrl)
 					m.EXPECT().
 						GetEventToEntity(
 							"event",
@@ -223,8 +223,8 @@ func TestExampleService_GetLoginRewardModel(t *testing.T) {
 						)
 					return m
 				},
-				eventService: func(ctrl *gomock.Controller) eventService.EventService {
-					m := eventService.NewMockEventService(ctrl)
+				eventService: func(ctrl *gomock.Controller) event.EventService {
+					m := event.NewMockEventService(ctrl)
 					m.EXPECT().
 						GetEventToEntity(
 							"event",
@@ -274,8 +274,8 @@ func TestExampleService_ReceiveLoginReward(t *testing.T) {
 		loginRewardModelRepository  func(ctrl *gomock.Controller) masterLoginRewardRepository.LoginRewardModelRepository
 		loginRewardRewardRepository func(ctrl *gomock.Controller) masterLoginRewardRepository.LoginRewardRewardRepository
 		loginRewardStatusRepository func(ctrl *gomock.Controller) userLoginRewardRepository.LoginRewardStatusRepository
-		eventService                func(ctrl *gomock.Controller) eventService.EventService
-		itemService                 func(ctrl *gomock.Controller) itemService.ItemService
+		eventService                func(ctrl *gomock.Controller) event.EventService
+		itemService                 func(ctrl *gomock.Controller) item.ItemService
 	}
 	type args struct {
 		req *request.ReceiveLoginReward
@@ -369,8 +369,8 @@ func TestExampleService_ReceiveLoginReward(t *testing.T) {
 						)
 					return m
 				},
-				eventService: func(ctrl *gomock.Controller) eventService.EventService {
-					m := eventService.NewMockEventService(ctrl)
+				eventService: func(ctrl *gomock.Controller) event.EventService {
+					m := event.NewMockEventService(ctrl)
 					m.EXPECT().
 						GetEventToEntity(
 							"event",
@@ -430,8 +430,8 @@ func TestExampleService_ReceiveLoginReward(t *testing.T) {
 						)
 					return m
 				},
-				itemService: func(ctrl *gomock.Controller) itemService.ItemService {
-					m := itemService.NewMockItemService(ctrl)
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
 					m.EXPECT().
 						ReceiveItemInBox(
 							gomock.Any(),
@@ -570,16 +570,16 @@ func TestExampleService_ReceiveLoginReward(t *testing.T) {
 					m := masterLoginRewardRepository.NewMockLoginRewardRewardRepository(ctrl)
 					return m
 				},
-				eventService: func(ctrl *gomock.Controller) eventService.EventService {
-					m := eventService.NewMockEventService(ctrl)
+				eventService: func(ctrl *gomock.Controller) event.EventService {
+					m := event.NewMockEventService(ctrl)
 					return m
 				},
 				loginRewardStatusRepository: func(ctrl *gomock.Controller) userLoginRewardRepository.LoginRewardStatusRepository {
 					m := userLoginRewardRepository.NewMockLoginRewardStatusRepository(ctrl)
 					return m
 				},
-				itemService: func(ctrl *gomock.Controller) itemService.ItemService {
-					m := itemService.NewMockItemService(ctrl)
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
 					return m
 				},
 			},
@@ -634,16 +634,16 @@ func TestExampleService_ReceiveLoginReward(t *testing.T) {
 					m := masterLoginRewardRepository.NewMockLoginRewardRewardRepository(ctrl)
 					return m
 				},
-				eventService: func(ctrl *gomock.Controller) eventService.EventService {
-					m := eventService.NewMockEventService(ctrl)
+				eventService: func(ctrl *gomock.Controller) event.EventService {
+					m := event.NewMockEventService(ctrl)
 					return m
 				},
 				loginRewardStatusRepository: func(ctrl *gomock.Controller) userLoginRewardRepository.LoginRewardStatusRepository {
 					m := userLoginRewardRepository.NewMockLoginRewardStatusRepository(ctrl)
 					return m
 				},
-				itemService: func(ctrl *gomock.Controller) itemService.ItemService {
-					m := itemService.NewMockItemService(ctrl)
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
 					return m
 				},
 			},
@@ -740,8 +740,8 @@ func TestExampleService_ReceiveLoginReward(t *testing.T) {
 						)
 					return m
 				},
-				eventService: func(ctrl *gomock.Controller) eventService.EventService {
-					m := eventService.NewMockEventService(ctrl)
+				eventService: func(ctrl *gomock.Controller) event.EventService {
+					m := event.NewMockEventService(ctrl)
 					m.EXPECT().
 						GetEventToEntity(
 							"event",
@@ -775,8 +775,8 @@ func TestExampleService_ReceiveLoginReward(t *testing.T) {
 						)
 					return m
 				},
-				itemService: func(ctrl *gomock.Controller) itemService.ItemService {
-					m := itemService.NewMockItemService(ctrl)
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
 					return m
 				},
 			},
@@ -873,8 +873,8 @@ func TestExampleService_ReceiveLoginReward(t *testing.T) {
 						)
 					return m
 				},
-				eventService: func(ctrl *gomock.Controller) eventService.EventService {
-					m := eventService.NewMockEventService(ctrl)
+				eventService: func(ctrl *gomock.Controller) event.EventService {
+					m := event.NewMockEventService(ctrl)
 					m.EXPECT().
 						GetEventToEntity(
 							"event",
@@ -916,8 +916,8 @@ func TestExampleService_ReceiveLoginReward(t *testing.T) {
 						)
 					return m
 				},
-				itemService: func(ctrl *gomock.Controller) itemService.ItemService {
-					m := itemService.NewMockItemService(ctrl)
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
 					m.EXPECT().
 						ReceiveItemInBox(
 							gomock.Any(),
@@ -1022,8 +1022,8 @@ func TestExampleService_ReceiveLoginReward(t *testing.T) {
 						)
 					return m
 				},
-				eventService: func(ctrl *gomock.Controller) eventService.EventService {
-					m := eventService.NewMockEventService(ctrl)
+				eventService: func(ctrl *gomock.Controller) event.EventService {
+					m := event.NewMockEventService(ctrl)
 					m.EXPECT().
 						GetEventToEntity(
 							"event",
@@ -1075,8 +1075,8 @@ func TestExampleService_ReceiveLoginReward(t *testing.T) {
 						)
 					return m
 				},
-				itemService: func(ctrl *gomock.Controller) itemService.ItemService {
-					m := itemService.NewMockItemService(ctrl)
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
 					m.EXPECT().
 						ReceiveItemInBox(
 							gomock.Any(),
@@ -1197,8 +1197,8 @@ func TestExampleService_ReceiveLoginReward(t *testing.T) {
 						)
 					return m
 				},
-				eventService: func(ctrl *gomock.Controller) eventService.EventService {
-					m := eventService.NewMockEventService(ctrl)
+				eventService: func(ctrl *gomock.Controller) event.EventService {
+					m := event.NewMockEventService(ctrl)
 					m.EXPECT().
 						GetEventToEntity(
 							"event",
@@ -1240,8 +1240,8 @@ func TestExampleService_ReceiveLoginReward(t *testing.T) {
 						)
 					return m
 				},
-				itemService: func(ctrl *gomock.Controller) itemService.ItemService {
-					m := itemService.NewMockItemService(ctrl)
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
 					return m
 				},
 			},
@@ -1287,7 +1287,7 @@ func TestExampleService_getLoginRewardModelAndRewardsAndEvent(t *testing.T) {
 	type fields struct {
 		loginRewardModelRepository  func(ctrl *gomock.Controller) masterLoginRewardRepository.LoginRewardModelRepository
 		loginRewardRewardRepository func(ctrl *gomock.Controller) masterLoginRewardRepository.LoginRewardRewardRepository
-		eventService                func(ctrl *gomock.Controller) eventService.EventService
+		eventService                func(ctrl *gomock.Controller) event.EventService
 	}
 	type args struct {
 		loginRewardModelName string
@@ -1354,8 +1354,8 @@ func TestExampleService_getLoginRewardModelAndRewardsAndEvent(t *testing.T) {
 						)
 					return m
 				},
-				eventService: func(ctrl *gomock.Controller) eventService.EventService {
-					m := eventService.NewMockEventService(ctrl)
+				eventService: func(ctrl *gomock.Controller) event.EventService {
+					m := event.NewMockEventService(ctrl)
 					m.EXPECT().
 						GetEventToEntity(
 							"event",
@@ -1440,8 +1440,8 @@ func TestExampleService_getLoginRewardModelAndRewardsAndEvent(t *testing.T) {
 					m := masterLoginRewardRepository.NewMockLoginRewardRewardRepository(ctrl)
 					return m
 				},
-				eventService: func(ctrl *gomock.Controller) eventService.EventService {
-					m := eventService.NewMockEventService(ctrl)
+				eventService: func(ctrl *gomock.Controller) event.EventService {
+					m := event.NewMockEventService(ctrl)
 					return m
 				},
 			},
@@ -1487,8 +1487,8 @@ func TestExampleService_getLoginRewardModelAndRewardsAndEvent(t *testing.T) {
 						)
 					return m
 				},
-				eventService: func(ctrl *gomock.Controller) eventService.EventService {
-					m := eventService.NewMockEventService(ctrl)
+				eventService: func(ctrl *gomock.Controller) event.EventService {
+					m := event.NewMockEventService(ctrl)
 					return m
 				},
 			},
@@ -1553,8 +1553,8 @@ func TestExampleService_getLoginRewardModelAndRewardsAndEvent(t *testing.T) {
 						)
 					return m
 				},
-				eventService: func(ctrl *gomock.Controller) eventService.EventService {
-					m := eventService.NewMockEventService(ctrl)
+				eventService: func(ctrl *gomock.Controller) event.EventService {
+					m := event.NewMockEventService(ctrl)
 					m.EXPECT().
 						GetEventToEntity(
 							"event",
@@ -1627,8 +1627,8 @@ func TestExampleService_getLoginRewardModelAndRewardsAndEvent(t *testing.T) {
 						)
 					return m
 				},
-				eventService: func(ctrl *gomock.Controller) eventService.EventService {
-					m := eventService.NewMockEventService(ctrl)
+				eventService: func(ctrl *gomock.Controller) event.EventService {
+					m := event.NewMockEventService(ctrl)
 					m.EXPECT().
 						GetEventToEntity(
 							"event",
@@ -1691,7 +1691,7 @@ func TestExampleService_getLoginRewardModelAndRewardsAndEvent(t *testing.T) {
 func TestExampleService_reward(t *testing.T) {
 	type fields struct {
 		loginRewardStatusRepository func(ctrl *gomock.Controller) userLoginRewardRepository.LoginRewardStatusRepository
-		itemService                 func(ctrl *gomock.Controller) itemService.ItemService
+		itemService                 func(ctrl *gomock.Controller) item.ItemService
 	}
 	type args struct {
 		lrs  *userLoginRewarEntity.LoginRewardStatus
@@ -1733,8 +1733,8 @@ func TestExampleService_reward(t *testing.T) {
 						)
 					return m
 				},
-				itemService: func(ctrl *gomock.Controller) itemService.ItemService {
-					m := itemService.NewMockItemService(ctrl)
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
 					m.EXPECT().
 						ReceiveItemInBox(
 							gomock.Any(),
@@ -1830,8 +1830,8 @@ func TestExampleService_reward(t *testing.T) {
 					m := userLoginRewardRepository.NewMockLoginRewardStatusRepository(ctrl)
 					return m
 				},
-				itemService: func(ctrl *gomock.Controller) itemService.ItemService {
-					m := itemService.NewMockItemService(ctrl)
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
 					return m
 				},
 			},
@@ -1905,8 +1905,8 @@ func TestExampleService_reward(t *testing.T) {
 						)
 					return m
 				},
-				itemService: func(ctrl *gomock.Controller) itemService.ItemService {
-					m := itemService.NewMockItemService(ctrl)
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
 					m.EXPECT().
 						ReceiveItemInBox(
 							gomock.Any(),
@@ -1994,8 +1994,8 @@ func TestExampleService_reward(t *testing.T) {
 					m := userLoginRewardRepository.NewMockLoginRewardStatusRepository(ctrl)
 					return m
 				},
-				itemService: func(ctrl *gomock.Controller) itemService.ItemService {
-					m := itemService.NewMockItemService(ctrl)
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
 					m.EXPECT().
 						ReceiveItemInBox(
 							gomock.Any(),
@@ -2084,7 +2084,7 @@ func TestExampleService_reward(t *testing.T) {
 
 func TestExampleService_receiveItem(t *testing.T) {
 	type fields struct {
-		itemService func(ctrl *gomock.Controller) itemService.ItemService
+		itemService func(ctrl *gomock.Controller) item.ItemService
 	}
 	type args struct {
 		lrrs      *masterLoginRewardEntity.LoginRewardRewards
@@ -2102,8 +2102,8 @@ func TestExampleService_receiveItem(t *testing.T) {
 		{
 			name: "正常：受け取りできる",
 			fields: fields{
-				itemService: func(ctrl *gomock.Controller) itemService.ItemService {
-					m := itemService.NewMockItemService(ctrl)
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
 					m.EXPECT().
 						ReceiveItemInBox(
 							gomock.Any(),
@@ -2172,8 +2172,8 @@ func TestExampleService_receiveItem(t *testing.T) {
 		{
 			name: "異常：Unmarshalエラー",
 			fields: fields{
-				itemService: func(ctrl *gomock.Controller) itemService.ItemService {
-					m := itemService.NewMockItemService(ctrl)
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
 					return m
 				},
 			},
@@ -2218,8 +2218,8 @@ func TestExampleService_receiveItem(t *testing.T) {
 		{
 			name: "異常：エラー",
 			fields: fields{
-				itemService: func(ctrl *gomock.Controller) itemService.ItemService {
-					m := itemService.NewMockItemService(ctrl)
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
 					m.EXPECT().
 						ReceiveItemInBox(
 							gomock.Any(),

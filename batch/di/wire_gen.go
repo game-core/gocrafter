@@ -9,7 +9,7 @@ package di
 import (
 	"github.com/game-core/gocrafter/batch/command/example"
 	"github.com/game-core/gocrafter/config/database"
-	example3 "github.com/game-core/gocrafter/domain/service/example"
+	example3 "github.com/game-core/gocrafter/domain/service/api/example"
 	example2 "github.com/game-core/gocrafter/infra/dao/master/example"
 )
 
