@@ -12,6 +12,7 @@ import (
 type AccountController interface {
 	RegisterAccount() echo.HandlerFunc
 	LoginAccount() echo.HandlerFunc
+	CheckAccount() echo.HandlerFunc
 }
 
 type accountController struct {
@@ -65,6 +66,31 @@ func (a *accountController) LoginAccount() echo.HandlerFunc {
 		c.Bind(req)
 
 		res, err := a.accountService.LoginAccount(req)
+		if err != nil {
+			return c.JSON(500, &errorResponse.Error{
+				Status:       500,
+				ErrorMessage: err.Error(),
+			})
+		}
+
+		return c.JSON(200, res)
+	}
+}
+
+// @tags    Account
+// @Summary アカウント確認
+// @Accept  json
+// @Produce json
+// @Param   body body request.CheckAccount true "アカウント確認"
+// @Router  /account/check_account [post]
+// @Success 200 {object} account.CheckAccount
+// @Failure 500 {object} errorResponse.Error
+func (a *accountController) CheckAccount() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		req := &request.CheckAccount{}
+		c.Bind(req)
+
+		res, err := a.accountService.CheckAccount(req)
 		if err != nil {
 			return c.JSON(500, &errorResponse.Error{
 				Status:       500,

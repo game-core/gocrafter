@@ -18,6 +18,7 @@ import (
 type AccountService interface {
 	RegisterAccount(req *request.RegisterAccount) (*response.RegisterAccount, error)
 	LoginAccount(req *request.LoginAccount) (*response.LoginAccount, error)
+	CheckAccount(req *request.CheckAccount) (*response.CheckAccount, error)
 }
 
 type accountService struct {
@@ -93,4 +94,14 @@ func (s *accountService) LoginAccount(req *request.LoginAccount) (*response.Logi
 	}
 
 	return response.ToLoginAccount(200, *response.ToAccount(a.ID, a.Name, a.Email, req.Password, token)), nil
+}
+
+// CheckAccount アカウントを確認する
+func (s *accountService) CheckAccount(req *request.CheckAccount) (*response.CheckAccount, error) {
+	a, err := s.accountRepository.FindByEmail(req.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	return response.ToCheckAccount(200, *response.ToAccount(a.ID, a.Name, a.Email, "", "")), nil
 }

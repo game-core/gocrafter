@@ -20,6 +20,18 @@ definitions:
       status:
         type: integer
     type: object
+  github.com_game-core_gocrafter_auth_presentation_request_account.CheckAccount:
+    properties:
+      email:
+        type: string
+    type: object
+  github.com_game-core_gocrafter_auth_presentation_request_account.LoginAccount:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
   github.com_game-core_gocrafter_auth_presentation_request_account.RegisterAccount:
     properties:
       email:
@@ -28,6 +40,20 @@ definitions:
         type: string
       password:
         type: string
+    type: object
+  github.com_game-core_gocrafter_auth_presentation_response_account.CheckAccount:
+    properties:
+      account:
+        $ref: '#/definitions/account.Account'
+      status:
+        type: integer
+    type: object
+  github.com_game-core_gocrafter_auth_presentation_response_account.LoginAccount:
+    properties:
+      account:
+        $ref: '#/definitions/account.Account'
+      status:
+        type: integer
     type: object
   github.com_game-core_gocrafter_auth_presentation_response_account.RegisterAccount:
     properties:
@@ -46,6 +72,56 @@ info:
   title: github.com/game-core/gocrafter
   version: "1.0"
 paths:
+  /account/check_account:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: アカウント確認
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/github.com_game-core_gocrafter_auth_presentation_request_account.CheckAccount'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github.com_game-core_gocrafter_auth_presentation_response_account.CheckAccount'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: アカウント確認
+      tags:
+      - Account
+  /account/login_account:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: アカウントログイン
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/github.com_game-core_gocrafter_auth_presentation_request_account.LoginAccount'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github.com_game-core_gocrafter_auth_presentation_response_account.LoginAccount'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: アカウントログイン
+      tags:
+      - Account
   /account/register_account:
     post:
       consumes:

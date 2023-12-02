@@ -14,6 +14,7 @@ import (
 func Init() {
 	// di: wire ./api/di/wire.go
 	accountController := di.InitializeAccountController()
+	accountMiddleware := di.InitializeAccountMiddleware()
 
 	e := echo.New()
 
@@ -29,6 +30,10 @@ func Init() {
 	account := e.Group("/account")
 	account.POST("/register_account", accountController.RegisterAccount())
 	account.POST("/login_account", accountController.LoginAccount())
+
+	accountWithToken := e.Group("/account")
+	accountWithToken.Use(accountMiddleware.AccountMiddleware)
+	accountWithToken.POST("/check_account", accountController.CheckAccount())
 
 	e.Logger.Fatal(e.Start(":8000"))
 }

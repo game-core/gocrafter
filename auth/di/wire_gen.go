@@ -7,25 +7,31 @@
 package di
 
 import (
-	"github.com/game-core/gocrafter/auth/presentation/controller/account"
+	"github.com/game-core/gocrafter/api/presentation/middleware/account"
+	account2 "github.com/game-core/gocrafter/auth/presentation/controller/account"
 	"github.com/game-core/gocrafter/config/database"
-	account2 "github.com/game-core/gocrafter/domain/service/auth/account"
+	account3 "github.com/game-core/gocrafter/domain/service/auth/account"
 	"github.com/game-core/gocrafter/infra/dao/auth"
-	account3 "github.com/game-core/gocrafter/infra/dao/auth/account"
+	account4 "github.com/game-core/gocrafter/infra/dao/auth/account"
 )
 
 // Injectors from wire.go:
 
-func InitializeAccountController() account.AccountController {
+func InitializeAccountMiddleware() account.AccountMiddleware {
+	accountMiddleware := account.NewAccountMiddleware()
+	return accountMiddleware
+}
+
+func InitializeAccountController() account2.AccountController {
 	accountService := InitializeAccountService()
-	accountController := account.NewAccountController(accountService)
+	accountController := account2.NewAccountController(accountService)
 	return accountController
 }
 
-func InitializeAccountService() account2.AccountService {
+func InitializeAccountService() account3.AccountService {
 	sqlHandler := database.NewDB()
 	transactionRepository := config.NewTransactionDao(sqlHandler)
-	accountRepository := account3.NewAccountDao(sqlHandler)
-	accountService := account2.NewAccountService(transactionRepository, accountRepository)
+	accountRepository := account4.NewAccountDao(sqlHandler)
+	accountService := account3.NewAccountService(transactionRepository, accountRepository)
 	return accountService
 }

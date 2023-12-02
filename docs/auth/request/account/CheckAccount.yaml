@@ -1,0 +1,8 @@
+name: CheckAccount
+package: account
+structure:
+  Email:
+    name: email
+    type: string
+    nullable: false
+    number: 1

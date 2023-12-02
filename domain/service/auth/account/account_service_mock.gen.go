@@ -35,6 +35,36 @@ func (m *MockAccountService) EXPECT() *MockAccountServiceMockRecorder {
 	return m.recorder
 }
 
+// CheckAccount mocks base method.
+func (m *MockAccountService) CheckAccount(req *account.CheckAccount) (*account0.CheckAccount, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CheckAccount", req)
+	ret0, _ := ret[0].(*account0.CheckAccount)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CheckAccount indicates an expected call of CheckAccount.
+func (mr *MockAccountServiceMockRecorder) CheckAccount(req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckAccount", reflect.TypeOf((*MockAccountService)(nil).CheckAccount), req)
+}
+
+// LoginAccount mocks base method.
+func (m *MockAccountService) LoginAccount(req *account.LoginAccount) (*account0.LoginAccount, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LoginAccount", req)
+	ret0, _ := ret[0].(*account0.LoginAccount)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// LoginAccount indicates an expected call of LoginAccount.
+func (mr *MockAccountServiceMockRecorder) LoginAccount(req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LoginAccount", reflect.TypeOf((*MockAccountService)(nil).LoginAccount), req)
+}
+
 // RegisterAccount mocks base method.
 func (m *MockAccountService) RegisterAccount(req *account.RegisterAccount) (*account0.RegisterAccount, error) {
 	m.ctrl.T.Helper()

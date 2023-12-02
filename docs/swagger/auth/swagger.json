@@ -13,6 +13,84 @@
     "host": "localhost:8002",
     "basePath": "/",
     "paths": {
+        "/account/check_account": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account"
+                ],
+                "summary": "アカウント確認",
+                "parameters": [
+                    {
+                        "description": "アカウント確認",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github.com_game-core_gocrafter_auth_presentation_request_account.CheckAccount"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github.com_game-core_gocrafter_auth_presentation_response_account.CheckAccount"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/account/login_account": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account"
+                ],
+                "summary": "アカウントログイン",
+                "parameters": [
+                    {
+                        "description": "アカウントログイン",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github.com_game-core_gocrafter_auth_presentation_request_account.LoginAccount"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github.com_game-core_gocrafter_auth_presentation_response_account.LoginAccount"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/error.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/account/register_account": {
             "post": {
                 "consumes": [
@@ -85,6 +163,25 @@
                 }
             }
         },
+        "github.com_game-core_gocrafter_auth_presentation_request_account.CheckAccount": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
+        "github.com_game-core_gocrafter_auth_presentation_request_account.LoginAccount": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
         "github.com_game-core_gocrafter_auth_presentation_request_account.RegisterAccount": {
             "type": "object",
             "properties": {
@@ -96,6 +193,28 @@
                 },
                 "password": {
                     "type": "string"
+                }
+            }
+        },
+        "github.com_game-core_gocrafter_auth_presentation_response_account.CheckAccount": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "$ref": "#/definitions/account.Account"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github.com_game-core_gocrafter_auth_presentation_response_account.LoginAccount": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "$ref": "#/definitions/account.Account"
+                },
+                "status": {
+                    "type": "integer"
                 }
             }
         },
