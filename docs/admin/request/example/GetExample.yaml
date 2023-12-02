@@ -1,0 +1,8 @@
+name: GetExample
+package: example
+structure:
+  ID:
+    name: uuid
+    type: string
+    nullable: false
+    number: 1

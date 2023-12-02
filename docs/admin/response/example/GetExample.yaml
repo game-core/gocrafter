@@ -1,0 +1,13 @@
+name: GetExample
+package: example
+structure:
+  Status:
+    name: status
+    type: int64
+    nullable: false
+    number: 1
+  Example:
+    name: example
+    type: Example
+    nullable: true
+    number: 2
