@@ -38,6 +38,21 @@ services:
       test_db:
         condition: service_healthy
 
+  test_auth:
+    container_name: gocrafter-test-auth
+    env_file:
+      - .env.test
+    build:
+      target: dev
+      context: .
+      dockerfile: ./docker/test_auth/Dockerfile
+    volumes:
+      - ./:/go/src/app
+    tty: true
+    depends_on:
+      test_db:
+        condition: service_healthy
+
 volumes:
    db-local-test:
      driver: local

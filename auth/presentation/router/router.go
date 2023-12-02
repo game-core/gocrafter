@@ -22,7 +22,7 @@ func Init() {
 	e.GET("/swagger/*any", echoSwagger.WrapHandler)
 
 	// Log
-	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{Output: log.GenerateApiLog()}))
+	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{Output: log.GenerateAuthLog()}))
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 

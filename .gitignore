@@ -3,6 +3,7 @@
 .idea
 
 /tmp
+/log/auth_debug.log
 /log/api_debug.log
 /log/batch_debug.log
 /static/images
