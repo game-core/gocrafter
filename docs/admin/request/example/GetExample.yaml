@@ -2,7 +2,7 @@ name: GetExample
 package: example
 structure:
   ID:
-    name: uuid
-    type: string
+    name: id
+    type: int64
     nullable: false
     number: 1
