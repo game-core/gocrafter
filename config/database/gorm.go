@@ -10,6 +10,7 @@ import (
 )
 
 type SqlHandler struct {
+	Admin  *Conn
 	Auth   *Conn
 	Config *Conn
 	Master *Conn
@@ -27,10 +28,48 @@ type Conn struct {
 
 func NewDB() *SqlHandler {
 	return &SqlHandler{
+		Admin:  adminDB(),
 		Auth:   authDB(),
 		Config: configDB(),
 		Master: masterDB(),
 		User:   shardUserDB(),
+	}
+}
+
+func adminDB() *Conn {
+	readConn := fmt.Sprintf(
+		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
+		os.Getenv("ADMIN_MYSQL_READ_USER"),
+		os.Getenv("ADMIN_MYSQL_READ_PASSWORD"),
+		os.Getenv("ADMIN_MYSQL_READ_HOST"),
+		os.Getenv("ADMIN_MYSQL_DATABASE"),
+	)
+
+	writeConn := fmt.Sprintf(
+		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
+		os.Getenv("ADMIN_MYSQL_WRITE_USER"),
+		os.Getenv("ADMIN_MYSQL_WRITE_PASSWORD"),
+		os.Getenv("ADMIN_MYSQL_WRITE_HOST"),
+		os.Getenv("ADMIN_MYSQL_DATABASE"),
+	)
+
+	readDB, err := gorm.Open(mysql.New(mysql.Config{
+		DSN: readConn,
+	}), &gorm.Config{})
+	if err != nil {
+		panic(err.Error())
+	}
+
+	writeDB, err := gorm.Open(mysql.New(mysql.Config{
+		DSN: writeConn,
+	}), &gorm.Config{})
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return &Conn{
+		ReadConn:  readDB,
+		WriteConn: writeDB,
 	}
 }
 

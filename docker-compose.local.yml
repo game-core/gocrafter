@@ -38,6 +38,23 @@ services:
       db:
         condition: service_healthy
 
+  admin:
+    container_name: gocrafter-admin
+    env_file:
+      - .env.local
+    build:
+      target: dev
+      context: .
+      dockerfile: ./docker/admin/Dockerfile
+    volumes:
+      - ./:/go/src/app
+    ports:
+      - "8000:8000"
+    tty: true
+    depends_on:
+      db:
+        condition: service_healthy
+
   api:
     container_name: gocrafter-api
     env_file:
@@ -98,7 +115,7 @@ services:
     volumes:
       - .:/swagger:cached
     ports:
-      - "8000:8000"
+      - "8003:8000"
     tty: true
 
 volumes:

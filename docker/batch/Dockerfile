@@ -14,7 +14,6 @@ WORKDIR /app
 COPY --from=builder /app/main .
 COPY .env .
 RUN mkdir /app/log
-COPY /log/api_debug.log /app/log
 COPY /log/batch_debug.log /app/log
 COPY wait-for.sh .
 RUN chmod +x wait-for.sh

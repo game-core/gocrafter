@@ -5,7 +5,7 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN go build -o main /app/api/main.go
+RUN go build -o main /app/admin/main.go
 
 # Run Production
 FROM alpine AS prod
@@ -14,7 +14,7 @@ WORKDIR /app
 COPY --from=builder /app/main .
 COPY .env .
 RUN mkdir /app/log
-COPY /log/api_debug.log /app/log
+COPY /log/admin_debug.log /app/log
 COPY wait-for.sh .
 RUN chmod +x wait-for.sh
 
@@ -38,4 +38,4 @@ RUN go install github.com/golang/mock/mockgen@v1.6.0
 
 EXPOSE 8000
 
-CMD [ "go", "run", "api/main.go" ]
+CMD [ "go", "run", "admin/main.go" ]
