@@ -55,3 +55,5 @@ docker_db_master:
 docker_db_config:
 	$(DOCKER_COMPOSE) exec db mysql --host=localhost --user=mysql_user --password=mysql_password gocrafter_config
 
+docker_db_auth:
+	$(DOCKER_COMPOSE) exec db mysql --host=localhost --user=mysql_user --password=mysql_password gocrafter_auth

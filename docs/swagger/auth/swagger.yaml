@@ -1,0 +1,293 @@
+basePath: /
+definitions:
+  account.Account:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      password:
+        type: string
+      shard_key:
+        type: integer
+      token:
+        type: string
+      uuid:
+        type: string
+    type: object
+  error.Error:
+    properties:
+      error_message:
+        type: string
+      status:
+        type: integer
+    type: object
+  github.com_game-core_gocrafter_api_presentation_request_account.CheckAccount:
+    properties:
+      shard_key:
+        type: integer
+      uuid:
+        type: string
+    type: object
+  github.com_game-core_gocrafter_api_presentation_request_account.LoginAccount:
+    properties:
+      password:
+        type: string
+      shard_key:
+        type: integer
+      uuid:
+        type: string
+    type: object
+  github.com_game-core_gocrafter_api_presentation_request_account.RegisterAccount:
+    properties:
+      name:
+        type: string
+    type: object
+  github.com_game-core_gocrafter_api_presentation_request_loginReward.GetLoginRewardModel:
+    properties:
+      login_reward_model_name:
+        type: string
+    type: object
+  github.com_game-core_gocrafter_api_presentation_request_loginReward.ReceiveLoginReward:
+    properties:
+      account_id:
+        type: integer
+      login_reward_model_name:
+        type: string
+      shard_key:
+        type: integer
+      uuid:
+        type: string
+    type: object
+  github.com_game-core_gocrafter_api_presentation_response_account.CheckAccount:
+    properties:
+      item:
+        $ref: '#/definitions/account.Account'
+      status:
+        type: integer
+    type: object
+  github.com_game-core_gocrafter_api_presentation_response_account.LoginAccount:
+    properties:
+      item:
+        $ref: '#/definitions/account.Account'
+      status:
+        type: integer
+    type: object
+  github.com_game-core_gocrafter_api_presentation_response_account.RegisterAccount:
+    properties:
+      item:
+        $ref: '#/definitions/account.Account'
+      status:
+        type: integer
+    type: object
+  github.com_game-core_gocrafter_api_presentation_response_loginReward.GetLoginRewardModel:
+    properties:
+      login_reward_model:
+        $ref: '#/definitions/loginReward.LoginRewardModel'
+      status:
+        type: integer
+    type: object
+  github.com_game-core_gocrafter_api_presentation_response_loginReward.ReceiveLoginReward:
+    properties:
+      item:
+        $ref: '#/definitions/loginReward.LoginRewardStatus'
+      status:
+        type: integer
+    type: object
+  loginReward.Event:
+    properties:
+      end_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      repeat_hour:
+        type: integer
+      repeat_setting:
+        type: boolean
+      repeat_start_at:
+        type: string
+      start_at:
+        type: string
+    type: object
+  loginReward.Item:
+    properties:
+      detail:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  loginReward.LoginRewardModel:
+    properties:
+      event:
+        $ref: '#/definitions/loginReward.Event'
+      id:
+        type: integer
+      login_reward_reward:
+        items:
+          $ref: '#/definitions/loginReward.LoginRewardReward'
+        type: array
+      name:
+        type: string
+    type: object
+  loginReward.LoginRewardReward:
+    properties:
+      id:
+        type: integer
+      item_name:
+        type: string
+      name:
+        type: string
+      step_number:
+        type: integer
+    type: object
+  loginReward.LoginRewardStatus:
+    properties:
+      id:
+        type: integer
+      item:
+        $ref: '#/definitions/loginReward.Item'
+      last_received_at:
+        type: string
+      login_reward_model:
+        $ref: '#/definitions/loginReward.LoginRewardModel'
+    type: object
+host: localhost:8001
+info:
+  contact: {}
+  description: This is a sample swagger server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: github.com/game-core/gocrafter
+  version: "1.0"
+paths:
+  /account/check_account:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: アカウント確認
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/github.com_game-core_gocrafter_api_presentation_request_account.CheckAccount'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github.com_game-core_gocrafter_api_presentation_response_account.CheckAccount'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: アカウント確認
+      tags:
+      - Account
+  /account/login_account:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: アカウントログイン
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/github.com_game-core_gocrafter_api_presentation_request_account.LoginAccount'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github.com_game-core_gocrafter_api_presentation_response_account.LoginAccount'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: アカウントログイン
+      tags:
+      - Account
+  /account/register_account:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: アカウント登録
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/github.com_game-core_gocrafter_api_presentation_request_account.RegisterAccount'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github.com_game-core_gocrafter_api_presentation_response_account.RegisterAccount'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: アカウント登録
+      tags:
+      - Account
+  /login_eward/receive_login_reward:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ログイン報酬受け取り
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/github.com_game-core_gocrafter_api_presentation_request_loginReward.ReceiveLoginReward'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github.com_game-core_gocrafter_api_presentation_response_loginReward.ReceiveLoginReward'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: ログイン報酬受け取り
+      tags:
+      - LoginReward
+  /login_reward/get_login_reward_model:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ログイン報酬モデル取得
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/github.com_game-core_gocrafter_api_presentation_request_loginReward.GetLoginRewardModel'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github.com_game-core_gocrafter_api_presentation_response_loginReward.GetLoginRewardModel'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/error.Error'
+      summary: ログイン報酬モデル取得
+      tags:
+      - LoginReward
+swagger: "2.0"

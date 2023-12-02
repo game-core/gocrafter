@@ -52,8 +52,8 @@ type {{.CamelName}}Dao struct {
 
 func New{{.Name}}Dao(conn *database.SqlHandler) {{.Package}}Repository.{{.Name}}Repository {
 	return &{{.CamelName}}Dao{
-		Read:  conn.Config.ReadConn,
-		Write: conn.Config.WriteConn,
+		Read:  conn.Auth.ReadConn,
+		Write: conn.Auth.WriteConn,
 	}
 }
 

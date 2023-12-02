@@ -29,7 +29,7 @@ func (e *exampleCommand) ListExample() (err error) {
 	}
 
 	fmt.Println("List Examples:")
-	for _, example := range *results.Items {
+	for _, example := range *results.Examples {
 		fmt.Printf("ID: %d, Name: %s, Detail: %s, Count: %d\n",
 			example.ID,
 			example.Name,

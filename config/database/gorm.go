@@ -10,6 +10,7 @@ import (
 )
 
 type SqlHandler struct {
+	Auth   *Conn
 	Config *Conn
 	Master *Conn
 	User   *ShardConn
@@ -26,27 +27,28 @@ type Conn struct {
 
 func NewDB() *SqlHandler {
 	return &SqlHandler{
+		Auth:   authDB(),
 		Config: configDB(),
 		Master: masterDB(),
 		User:   shardUserDB(),
 	}
 }
 
-func masterDB() *Conn {
+func authDB() *Conn {
 	readConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		os.Getenv("MASTER_MYSQL_READ_USER"),
-		os.Getenv("MASTER_MYSQL_READ_PASSWORD"),
-		os.Getenv("MASTER_MYSQL_READ_HOST"),
-		os.Getenv("MASTER_MYSQL_DATABASE"),
+		os.Getenv("AUTH_MYSQL_READ_USER"),
+		os.Getenv("AUTH_MYSQL_READ_PASSWORD"),
+		os.Getenv("AUTH_MYSQL_READ_HOST"),
+		os.Getenv("AUTH_MYSQL_DATABASE"),
 	)
 
 	writeConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		os.Getenv("MASTER_MYSQL_WRITE_USER"),
-		os.Getenv("MASTER_MYSQL_WRITE_PASSWORD"),
-		os.Getenv("MASTER_MYSQL_WRITE_HOST"),
-		os.Getenv("MASTER_MYSQL_DATABASE"),
+		os.Getenv("AUTH_MYSQL_WRITE_USER"),
+		os.Getenv("AUTH_MYSQL_WRITE_PASSWORD"),
+		os.Getenv("AUTH_MYSQL_WRITE_HOST"),
+		os.Getenv("AUTH_MYSQL_DATABASE"),
 	)
 
 	readDB, err := gorm.Open(mysql.New(mysql.Config{
@@ -84,6 +86,43 @@ func configDB() *Conn {
 		os.Getenv("CONFIG_MYSQL_WRITE_PASSWORD"),
 		os.Getenv("CONFIG_MYSQL_WRITE_HOST"),
 		os.Getenv("CONFIG_MYSQL_DATABASE"),
+	)
+
+	readDB, err := gorm.Open(mysql.New(mysql.Config{
+		DSN: readConn,
+	}), &gorm.Config{})
+	if err != nil {
+		panic(err.Error())
+	}
+
+	writeDB, err := gorm.Open(mysql.New(mysql.Config{
+		DSN: writeConn,
+	}), &gorm.Config{})
+	if err != nil {
+		panic(err.Error())
+	}
+
+	return &Conn{
+		ReadConn:  readDB,
+		WriteConn: writeDB,
+	}
+}
+
+func masterDB() *Conn {
+	readConn := fmt.Sprintf(
+		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
+		os.Getenv("MASTER_MYSQL_READ_USER"),
+		os.Getenv("MASTER_MYSQL_READ_PASSWORD"),
+		os.Getenv("MASTER_MYSQL_READ_HOST"),
+		os.Getenv("MASTER_MYSQL_DATABASE"),
+	)
+
+	writeConn := fmt.Sprintf(
+		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
+		os.Getenv("MASTER_MYSQL_WRITE_USER"),
+		os.Getenv("MASTER_MYSQL_WRITE_PASSWORD"),
+		os.Getenv("MASTER_MYSQL_WRITE_HOST"),
+		os.Getenv("MASTER_MYSQL_DATABASE"),
 	)
 
 	readDB, err := gorm.Open(mysql.New(mysql.Config{

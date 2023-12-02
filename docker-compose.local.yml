@@ -55,6 +55,23 @@ services:
       db:
         condition: service_healthy
 
+  auth:
+    container_name: gocrafter-auth
+    env_file:
+      - .env.local
+    build:
+      target: dev
+      context: .
+      dockerfile: ./docker/api/Dockerfile
+    volumes:
+      - ./:/go/src/app
+    ports:
+      - "8002:8000"
+    tty: true
+    depends_on:
+      db:
+        condition: service_healthy
+
   batch:
     container_name: gocrafter-batch
     env_file:
