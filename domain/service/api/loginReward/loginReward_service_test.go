@@ -23,7 +23,7 @@ import (
 	userLoginRewardRepository "github.com/game-core/gocrafter/domain/repository/user/loginReward"
 )
 
-func TestExampleService_GetLoginRewardModel(t *testing.T) {
+func TestLoginRewardService_GetLoginRewardModel(t *testing.T) {
 	type fields struct {
 		loginRewardModelRepository  func(ctrl *gomock.Controller) masterLoginRewardRepository.LoginRewardModelRepository
 		loginRewardRewardRepository func(ctrl *gomock.Controller) masterLoginRewardRepository.LoginRewardRewardRepository
@@ -268,7 +268,7 @@ func TestExampleService_GetLoginRewardModel(t *testing.T) {
 	}
 }
 
-func TestExampleService_ReceiveLoginReward(t *testing.T) {
+func TestLoginRewardService_ReceiveLoginReward(t *testing.T) {
 	type fields struct {
 		transactionRepository       func(ctrl *gomock.Controller) userRepository.TransactionRepository
 		loginRewardModelRepository  func(ctrl *gomock.Controller) masterLoginRewardRepository.LoginRewardModelRepository
@@ -1283,7 +1283,7 @@ func TestExampleService_ReceiveLoginReward(t *testing.T) {
 	}
 }
 
-func TestExampleService_getLoginRewardModelAndRewardsAndEvent(t *testing.T) {
+func TestLoginRewardService_getLoginRewardModelAndRewardsAndEvent(t *testing.T) {
 	type fields struct {
 		loginRewardModelRepository  func(ctrl *gomock.Controller) masterLoginRewardRepository.LoginRewardModelRepository
 		loginRewardRewardRepository func(ctrl *gomock.Controller) masterLoginRewardRepository.LoginRewardRewardRepository
@@ -1688,7 +1688,7 @@ func TestExampleService_getLoginRewardModelAndRewardsAndEvent(t *testing.T) {
 	}
 }
 
-func TestExampleService_reward(t *testing.T) {
+func TestLoginRewardService_reward(t *testing.T) {
 	type fields struct {
 		loginRewardStatusRepository func(ctrl *gomock.Controller) userLoginRewardRepository.LoginRewardStatusRepository
 		itemService                 func(ctrl *gomock.Controller) item.ItemService
@@ -2082,7 +2082,7 @@ func TestExampleService_reward(t *testing.T) {
 	}
 }
 
-func TestExampleService_receiveItem(t *testing.T) {
+func TestLoginRewardService_receiveItem(t *testing.T) {
 	type fields struct {
 		itemService func(ctrl *gomock.Controller) item.ItemService
 	}
@@ -2287,7 +2287,7 @@ func TestExampleService_receiveItem(t *testing.T) {
 	}
 }
 
-func TestExampleService_updateLoginRewardStatus(t *testing.T) {
+func TestLoginRewardService_updateLoginRewardStatus(t *testing.T) {
 	type fields struct {
 		loginRewardStatusRepository func(ctrl *gomock.Controller) userLoginRewardRepository.LoginRewardStatusRepository
 	}

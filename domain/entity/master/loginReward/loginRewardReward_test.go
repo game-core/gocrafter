@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func TestExampleService_GetMaxStepNumber(t *testing.T) {
+func TestLoginRewardRewardEntity_GetMaxStepNumber(t *testing.T) {
 	type fields struct {
 		rewards *LoginRewardRewards
 	}
@@ -52,7 +52,7 @@ func TestExampleService_GetMaxStepNumber(t *testing.T) {
 	}
 }
 
-func TestExampleService_GetItems(t *testing.T) {
+func TestLoginRewardRewardEntity_GetItems(t *testing.T) {
 	type fields struct {
 		rewards *LoginRewardRewards
 	}

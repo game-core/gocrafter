@@ -13,7 +13,7 @@ import (
 	masterEventRepository "github.com/game-core/gocrafter/domain/repository/master/event"
 )
 
-func TestExampleService_GetEventToEntity(t *testing.T) {
+func TestEventService_GetEventToEntity(t *testing.T) {
 	type fields struct {
 		eventRepository func(ctrl *gomock.Controller) masterEventRepository.EventRepository
 	}

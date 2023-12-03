@@ -18,7 +18,7 @@ import (
 	userItemRepository "github.com/game-core/gocrafter/domain/repository/user/item"
 )
 
-func TestExampleService_GetItemToEntity(t *testing.T) {
+func TestItemService_GetItemToEntity(t *testing.T) {
 	type fields struct {
 		itemRepository func(ctrl *gomock.Controller) masterItemRepository.ItemRepository
 	}
@@ -105,7 +105,7 @@ func TestExampleService_GetItemToEntity(t *testing.T) {
 	}
 }
 
-func TestExampleService_ReceiveItemInBox(t *testing.T) {
+func TestItemService_ReceiveItemInBox(t *testing.T) {
 	type fields struct {
 		transactionRepository func(ctrl *gomock.Controller) userRepository.TransactionRepository
 		itemRepository        func(ctrl *gomock.Controller) masterItemRepository.ItemRepository
@@ -399,7 +399,7 @@ func TestExampleService_ReceiveItemInBox(t *testing.T) {
 	}
 }
 
-func TestExampleService_receiveItemInBox(t *testing.T) {
+func TestItemService_receiveItemInBox(t *testing.T) {
 	type fields struct {
 		itemRepository    func(ctrl *gomock.Controller) masterItemRepository.ItemRepository
 		itemBoxRepository func(ctrl *gomock.Controller) userItemRepository.ItemBoxRepository

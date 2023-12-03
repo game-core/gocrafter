@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func TestExampleService_GetDayCount(t *testing.T) {
+func TestEventEntity_GetDayCount(t *testing.T) {
 	type fields struct {
 		RepeatSetting bool
 		RepeatStartAt *time.Time
@@ -63,7 +63,7 @@ func TestExampleService_GetDayCount(t *testing.T) {
 	}
 }
 
-func TestExampleService_IsEventPeriod(t *testing.T) {
+func TestEventEntity_IsEventPeriod(t *testing.T) {
 	type fields struct {
 		RepeatSetting bool
 		RepeatStartAt *time.Time

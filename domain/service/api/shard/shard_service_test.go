@@ -14,7 +14,7 @@ import (
 	shardRepository "github.com/game-core/gocrafter/domain/repository/config/shard"
 )
 
-func TestShardService_GetShard(t *testing.T) {
+func TestLoginRewardService_GetShard(t *testing.T) {
 	type fields struct {
 		transactionRepository func(ctrl *gomock.Controller) configRepository.TransactionRepository
 		shardRepository       func(ctrl *gomock.Controller) shardRepository.ShardRepository

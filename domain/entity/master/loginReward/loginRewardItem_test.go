@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestExampleService_ToJson(t *testing.T) {
+func TestLoginRewardItemEntity_ToJson(t *testing.T) {
 	type fields struct {
 		items *LoginRewardItems
 	}
@@ -47,7 +47,7 @@ func TestExampleService_ToJson(t *testing.T) {
 	}
 }
 
-func TestExampleService_ToEntities(t *testing.T) {
+func TestLoginRewardItemEntity_ToEntities(t *testing.T) {
 	type args struct {
 		items string
 	}
