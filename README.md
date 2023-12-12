@@ -1,6 +1,9 @@
 # gocrafter
 ゲームサーバーのテンプレート
 
+## 依存関係
+![image](https://github.com/game-core/gocrafter/assets/71867595/fe269513-32aa-45ad-96d4-ff882e103777)
+
 ## 環境構築
 - コンテナを起動
 ```
