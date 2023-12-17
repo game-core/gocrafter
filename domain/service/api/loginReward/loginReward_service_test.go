@@ -2,8 +2,6 @@ package loginReward
 
 import (
 	"errors"
-	"github.com/game-core/gocrafter/domain/service/api/event"
-	"github.com/game-core/gocrafter/domain/service/api/item"
 	"gorm.io/gorm"
 	"reflect"
 	"testing"
@@ -19,8 +17,10 @@ import (
 	masterLoginRewardEntity "github.com/game-core/gocrafter/domain/entity/master/loginReward"
 	userLoginRewarEntity "github.com/game-core/gocrafter/domain/entity/user/loginReward"
 	masterLoginRewardRepository "github.com/game-core/gocrafter/domain/repository/master/loginReward"
-	userRepository "github.com/game-core/gocrafter/domain/repository/user"
 	userLoginRewardRepository "github.com/game-core/gocrafter/domain/repository/user/loginReward"
+	transactionRepository "github.com/game-core/gocrafter/domain/repository/user/transaction"
+	"github.com/game-core/gocrafter/domain/service/api/event"
+	"github.com/game-core/gocrafter/domain/service/api/item"
 )
 
 func TestLoginRewardService_GetLoginRewardModel(t *testing.T) {
@@ -270,7 +270,7 @@ func TestLoginRewardService_GetLoginRewardModel(t *testing.T) {
 
 func TestLoginRewardService_ReceiveLoginReward(t *testing.T) {
 	type fields struct {
-		transactionRepository       func(ctrl *gomock.Controller) userRepository.TransactionRepository
+		transactionRepository       func(ctrl *gomock.Controller) transactionRepository.TransactionRepository
 		loginRewardModelRepository  func(ctrl *gomock.Controller) masterLoginRewardRepository.LoginRewardModelRepository
 		loginRewardRewardRepository func(ctrl *gomock.Controller) masterLoginRewardRepository.LoginRewardRewardRepository
 		loginRewardStatusRepository func(ctrl *gomock.Controller) userLoginRewardRepository.LoginRewardStatusRepository
@@ -291,8 +291,8 @@ func TestLoginRewardService_ReceiveLoginReward(t *testing.T) {
 		{
 			name: "正常：受け取りできる",
 			fields: fields{
-				transactionRepository: func(ctrl *gomock.Controller) userRepository.TransactionRepository {
-					m := userRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin(
 							"SHARD_1",
@@ -550,8 +550,8 @@ func TestLoginRewardService_ReceiveLoginReward(t *testing.T) {
 		{
 			name: "異常：トランザクションエラー",
 			fields: fields{
-				transactionRepository: func(ctrl *gomock.Controller) userRepository.TransactionRepository {
-					m := userRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin(
 							"SHARD_1",
@@ -598,8 +598,8 @@ func TestLoginRewardService_ReceiveLoginReward(t *testing.T) {
 		{
 			name: "異常：エラー",
 			fields: fields{
-				transactionRepository: func(ctrl *gomock.Controller) userRepository.TransactionRepository {
-					m := userRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin(
 							"SHARD_1",
@@ -662,8 +662,8 @@ func TestLoginRewardService_ReceiveLoginReward(t *testing.T) {
 		{
 			name: "異常：エラー",
 			fields: fields{
-				transactionRepository: func(ctrl *gomock.Controller) userRepository.TransactionRepository {
-					m := userRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin(
 							"SHARD_1",
@@ -795,8 +795,8 @@ func TestLoginRewardService_ReceiveLoginReward(t *testing.T) {
 		{
 			name: "異常：エラー",
 			fields: fields{
-				transactionRepository: func(ctrl *gomock.Controller) userRepository.TransactionRepository {
-					m := userRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin(
 							"SHARD_1",
@@ -944,8 +944,8 @@ func TestLoginRewardService_ReceiveLoginReward(t *testing.T) {
 		{
 			name: "異常：エラー",
 			fields: fields{
-				transactionRepository: func(ctrl *gomock.Controller) userRepository.TransactionRepository {
-					m := userRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin(
 							"SHARD_1",
@@ -1119,8 +1119,8 @@ func TestLoginRewardService_ReceiveLoginReward(t *testing.T) {
 		{
 			name: "異常：Unmarshalエラー",
 			fields: fields{
-				transactionRepository: func(ctrl *gomock.Controller) userRepository.TransactionRepository {
-					m := userRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin(
 							"SHARD_1",

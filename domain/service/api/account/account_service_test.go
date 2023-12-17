@@ -13,14 +13,14 @@ import (
 	response "github.com/game-core/gocrafter/api/presentation/response/account"
 	shardResponse "github.com/game-core/gocrafter/api/presentation/response/shard"
 	accountEntity "github.com/game-core/gocrafter/domain/entity/user/account"
-	userRepository "github.com/game-core/gocrafter/domain/repository/user"
 	accountRepository "github.com/game-core/gocrafter/domain/repository/user/account"
+	transactionRepository "github.com/game-core/gocrafter/domain/repository/user/transaction"
 )
 
 func TestAccountService_RegisterAccount(t *testing.T) {
 	type fields struct {
 		shardService          func(ctrl *gomock.Controller) shard.ShardService
-		transactionRepository func(ctrl *gomock.Controller) userRepository.TransactionRepository
+		transactionRepository func(ctrl *gomock.Controller) transactionRepository.TransactionRepository
 		accountRepository     func(ctrl *gomock.Controller) accountRepository.AccountRepository
 	}
 	type args struct {
@@ -63,8 +63,8 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 						)
 					return m
 				},
-				transactionRepository: func(ctrl *gomock.Controller) userRepository.TransactionRepository {
-					m := userRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin("SHARD_1").
 						Return(
@@ -151,8 +151,8 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 						)
 					return m
 				},
-				transactionRepository: func(ctrl *gomock.Controller) userRepository.TransactionRepository {
-					m := userRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin(
 							"SHARD_1",
@@ -224,8 +224,8 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 						)
 					return m
 				},
-				transactionRepository: func(ctrl *gomock.Controller) userRepository.TransactionRepository {
-					m := userRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin("SHARD_1").
 						Return(
@@ -260,8 +260,8 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 						)
 					return m
 				},
-				transactionRepository: func(ctrl *gomock.Controller) userRepository.TransactionRepository {
-					m := userRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					return m
 				},
 				accountRepository: func(ctrl *gomock.Controller) accountRepository.AccountRepository {

@@ -10,8 +10,8 @@ import (
 	masterItemEntity "github.com/game-core/gocrafter/domain/entity/master/item"
 	userItemEntity "github.com/game-core/gocrafter/domain/entity/user/item"
 	masterItemRepository "github.com/game-core/gocrafter/domain/repository/master/item"
-	userRepository "github.com/game-core/gocrafter/domain/repository/user"
 	userItemRepository "github.com/game-core/gocrafter/domain/repository/user/item"
+	transactionRepository "github.com/game-core/gocrafter/domain/repository/user/transaction"
 )
 
 type ItemService interface {
@@ -20,13 +20,13 @@ type ItemService interface {
 }
 
 type itemService struct {
-	transactionRepository userRepository.TransactionRepository
+	transactionRepository transactionRepository.TransactionRepository
 	itemRepository        masterItemRepository.ItemRepository
 	itemBoxRepository     userItemRepository.ItemBoxRepository
 }
 
 func NewItemService(
-	transactionRepository userRepository.TransactionRepository,
+	transactionRepository transactionRepository.TransactionRepository,
 	itemRepository masterItemRepository.ItemRepository,
 	itemBoxRepository userItemRepository.ItemBoxRepository,
 ) ItemService {

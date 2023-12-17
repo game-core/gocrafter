@@ -1,26 +1,24 @@
-package config
+package transaction
 
 import (
 	"gorm.io/gorm"
 
 	"github.com/game-core/gocrafter/config/database"
-	repository "github.com/game-core/gocrafter/domain/repository/auth"
+	transactionRepository "github.com/game-core/gocrafter/domain/repository/user/transaction"
 )
 
 type transactionDao struct {
-	Read  *gorm.DB
-	Write *gorm.DB
+	ShardConn *database.ShardConn
 }
 
-func NewTransactionDao(conn *database.SqlHandler) repository.TransactionRepository {
+func NewTransactionDao(conn *database.SqlHandler) transactionRepository.TransactionRepository {
 	return &transactionDao{
-		Read:  conn.Auth.ReadConn,
-		Write: conn.Auth.WriteConn,
+		ShardConn: conn.User,
 	}
 }
 
-func (d *transactionDao) Begin() (*gorm.DB, error) {
-	tx := d.Write.Begin()
+func (d *transactionDao) Begin(shardKey string) (*gorm.DB, error) {
+	tx := d.ShardConn.Shards[shardKey].WriteConn.Begin()
 	if err := tx.Error; err != nil {
 		return nil, err
 	}

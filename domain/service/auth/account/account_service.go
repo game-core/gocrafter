@@ -3,16 +3,16 @@ package account
 
 import (
 	"errors"
-	"github.com/game-core/gocrafter/config/token"
 	"log"
 
 	"github.com/game-core/gocrafter/config/key"
+	"github.com/game-core/gocrafter/config/token"
 
 	request "github.com/game-core/gocrafter/auth/presentation/request/account"
 	response "github.com/game-core/gocrafter/auth/presentation/response/account"
 	accountEntity "github.com/game-core/gocrafter/domain/entity/auth/account"
-	authRepository "github.com/game-core/gocrafter/domain/repository/auth"
 	accountRepository "github.com/game-core/gocrafter/domain/repository/auth/account"
+	transactionRepository "github.com/game-core/gocrafter/domain/repository/auth/transaction"
 )
 
 type AccountService interface {
@@ -22,12 +22,12 @@ type AccountService interface {
 }
 
 type accountService struct {
-	transactionRepository authRepository.TransactionRepository
+	transactionRepository transactionRepository.TransactionRepository
 	accountRepository     accountRepository.AccountRepository
 }
 
 func NewAccountService(
-	transactionRepository authRepository.TransactionRepository,
+	transactionRepository transactionRepository.TransactionRepository,
 	accountRepository accountRepository.AccountRepository,
 ) AccountService {
 	return &accountService{

@@ -1,5 +1,5 @@
-//go:generate mockgen -source=./transaction.go -destination=./transaction_mock.go -package=master
-package master
+//go:generate mockgen -source=./transaction.go -destination=./transaction_mock.go -package=transaction
+package transaction
 
 import (
 	"gorm.io/gorm"

@@ -11,8 +11,8 @@ import (
 	account2 "github.com/game-core/gocrafter/auth/presentation/controller/account"
 	"github.com/game-core/gocrafter/config/database"
 	account3 "github.com/game-core/gocrafter/domain/service/auth/account"
-	"github.com/game-core/gocrafter/infra/dao/auth"
 	account4 "github.com/game-core/gocrafter/infra/dao/auth/account"
+	"github.com/game-core/gocrafter/infra/dao/auth/transaction"
 )
 
 // Injectors from wire.go:

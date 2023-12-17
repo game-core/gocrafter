@@ -15,8 +15,8 @@ import (
 	masterLoginRewardEntity "github.com/game-core/gocrafter/domain/entity/master/loginReward"
 	userLoginRewardEntity "github.com/game-core/gocrafter/domain/entity/user/loginReward"
 	masterLoginRewardRepository "github.com/game-core/gocrafter/domain/repository/master/loginReward"
-	userRepository "github.com/game-core/gocrafter/domain/repository/user"
 	userLoginRewardRepository "github.com/game-core/gocrafter/domain/repository/user/loginReward"
+	transactionRepository "github.com/game-core/gocrafter/domain/repository/user/transaction"
 	eventService "github.com/game-core/gocrafter/domain/service/api/event"
 	itemService "github.com/game-core/gocrafter/domain/service/api/item"
 )
@@ -27,7 +27,7 @@ type LoginRewardService interface {
 }
 
 type loginRewardService struct {
-	transactionRepository       userRepository.TransactionRepository
+	transactionRepository       transactionRepository.TransactionRepository
 	loginRewardStatusRepository userLoginRewardRepository.LoginRewardStatusRepository
 	loginRewardModelRepository  masterLoginRewardRepository.LoginRewardModelRepository
 	loginRewardRewardRepository masterLoginRewardRepository.LoginRewardRewardRepository
@@ -36,7 +36,7 @@ type loginRewardService struct {
 }
 
 func NewLoginRewardService(
-	transactionRepository userRepository.TransactionRepository,
+	transactionRepository transactionRepository.TransactionRepository,
 	loginRewardStatusRepository userLoginRewardRepository.LoginRewardStatusRepository,
 	loginRewardModelRepository masterLoginRewardRepository.LoginRewardModelRepository,
 	loginRewardRewardRepository masterLoginRewardRepository.LoginRewardRewardRepository,

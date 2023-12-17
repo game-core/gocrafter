@@ -11,8 +11,8 @@ import (
 	"github.com/game-core/gocrafter/admin/presentation/middleware/account"
 	"github.com/game-core/gocrafter/config/database"
 	example2 "github.com/game-core/gocrafter/domain/service/admin/example"
-	"github.com/game-core/gocrafter/infra/dao/admin"
 	example3 "github.com/game-core/gocrafter/infra/dao/admin/example"
+	"github.com/game-core/gocrafter/infra/dao/admin/transaction"
 )
 
 // Injectors from wire.go:

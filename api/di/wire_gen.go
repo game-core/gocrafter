@@ -16,15 +16,15 @@ import (
 	"github.com/game-core/gocrafter/domain/service/api/item"
 	loginReward2 "github.com/game-core/gocrafter/domain/service/api/loginReward"
 	"github.com/game-core/gocrafter/domain/service/api/shard"
-	"github.com/game-core/gocrafter/infra/dao/config"
 	shard2 "github.com/game-core/gocrafter/infra/dao/config/shard"
+	transaction2 "github.com/game-core/gocrafter/infra/dao/config/transaction"
 	event2 "github.com/game-core/gocrafter/infra/dao/master/event"
 	item2 "github.com/game-core/gocrafter/infra/dao/master/item"
 	loginReward4 "github.com/game-core/gocrafter/infra/dao/master/loginReward"
-	"github.com/game-core/gocrafter/infra/dao/user"
 	account4 "github.com/game-core/gocrafter/infra/dao/user/account"
 	item3 "github.com/game-core/gocrafter/infra/dao/user/item"
 	loginReward3 "github.com/game-core/gocrafter/infra/dao/user/loginReward"
+	"github.com/game-core/gocrafter/infra/dao/user/transaction"
 )
 
 // Injectors from wire.go:
@@ -49,7 +49,7 @@ func InitializeLoginRewardController() loginReward.LoginRewardController {
 func InitializeAccountService() account3.AccountService {
 	shardService := InitializeShardService()
 	sqlHandler := database.NewDB()
-	transactionRepository := user.NewTransactionDao(sqlHandler)
+	transactionRepository := transaction.NewTransactionDao(sqlHandler)
 	accountRepository := account4.NewAccountDao(sqlHandler)
 	accountService := account3.NewAccountService(shardService, transactionRepository, accountRepository)
 	return accountService
@@ -58,14 +58,14 @@ func InitializeAccountService() account3.AccountService {
 func InitializeShardService() shard.ShardService {
 	sqlHandler := database.NewDB()
 	shardRepository := shard2.NewShardDao(sqlHandler)
-	transactionRepository := config.NewTransactionDao(sqlHandler)
+	transactionRepository := transaction2.NewTransactionDao(sqlHandler)
 	shardService := shard.NewShardService(shardRepository, transactionRepository)
 	return shardService
 }
 
 func InitializeLoginRewardService() loginReward2.LoginRewardService {
 	sqlHandler := database.NewDB()
-	transactionRepository := user.NewTransactionDao(sqlHandler)
+	transactionRepository := transaction.NewTransactionDao(sqlHandler)
 	loginRewardStatusRepository := loginReward3.NewLoginRewardStatusDao(sqlHandler)
 	loginRewardModelRepository := loginReward4.NewLoginRewardModelDao(sqlHandler)
 	loginRewardRewardRepository := loginReward4.NewLoginRewardRewardDao(sqlHandler)
@@ -84,7 +84,7 @@ func InitializeEventService() event.EventService {
 
 func InitializeItemService() item.ItemService {
 	sqlHandler := database.NewDB()
-	transactionRepository := user.NewTransactionDao(sqlHandler)
+	transactionRepository := transaction.NewTransactionDao(sqlHandler)
 	itemRepository := item2.NewItemDao(sqlHandler)
 	itemBoxRepository := item3.NewItemBoxDao(sqlHandler)
 	itemService := item.NewItemService(transactionRepository, itemRepository, itemBoxRepository)

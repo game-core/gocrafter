@@ -7,12 +7,12 @@ import (
 	"github.com/google/wire"
 
 	"github.com/game-core/gocrafter/config/database"
-	authDao "github.com/game-core/gocrafter/infra/dao/auth"
 
 	accountMiddleware "github.com/game-core/gocrafter/api/presentation/middleware/account"
 	accountController "github.com/game-core/gocrafter/auth/presentation/controller/account"
 	accountService "github.com/game-core/gocrafter/domain/service/auth/account"
 	accountDao "github.com/game-core/gocrafter/infra/dao/auth/account"
+	transactionDao "github.com/game-core/gocrafter/infra/dao/auth/transaction"
 )
 
 func InitializeAccountMiddleware() accountMiddleware.AccountMiddleware {
@@ -37,7 +37,7 @@ func InitializeAccountService() accountService.AccountService {
 		database.NewDB,
 		accountService.NewAccountService,
 		accountDao.NewAccountDao,
-		authDao.NewTransactionDao,
+		transactionDao.NewTransactionDao,
 	)
 
 	return nil

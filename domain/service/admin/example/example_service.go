@@ -4,8 +4,8 @@ package example
 import (
 	request "github.com/game-core/gocrafter/admin/presentation/request/example"
 	response "github.com/game-core/gocrafter/admin/presentation/response/example"
-	adminRepository "github.com/game-core/gocrafter/domain/repository/admin"
 	exampleRepository "github.com/game-core/gocrafter/domain/repository/admin/example"
+	transactionRepository "github.com/game-core/gocrafter/domain/repository/admin/transaction"
 )
 
 type ExampleService interface {
@@ -13,12 +13,12 @@ type ExampleService interface {
 }
 
 type exampleService struct {
-	transactionRepository adminRepository.TransactionRepository
+	transactionRepository transactionRepository.TransactionRepository
 	exampleRepository     exampleRepository.ExampleRepository
 }
 
 func NewExampleService(
-	transactionRepository adminRepository.TransactionRepository,
+	transactionRepository transactionRepository.TransactionRepository,
 	exampleRepository exampleRepository.ExampleRepository,
 ) ExampleService {
 	return &exampleService{

@@ -10,8 +10,8 @@ import (
 	"github.com/game-core/gocrafter/config/key"
 	"github.com/game-core/gocrafter/config/token"
 	accountEntity "github.com/game-core/gocrafter/domain/entity/user/account"
-	userRepository "github.com/game-core/gocrafter/domain/repository/user"
 	accountRepository "github.com/game-core/gocrafter/domain/repository/user/account"
+	transactionRepository "github.com/game-core/gocrafter/domain/repository/user/transaction"
 	shardService "github.com/game-core/gocrafter/domain/service/api/shard"
 )
 
@@ -23,13 +23,13 @@ type AccountService interface {
 
 type accountService struct {
 	shardService          shardService.ShardService
-	transactionRepository userRepository.TransactionRepository
+	transactionRepository transactionRepository.TransactionRepository
 	accountRepository     accountRepository.AccountRepository
 }
 
 func NewAccountService(
 	shardService shardService.ShardService,
-	transactionRepository userRepository.TransactionRepository,
+	transactionRepository transactionRepository.TransactionRepository,
 	accountRepository accountRepository.AccountRepository,
 ) AccountService {
 	return &accountService{

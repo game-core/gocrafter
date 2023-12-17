@@ -7,8 +7,8 @@ import (
 
 	response "github.com/game-core/gocrafter/api/presentation/response/shard"
 	shardEntity "github.com/game-core/gocrafter/domain/entity/config/shard"
-	configRepository "github.com/game-core/gocrafter/domain/repository/config"
 	shardRepository "github.com/game-core/gocrafter/domain/repository/config/shard"
+	transactionRepository "github.com/game-core/gocrafter/domain/repository/config/transaction"
 )
 
 type ShardService interface {
@@ -16,13 +16,13 @@ type ShardService interface {
 }
 
 type shardService struct {
-	transactionRepository configRepository.TransactionRepository
+	transactionRepository transactionRepository.TransactionRepository
 	shardRepository       shardRepository.ShardRepository
 }
 
 func NewShardService(
 	shardRepository shardRepository.ShardRepository,
-	transactionRepository configRepository.TransactionRepository,
+	transactionRepository transactionRepository.TransactionRepository,
 ) ShardService {
 	return &shardService{
 		transactionRepository: transactionRepository,

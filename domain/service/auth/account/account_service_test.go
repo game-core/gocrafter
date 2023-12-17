@@ -11,13 +11,13 @@ import (
 	request "github.com/game-core/gocrafter/auth/presentation/request/account"
 	response "github.com/game-core/gocrafter/auth/presentation/response/account"
 	accountEntity "github.com/game-core/gocrafter/domain/entity/auth/account"
-	authRepository "github.com/game-core/gocrafter/domain/repository/auth"
 	accountRepository "github.com/game-core/gocrafter/domain/repository/auth/account"
+	transactionRepository "github.com/game-core/gocrafter/domain/repository/auth/transaction"
 )
 
 func TestAccountService_RegisterAccount(t *testing.T) {
 	type fields struct {
-		transactionRepository func(ctrl *gomock.Controller) authRepository.TransactionRepository
+		transactionRepository func(ctrl *gomock.Controller) transactionRepository.TransactionRepository
 		accountRepository     func(ctrl *gomock.Controller) accountRepository.AccountRepository
 	}
 	type args struct {
@@ -33,8 +33,8 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 		{
 			name: "正常：登録できる",
 			fields: fields{
-				transactionRepository: func(ctrl *gomock.Controller) authRepository.TransactionRepository {
-					m := authRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin().
 						Return(
@@ -99,8 +99,8 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 		{
 			name: "正常：登録できない",
 			fields: fields{
-				transactionRepository: func(ctrl *gomock.Controller) authRepository.TransactionRepository {
-					m := authRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin().
 						Return(
@@ -147,8 +147,8 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 		{
 			name: "異常：エラー(accountRepository.FindOrNilByEmail)",
 			fields: fields{
-				transactionRepository: func(ctrl *gomock.Controller) authRepository.TransactionRepository {
-					m := authRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin().
 						Return(
@@ -191,8 +191,8 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 		{
 			name: "異常：エラー(accountRepository.Create)",
 			fields: fields{
-				transactionRepository: func(ctrl *gomock.Controller) authRepository.TransactionRepository {
-					m := authRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin().
 						Return(
@@ -244,8 +244,8 @@ func TestAccountService_RegisterAccount(t *testing.T) {
 		{
 			name: "異常：エラー（transactionRepository.Begin）",
 			fields: fields{
-				transactionRepository: func(ctrl *gomock.Controller) authRepository.TransactionRepository {
-					m := authRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin().
 						Return(

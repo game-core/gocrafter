@@ -4,7 +4,7 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/game-core/gocrafter/config/database"
-	repository "github.com/game-core/gocrafter/domain/repository/admin"
+	transactionRepository "github.com/game-core/gocrafter/domain/repository/admin/transaction"
 )
 
 type transactionDao struct {
@@ -12,7 +12,7 @@ type transactionDao struct {
 	Write *gorm.DB
 }
 
-func NewTransactionDao(conn *database.SqlHandler) repository.TransactionRepository {
+func NewTransactionDao(conn *database.SqlHandler) transactionRepository.TransactionRepository {
 	return &transactionDao{
 		Read:  conn.Admin.ReadConn,
 		Write: conn.Admin.WriteConn,

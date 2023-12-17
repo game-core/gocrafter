@@ -14,8 +14,8 @@ import (
 	masterItemEntity "github.com/game-core/gocrafter/domain/entity/master/item"
 	userItemEntity "github.com/game-core/gocrafter/domain/entity/user/item"
 	masterItemRepository "github.com/game-core/gocrafter/domain/repository/master/item"
-	userRepository "github.com/game-core/gocrafter/domain/repository/user"
 	userItemRepository "github.com/game-core/gocrafter/domain/repository/user/item"
+	transactionRepository "github.com/game-core/gocrafter/domain/repository/user/transaction"
 )
 
 func TestItemService_GetItemToEntity(t *testing.T) {
@@ -107,7 +107,7 @@ func TestItemService_GetItemToEntity(t *testing.T) {
 
 func TestItemService_ReceiveItemInBox(t *testing.T) {
 	type fields struct {
-		transactionRepository func(ctrl *gomock.Controller) userRepository.TransactionRepository
+		transactionRepository func(ctrl *gomock.Controller) transactionRepository.TransactionRepository
 		itemRepository        func(ctrl *gomock.Controller) masterItemRepository.ItemRepository
 		itemBoxRepository     func(ctrl *gomock.Controller) userItemRepository.ItemBoxRepository
 	}
@@ -124,8 +124,8 @@ func TestItemService_ReceiveItemInBox(t *testing.T) {
 		{
 			name: "正常：受け取りできる",
 			fields: fields{
-				transactionRepository: func(ctrl *gomock.Controller) userRepository.TransactionRepository {
-					m := userRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin("SHARD_1").
 						Return(
@@ -289,8 +289,8 @@ func TestItemService_ReceiveItemInBox(t *testing.T) {
 		{
 			name: "異常：トランザクションエラー",
 			fields: fields{
-				transactionRepository: func(ctrl *gomock.Controller) userRepository.TransactionRepository {
-					m := userRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin("SHARD_1").
 						Return(
@@ -326,8 +326,8 @@ func TestItemService_ReceiveItemInBox(t *testing.T) {
 		{
 			name: "異常：エラー（receiveItemInBox）",
 			fields: fields{
-				transactionRepository: func(ctrl *gomock.Controller) userRepository.TransactionRepository {
-					m := userRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin("SHARD_1").
 						Return(

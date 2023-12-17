@@ -10,13 +10,13 @@ import (
 
 	response "github.com/game-core/gocrafter/api/presentation/response/shard"
 	shardEntity "github.com/game-core/gocrafter/domain/entity/config/shard"
-	configRepository "github.com/game-core/gocrafter/domain/repository/config"
 	shardRepository "github.com/game-core/gocrafter/domain/repository/config/shard"
+	transactionRepository "github.com/game-core/gocrafter/domain/repository/config/transaction"
 )
 
 func TestLoginRewardService_GetShard(t *testing.T) {
 	type fields struct {
-		transactionRepository func(ctrl *gomock.Controller) configRepository.TransactionRepository
+		transactionRepository func(ctrl *gomock.Controller) transactionRepository.TransactionRepository
 		shardRepository       func(ctrl *gomock.Controller) shardRepository.ShardRepository
 	}
 	type args struct{}
@@ -30,8 +30,8 @@ func TestLoginRewardService_GetShard(t *testing.T) {
 		{
 			name: "正常：取得できる（切り替えなし）",
 			fields: fields{
-				transactionRepository: func(ctrl *gomock.Controller) configRepository.TransactionRepository {
-					m := configRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin().
 						Return(
@@ -124,8 +124,8 @@ func TestLoginRewardService_GetShard(t *testing.T) {
 		{
 			name: "正常：取得できる（切り替えあり）",
 			fields: fields{
-				transactionRepository: func(ctrl *gomock.Controller) configRepository.TransactionRepository {
-					m := configRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin().
 						Return(
@@ -218,8 +218,8 @@ func TestLoginRewardService_GetShard(t *testing.T) {
 		{
 			name: "異常：エラー（transactionRepository.Begin）",
 			fields: fields{
-				transactionRepository: func(ctrl *gomock.Controller) configRepository.TransactionRepository {
-					m := configRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin().
 						Return(
@@ -239,8 +239,8 @@ func TestLoginRewardService_GetShard(t *testing.T) {
 		{
 			name: "異常：エラー（shardRepository.List）",
 			fields: fields{
-				transactionRepository: func(ctrl *gomock.Controller) configRepository.TransactionRepository {
-					m := configRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin().
 						Return(
@@ -276,8 +276,8 @@ func TestLoginRewardService_GetShard(t *testing.T) {
 		{
 			name: "異常：エラー（failed to shardRepository.List）",
 			fields: fields{
-				transactionRepository: func(ctrl *gomock.Controller) configRepository.TransactionRepository {
-					m := configRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin().
 						Return(
@@ -313,8 +313,8 @@ func TestLoginRewardService_GetShard(t *testing.T) {
 		{
 			name: "異常：エラー（hardRepository.Update）",
 			fields: fields{
-				transactionRepository: func(ctrl *gomock.Controller) configRepository.TransactionRepository {
-					m := configRepository.NewMockTransactionRepository(ctrl)
+				transactionRepository: func(ctrl *gomock.Controller) transactionRepository.TransactionRepository {
+					m := transactionRepository.NewMockTransactionRepository(ctrl)
 					m.EXPECT().
 						Begin().
 						Return(
