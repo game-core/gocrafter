@@ -1,8 +1,0 @@
-name: GetExample
-package: example
-structure:
-  ID:
-    name: id
-    type: int64
-    nullable: false
-    number: 1

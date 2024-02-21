@@ -1,15 +1,1 @@
-.env
-
-.idea
-
-/tmp
-/log/admin_debug.log
-/log/auth_debug.log
-/log/api_debug.log
-/log/batch_debug.log
-/static/images
-
-/docker/db/sql
-/docker/db/data
-/docker/test_db/sql
-/docker/test_db/data
+.env.local

@@ -1,4 +1,0 @@
-name: ExampleSub
-package: example
-structure:
-  - ExampleSub1,ExampleSub2,ExampleSub3
