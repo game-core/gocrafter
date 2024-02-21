@@ -15,6 +15,19 @@ func SnakeToUpperCamel(s string) string {
 	return strings.Join(parts, "")
 }
 
+// SnakeToCamel スネークケースからキャメルケースに変換
+func SnakeToCamel(s string) string {
+	parts := strings.Split(s, "_")
+	for i := range parts {
+		parts[i] = strings.Title(parts[i])
+	}
+
+	result := strings.Join(parts, "")
+	result = strings.ToLower(string(result[0])) + result[1:]
+
+	return result
+}
+
 // UpperCamelToSnake アッパーキャメルケースからスネークケースに変換
 func UpperCamelToSnake(s string) string {
 	var result strings.Builder

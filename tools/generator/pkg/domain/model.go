@@ -19,7 +19,7 @@ const templateCode = `
 package {{.Package}}
 
 import (
-	"time"
+	{{.Import}}
 )
 
 type {{.PluralName}} []*{{.Name}}
@@ -27,8 +27,11 @@ type {{.PluralName}} []*{{.Name}}
 {{.Script}}
 `
 
+var importCode = ""
+
 type YamlStruct struct {
 	Name       string               `yaml:"name"`
+	Package    string               `yaml:"package"`
 	Comment    string               `yaml:"comment"`
 	Structures map[string]Structure `yaml:"structure"`
 }
@@ -36,6 +39,7 @@ type YamlStruct struct {
 type Structure struct {
 	Name     string `yaml:"name"`
 	Type     string `yaml:"type"`
+	Package  string `yaml:"package"`
 	Nullable bool   `yaml:"nullable"`
 	Number   int    `yaml:"number"`
 	Comment  string `yaml:"comment"`
@@ -47,6 +51,7 @@ type TemplateStruct struct {
 	PluralName string
 	Comment    string
 	Script     string
+	Import     string
 }
 
 // generate 生成する
@@ -108,11 +113,12 @@ func createTemplate(yamlStruct *YamlStruct, outputFile *os.File) error {
 		outputFile,
 		"templateCode",
 		TemplateStruct{
-			Package:    "",
 			Name:       yamlStruct.Name,
+			Package:    yamlStruct.Package,
 			PluralName: internal.SingularToPlural(yamlStruct.Name),
 			Comment:    yamlStruct.Comment,
 			Script:     createScript(yamlStruct),
+			Import:     importCode,
 		},
 	); err != nil {
 		return fmt.Errorf("faild to tmp.ExecuteTemplate: %v", err)
@@ -124,31 +130,64 @@ func createTemplate(yamlStruct *YamlStruct, outputFile *os.File) error {
 // createScript スクリプトを作成する
 func createScript(yamlStruct *YamlStruct) string {
 	var fieldScript []string
+	var paramScript []string
+	var returnScript []string
 
 	for _, field := range getStructure(yamlStruct.Structures) {
-		fieldScript = append(fieldScript, fmt.Sprintf("%s %s", internal.SnakeToUpperCamel(field.Name), field.Type))
+		fieldScript = append(fieldScript, fmt.Sprintf("%s %s", internal.SnakeToUpperCamel(field.Name), getType(field)))
+		paramScript = append(paramScript, fmt.Sprintf("%s %s", internal.SnakeToUpperCamel(field.Name), getType(field)))
+		returnScript = append(returnScript, fmt.Sprintf("%s: %s", internal.SnakeToUpperCamel(field.Name), internal.SnakeToCamel(field.Name)))
 	}
 
-	return fmt.Sprintf(
+	// Struct
+	structScript := fmt.Sprintf(
 		`type %s struct {
 			%s
-		}
+		}`,
+		yamlStruct.Name,
+		strings.Join(fieldScript, ""),
+	)
 
-		func New%s() *%s {
-			return &%s{}
-		}
-
-		func New%s() %s {
-			return %s{}
-		}
-
-		func Set%s(%s) *%s {
+	// Setter
+	setterScript := fmt.Sprintf(
+		`func Set%s(%s) *%s {
 			return &%s{
 				%s
 			}
 		}`,
 		yamlStruct.Name,
-		strings.Join(fieldScript, ""),
+		strings.Join(paramScript, ","),
+		yamlStruct.Name,
+		yamlStruct.Name,
+		strings.Join(returnScript, ","),
+	)
+
+	// New
+	newScript := fmt.Sprintf(
+		`func New%s() *%s {
+			return &%s{}
+		}
+
+		func New%s() %s {
+			return %s{}
+		}`,
+		yamlStruct.Name,
+		yamlStruct.Name,
+		yamlStruct.Name,
+		internal.SingularToPlural(yamlStruct.Name),
+		internal.SingularToPlural(yamlStruct.Name),
+		internal.SingularToPlural(yamlStruct.Name),
+	)
+
+	return fmt.Sprintf(
+		`%s
+
+		%s
+
+		%s`,
+		structScript,
+		newScript,
+		setterScript,
 	)
 }
 
@@ -173,6 +212,42 @@ func getStructure(structures map[string]Structure) []*Structure {
 	})
 
 	return sortStructures
+}
+
+// getType 型を取得する
+func getType(field *Structure) string {
+	var result string
+
+	switch field.Type {
+	case "time":
+		result = "time.Time"
+	case "structure":
+		if field.Package != "" {
+			importCode = fmt.Sprintf(
+				"%s\n%s",
+				importCode,
+				fmt.Sprintf("\"github.com/game-core/gocrafter/pkg/domain/%s\"", field.Package),
+			)
+		}
+		result = fmt.Sprintf("%s.%s", internal.SnakeToCamel(field.Name), internal.SnakeToUpperCamel(field.Name))
+	case "structures":
+		if field.Package != "" {
+			importCode = fmt.Sprintf(
+				"%s\n%s",
+				importCode,
+				fmt.Sprintf("\"github.com/game-core/gocrafter/pkg/domain/%s\"", field.Package),
+			)
+		}
+		result = fmt.Sprintf("%s.%s", internal.SnakeToCamel(field.Name), internal.SnakeToUpperCamel(field.Name))
+	default:
+		result = field.Type
+	}
+
+	if field.Nullable {
+		result = fmt.Sprintf("*%s", result)
+	}
+
+	return result
 }
 
 func main() {
