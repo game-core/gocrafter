@@ -8,3 +8,8 @@ docker_up:
 # ジェネレータに接続
 docker_gen:
 	$(DOCKER_COMPOSE) exec generator bash
+
+# modelを生成
+docker_gen_model:
+	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/pkg/domain/model.go
+	$(DOCKER_COMPOSE) exec generator goimports -w ./pkg/domain

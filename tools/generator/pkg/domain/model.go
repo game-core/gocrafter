@@ -1,3 +1,5 @@
+//go:generate go run .
+
 package main
 
 import (
@@ -15,7 +17,7 @@ import (
 )
 
 const templateCode = `
-// {{.Comment}}
+// Package {{.Package}} {{.Comment}}
 package {{.Package}}
 
 import (
@@ -104,7 +106,7 @@ func createOutputFile(yamlStruct *YamlStruct, outputFileName string) error {
 
 // createTemplate テンプレートを作成する
 func createTemplate(yamlStruct *YamlStruct, outputFile *os.File) error {
-	tmp, err := template.New("structTemplate").Parse(templateCode)
+	tmp, err := template.New("templateCode").Parse(templateCode)
 	if err != nil {
 		return err
 	}
@@ -135,8 +137,8 @@ func createScript(yamlStruct *YamlStruct) string {
 
 	for _, field := range getStructure(yamlStruct.Structures) {
 		fieldScript = append(fieldScript, fmt.Sprintf("%s %s", internal.SnakeToUpperCamel(field.Name), getType(field)))
-		paramScript = append(paramScript, fmt.Sprintf("%s %s", internal.SnakeToUpperCamel(field.Name), getType(field)))
-		returnScript = append(returnScript, fmt.Sprintf("%s: %s", internal.SnakeToUpperCamel(field.Name), internal.SnakeToCamel(field.Name)))
+		paramScript = append(paramScript, fmt.Sprintf("%s %s", internal.SnakeToCamel(field.Name), getType(field)))
+		returnScript = append(returnScript, fmt.Sprintf("%s: %s,", internal.SnakeToUpperCamel(field.Name), internal.SnakeToCamel(field.Name)))
 	}
 
 	// Struct
@@ -145,21 +147,7 @@ func createScript(yamlStruct *YamlStruct) string {
 			%s
 		}`,
 		yamlStruct.Name,
-		strings.Join(fieldScript, ""),
-	)
-
-	// Setter
-	setterScript := fmt.Sprintf(
-		`func Set%s(%s) *%s {
-			return &%s{
-				%s
-			}
-		}`,
-		yamlStruct.Name,
-		strings.Join(paramScript, ","),
-		yamlStruct.Name,
-		yamlStruct.Name,
-		strings.Join(returnScript, ","),
+		strings.Join(fieldScript, "\n"),
 	)
 
 	// New
@@ -177,6 +165,20 @@ func createScript(yamlStruct *YamlStruct) string {
 		internal.SingularToPlural(yamlStruct.Name),
 		internal.SingularToPlural(yamlStruct.Name),
 		internal.SingularToPlural(yamlStruct.Name),
+	)
+
+	// Setter
+	setterScript := fmt.Sprintf(
+		`func Set%s(%s) *%s {
+			return &%s{
+				%s
+			}
+		}`,
+		yamlStruct.Name,
+		strings.Join(paramScript, ","),
+		yamlStruct.Name,
+		yamlStruct.Name,
+		strings.Join(returnScript, "\n"),
 	)
 
 	return fmt.Sprintf(
@@ -220,25 +222,29 @@ func getType(field *Structure) string {
 
 	switch field.Type {
 	case "time":
+		importCode = fmt.Sprintf("%s\n%s", importCode, "\"time\"")
 		result = "time.Time"
 	case "structure":
 		if field.Package != "" {
-			importCode = fmt.Sprintf(
-				"%s\n%s",
-				importCode,
-				fmt.Sprintf("\"github.com/game-core/gocrafter/pkg/domain/%s\"", field.Package),
-			)
+			importCode = fmt.Sprintf("%s\n%s", importCode, fmt.Sprintf("\"github.com/game-core/gocrafter/pkg/domain/%s\"", field.Package))
+			result = fmt.Sprintf("%s.%s", internal.SnakeToCamel(field.Name), internal.SnakeToUpperCamel(field.Name))
+		} else {
+			result = internal.SnakeToUpperCamel(field.Name)
 		}
-		result = fmt.Sprintf("%s.%s", internal.SnakeToCamel(field.Name), internal.SnakeToUpperCamel(field.Name))
 	case "structures":
 		if field.Package != "" {
-			importCode = fmt.Sprintf(
-				"%s\n%s",
-				importCode,
-				fmt.Sprintf("\"github.com/game-core/gocrafter/pkg/domain/%s\"", field.Package),
-			)
+			importCode = fmt.Sprintf("%s\n%s", importCode, fmt.Sprintf("\"github.com/game-core/gocrafter/pkg/domain/%s\"", field.Package))
+			result = fmt.Sprintf("%s.%s", internal.SnakeToCamel(field.Name), internal.SnakeToUpperCamel(internal.SingularToPlural(field.Name)))
+		} else {
+			result = internal.SnakeToUpperCamel(internal.SingularToPlural(field.Name))
 		}
-		result = fmt.Sprintf("%s.%s", internal.SnakeToCamel(field.Name), internal.SnakeToUpperCamel(field.Name))
+	case "enum":
+		if field.Package != "" {
+			importCode = fmt.Sprintf("%s\n%s", importCode, fmt.Sprintf("\"github.com/game-core/gocrafter/pkg/domain/%s\"", field.Package))
+			result = fmt.Sprintf("%s.%s", internal.SnakeToCamel(field.Name), internal.SnakeToUpperCamel(field.Name))
+		} else {
+			result = internal.SnakeToUpperCamel(field.Name)
+		}
 	default:
 		result = field.Type
 	}
@@ -251,8 +257,8 @@ func getType(field *Structure) string {
 }
 
 func main() {
-	dir := "../../../../../pkg/domain"
-	files, err := filepath.Glob("../../../../../docs/yaml/pkg/domain/*.yaml")
+	dir := "../../../../pkg/domain/model"
+	files, err := filepath.Glob("../../../../docs/yaml/pkg/domain/model/*.yaml")
 	if err != nil {
 		log.Fatalf("error finding yaml files: %v", err)
 	}
