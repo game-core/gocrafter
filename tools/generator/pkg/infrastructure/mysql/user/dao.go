@@ -256,24 +256,9 @@ func (s *Dao) createMethods(yamlStruct *YamlStruct) map[string]MethodType {
 
 // createFind Findを作成する
 func (s *Dao) createFind(yamlStruct *YamlStruct, primaryFields []string) string {
-	fields := make(map[string]Structure)
-	var paramStrings []string
-	var scriptStrings []string
-	var returnStrings []string
-
+	keys := make(map[string]Structure)
 	for _, field := range primaryFields {
-		fields[field] = yamlStruct.Structures[field]
-	}
-
-	for _, field := range s.getStructures(fields) {
-		paramStrings = append(paramStrings, fmt.Sprintf("%s %s", internal.SnakeToCamel(field.Name), s.getType(field)))
-		scriptStrings = append(scriptStrings, fmt.Sprintf("Where(\"%s = ?\", %s)", field.Name, internal.SnakeToCamel(field.Name)))
-	}
-
-	for _, field := range s.getStructures(yamlStruct.Structures) {
-		if field.Name != "created_at" && field.Name != "updated_at" {
-			returnStrings = append(returnStrings, fmt.Sprintf("%s: t.%s,", internal.SnakeToUpperCamel(field.Name), internal.SnakeToUpperCamel(field.Name)))
-		}
+		keys[field] = yamlStruct.Structures[field]
 	}
 
 	return fmt.Sprintf(
@@ -293,15 +278,47 @@ func (s *Dao) createFind(yamlStruct *YamlStruct, primaryFields []string) string 
 		}
 		`,
 		internal.UpperCamelToCamel(yamlStruct.Name),
-		strings.Join(paramStrings, ","),
+		s.createParam(keys),
 		yamlStruct.Package,
 		yamlStruct.Name,
 		yamlStruct.Name,
-		strings.Join(scriptStrings, "."),
+		s.createQuery(keys),
 		yamlStruct.Package,
 		yamlStruct.Name,
-		strings.Join(returnStrings, "\n"),
+		s.createReturn(yamlStruct.Structures),
 	)
+}
+
+// createQuery Queryを作成する
+func (s *Dao) createQuery(keys map[string]Structure) string {
+	var queryStrings []string
+	for _, field := range s.getStructures(keys) {
+		queryStrings = append(queryStrings, fmt.Sprintf("Where(\"%s = ?\", %s)", field.Name, internal.SnakeToCamel(field.Name)))
+	}
+
+	return strings.Join(queryStrings, ",")
+}
+
+// createParam 引数を作成する
+func (s *Dao) createParam(keys map[string]Structure) string {
+	var paramStrings []string
+	for _, field := range s.getStructures(keys) {
+		paramStrings = append(paramStrings, fmt.Sprintf("%s %s", internal.SnakeToCamel(field.Name), s.getType(field)))
+	}
+
+	return strings.Join(paramStrings, ",")
+}
+
+// createReturn 返り値のフィールドを作成する
+func (s *Dao) createReturn(structures map[string]Structure) string {
+	var returnStrings []string
+	for _, field := range s.getStructures(structures) {
+		if field.Name != "created_at" && field.Name != "updated_at" {
+			returnStrings = append(returnStrings, fmt.Sprintf("%s: t.%s,", internal.SnakeToUpperCamel(field.Name), internal.SnakeToUpperCamel(field.Name)))
+		}
+	}
+
+	return strings.Join(returnStrings, "\n")
 }
 
 // getStructures フィールド構造体を取得する

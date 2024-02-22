@@ -135,7 +135,7 @@ func (s *Table) createScript(yamlStruct *YamlStruct) string {
 		s.createStruct(yamlStruct.Name, strings.Join(fieldScript, "\n")),
 		s.createNew(yamlStruct.Name, internal.SingularToPlural(yamlStruct.Name)),
 		s.createSetter(yamlStruct.Name, strings.Join(paramScript, ","), strings.Join(returnScript, "\n")),
-		s.createNameScript(yamlStruct.Name),
+		s.createTableName(yamlStruct.Name),
 	)
 }
 
@@ -186,7 +186,7 @@ func (s *Table) createSetter(name, paramScript, returnScript string) string {
 }
 
 // createNameScript TableNameを作成する
-func (s *Table) createNameScript(name string) string {
+func (s *Table) createTableName(name string) string {
 	return fmt.Sprintf(
 		`func (t *%s) TableName() string {
 			return "%s"
