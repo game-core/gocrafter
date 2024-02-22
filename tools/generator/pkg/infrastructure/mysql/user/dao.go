@@ -259,6 +259,7 @@ func (s *Dao) createFind(yamlStruct *YamlStruct, primaryFields []string) string 
 	fields := make(map[string]Structure)
 	var paramStrings []string
 	var scriptStrings []string
+	var returnStrings []string
 
 	for _, field := range primaryFields {
 		fields[field] = yamlStruct.Structures[field]
@@ -269,8 +270,14 @@ func (s *Dao) createFind(yamlStruct *YamlStruct, primaryFields []string) string 
 		scriptStrings = append(scriptStrings, fmt.Sprintf("Where(\"%s = ?\", %s)", field.Name, internal.SnakeToCamel(field.Name)))
 	}
 
+	for _, field := range s.getStructures(yamlStruct.Structures) {
+		if field.Name != "created_at" && field.Name != "updated_at" {
+			returnStrings = append(returnStrings, fmt.Sprintf("%s: t.%s,", internal.SnakeToUpperCamel(field.Name), internal.SnakeToUpperCamel(field.Name)))
+		}
+	}
+
 	return fmt.Sprintf(
-		`func (s *%sDao) Find(ctx context.Context, %s) (*%s, error) {
+		`func (s *%sDao) Find(ctx context.Context, %s) (*%s.%s, error) {
 			t := New%s()
 			res := s.ShardConn.Shards[internal.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).%s.Find(t)
 			if err := res.Error; err != nil {
@@ -280,25 +287,31 @@ func (s *Dao) createFind(yamlStruct *YamlStruct, primaryFields []string) string 
 				return nil, fmt.Errorf("record does not exist")
 			}
 
-			return t, nil
+			return &%s.%s{
+				%s
+			}, nil
 		}
 		`,
 		internal.UpperCamelToCamel(yamlStruct.Name),
 		strings.Join(paramStrings, ","),
+		yamlStruct.Package,
 		yamlStruct.Name,
 		yamlStruct.Name,
 		strings.Join(scriptStrings, "."),
+		yamlStruct.Package,
+		yamlStruct.Name,
+		strings.Join(returnStrings, "\n"),
 	)
 }
 
 // getStructures フィールド構造体を取得する
 func (s *Dao) getStructures(structures map[string]Structure) []*Structure {
 	var sortStructures []*Structure
-	for key, value := range structures {
+	for _, value := range structures {
 		sortStructures = append(
 			sortStructures,
 			&Structure{
-				Name:     key,
+				Name:     value.Name,
 				Type:     value.Type,
 				Package:  value.Package,
 				Nullable: value.Nullable,
@@ -308,8 +321,8 @@ func (s *Dao) getStructures(structures map[string]Structure) []*Structure {
 		)
 	}
 
-	sort.SliceStable(sortStructures, func(i, j int) bool {
-		return structures[sortStructures[i].Name].Number < structures[sortStructures[j].Name].Number
+	sort.Slice(sortStructures, func(i, j int) bool {
+		return sortStructures[i].Number < sortStructures[j].Number
 	})
 
 	return sortStructures

@@ -185,11 +185,11 @@ func (s *Entity) createSetter(name, paramScript, returnScript string) string {
 // getStructure フィールド構造体を取得する
 func (s *Entity) getStructure(structures map[string]Structure) []*Structure {
 	var sortStructures []*Structure
-	for key, value := range structures {
+	for _, value := range structures {
 		sortStructures = append(
 			sortStructures,
 			&Structure{
-				Name:     key,
+				Name:     value.Name,
 				Type:     value.Type,
 				Package:  value.Package,
 				Nullable: value.Nullable,
@@ -199,8 +199,8 @@ func (s *Entity) getStructure(structures map[string]Structure) []*Structure {
 		)
 	}
 
-	sort.SliceStable(sortStructures, func(i, j int) bool {
-		return structures[sortStructures[i].Name].Number < structures[sortStructures[j].Name].Number
+	sort.Slice(sortStructures, func(i, j int) bool {
+		return sortStructures[i].Number < sortStructures[j].Number
 	})
 
 	return sortStructures

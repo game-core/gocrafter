@@ -20,9 +20,9 @@ func NewUserAccountDao(conn *database.SqlHandler) userAccount.UserAccountReposit
 	}
 }
 
-func (s *userAccountDao) Find(ctx context.Context, userId string) (*UserAccount, error) {
+func (s *userAccountDao) Find(ctx context.Context, userId string) (*userAccount.UserAccount, error) {
 	t := NewUserAccount()
-	res := s.ShardConn.Shards[internal.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("UserId = ?", userId).Find(t)
+	res := s.ShardConn.Shards[internal.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -30,5 +30,11 @@ func (s *userAccountDao) Find(ctx context.Context, userId string) (*UserAccount,
 		return nil, fmt.Errorf("record does not exist")
 	}
 
-	return t, nil
+	return &userAccount.UserAccount{
+		UserId:   t.UserId,
+		Name:     t.Name,
+		Password: t.Password,
+		LoginAt:  t.LoginAt,
+		LogoutAt: t.LogoutAt,
+	}, nil
 }
