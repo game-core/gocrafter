@@ -45,6 +45,17 @@ func UpperCamelToSnake(s string) string {
 	return result.String()
 }
 
+// UpperCamelToCamel アッパーキャメルケースからキャメルケースに変換
+func UpperCamelToCamel(s string) string {
+	if len(s) == 0 {
+		return s
+	}
+	var result strings.Builder
+	result.WriteRune(unicode.ToLower(rune(s[0])))
+	result.WriteString(s[1:])
+	return result.String()
+}
+
 // SingularToPlural 単数形から複数形に変換
 func SingularToPlural(s string) string {
 	if s == "" {

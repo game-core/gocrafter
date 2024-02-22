@@ -9,14 +9,12 @@ docker_up:
 docker_gen:
 	$(DOCKER_COMPOSE) exec generator bash
 
-# modelを生成
-docker_gen_model:
-	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/pkg/domain/model/entity.go
+# domainを生成
+docker_gen_domain:
+	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/pkg/domain/model/main.go
 	$(DOCKER_COMPOSE) exec generator goimports -w ./pkg/domain
 
-# tableを生成
-docker_gen_table:
-	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/pkg/infrastructure/mysql/common/generator.go
-	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/pkg/infrastructure/mysql/master/generator.go
-	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/pkg/infrastructure/mysql/user/generator.go
+# infraを生成
+docker_gen_infra:
+	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/pkg/infrastructure/mysql/user/main.go
 	$(DOCKER_COMPOSE) exec generator goimports -w ./pkg/infrastructure
