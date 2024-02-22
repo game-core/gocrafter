@@ -38,3 +38,22 @@ func (s *userAccountDao) Find(ctx context.Context, userId string) (*userAccount.
 		LogoutAt: t.LogoutAt,
 	}, nil
 }
+
+func (s *userAccountDao) FindOrNil(ctx context.Context, userId string) (*userAccount.UserAccount, error) {
+	t := NewUserAccount()
+	res := s.ShardConn.Shards[internal.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(t)
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+	if res.RowsAffected == 0 {
+		return nil, nil
+	}
+
+	return &userAccount.UserAccount{
+		UserId:   t.UserId,
+		Name:     t.Name,
+		Password: t.Password,
+		LoginAt:  t.LoginAt,
+		LogoutAt: t.LogoutAt,
+	}, nil
+}

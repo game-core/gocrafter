@@ -190,15 +190,14 @@ func (s *Dao) createMethods(yamlStruct *YamlStruct) map[string]MethodType {
 		}
 	}
 
-	/*
-		// FindOrNil
-		if len(yamlStruct.Primary) > 0 {
-			primaryFields := strings.Split(yamlStruct.Primary[0], ",")
-			methods["FindOrNil"] = MethodType{
-				Script: createDaoFindOrNil(yamlStruct, primaryFields),
-			}
+	// FindOrNil
+	if len(yamlStruct.Primary) > 0 {
+		methods["FindOrNil"] = MethodType{
+			Script: s.createFindOrNil(yamlStruct, strings.Split(yamlStruct.Primary[0], ",")),
 		}
+	}
 
+	/*
 		// FindByIndex
 		for _, index := range yamlStruct.Index {
 			indexFields := strings.Split(index, ",")
@@ -289,6 +288,41 @@ func (s *Dao) createFind(yamlStruct *YamlStruct, primaryFields []string) string 
 	)
 }
 
+// createFindOrNil FindOrNilを作成する
+func (s *Dao) createFindOrNil(yamlStruct *YamlStruct, primaryFields []string) string {
+	keys := make(map[string]Structure)
+	for _, field := range primaryFields {
+		keys[field] = yamlStruct.Structures[field]
+	}
+
+	return fmt.Sprintf(
+		`func (s *%sDao) FindOrNil(ctx context.Context, %s) (*%s.%s, error) {
+			t := New%s()
+			res := s.ShardConn.Shards[internal.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).%s.Find(t)
+			if err := res.Error; err != nil {
+				return nil, err
+			}
+			if res.RowsAffected == 0 {
+				return nil, nil
+			}
+
+			return &%s.%s{
+				%s
+			}, nil
+		}
+		`,
+		internal.UpperCamelToCamel(yamlStruct.Name),
+		s.createParam(keys),
+		yamlStruct.Package,
+		yamlStruct.Name,
+		yamlStruct.Name,
+		s.createQuery(keys),
+		yamlStruct.Package,
+		yamlStruct.Name,
+		s.createReturn(yamlStruct.Structures),
+	)
+}
+
 // createQuery Queryを作成する
 func (s *Dao) createQuery(keys map[string]Structure) string {
 	var queryStrings []string
@@ -299,7 +333,7 @@ func (s *Dao) createQuery(keys map[string]Structure) string {
 	return strings.Join(queryStrings, ",")
 }
 
-// createParam 引数を作成する
+// createParam Paramを作成する
 func (s *Dao) createParam(keys map[string]Structure) string {
 	var paramStrings []string
 	for _, field := range s.getStructures(keys) {
@@ -309,7 +343,7 @@ func (s *Dao) createParam(keys map[string]Structure) string {
 	return strings.Join(paramStrings, ",")
 }
 
-// createReturn 返り値のフィールドを作成する
+// createReturn Returnを作成する
 func (s *Dao) createReturn(structures map[string]Structure) string {
 	var returnStrings []string
 	for _, field := range s.getStructures(structures) {
