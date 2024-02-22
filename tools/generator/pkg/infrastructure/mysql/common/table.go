@@ -57,15 +57,15 @@ type TemplateStruct struct {
 }
 
 // generate 生成する
-func generate(file string, baseDir string) error {
+func generate(file string, base string) error {
 	yamlStruct, err := getYamlStruct(file)
 	if err != nil {
 		return err
 	}
 
-	outputDir := filepath.Join(baseDir, "pkg", strings.Replace(filepath.Dir(file[len(""):]), "/docs/yaml", "", -1))
+	outputDir := filepath.Join(base, strings.Replace(filepath.Dir(file), "/../../docs/yaml", "", -1))
 	if err := os.MkdirAll(outputDir, os.ModePerm); err != nil {
-		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
+		return err
 	}
 
 	if err := createOutputFile(yamlStruct, getOutputFileName(outputDir, filepath.Base(file[:len(file)-len(filepath.Ext(file))]))); err != nil {
@@ -75,16 +75,16 @@ func generate(file string, baseDir string) error {
 	return nil
 }
 
-// getYaml yaml構造体を取得する
+// getYamlStruct yaml構造体を取得する
 func getYamlStruct(file string) (*YamlStruct, error) {
 	yamlData, err := ioutil.ReadFile(file)
 	if err != nil {
-		return nil, fmt.Errorf("error reading yaml file %s: %v", file, err)
+		return nil, err
 	}
 
 	var yamlStruct YamlStruct
 	if err := yaml.Unmarshal(yamlData, &yamlStruct); err != nil {
-		return nil, fmt.Errorf("error unmarshalling yaml in file %s: %v", yamlStruct, err)
+		return nil, err
 	}
 
 	return &yamlStruct, nil
@@ -99,11 +99,11 @@ func getOutputFileName(dir, name string) string {
 func createOutputFile(yamlStruct *YamlStruct, outputFileName string) error {
 	outputFile, err := os.Create(outputFileName)
 	if err != nil {
-		return fmt.Errorf("outputFileName file %s create error: %v", outputFileName, err)
+		return err
 	}
 
 	if err := createTemplate(yamlStruct, outputFile); err != nil {
-		return fmt.Errorf("faild to generateTemplate: %v", err)
+		return err
 	}
 
 	return nil
@@ -128,7 +128,7 @@ func createTemplate(yamlStruct *YamlStruct, outputFile *os.File) error {
 			Import:     importCode,
 		},
 	); err != nil {
-		return fmt.Errorf("faild to tmp.ExecuteTemplate: %v", err)
+		return err
 	}
 
 	return nil
@@ -151,10 +151,13 @@ func createScript(yamlStruct *YamlStruct) string {
 
 		%s
 
+		%s
+
 		%s`,
 		createStruct(yamlStruct.Name, strings.Join(fieldScript, "\n")),
 		createNew(yamlStruct.Name, internal.SingularToPlural(yamlStruct.Name)),
 		createSetter(yamlStruct.Name, strings.Join(paramScript, ","), strings.Join(returnScript, "\n")),
+		createTableNameScript(yamlStruct.Name),
 	)
 }
 
@@ -201,6 +204,17 @@ func createSetter(name, paramScript, returnScript string) string {
 		name,
 		name,
 		returnScript,
+	)
+}
+
+// createTableNameScript TableNameを作成する
+func createTableNameScript(name string) string {
+	return fmt.Sprintf(
+		`func (t *%s) TableName() string {
+			return "%s"
+		}`,
+		name,
+		internal.UpperCamelToSnake(name),
 	)
 }
 
@@ -269,21 +283,23 @@ func getType(field *Structure) string {
 }
 
 func main() {
-	dir := "../../../../docs/yaml/pkg/domain/model"
-	if err := filepath.Walk("../../../../docs/yaml/pkg/domain/model", func(path string, info os.FileInfo, err error) error {
+	yamls := "../../../../../../docs/yaml/pkg/infrastructure/mysql/common"
+	base := "../../../../../../pkg/infrastructure/mysql/common"
+
+	if err := filepath.Walk(yamls, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			log.Printf("error accessing path %s: %v", path, err)
 			return nil
 		}
 
 		if !info.IsDir() && strings.HasSuffix(info.Name(), ".yaml") {
-			if err := generate(path, "../../../../pkg/domain/model"); err != nil {
-				log.Printf("error generating model yaml file %s: %v", path, err)
+			if err := generate(path, base); err != nil {
+				log.Printf("failed to generate: %s", err)
 			}
 		}
 
 		return nil
 	}); err != nil {
-		log.Fatalf("error walking the path %s: %v", dir, err)
+		log.Fatalf("failed to filepath.Walk: %s", err)
 	}
 }

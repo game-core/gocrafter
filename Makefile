@@ -11,5 +11,12 @@ docker_gen:
 
 # modelを生成
 docker_gen_model:
-	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/pkg/domain/model.go
+	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/pkg/domain/model/entity.go
 	$(DOCKER_COMPOSE) exec generator goimports -w ./pkg/domain
+
+# tableを生成
+docker_gen_table:
+	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/pkg/infrastructure/mysql/common/generator.go
+	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/pkg/infrastructure/mysql/master/generator.go
+	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/pkg/infrastructure/mysql/user/generator.go
+	$(DOCKER_COMPOSE) exec generator goimports -w ./pkg/infrastructure
