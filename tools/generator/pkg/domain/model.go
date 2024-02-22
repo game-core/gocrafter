@@ -57,13 +57,18 @@ type TemplateStruct struct {
 }
 
 // generate 生成する
-func generate(file string, dir string) error {
+func generate(file string) error {
 	yamlStruct, err := getYamlStruct(file)
 	if err != nil {
 		return err
 	}
 
-	if err := createOutputFile(yamlStruct, getOutputFileName(dir, yamlStruct.Name)); err != nil {
+	outputDir := filepath.Join("../../../../", filepath.Dir(file[len("./docs/yaml/pkg/"):]))
+	if err := os.MkdirAll(outputDir, os.ModePerm); err != nil {
+		return fmt.Errorf("error creating output directory %s: %v", outputDir, err)
+	}
+
+	if err := createOutputFile(yamlStruct, getOutputFileName(outputDir, yamlStruct.Name)); err != nil {
 		return err
 	}
 
@@ -257,15 +262,15 @@ func getType(field *Structure) string {
 }
 
 func main() {
-	dir := "../../../../pkg/domain/model"
+	// dir := "../../../../pkg/domain/model"
 	files, err := filepath.Glob("../../../../docs/yaml/pkg/domain/model/*.yaml")
 	if err != nil {
 		log.Fatalf("error finding yaml files: %v", err)
 	}
 
 	for _, file := range files {
-		if err := generate(file, dir); err != nil {
-			log.Printf("error generating model yamle file %s: %v", file, err)
+		if err := generate(file); err != nil {
+			log.Printf("error generating model yaml file %s: %v", file, err)
 		}
 	}
 }
