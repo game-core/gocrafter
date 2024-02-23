@@ -1,0 +1,13 @@
+name: Account
+package: account
+comment: "アカウント"
+
+structure:
+  Create:
+    name: create
+    method: unary
+    auth: false
+    request: AccountCreateRequest
+    response: AccountCreateResponse
+    number: 1
+    comment: "アカウントを作成する"

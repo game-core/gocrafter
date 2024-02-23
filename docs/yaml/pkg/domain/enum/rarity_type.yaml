@@ -1,0 +1,21 @@
+name: RarityType
+package: enum
+comment: "レアリティタイプ"
+
+structure:
+  N:
+    name: N
+    number: 0
+    comment: "ノーマル"
+  R:
+    name: R
+    number: 1
+    comment: "レア"
+  SR:
+    name: SR
+    number: 2
+    comment: "スーパーレア"
+  SSR:
+    name: SSR
+    number: 3
+    comment: "スーパースペシャルレア"

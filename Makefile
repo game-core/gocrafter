@@ -11,6 +11,7 @@ docker_gen:
 
 # domainを生成
 docker_gen_domain:
+	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/pkg/domain/enum/main.go
 	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/pkg/domain/model/main.go
 	$(DOCKER_COMPOSE) exec generator goimports -w ./pkg/domain
 

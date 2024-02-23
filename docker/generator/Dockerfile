@@ -24,5 +24,5 @@ RUN apk upgrade --update && apk add bash && apk --no-cache add git && apk add ba
 RUN go install github.com/google/wire/cmd/wire@v0.5.0
 RUN go install github.com/golang/mock/mockgen@v1.6.0
 RUN go install golang.org/x/tools/cmd/goimports@v0.17.0
-RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+RUN go install google.golang.org/server/cmd/protoc-gen-go-server@latest
 RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest

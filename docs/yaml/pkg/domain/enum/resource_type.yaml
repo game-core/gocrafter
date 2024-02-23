@@ -1,0 +1,25 @@
+name: ResourceType
+package: enum
+comment: "リソースタイプ"
+
+structure:
+  Normal:
+    name: Normal
+    number: 0
+    comment: "ノーマルアイテム"
+  Card:
+    name: Card
+    number: 1
+    comment: "カード"
+  Ticket:
+    name: Ticket
+    number: 2
+    comment: "チケット"
+  Coin:
+    name: Coin
+    number: 3
+    comment: "コイン"
+  Crystal:
+    name: Crystal
+    number: 4
+    comment: "クリスタル"
