@@ -9,6 +9,10 @@ docker_up:
 docker_gen:
 	$(DOCKER_COMPOSE) exec generator bash
 
+# mockを生成
+docker_gen_mock:
+	$(DOCKER_COMPOSE) exec generator go generate ./pkg/domain/...
+
 # apiを生成
 docker_gen_api:
 	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/api/game/main.go
