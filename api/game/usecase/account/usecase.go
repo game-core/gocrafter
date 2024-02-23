@@ -45,13 +45,13 @@ func (s *accountUsecase) Create(ctx context.Context, req *accountServer.AccountC
 		return nil, fmt.Errorf("failed to s.accountService.Create: %s", err)
 	}
 
-	return &accountServer.AccountCreateResponse{
-		UserAccount: &accountServer.UserAccount{
-			UserId:   userAccount.UserAccount.UserId,
-			Name:     userAccount.UserAccount.Name,
-			Password: userAccount.UserAccount.Password,
-			LoginAt:  internal.TimeToPb(&userAccount.UserAccount.LoginAt),
-			LogoutAt: internal.TimeToPb(&userAccount.UserAccount.LogoutAt),
-		},
-	}, nil
+	return accountServer.SetAccountCreateResponse(
+		accountServer.SetUserAccount(
+			userAccount.UserAccount.UserId,
+			userAccount.UserAccount.Name,
+			userAccount.UserAccount.Password,
+			internal.TimeToPb(&userAccount.UserAccount.LoginAt),
+			internal.TimeToPb(&userAccount.UserAccount.LogoutAt),
+		),
+	), nil
 }

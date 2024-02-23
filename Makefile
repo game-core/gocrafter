@@ -17,6 +17,7 @@ docker_gen_mock:
 docker_gen_api:
 	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/api/game/main.go
 	$(DOCKER_COMPOSE) exec generator sh ./scripts/bulk-generate-protos.sh
+	$(DOCKER_COMPOSE) exec generator goimports -w ./api
 
 # domainを生成
 docker_gen_domain:

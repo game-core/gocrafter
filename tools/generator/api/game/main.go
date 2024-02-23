@@ -41,7 +41,6 @@ var importCode = ""
 
 func main() {
 	yamls := "../../../../docs/yaml/api/game"
-	base := "../../../../docs/proto/api/game"
 
 	if err := filepath.Walk(yamls, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -50,8 +49,12 @@ func main() {
 		}
 
 		if !info.IsDir() && strings.HasSuffix(info.Name(), ".yaml") {
-			if err := NewProto().generate(path, base); err != nil {
+			if err := NewProto().generate(path, "../../../../docs/proto/api/game"); err != nil {
 				log.Printf("failed to NewProto().generate: %s", err)
+			}
+
+			if err := NewSetter().generate(path, "../../../../api/game/presentation/server"); err != nil {
+				log.Printf("failed to NewSetter().generate: %s", err)
 			}
 		}
 
