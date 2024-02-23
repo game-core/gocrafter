@@ -37,10 +37,6 @@ type TemplateStruct struct {
 	Import     string
 }
 
-type MethodType struct {
-	Script string
-}
-
 var importCode = ""
 
 func main() {

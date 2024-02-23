@@ -172,7 +172,7 @@ func (s *Dao) createScript(yamlStruct *YamlStruct) string {
 
 			%s`,
 			methods,
-			method.Script,
+			method,
 		)
 	}
 
@@ -180,75 +180,49 @@ func (s *Dao) createScript(yamlStruct *YamlStruct) string {
 }
 
 // createMethods メソッドを作成する
-func (s *Dao) createMethods(yamlStruct *YamlStruct) map[string]MethodType {
-	methods := make(map[string]MethodType)
+func (s *Dao) createMethods(yamlStruct *YamlStruct) []string {
+	var methods []string
 
 	// Find
 	if len(yamlStruct.Primary) > 0 {
-		methods["Find"] = MethodType{
-			Script: s.createFind(yamlStruct, strings.Split(yamlStruct.Primary[0], ",")),
-		}
+		methods = append(methods, s.createFind(yamlStruct, strings.Split(yamlStruct.Primary[0], ",")))
 	}
 
 	// FindOrNil
 	if len(yamlStruct.Primary) > 0 {
-		methods["FindOrNil"] = MethodType{
-			Script: s.createFindOrNil(yamlStruct, strings.Split(yamlStruct.Primary[0], ",")),
-		}
+		methods = append(methods, s.createFindOrNil(yamlStruct, strings.Split(yamlStruct.Primary[0], ",")))
 	}
 
-	/*
-		// FindByIndex
-		for _, index := range yamlStruct.Index {
-			indexFields := strings.Split(index, ",")
-			methods[fmt.Sprintf("FindBy%s", strings.Join(indexFields, "And"))] = MethodType{
-				Script: createDaoFindByIndex(yamlStruct, indexFields),
-			}
-		}
+	// FindByIndex
+	for _, index := range yamlStruct.Index {
+		methods = append(methods, s.createFindByIndex(yamlStruct, strings.Split(index, ",")))
+	}
 
-		// FindOrNilByIndex
-		for _, index := range yamlStruct.Index {
-			indexFields := strings.Split(index, ",")
-			methods[fmt.Sprintf("FindOrNilBy%s", strings.Join(indexFields, "And"))] = MethodType{
-				Script: createDaoFindOrNilByIndex(yamlStruct, indexFields),
-			}
-		}
+	// FindOrNilByIndex
+	for _, index := range yamlStruct.Index {
+		methods = append(methods, s.createFindOrNilByIndex(yamlStruct, strings.Split(index, ",")))
+	}
 
-		// List
-		methods["FindList"] = MethodType{
-			Script: createDaoFindList(yamlStruct),
-		}
+	// FindList
+	methods = append(methods, s.createFindList(yamlStruct))
 
-		// ListByIndex
-		for _, index := range yamlStruct.Index {
-			indexFields := strings.Split(index, ",")
-			methods[fmt.Sprintf("FindListBy%s", strings.Join(indexFields, "And"))] = MethodType{
-				Script: createDaoFindListByIndex(yamlStruct, indexFields),
-			}
-		}
+	// ListByIndex
+	for _, index := range yamlStruct.Index {
+		methods = append(methods, s.createFindListByIndex(yamlStruct, strings.Split(index, ",")))
+	}
 
-		// Create
-		methods["Create"] = MethodType{
-			Script: createDaoCreate(yamlStruct),
-		}
+	// Create
+	methods = append(methods, s.createCreate(yamlStruct))
 
-		// Update
-		if len(yamlStruct.Primary) > 0 {
-			primaryFields := strings.Split(yamlStruct.Primary[0], ",")
-			methods["Update"] = MethodType{
-				Script: createDaoUpdate(yamlStruct, primaryFields),
-			}
-		}
+	// Update
+	if len(yamlStruct.Primary) > 0 {
+		methods = append(methods, s.createUpdate(yamlStruct, strings.Split(yamlStruct.Primary[0], ",")))
+	}
 
-		// Delete
-		if len(yamlStruct.Primary) > 0 {
-			primaryFields := strings.Split(yamlStruct.Primary[0], ",")
-			methods["Delete"] = MethodType{
-				Script: createDaoDelete(yamlStruct, primaryFields),
-			}
-		}
-
-	*/
+	// Delete
+	if len(yamlStruct.Primary) > 0 {
+		methods = append(methods, s.createDelete(yamlStruct, strings.Split(yamlStruct.Primary[0], ",")))
+	}
 
 	return methods
 }
@@ -271,9 +245,7 @@ func (s *Dao) createFind(yamlStruct *YamlStruct, primaryFields []string) string 
 				return nil, fmt.Errorf("record does not exist")
 			}
 
-			return &%s.%s{
-				%s
-			}, nil
+			return %s, nil
 		}
 		`,
 		internal.UpperCamelToCamel(yamlStruct.Name),
@@ -282,9 +254,7 @@ func (s *Dao) createFind(yamlStruct *YamlStruct, primaryFields []string) string 
 		yamlStruct.Name,
 		yamlStruct.Name,
 		s.createQuery(keys),
-		yamlStruct.Package,
-		yamlStruct.Name,
-		s.createReturn(yamlStruct.Structures),
+		s.createModelSetter(yamlStruct),
 	)
 }
 
@@ -306,9 +276,7 @@ func (s *Dao) createFindOrNil(yamlStruct *YamlStruct, primaryFields []string) st
 				return nil, nil
 			}
 
-			return &%s.%s{
-				%s
-			}, nil
+			return %s, nil
 		}
 		`,
 		internal.UpperCamelToCamel(yamlStruct.Name),
@@ -317,9 +285,223 @@ func (s *Dao) createFindOrNil(yamlStruct *YamlStruct, primaryFields []string) st
 		yamlStruct.Name,
 		yamlStruct.Name,
 		s.createQuery(keys),
+		s.createModelSetter(yamlStruct),
+	)
+}
+
+// createFindByIndex FindByIndexを作成する
+func (s *Dao) createFindByIndex(yamlStruct *YamlStruct, indexFields []string) string {
+	keys := make(map[string]Structure)
+	for _, field := range indexFields {
+		keys[field] = yamlStruct.Structures[field]
+	}
+
+	return fmt.Sprintf(
+		`func (s *%sDao) FindBy%s(ctx context.Context, %s) (*%s.%s, error) {
+			t := New%s()
+			res := s.ShardConn.Shards[internal.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).%s.Find(t)
+			if err := res.Error; err != nil {
+				return nil, err
+			}
+			if res.RowsAffected == 0 {
+				return nil, fmt.Errorf("record does not exist")
+			}
+
+			return %s, nil
+		}
+		`,
+		internal.UpperCamelToCamel(yamlStruct.Name),
+		strings.Join(indexFields, "And"),
+		s.createParam(keys),
 		yamlStruct.Package,
 		yamlStruct.Name,
-		s.createReturn(yamlStruct.Structures),
+		yamlStruct.Name,
+		s.createQuery(keys),
+		s.createModelSetter(yamlStruct),
+	)
+}
+
+// createFindOrNilByIndex FindOrNilByIndexを作成する
+func (s *Dao) createFindOrNilByIndex(yamlStruct *YamlStruct, indexFields []string) string {
+	keys := make(map[string]Structure)
+	for _, field := range indexFields {
+		keys[field] = yamlStruct.Structures[field]
+	}
+
+	return fmt.Sprintf(
+		`func (s *%sDao) FinOrNilBy%s(ctx context.Context, %s) (*%s.%s, error) {
+			t := New%s()
+			res := s.ShardConn.Shards[internal.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).%s.Find(t)
+			if err := res.Error; err != nil {
+				return nil, err
+			}
+			if res.RowsAffected == 0 {
+				return nil, nil
+			}
+
+			return %s, nil
+		}
+		`,
+		internal.UpperCamelToCamel(yamlStruct.Name),
+		strings.Join(indexFields, "And"),
+		s.createParam(keys),
+		yamlStruct.Package,
+		yamlStruct.Name,
+		yamlStruct.Name,
+		s.createQuery(keys),
+		s.createModelSetter(yamlStruct),
+	)
+}
+
+// createFindList FindListを作成する
+func (s *Dao) createFindList(yamlStruct *YamlStruct) string {
+	return fmt.Sprintf(
+		`func (s *%sDao) FindList(ctx context.Context, userId string) (%s.%s, error) {
+			ts := New%s()
+			res := s.ShardConn.Shards[internal.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(ts)
+			if err := res.Error; err != nil {
+				return nil, err
+			}
+
+			%s
+			
+			return ms, nil
+		}
+		`,
+		internal.UpperCamelToCamel(yamlStruct.Name),
+		yamlStruct.Package,
+		internal.SingularToPlural(yamlStruct.Name),
+		internal.SingularToPlural(yamlStruct.Name),
+		s.createModelSetters(yamlStruct),
+	)
+}
+
+// createFindListByIndex FindListByIndexを作成する
+func (s *Dao) createFindListByIndex(yamlStruct *YamlStruct, indexFields []string) string {
+	keys := make(map[string]Structure)
+	for _, field := range indexFields {
+		keys[field] = yamlStruct.Structures[field]
+	}
+
+	return fmt.Sprintf(
+		`func (s *%sDao) FindListBy%s(ctx context.Context, %s) (%s.%s, error) {
+			ts := New%s()
+			res := s.ShardConn.Shards[internal.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).%s.Find(ts)
+			if err := res.Error; err != nil {
+				return nil, err
+			}
+
+			%s
+			
+			return ms, nil
+		}
+		`,
+		internal.UpperCamelToCamel(yamlStruct.Name),
+		strings.Join(indexFields, "And"),
+		s.createParam(keys),
+		yamlStruct.Package,
+		internal.SingularToPlural(yamlStruct.Name),
+		internal.SingularToPlural(yamlStruct.Name),
+		s.createQuery(keys),
+		s.createModelSetters(yamlStruct),
+	)
+}
+
+// createCreate Createを作成する
+func (s *Dao) createCreate(yamlStruct *YamlStruct) string {
+	return fmt.Sprintf(
+		`func (s *%sDao) Create(ctx context.Context, tx *gorm.DB, m *%s.%s) (*%s.%s, error) {
+			var conn *gorm.DB
+			if tx != nil {
+				conn = tx
+			} else {
+				conn = s.ShardConn.Shards[internal.GetShardKeyByUserId(m.UserId)].WriteConn
+			}
+
+			t := %s
+			res := conn.Model(New%s()).WithContext(ctx).Create(t)
+			if err := res.Error; err != nil {
+				return nil, err
+			}
+		
+			return %s, nil
+		}`,
+		internal.UpperCamelToCamel(yamlStruct.Name),
+		yamlStruct.Package,
+		yamlStruct.Name,
+		yamlStruct.Package,
+		yamlStruct.Name,
+		s.createTableSetter(yamlStruct),
+		yamlStruct.Name,
+		s.createModelSetter(yamlStruct),
+	)
+}
+
+// createUpdate Updateを作成する
+func (s *Dao) createUpdate(yamlStruct *YamlStruct, primaryFields []string) string {
+	keys := make(map[string]Structure)
+	for _, field := range primaryFields {
+		keys[field] = yamlStruct.Structures[field]
+	}
+
+	return fmt.Sprintf(
+		`func (s *%sDao) Update(ctx context.Context, tx *gorm.DB, m *%s.%s) (*%s.%s, error) {
+			var conn *gorm.DB
+			if tx != nil {
+				conn = tx
+			} else {
+				conn = s.ShardConn.Shards[internal.GetShardKeyByUserId(m.UserId)].WriteConn
+			}
+
+			t := %s
+			res := conn.Model(New%s()).WithContext(ctx).%s.Updates(t)
+			if err := res.Error; err != nil {
+				return nil, err
+			}
+		
+			return %s, nil
+		}`,
+		internal.UpperCamelToCamel(yamlStruct.Name),
+		yamlStruct.Package,
+		yamlStruct.Name,
+		yamlStruct.Package,
+		yamlStruct.Name,
+		s.createTableSetter(yamlStruct),
+		yamlStruct.Name,
+		s.createModelQuery(keys),
+		s.createModelSetter(yamlStruct),
+	)
+}
+
+// createDelete Deleteを作成する
+func (s *Dao) createDelete(yamlStruct *YamlStruct, primaryFields []string) string {
+	keys := make(map[string]Structure)
+	for _, field := range primaryFields {
+		keys[field] = yamlStruct.Structures[field]
+	}
+
+	return fmt.Sprintf(
+		`func (s *%sDao) Delete(ctx context.Context, tx *gorm.DB, m *%s.%s) error {
+			var conn *gorm.DB
+			if tx != nil {
+				conn = tx
+			} else {
+				conn = s.ShardConn.Shards[internal.GetShardKeyByUserId(m.UserId)].WriteConn
+			}
+		
+			res := conn.Model(New%s()).WithContext(ctx).%s.Delete(New%s())
+			if err := res.Error; err != nil {
+				return err
+			}
+		
+			return nil
+		}`,
+		internal.UpperCamelToCamel(yamlStruct.Name),
+		yamlStruct.Package,
+		yamlStruct.Name,
+		yamlStruct.Name,
+		s.createModelQuery(keys),
+		yamlStruct.Name,
 	)
 }
 
@@ -330,7 +512,17 @@ func (s *Dao) createQuery(keys map[string]Structure) string {
 		queryStrings = append(queryStrings, fmt.Sprintf("Where(\"%s = ?\", %s)", field.Name, internal.SnakeToCamel(field.Name)))
 	}
 
-	return strings.Join(queryStrings, ",")
+	return strings.Join(queryStrings, ".")
+}
+
+// createModelQuery Queryを作成する
+func (s *Dao) createModelQuery(keys map[string]Structure) string {
+	var queryStrings []string
+	for _, field := range s.getStructures(keys) {
+		queryStrings = append(queryStrings, fmt.Sprintf("Where(\"%s = ?\", m.%s)", field.Name, internal.SnakeToUpperCamel(field.Name)))
+	}
+
+	return strings.Join(queryStrings, ".")
 }
 
 // createParam Paramを作成する
@@ -343,16 +535,65 @@ func (s *Dao) createParam(keys map[string]Structure) string {
 	return strings.Join(paramStrings, ",")
 }
 
-// createReturn Returnを作成する
-func (s *Dao) createReturn(structures map[string]Structure) string {
-	var returnStrings []string
-	for _, field := range s.getStructures(structures) {
+// createModelSetter createModelSetterを作成する
+func (s *Dao) createModelSetter(yamlStruct *YamlStruct) string {
+	var paramStrings []string
+	for _, field := range s.getStructures(yamlStruct.Structures) {
 		if field.Name != "created_at" && field.Name != "updated_at" {
-			returnStrings = append(returnStrings, fmt.Sprintf("%s: t.%s,", internal.SnakeToUpperCamel(field.Name), internal.SnakeToUpperCamel(field.Name)))
+			paramStrings = append(paramStrings, fmt.Sprintf("t.%s,", internal.SnakeToUpperCamel(field.Name)))
 		}
 	}
 
-	return strings.Join(returnStrings, "\n")
+	return fmt.Sprintf(
+		`%s.Set%s(%s)`,
+		yamlStruct.Package,
+		yamlStruct.Name,
+		strings.Join(paramStrings, ""),
+	)
+}
+
+// createModelSetters createModelSettersを作成する
+func (s *Dao) createModelSetters(yamlStruct *YamlStruct) string {
+	var paramStrings []string
+	for _, field := range s.getStructures(yamlStruct.Structures) {
+		if field.Name != "created_at" && field.Name != "updated_at" {
+			paramStrings = append(paramStrings, fmt.Sprintf("t.%s,", internal.SnakeToUpperCamel(field.Name)))
+		}
+	}
+
+	return fmt.Sprintf(
+		`ms := %s.New%s()
+		for _, t := range ts {
+			ms = append(ms, %s)
+		}`,
+		yamlStruct.Package,
+		internal.SingularToPlural(yamlStruct.Name),
+		fmt.Sprintf(
+			`%s.Set%s(%s)`,
+			yamlStruct.Package,
+			yamlStruct.Name,
+			strings.Join(paramStrings, ""),
+		),
+	)
+}
+
+// createTableSetter createTableSetterを作成する
+func (s *Dao) createTableSetter(yamlStruct *YamlStruct) string {
+	var paramStrings []string
+	for _, field := range s.getStructures(yamlStruct.Structures) {
+		if field.Name != "created_at" && field.Name != "updated_at" {
+			paramStrings = append(paramStrings, fmt.Sprintf("%s: m.%s,", internal.SnakeToUpperCamel(field.Name), internal.SnakeToUpperCamel(field.Name)))
+		}
+	}
+
+	return fmt.Sprintf(
+		`&%s.%s{
+			%s
+		}`,
+		yamlStruct.Package,
+		yamlStruct.Name,
+		strings.Join(paramStrings, "\n"),
+	)
 }
 
 // getStructures フィールド構造体を取得する

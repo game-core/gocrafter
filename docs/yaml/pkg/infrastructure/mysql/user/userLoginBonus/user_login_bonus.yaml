@@ -1,0 +1,42 @@
+name: UserLoginBonus
+package: userLoginBonus
+comment: "ユーザーログインボーナス"
+
+structure:
+  UserId:
+    name: user_id
+    type: string
+    nullable: false
+    number: 1
+    comment: "ユーザーID"
+  MasterLoginBonusId:
+    name: master_login_bonus_id
+    type: int64
+    nullable: false
+    number: 2
+    comment: "ログインボーナスID"
+  ReceivedAt:
+    name: received_at
+    type: time
+    nullable: false
+    number: 3
+    comment: "受け取り日時"
+  CreatedAt:
+    name: created_at
+    type: time
+    nullable: false
+    number: 4
+    comment: "作成日時"
+  UpdatedAt:
+    name: updated_at
+    type: time
+    nullable: false
+    number: 5
+    comment: "更新日時"
+primary:
+  - UserId,MasterLoginBonusId
+unique:
+  - UserId,MasterLoginBonusId
+index:
+  - UserId
+  - MasterLoginBonusId,UserId

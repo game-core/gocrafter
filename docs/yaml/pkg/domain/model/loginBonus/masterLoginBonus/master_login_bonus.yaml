@@ -1,0 +1,23 @@
+name: MasterLoginBonus
+package: masterLoginBonus
+comment: "ログインボーナス"
+
+structure:
+  Id:
+    name: id
+    type: int64
+    nullable: false
+    number: 1
+    comment: "ID"
+  MasterEventId:
+    name: master_event_id
+    type: int64
+    nullable: false
+    number: 2
+    comment: "イベントID"
+  Name:
+    name: name
+    type: string
+    nullable: false
+    number: 3
+    comment: "ログインボーナス名"
