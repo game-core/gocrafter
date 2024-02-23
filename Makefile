@@ -32,5 +32,6 @@ docker_gen_infra:
 	$(DOCKER_COMPOSE) exec generator goimports -w ./pkg/infrastructure
 	$(DOCKER_COMPOSE) exec generator goimports -w ./pkg/domain
 
+# fmt
 docker_fmt:
 	$(DOCKER_COMPOSE) exec generator goimports -w .
