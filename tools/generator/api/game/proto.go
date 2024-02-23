@@ -121,9 +121,63 @@ func (s *Proto) createScript(file string, yamlStruct *YamlStruct) string {
 	case strings.Contains(file, "_enum"):
 		return s.createEnum(yamlStruct)
 	default:
+		return s.createService(yamlStruct)
+	}
+}
+
+// createService serviceを作成する
+func (s *Proto) createService(yamlStruct *YamlStruct) string {
+	var imports []string
+	var services []string
+	for _, field := range s.getStructure(yamlStruct.Structures) {
+		checkReq := true
+		req := fmt.Sprintf("import \"%s.proto\";", internal.UpperCamelToSnake(field.Request))
+		for _, m := range imports {
+			if m == req {
+				checkReq = false
+				break
+			}
+		}
+		if checkReq {
+			imports = append(imports, req)
+		}
+
+		checkRes := true
+		res := fmt.Sprintf("import \"%s.proto\";", internal.UpperCamelToSnake(field.Response))
+		for _, m := range imports {
+			if m == res {
+				checkRes = false
+				break
+			}
+		}
+		if checkRes {
+			imports = append(imports, res)
+		}
+
+		services = append(services, fmt.Sprintf("  rpc %s (%s) returns (%s);", internal.SnakeToUpperCamel(field.Name), field.Request, field.Response))
 	}
 
-	return ""
+	script := ""
+	if len(imports) == 0 {
+		script = fmt.Sprintf(`service %s {
+%s
+}`,
+			yamlStruct.Name,
+			strings.Join(services, "\n"),
+		)
+	} else {
+		script = fmt.Sprintf(`%s
+
+service %s {
+%s
+}`,
+			strings.Join(imports, "\n"),
+			yamlStruct.Name,
+			strings.Join(services, "\n"),
+		)
+	}
+
+	return script
 }
 
 // createStructure structureを作成する
@@ -216,6 +270,9 @@ func (s *Proto) getStructure(structures map[string]Structure) []*Structure {
 			sortStructures,
 			&Structure{
 				Name:     value.Name,
+				Method:   value.Method,
+				Request:  value.Request,
+				Response: value.Response,
 				Type:     value.Type,
 				Package:  value.Package,
 				Nullable: value.Nullable,

@@ -18,6 +18,10 @@ type YamlStruct struct {
 
 type Structure struct {
 	Name     string `yaml:"name"`
+	Method   string `yaml:"method"`
+	Auth     bool   `yaml:"auth"`
+	Request  string `yaml:"request"`
+	Response string `yaml:"response"`
 	Type     string `yaml:"type"`
 	Package  string `yaml:"package"`
 	Nullable bool   `yaml:"nullable"`

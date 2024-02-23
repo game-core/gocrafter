@@ -4,4 +4,9 @@ package proto;
 
 option go_package = "api/game/presentation/proto";
 
+import "account_create_request.proto";
+import "account_create_response.proto";
 
+service Account {
+  rpc Create (AccountCreateRequest) returns (AccountCreateResponse);
+}
