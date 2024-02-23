@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/proto";
+
+import "user_account_structure.proto";
+
+message AccountCreateResponse {
+  optional UserAccount user_account = 1;
+}

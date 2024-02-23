@@ -37,8 +37,8 @@ type TemplateStruct struct {
 var importCode = ""
 
 func main() {
-	yamls := "../../../../../docs/yaml/pkg/api/game"
-	base := "../../../../../docs/proto"
+	yamls := "../../../../docs/yaml/api/game"
+	base := "../../../../docs/proto/api/game"
 
 	if err := filepath.Walk(yamls, func(path string, info os.FileInfo, err error) error {
 		if err != nil {

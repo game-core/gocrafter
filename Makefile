@@ -9,9 +9,9 @@ docker_up:
 docker_gen:
 	$(DOCKER_COMPOSE) exec generator bash
 
-# appを生成
-docker_gen_app:
-	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/app/game/main.go
+# apiを生成
+docker_gen_api:
+	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/api/game/main.go
 
 # domainを生成
 docker_gen_domain:
