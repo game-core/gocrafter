@@ -47,15 +47,20 @@ func NewDao() *Dao {
 }
 
 // generate 生成する
-func (s *Dao) generate(file string, base string) error {
+func (s *Dao) generate(path string, base string) error {
 	importCode = ""
 
-	yamlStruct, err := s.getYamlStruct(file)
+	yamlStruct, err := s.getYamlStruct(path)
 	if err != nil {
 		return err
 	}
 
-	if err := s.getDomainImportPath(fmt.Sprintf("%s_repository.gen.go", internal.UpperCamelToSnake(yamlStruct.Name))); err != nil {
+	domainPath, err := s.getDomainPath(fmt.Sprintf("%s_model.gen.go", internal.UpperCamelToSnake(yamlStruct.Name)))
+	if err != nil {
+		return err
+	}
+
+	if err := NewRepository().generate(path, domainPath); err != nil {
 		return err
 	}
 
@@ -71,8 +76,8 @@ func (s *Dao) generate(file string, base string) error {
 	return nil
 }
 
-// getDomainImportPath ドメインのpathを取得する関数
-func (s *Dao) getDomainImportPath(name string) error {
+// getDomainPath ドメインのpathを取得する関数
+func (s *Dao) getDomainPath(name string) (string, error) {
 	base := "../../../../../../pkg/domain/model"
 	var target string
 
@@ -88,18 +93,17 @@ func (s *Dao) getDomainImportPath(name string) error {
 		}
 		return nil
 	}); err != nil {
-		return err
+		return "", err
 	}
 
 	if target == "" {
-		return fmt.Errorf("file does not exist")
+		return "", fmt.Errorf("file does not exist")
 	}
 
 	importPath := fmt.Sprintf("\"github.com/game-core/gocrafter/%s\"", strings.Replace(target, "../../../../../../", "", -1))
 	importCode = fmt.Sprintf("%s\n%s", importCode, importPath)
-	fmt.Println(importCode)
 
-	return nil
+	return target, nil
 }
 
 // getYamlStruct yaml構造体を取得する
@@ -213,6 +217,9 @@ func (s *Dao) createMethods(yamlStruct *YamlStruct) []string {
 
 	// Create
 	methods = append(methods, s.createCreate(yamlStruct))
+
+	// CreateList
+	methods = append(methods, s.createCreateList(yamlStruct))
 
 	// Update
 	if len(yamlStruct.Primary) > 0 {
@@ -437,6 +444,52 @@ func (s *Dao) createCreate(yamlStruct *YamlStruct) string {
 	)
 }
 
+// createCreate CreateListを作成する
+func (s *Dao) createCreateList(yamlStruct *YamlStruct) string {
+	return fmt.Sprintf(
+		`func (s *%sDao) CreateList(ctx context.Context, tx *gorm.DB, ms %s.%s) (%s.%s, error) {
+			if len(ms) <= 0 {
+				return ms, nil
+			}
+			
+			fms := ms[0]
+			for _, m := range ms {
+				if m.UserId != fms.UserId {
+					return nil, fmt.Errorf("userId is invalid")
+				}
+			}
+
+			var conn *gorm.DB
+			if tx != nil {
+				conn = tx
+			} else {
+				conn = s.ShardConn.Shards[internal.GetShardKeyByUserId(fms.UserId)].WriteConn
+			}
+
+			ts := New%s()
+			for _, m := range ms {
+				t := %s
+				ts = append(ts, t)
+			}
+
+			res := conn.Model(New%s()).WithContext(ctx).Create(ts)
+			if err := res.Error; err != nil {
+				return nil, err
+			}
+		
+			return ms, nil
+		}`,
+		internal.UpperCamelToCamel(yamlStruct.Name),
+		yamlStruct.Package,
+		internal.SingularToPlural(yamlStruct.Name),
+		yamlStruct.Package,
+		internal.SingularToPlural(yamlStruct.Name),
+		internal.SingularToPlural(yamlStruct.Name),
+		s.createTableSetter(yamlStruct),
+		yamlStruct.Name,
+	)
+}
+
 // createUpdate Updateを作成する
 func (s *Dao) createUpdate(yamlStruct *YamlStruct, primaryFields []string) string {
 	keys := make(map[string]Structure)
@@ -587,10 +640,9 @@ func (s *Dao) createTableSetter(yamlStruct *YamlStruct) string {
 	}
 
 	return fmt.Sprintf(
-		`&%s.%s{
+		`&%s{
 			%s
 		}`,
-		yamlStruct.Package,
 		yamlStruct.Name,
 		strings.Join(paramStrings, "\n"),
 	)
@@ -644,8 +696,8 @@ func (s *Dao) getType(field *Structure) string {
 		}
 	case "enum":
 		if field.Package != "" {
-			importCode = fmt.Sprintf("%s\n%s", importCode, fmt.Sprintf("\"github.com/game-core/gocrafter/pkg/domain/%s\"", field.Package))
-			result = fmt.Sprintf("%s.%s", internal.SnakeToCamel(field.Name), internal.SnakeToUpperCamel(field.Name))
+			importCode = fmt.Sprintf("%s\n%s", importCode, "github.com/game-core/gocrafter/pkg/domain/enum")
+			result = fmt.Sprintf("emun.%s", internal.SnakeToUpperCamel(field.Name))
 		} else {
 			result = internal.SnakeToUpperCamel(field.Name)
 		}

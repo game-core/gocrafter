@@ -71,7 +71,7 @@ func (s *userAccountDao) Create(ctx context.Context, tx *gorm.DB, m *userAccount
 		conn = s.ShardConn.Shards[internal.GetShardKeyByUserId(m.UserId)].WriteConn
 	}
 
-	t := &userAccount.UserAccount{
+	t := &UserAccount{
 		UserId:   m.UserId,
 		Name:     m.Name,
 		Password: m.Password,
@@ -86,6 +86,45 @@ func (s *userAccountDao) Create(ctx context.Context, tx *gorm.DB, m *userAccount
 	return userAccount.SetUserAccount(t.UserId, t.Name, t.Password, t.LoginAt, t.LogoutAt), nil
 }
 
+func (s *userAccountDao) CreateList(ctx context.Context, tx *gorm.DB, ms userAccount.UserAccounts) (userAccount.UserAccounts, error) {
+	if len(ms) <= 0 {
+		return ms, nil
+	}
+
+	fms := ms[0]
+	for _, m := range ms {
+		if m.UserId != fms.UserId {
+			return nil, fmt.Errorf("userId is invalid")
+		}
+	}
+
+	var conn *gorm.DB
+	if tx != nil {
+		conn = tx
+	} else {
+		conn = s.ShardConn.Shards[internal.GetShardKeyByUserId(fms.UserId)].WriteConn
+	}
+
+	ts := NewUserAccounts()
+	for _, m := range ms {
+		t := &UserAccount{
+			UserId:   m.UserId,
+			Name:     m.Name,
+			Password: m.Password,
+			LoginAt:  m.LoginAt,
+			LogoutAt: m.LogoutAt,
+		}
+		ts = append(ts, t)
+	}
+
+	res := conn.Model(NewUserAccount()).WithContext(ctx).Create(ts)
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	return ms, nil
+}
+
 func (s *userAccountDao) Update(ctx context.Context, tx *gorm.DB, m *userAccount.UserAccount) (*userAccount.UserAccount, error) {
 	var conn *gorm.DB
 	if tx != nil {
@@ -94,7 +133,7 @@ func (s *userAccountDao) Update(ctx context.Context, tx *gorm.DB, m *userAccount
 		conn = s.ShardConn.Shards[internal.GetShardKeyByUserId(m.UserId)].WriteConn
 	}
 
-	t := &userAccount.UserAccount{
+	t := &UserAccount{
 		UserId:   m.UserId,
 		Name:     m.Name,
 		Password: m.Password,

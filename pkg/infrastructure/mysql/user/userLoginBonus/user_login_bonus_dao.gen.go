@@ -153,7 +153,7 @@ func (s *userLoginBonusDao) Create(ctx context.Context, tx *gorm.DB, m *userLogi
 		conn = s.ShardConn.Shards[internal.GetShardKeyByUserId(m.UserId)].WriteConn
 	}
 
-	t := &userLoginBonus.UserLoginBonus{
+	t := &UserLoginBonus{
 		UserId:             m.UserId,
 		MasterLoginBonusId: m.MasterLoginBonusId,
 		ReceivedAt:         m.ReceivedAt,
@@ -166,6 +166,43 @@ func (s *userLoginBonusDao) Create(ctx context.Context, tx *gorm.DB, m *userLogi
 	return userLoginBonus.SetUserLoginBonus(t.UserId, t.MasterLoginBonusId, t.ReceivedAt), nil
 }
 
+func (s *userLoginBonusDao) CreateList(ctx context.Context, tx *gorm.DB, ms userLoginBonus.UserLoginBonuses) (userLoginBonus.UserLoginBonuses, error) {
+	if len(ms) <= 0 {
+		return ms, nil
+	}
+
+	fms := ms[0]
+	for _, m := range ms {
+		if m.UserId != fms.UserId {
+			return nil, fmt.Errorf("userId is invalid")
+		}
+	}
+
+	var conn *gorm.DB
+	if tx != nil {
+		conn = tx
+	} else {
+		conn = s.ShardConn.Shards[internal.GetShardKeyByUserId(fms.UserId)].WriteConn
+	}
+
+	ts := NewUserLoginBonuses()
+	for _, m := range ms {
+		t := &UserLoginBonus{
+			UserId:             m.UserId,
+			MasterLoginBonusId: m.MasterLoginBonusId,
+			ReceivedAt:         m.ReceivedAt,
+		}
+		ts = append(ts, t)
+	}
+
+	res := conn.Model(NewUserLoginBonus()).WithContext(ctx).Create(ts)
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	return ms, nil
+}
+
 func (s *userLoginBonusDao) Update(ctx context.Context, tx *gorm.DB, m *userLoginBonus.UserLoginBonus) (*userLoginBonus.UserLoginBonus, error) {
 	var conn *gorm.DB
 	if tx != nil {
@@ -174,7 +211,7 @@ func (s *userLoginBonusDao) Update(ctx context.Context, tx *gorm.DB, m *userLogi
 		conn = s.ShardConn.Shards[internal.GetShardKeyByUserId(m.UserId)].WriteConn
 	}
 
-	t := &userLoginBonus.UserLoginBonus{
+	t := &UserLoginBonus{
 		UserId:             m.UserId,
 		MasterLoginBonusId: m.MasterLoginBonusId,
 		ReceivedAt:         m.ReceivedAt,

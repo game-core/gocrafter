@@ -47,8 +47,8 @@ func main() {
 		}
 
 		if !info.IsDir() && strings.HasSuffix(info.Name(), ".yaml") {
-			if err := NewEntity().generate(path, base); err != nil {
-				log.Printf("failed to NewEntity().generate: %s", err)
+			if err := NewModel().generate(path, base); err != nil {
+				log.Printf("failed to NewModel().generate: %s", err)
 			}
 		}
 

@@ -1,9 +1,18 @@
+// Package userAccount ユーザーアカウント
 package userAccount
 
 import (
 	"context"
+
+	"gorm.io/gorm"
 )
 
 type UserAccountRepository interface {
 	Find(ctx context.Context, userId string) (*UserAccount, error)
+	FindOrNil(ctx context.Context, userId string) (*UserAccount, error)
+	FindList(ctx context.Context, userId string) (UserAccounts, error)
+	Create(ctx context.Context, tx *gorm.DB, m *UserAccount) (*UserAccount, error)
+	CreateList(ctx context.Context, tx *gorm.DB, ms UserAccounts) (UserAccounts, error)
+	Update(ctx context.Context, tx *gorm.DB, m *UserAccount) (*UserAccount, error)
+	Delete(ctx context.Context, tx *gorm.DB, m *UserAccount) error
 }

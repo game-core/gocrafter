@@ -244,8 +244,8 @@ func (s *Table) getType(field *Structure) string {
 		}
 	case "enum":
 		if field.Package != "" {
-			importCode = fmt.Sprintf("%s\n%s", importCode, fmt.Sprintf("\"github.com/game-core/gocrafter/pkg/domain/%s\"", field.Package))
-			result = fmt.Sprintf("%s.%s", internal.SnakeToCamel(field.Name), internal.SnakeToUpperCamel(field.Name))
+			importCode = fmt.Sprintf("%s\n%s", importCode, "github.com/game-core/gocrafter/pkg/domain/enum")
+			result = fmt.Sprintf("emun.%s", internal.SnakeToUpperCamel(field.Name))
 		} else {
 			result = internal.SnakeToUpperCamel(field.Name)
 		}
