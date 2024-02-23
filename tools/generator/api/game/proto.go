@@ -14,11 +14,12 @@ import (
 	"github.com/game-core/gocrafter/internal"
 )
 
-const protoTemplate = `syntax = "proto3";
+const protoTemplate = `// {{.Comment}}
+syntax = "proto3";
 
 package proto;
 
-option go_package = "api/game/presentation/proto";
+option go_package = "api/game/presentation/server/{{.Package}}";
 
 {{.Script}}
 `
@@ -95,12 +96,11 @@ func (s *Proto) createTemplate(file string, yamlStruct *YamlStruct, outputFile *
 		outputFile,
 		"protoTemplate",
 		TemplateStruct{
-			Name:       yamlStruct.Name,
-			Package:    yamlStruct.Package,
-			PluralName: internal.SingularToPlural(yamlStruct.Name),
-			Comment:    yamlStruct.Comment,
-			Script:     s.createScript(file, yamlStruct),
-			Import:     importCode,
+			Name:    yamlStruct.Name,
+			Package: yamlStruct.Package,
+			Comment: yamlStruct.Comment,
+			Script:  s.createScript(file, yamlStruct),
+			Import:  importCode,
 		},
 	); err != nil {
 		return err
@@ -194,7 +194,7 @@ func (s *Proto) createStructure(yamlStruct *YamlStruct) string {
 			fe = fmt.Sprintf("%s %s = %v;", internal.SnakeToUpperCamel(field.Name), field.Name, field.Number)
 		case "structures":
 			imports = append(imports, fmt.Sprintf("import \"%s_structure.proto\";", internal.PluralToSingular(field.Name)))
-			fe = fmt.Sprintf("repeated %s %s = %v;", internal.SnakeToUpperCamel(field.Name), field.Name, field.Number)
+			fe = fmt.Sprintf("repeated %s %s = %v;", internal.SnakeToUpperCamel(internal.PluralToSingular(field.Name)), field.Name, field.Number)
 		case "enum":
 			imports = append(imports, fmt.Sprintf("import \"%s_enum.proto\";", internal.PluralToSingular(field.Name)))
 			fe = fmt.Sprintf("%s %s = %v;", internal.SnakeToUpperCamel(field.Name), field.Name, field.Number)

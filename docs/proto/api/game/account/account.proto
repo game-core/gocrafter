@@ -1,8 +1,9 @@
+// アカウント
 syntax = "proto3";
 
 package proto;
 
-option go_package = "api/game/presentation/proto";
+option go_package = "api/game/presentation/server/account";
 
 import "account_create_request.proto";
 import "account_create_response.proto";
