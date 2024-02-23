@@ -13,17 +13,17 @@ import (
 )
 
 func main() {
-	if err := migrateCommonDB("./docs/sql/common"); err != nil {
+	if err := migrateCommonDB("./docs/sql/common/ddl"); err != nil {
 		fmt.Println("error migrating the database:", err)
 		return
 	}
 
-	if err := migrateMasterDB("./docs/sql/master"); err != nil {
+	if err := migrateMasterDB("./docs/sql/master/ddl"); err != nil {
 		fmt.Println("error migrating the database:", err)
 		return
 	}
 
-	if err := migrateUserDB("./docs/sql/user"); err != nil {
+	if err := migrateUserDB("./docs/sql/user/ddl"); err != nil {
 		fmt.Println("error migrating the database:", err)
 		return
 	}
