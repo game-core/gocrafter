@@ -3,6 +3,7 @@ package commonShard
 
 import (
 	"context"
+	"fmt"
 
 	"gorm.io/gorm"
 
@@ -22,9 +23,76 @@ func NewCommonShardDao(conn *database.SqlHandler) commonShard.CommonShardReposit
 	}
 }
 
+func (s *commonShardDao) Find(ctx context.Context, id int64) (*commonShard.CommonShard, error) {
+	t := NewCommonShard()
+	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+	if res.RowsAffected == 0 {
+		return nil, fmt.Errorf("record does not exist")
+	}
+
+	return commonShard.SetCommonShard(t.Id, t.ShardKey, t.Name, t.Count), nil
+}
+
+func (s *commonShardDao) FindOrNil(ctx context.Context, id int64) (*commonShard.CommonShard, error) {
+	t := NewCommonShard()
+	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+	if res.RowsAffected == 0 {
+		return nil, nil
+	}
+
+	return commonShard.SetCommonShard(t.Id, t.ShardKey, t.Name, t.Count), nil
+}
+
+func (s *commonShardDao) FindByShardKey(ctx context.Context, shardKey string) (*commonShard.CommonShard, error) {
+	t := NewCommonShard()
+	res := s.ReadConn.WithContext(ctx).Where("shard_key = ?", shardKey).Find(t)
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+	if res.RowsAffected == 0 {
+		return nil, fmt.Errorf("record does not exist")
+	}
+
+	return commonShard.SetCommonShard(t.Id, t.ShardKey, t.Name, t.Count), nil
+}
+
+func (s *commonShardDao) FinOrNilByShardKey(ctx context.Context, shardKey string) (*commonShard.CommonShard, error) {
+	t := NewCommonShard()
+	res := s.ReadConn.WithContext(ctx).Where("shard_key = ?", shardKey).Find(t)
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+	if res.RowsAffected == 0 {
+		return nil, nil
+	}
+
+	return commonShard.SetCommonShard(t.Id, t.ShardKey, t.Name, t.Count), nil
+}
+
 func (s *commonShardDao) FindList(ctx context.Context) (commonShard.CommonShards, error) {
 	ts := NewCommonShards()
 	res := s.ReadConn.WithContext(ctx).Find(ts)
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	ms := commonShard.NewCommonShards()
+	for _, t := range ts {
+		ms = append(ms, commonShard.SetCommonShard(t.Id, t.ShardKey, t.Name, t.Count))
+	}
+
+	return ms, nil
+}
+
+func (s *commonShardDao) FindListByShardKey(ctx context.Context, shardKey string) (commonShard.CommonShards, error) {
+	ts := NewCommonShards()
+	res := s.ReadConn.WithContext(ctx).Where("shard_key = ?", shardKey).Find(ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -84,4 +152,42 @@ func (s *commonShardDao) CreateList(ctx context.Context, tx *gorm.DB, ms commonS
 	}
 
 	return ms, nil
+}
+
+func (s *commonShardDao) Update(ctx context.Context, tx *gorm.DB, m *commonShard.CommonShard) (*commonShard.CommonShard, error) {
+	var conn *gorm.DB
+	if tx != nil {
+		conn = tx
+	} else {
+		conn = s.WriteConn
+	}
+
+	t := &CommonShard{
+		Id:       m.Id,
+		ShardKey: m.ShardKey,
+		Name:     m.Name,
+		Count:    m.Count,
+	}
+	res := conn.Model(NewCommonShard()).WithContext(ctx).Where("id = ?", m.Id).Updates(t)
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	return commonShard.SetCommonShard(t.Id, t.ShardKey, t.Name, t.Count), nil
+}
+
+func (s *commonShardDao) Delete(ctx context.Context, tx *gorm.DB, m *commonShard.CommonShard) error {
+	var conn *gorm.DB
+	if tx != nil {
+		conn = tx
+	} else {
+		conn = s.WriteConn
+	}
+
+	res := conn.Model(NewCommonShard()).WithContext(ctx).Where("id = ?", m.Id).Delete(NewCommonShard())
+	if err := res.Error; err != nil {
+		return err
+	}
+
+	return nil
 }

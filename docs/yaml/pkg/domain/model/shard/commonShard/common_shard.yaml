@@ -27,9 +27,3 @@ structure:
     nullable: false
     number: 4
     comment: "シャードされたユーザー数"
-primary:
-  - Id
-unique:
-  - Id
-index:
-  - ShardKey

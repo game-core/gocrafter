@@ -39,3 +39,9 @@ structure:
     nullable: false
     number: 6
     comment: "更新日時"
+primary:
+  - Id
+unique:
+  - Id
+index:
+  - ShardKey
