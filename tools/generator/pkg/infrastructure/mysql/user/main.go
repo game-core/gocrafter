@@ -35,6 +35,7 @@ type TemplateStruct struct {
 	Comment    string
 	Script     string
 	Import     string
+	Mock       string
 }
 
 var importCode = ""

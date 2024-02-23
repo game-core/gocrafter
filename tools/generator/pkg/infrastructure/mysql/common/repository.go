@@ -20,6 +20,7 @@ func NewRepository() *Repository {
 }
 
 const repositoryTemplate = `
+{{.Mock}}
 // Package {{.Package}} {{.Comment}}
 package {{.Package}}
 
@@ -104,12 +105,23 @@ func (s *Repository) createTemplate(yamlStruct *YamlStruct, outputFile *os.File)
 			Comment:    yamlStruct.Comment,
 			Script:     s.createScript(yamlStruct),
 			Import:     importCode,
+			Mock:       createMock(yamlStruct),
 		},
 	); err != nil {
 		return err
 	}
 
 	return nil
+}
+
+// createMock mockを作成する
+func createMock(yamlStruct *YamlStruct) string {
+	return fmt.Sprintf(
+		"//go:generate mockgen -source=./%s_repository.gen.go -destination=./%s_repository_mock.gen.go -package=%s",
+		internal.UpperCamelToSnake(yamlStruct.Name),
+		internal.UpperCamelToSnake(yamlStruct.Name),
+		internal.UpperCamelToCamel(yamlStruct.Package),
+	)
 }
 
 // createScript スクリプトを作成する

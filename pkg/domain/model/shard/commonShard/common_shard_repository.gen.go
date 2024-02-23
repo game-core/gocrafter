@@ -1,4 +1,6 @@
 // Package commonShard シャード管理
+//
+//go:generate mockgen -source=./common_shard_repository.gen.go -destination=./common_shard_repository_mock.gen.go -package=commonShard
 package commonShard
 
 import (

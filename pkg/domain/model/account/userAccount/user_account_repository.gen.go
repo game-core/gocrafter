@@ -1,4 +1,6 @@
 // Package userAccount ユーザーアカウント
+//
+//go:generate mockgen -source=./user_account_repository.gen.go -destination=./user_account_repository_mock.gen.go -package=userAccount
 package userAccount
 
 import (

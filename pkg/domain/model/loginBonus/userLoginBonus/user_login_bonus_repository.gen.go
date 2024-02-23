@@ -1,4 +1,6 @@
 // Package userLoginBonus ユーザーログインボーナス
+//
+//go:generate mockgen -source=./user_login_bonus_repository.gen.go -destination=./user_login_bonus_repository_mock.gen.go -package=userLoginBonus
 package userLoginBonus
 
 import (

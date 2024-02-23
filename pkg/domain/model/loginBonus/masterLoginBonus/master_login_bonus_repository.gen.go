@@ -1,4 +1,6 @@
 // Package masterLoginBonus ログインボーナス
+//
+//go:generate mockgen -source=./master_login_bonus_repository.gen.go -destination=./master_login_bonus_repository_mock.gen.go -package=masterLoginBonus
 package masterLoginBonus
 
 import (
