@@ -34,16 +34,6 @@ func NewAccountService(
 
 // Create アカウントを作成する
 func (s *accountService) Create(ctx context.Context, tx *gorm.DB, req *AccountCreateRequest) (*AccountCreateResponse, error) {
-	shardKey, err := s.shardService.GetShardKeyAndUpdate(ctx, nil)
-	if err != nil {
-		return nil, fmt.Errorf("failed to s.shardService.GetShardKeyAndUpdate: %s", err)
-	}
-
-	userId, err := internal.GenerateUserID(shardKey)
-	if err != nil {
-		return nil, fmt.Errorf("failed to internal.GenerateUserID: %s", err)
-	}
-
 	password, err := internal.GeneratePassword()
 	if err != nil {
 		return nil, fmt.Errorf("failed to internal.GeneratePassword: %s", err)
@@ -54,7 +44,7 @@ func (s *accountService) Create(ctx context.Context, tx *gorm.DB, req *AccountCr
 		return nil, fmt.Errorf("failed to internal.GenerateHashPassword: %s", err)
 	}
 
-	userAccount, err := s.userAccountRepository.Create(ctx, tx, userAccount.SetUserAccount(userId, req.Name, hashPassword, time.Now(), time.Now()))
+	userAccount, err := s.userAccountRepository.Create(ctx, tx, userAccount.SetUserAccount(req.UserId, req.Name, hashPassword, time.Now(), time.Now()))
 	if err != nil {
 		return nil, fmt.Errorf("failed to s.userAccountRepository.Create: %s", err)
 	}

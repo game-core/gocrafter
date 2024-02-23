@@ -5,11 +5,11 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/game-core/gocrafter/internal"
 	"github.com/patrickmn/go-cache"
 	"gorm.io/gorm"
 
 	"github.com/game-core/gocrafter/configs/database"
-	"github.com/game-core/gocrafter/internal"
 	"github.com/game-core/gocrafter/pkg/domain/model/loginBonus/masterLoginBonus"
 )
 

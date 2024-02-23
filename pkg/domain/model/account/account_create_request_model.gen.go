@@ -4,7 +4,8 @@ package account
 type AccountCreateRequests []*AccountCreateRequest
 
 type AccountCreateRequest struct {
-	Name string
+	UserId string
+	Name   string
 }
 
 func NewAccountCreateRequest() *AccountCreateRequest {
@@ -15,8 +16,9 @@ func NewAccountCreateRequests() AccountCreateRequests {
 	return AccountCreateRequests{}
 }
 
-func SetAccountCreateRequest(name string) *AccountCreateRequest {
+func SetAccountCreateRequest(userId string, name string) *AccountCreateRequest {
 	return &AccountCreateRequest{
-		Name: name,
+		UserId: userId,
+		Name:   name,
 	}
 }

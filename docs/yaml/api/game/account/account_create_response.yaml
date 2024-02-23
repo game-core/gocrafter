@@ -3,9 +3,9 @@ package: account
 comment: "アカウント作成レスポンス"
 
 structure:
-  UserAccounts:
-    name: user_accounts
-    type: structures
+  UserAccount:
+    name: user_account
+    type: structure
     nullable: false
     number: 1
     comment: "ユーザーアカウント"
