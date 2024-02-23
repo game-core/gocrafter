@@ -1,12 +1,9 @@
-//go:generate go run .
-
 package main
 
 import (
 	"fmt"
 	"gopkg.in/yaml.v3"
 	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
 	"sort"
@@ -16,7 +13,7 @@ import (
 	"github.com/game-core/gocrafter/internal"
 )
 
-const templateCode = `
+const tableTemplate = `
 // Package {{.Package}} {{.Comment}}
 package {{.Package}}
 
@@ -29,46 +26,27 @@ type {{.PluralName}} []*{{.Name}}
 {{.Script}}
 `
 
-var importCode = ""
+type Table struct{}
 
-type YamlStruct struct {
-	Name       string               `yaml:"name"`
-	Package    string               `yaml:"package"`
-	Comment    string               `yaml:"comment"`
-	Structures map[string]Structure `yaml:"structure"`
-}
-
-type Structure struct {
-	Name     string `yaml:"name"`
-	Type     string `yaml:"type"`
-	Package  string `yaml:"package"`
-	Nullable bool   `yaml:"nullable"`
-	Number   int    `yaml:"number"`
-	Comment  string `yaml:"comment"`
-}
-
-type TemplateStruct struct {
-	Package    string
-	Name       string
-	PluralName string
-	Comment    string
-	Script     string
-	Import     string
+func NewTable() *Table {
+	return &Table{}
 }
 
 // generate 生成する
-func generate(file string, base string) error {
-	yamlStruct, err := getYamlStruct(file)
+func (s *Table) generate(file string, base string) error {
+	importCode = ""
+
+	yamlStruct, err := s.getYamlStruct(file)
 	if err != nil {
 		return err
 	}
 
-	outputDir := filepath.Join(base, strings.Replace(filepath.Dir(file), "/../../docs/yaml", "", -1))
+	outputDir := filepath.Join(base, yamlStruct.Package)
 	if err := os.MkdirAll(outputDir, os.ModePerm); err != nil {
 		return err
 	}
 
-	if err := createOutputFile(yamlStruct, getOutputFileName(outputDir, filepath.Base(file[:len(file)-len(filepath.Ext(file))]))); err != nil {
+	if err := s.createOutputFile(yamlStruct, s.getOutputFileName(outputDir, internal.UpperCamelToSnake(yamlStruct.Name))); err != nil {
 		return err
 	}
 
@@ -76,7 +54,7 @@ func generate(file string, base string) error {
 }
 
 // getYamlStruct yaml構造体を取得する
-func getYamlStruct(file string) (*YamlStruct, error) {
+func (s *Table) getYamlStruct(file string) (*YamlStruct, error) {
 	yamlData, err := ioutil.ReadFile(file)
 	if err != nil {
 		return nil, err
@@ -91,18 +69,18 @@ func getYamlStruct(file string) (*YamlStruct, error) {
 }
 
 // getOutputFileName ファイル名を取得する
-func getOutputFileName(dir, name string) string {
+func (s *Table) getOutputFileName(dir, name string) string {
 	return filepath.Join(dir, fmt.Sprintf("%s.gen.go", internal.UpperCamelToSnake(name)))
 }
 
 // createOutputFile ファイルを作成する
-func createOutputFile(yamlStruct *YamlStruct, outputFileName string) error {
+func (s *Table) createOutputFile(yamlStruct *YamlStruct, outputFileName string) error {
 	outputFile, err := os.Create(outputFileName)
 	if err != nil {
 		return err
 	}
 
-	if err := createTemplate(yamlStruct, outputFile); err != nil {
+	if err := s.createTemplate(yamlStruct, outputFile); err != nil {
 		return err
 	}
 
@@ -110,21 +88,21 @@ func createOutputFile(yamlStruct *YamlStruct, outputFileName string) error {
 }
 
 // createTemplate テンプレートを作成する
-func createTemplate(yamlStruct *YamlStruct, outputFile *os.File) error {
-	tmp, err := template.New("templateCode").Parse(templateCode)
+func (s *Table) createTemplate(yamlStruct *YamlStruct, outputFile *os.File) error {
+	tmp, err := template.New("tableTemplate").Parse(tableTemplate)
 	if err != nil {
 		return err
 	}
 
 	if err := tmp.ExecuteTemplate(
 		outputFile,
-		"templateCode",
+		"tableTemplate",
 		TemplateStruct{
 			Name:       yamlStruct.Name,
 			Package:    yamlStruct.Package,
 			PluralName: internal.SingularToPlural(yamlStruct.Name),
 			Comment:    yamlStruct.Comment,
-			Script:     createScript(yamlStruct),
+			Script:     s.createScript(yamlStruct),
 			Import:     importCode,
 		},
 	); err != nil {
@@ -135,14 +113,14 @@ func createTemplate(yamlStruct *YamlStruct, outputFile *os.File) error {
 }
 
 // createScript スクリプトを作成する
-func createScript(yamlStruct *YamlStruct) string {
+func (s *Table) createScript(yamlStruct *YamlStruct) string {
 	var fieldScript []string
 	var paramScript []string
 	var returnScript []string
 
-	for _, field := range getStructure(yamlStruct.Structures) {
-		fieldScript = append(fieldScript, fmt.Sprintf("%s %s", internal.SnakeToUpperCamel(field.Name), getType(field)))
-		paramScript = append(paramScript, fmt.Sprintf("%s %s", internal.SnakeToCamel(field.Name), getType(field)))
+	for _, field := range s.getStructures(yamlStruct.Structures) {
+		fieldScript = append(fieldScript, fmt.Sprintf("%s %s", internal.SnakeToUpperCamel(field.Name), s.getType(field)))
+		paramScript = append(paramScript, fmt.Sprintf("%s %s", internal.SnakeToCamel(field.Name), s.getType(field)))
 		returnScript = append(returnScript, fmt.Sprintf("%s: %s,", internal.SnakeToUpperCamel(field.Name), internal.SnakeToCamel(field.Name)))
 	}
 
@@ -154,15 +132,15 @@ func createScript(yamlStruct *YamlStruct) string {
 		%s
 
 		%s`,
-		createStruct(yamlStruct.Name, strings.Join(fieldScript, "\n")),
-		createNew(yamlStruct.Name, internal.SingularToPlural(yamlStruct.Name)),
-		createSetter(yamlStruct.Name, strings.Join(paramScript, ","), strings.Join(returnScript, "\n")),
-		createTableNameScript(yamlStruct.Name),
+		s.createStruct(yamlStruct.Name, strings.Join(fieldScript, "\n")),
+		s.createNew(yamlStruct.Name, internal.SingularToPlural(yamlStruct.Name)),
+		s.createSetter(yamlStruct.Name, strings.Join(paramScript, ","), strings.Join(returnScript, "\n")),
+		s.createTableName(yamlStruct.Name),
 	)
 }
 
 // createStruct Structを作成する
-func createStruct(name string, fieldScript string) string {
+func (s *Table) createStruct(name string, fieldScript string) string {
 	return fmt.Sprintf(
 		`type %s struct {
 			%s
@@ -173,7 +151,7 @@ func createStruct(name string, fieldScript string) string {
 }
 
 // createNew Newを作成する
-func createNew(name, pluralName string) string {
+func (s *Table) createNew(name, pluralName string) string {
 	return fmt.Sprintf(
 		`func New%s() *%s {
 			return &%s{}
@@ -192,7 +170,7 @@ func createNew(name, pluralName string) string {
 }
 
 // createSetter Setterを作成する
-func createSetter(name, paramScript, returnScript string) string {
+func (s *Table) createSetter(name, paramScript, returnScript string) string {
 	return fmt.Sprintf(
 		`func Set%s(%s) *%s {
 			return &%s{
@@ -207,8 +185,8 @@ func createSetter(name, paramScript, returnScript string) string {
 	)
 }
 
-// createTableNameScript TableNameを作成する
-func createTableNameScript(name string) string {
+// createNameScript TableNameを作成する
+func (s *Table) createTableName(name string) string {
 	return fmt.Sprintf(
 		`func (t *%s) TableName() string {
 			return "%s"
@@ -218,14 +196,14 @@ func createTableNameScript(name string) string {
 	)
 }
 
-// getStructure フィールド構造体を取得する
-func getStructure(structures map[string]Structure) []*Structure {
+// getStructures フィールド構造体を取得する
+func (s *Table) getStructures(structures map[string]Structure) []*Structure {
 	var sortStructures []*Structure
-	for key, value := range structures {
+	for _, value := range structures {
 		sortStructures = append(
 			sortStructures,
 			&Structure{
-				Name:     key,
+				Name:     value.Name,
 				Type:     value.Type,
 				Package:  value.Package,
 				Nullable: value.Nullable,
@@ -235,15 +213,15 @@ func getStructure(structures map[string]Structure) []*Structure {
 		)
 	}
 
-	sort.SliceStable(sortStructures, func(i, j int) bool {
-		return structures[sortStructures[i].Name].Number < structures[sortStructures[j].Name].Number
+	sort.Slice(sortStructures, func(i, j int) bool {
+		return sortStructures[i].Number < sortStructures[j].Number
 	})
 
 	return sortStructures
 }
 
 // getType 型を取得する
-func getType(field *Structure) string {
+func (s *Table) getType(field *Structure) string {
 	var result string
 
 	switch field.Type {
@@ -266,8 +244,8 @@ func getType(field *Structure) string {
 		}
 	case "enum":
 		if field.Package != "" {
-			importCode = fmt.Sprintf("%s\n%s", importCode, fmt.Sprintf("\"github.com/game-core/gocrafter/pkg/domain/model/%s\"", field.Package))
-			result = fmt.Sprintf("%s.%s", internal.SnakeToCamel(field.Name), internal.SnakeToUpperCamel(field.Name))
+			importCode = fmt.Sprintf("%s\n%s", importCode, "github.com/game-core/gocrafter/pkg/domain/enum")
+			result = fmt.Sprintf("emun.%s", internal.SnakeToUpperCamel(field.Name))
 		} else {
 			result = internal.SnakeToUpperCamel(field.Name)
 		}
@@ -280,26 +258,4 @@ func getType(field *Structure) string {
 	}
 
 	return result
-}
-
-func main() {
-	yamls := "../../../../../../docs/yaml/pkg/infrastructure/mysql/master"
-	base := "../../../../../../pkg/infrastructure/mysql/master"
-
-	if err := filepath.Walk(yamls, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			log.Printf("error accessing path %s: %v", path, err)
-			return nil
-		}
-
-		if !info.IsDir() && strings.HasSuffix(info.Name(), ".yaml") {
-			if err := generate(path, base); err != nil {
-				log.Printf("failed to generate: %s", err)
-			}
-		}
-
-		return nil
-	}); err != nil {
-		log.Fatalf("failed to filepath.Walk: %s", err)
-	}
 }
