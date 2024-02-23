@@ -32,8 +32,13 @@ docker_gen_infra:
 	$(DOCKER_COMPOSE) exec generator goimports -w ./pkg/infrastructure
 	$(DOCKER_COMPOSE) exec generator goimports -w ./pkg/domain
 
+# sqlを生成
 docker_gen_sql:
 	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/sql/main.go
+
+# マイグレーション
+docker_migration:
+	$(DOCKER_COMPOSE) exec generator go run ./tools/migration/migration.go
 
 # fmt
 docker_fmt:

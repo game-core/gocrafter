@@ -143,7 +143,7 @@ func (s *Sql) createScript(yamlStruct *YamlStruct) string {
     %s
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`,
 		internal.UpperCamelToSnake(yamlStruct.Name),
-		strings.Join(s.createFields(yamlStruct), "\n"),
+		strings.Join(s.createFields(yamlStruct), ",\n"),
 	)
 }
 
@@ -155,7 +155,7 @@ func (s *Sql) createFields(yamlStruct *YamlStruct) []string {
 		fields = append(
 			fields,
 			fmt.Sprintf(
-				`%s%s %s %s %sCOMMENT "%s",`,
+				`%s%s %s %s %sCOMMENT "%s"`,
 				s.getSpace(i),
 				field.Name,
 				s.getType(field.Type),
