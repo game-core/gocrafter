@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
-	"github.com/game-core/gocrafter/internal"
-	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"sort"
 	"strings"
 	"text/template"
+
+	"github.com/game-core/gocrafter/internal"
+	"gopkg.in/yaml.v3"
 )
 
 type Repository struct{}

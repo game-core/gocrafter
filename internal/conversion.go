@@ -112,3 +112,85 @@ func convertSingularToPlural(s string) string {
 
 	return s + "s"
 }
+
+// PluralToSingular 複数形から単数形に変換
+func PluralToSingular(s string) string {
+	if s == "" {
+		return s
+	}
+
+	// 単語ごとに分割
+	words := strings.FieldsFunc(s, func(r rune) bool {
+		return r == '_' || r == '-'
+	})
+
+	// 最後の単語を単数形に変換
+	words[len(words)-1] = convertPluralToSingular(words[len(words)-1])
+
+	// 変換した単語を結合して返す
+	return returnToOriginalCase(s, strings.Join(words, "_"))
+}
+
+// convertPluralToSingular 単語ごとに複数形から単数形に変換
+func convertPluralToSingular(s string) string {
+	// 例外的な変換ルールの逆
+	irregularFormsReverse := map[string]string{
+		"people":    "person",
+		"children":  "child",
+		"oxen":      "ox",
+		"men":       "man",
+		"women":     "woman",
+		"teeth":     "tooth",
+		"feet":      "foot",
+		"geese":     "goose",
+		"cacti":     "cactus",
+		"fungi":     "fungus",
+		"foci":      "focus",
+		"data":      "datum",
+		"media":     "medium",
+		"analysis":  "analysis",
+		"basis":     "basis",
+		"diagnosis": "diagnosis",
+		"ellipsis":  "ellipsis",
+		"bonuses":   "bonus",
+		"schedules": "schedule",
+	}
+
+	// すでに単数形の場合はそのまま返す
+	if val, ok := irregularFormsReverse[s]; ok {
+		return val
+	}
+
+	// 通常の変換ルールの逆
+	if strings.HasSuffix(s, "ies") && len(s) > 3 && !strings.ContainsAny(string(s[len(s)-4]), "aeiouy") {
+		return s[:len(s)-3] + "y"
+	} else if strings.HasSuffix(s, "es") && len(s) > 2 && !strings.ContainsAny(string(s[len(s)-3]), "aeiouy") {
+		return s[:len(s)-2]
+	} else if strings.HasSuffix(s, "s") && len(s) > 1 {
+		return s[:len(s)-1]
+	}
+
+	return s
+}
+
+// returnToOriginalCase 文字列を元のケースに戻す
+func returnToOriginalCase(original string, converted string) string {
+	if IsCamelCase(original) {
+		return SnakeToCamel(converted)
+	} else if IsSnakeCase(original) {
+		return converted
+	}
+
+	// 他の形式に対する判定や変換ルールを追加する必要があればここに追加
+	return converted
+}
+
+// IsCamelCase キャメルケースかどうかを判定
+func IsCamelCase(s string) bool {
+	return strings.IndexFunc(s, unicode.IsUpper) != -1
+}
+
+// IsSnakeCase スネークケースかどうかを判定
+func IsSnakeCase(s string) bool {
+	return strings.Contains(s, "_")
+}

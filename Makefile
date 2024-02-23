@@ -9,6 +9,10 @@ docker_up:
 docker_gen:
 	$(DOCKER_COMPOSE) exec generator bash
 
+# appを生成
+docker_gen_app:
+	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/app/game/main.go
+
 # domainを生成
 docker_gen_domain:
 	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/pkg/domain/enum/main.go
@@ -22,3 +26,6 @@ docker_gen_infra:
 	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/pkg/infrastructure/mysql/user/main.go
 	$(DOCKER_COMPOSE) exec generator goimports -w ./pkg/infrastructure
 	$(DOCKER_COMPOSE) exec generator goimports -w ./pkg/domain
+
+docker_fmt:
+	$(DOCKER_COMPOSE) exec generator goimports -w .
