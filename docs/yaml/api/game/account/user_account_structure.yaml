@@ -1,5 +1,5 @@
 name: UserAccount
-package: userAccount
+package: account
 comment: "ユーザーアカウント"
 
 structure:
