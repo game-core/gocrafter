@@ -65,6 +65,65 @@ func (mr *MockCommonShardRepositoryMockRecorder) CreateList(ctx, tx, ms interfac
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateList", reflect.TypeOf((*MockCommonShardRepository)(nil).CreateList), ctx, tx, ms)
 }
 
+// Delete mocks base method.
+func (m_2 *MockCommonShardRepository) Delete(ctx context.Context, tx *gorm.DB, m *CommonShard) error {
+	m_2.ctrl.T.Helper()
+	ret := m_2.ctrl.Call(m_2, "Delete", ctx, tx, m)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Delete indicates an expected call of Delete.
+func (mr *MockCommonShardRepositoryMockRecorder) Delete(ctx, tx, m interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockCommonShardRepository)(nil).Delete), ctx, tx, m)
+}
+
+// FinOrNilByShardKey mocks base method.
+func (m *MockCommonShardRepository) FinOrNilByShardKey(ctx context.Context, shardKey string) (*CommonShard, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FinOrNilByShardKey", ctx, shardKey)
+	ret0, _ := ret[0].(*CommonShard)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FinOrNilByShardKey indicates an expected call of FinOrNilByShardKey.
+func (mr *MockCommonShardRepositoryMockRecorder) FinOrNilByShardKey(ctx, shardKey interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FinOrNilByShardKey", reflect.TypeOf((*MockCommonShardRepository)(nil).FinOrNilByShardKey), ctx, shardKey)
+}
+
+// Find mocks base method.
+func (m *MockCommonShardRepository) Find(ctx context.Context, id int64) (*CommonShard, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Find", ctx, id)
+	ret0, _ := ret[0].(*CommonShard)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Find indicates an expected call of Find.
+func (mr *MockCommonShardRepositoryMockRecorder) Find(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Find", reflect.TypeOf((*MockCommonShardRepository)(nil).Find), ctx, id)
+}
+
+// FindByShardKey mocks base method.
+func (m *MockCommonShardRepository) FindByShardKey(ctx context.Context, shardKey string) (*CommonShard, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindByShardKey", ctx, shardKey)
+	ret0, _ := ret[0].(*CommonShard)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindByShardKey indicates an expected call of FindByShardKey.
+func (mr *MockCommonShardRepositoryMockRecorder) FindByShardKey(ctx, shardKey interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByShardKey", reflect.TypeOf((*MockCommonShardRepository)(nil).FindByShardKey), ctx, shardKey)
+}
+
 // FindList mocks base method.
 func (m *MockCommonShardRepository) FindList(ctx context.Context) (CommonShards, error) {
 	m.ctrl.T.Helper()
@@ -78,4 +137,49 @@ func (m *MockCommonShardRepository) FindList(ctx context.Context) (CommonShards,
 func (mr *MockCommonShardRepositoryMockRecorder) FindList(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindList", reflect.TypeOf((*MockCommonShardRepository)(nil).FindList), ctx)
+}
+
+// FindListByShardKey mocks base method.
+func (m *MockCommonShardRepository) FindListByShardKey(ctx context.Context, shardKey string) (CommonShards, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindListByShardKey", ctx, shardKey)
+	ret0, _ := ret[0].(CommonShards)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindListByShardKey indicates an expected call of FindListByShardKey.
+func (mr *MockCommonShardRepositoryMockRecorder) FindListByShardKey(ctx, shardKey interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindListByShardKey", reflect.TypeOf((*MockCommonShardRepository)(nil).FindListByShardKey), ctx, shardKey)
+}
+
+// FindOrNil mocks base method.
+func (m *MockCommonShardRepository) FindOrNil(ctx context.Context, id int64) (*CommonShard, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindOrNil", ctx, id)
+	ret0, _ := ret[0].(*CommonShard)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindOrNil indicates an expected call of FindOrNil.
+func (mr *MockCommonShardRepositoryMockRecorder) FindOrNil(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNil", reflect.TypeOf((*MockCommonShardRepository)(nil).FindOrNil), ctx, id)
+}
+
+// Update mocks base method.
+func (m_2 *MockCommonShardRepository) Update(ctx context.Context, tx *gorm.DB, m *CommonShard) (*CommonShard, error) {
+	m_2.ctrl.T.Helper()
+	ret := m_2.ctrl.Call(m_2, "Update", ctx, tx, m)
+	ret0, _ := ret[0].(*CommonShard)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Update indicates an expected call of Update.
+func (mr *MockCommonShardRepositoryMockRecorder) Update(ctx, tx, m interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockCommonShardRepository)(nil).Update), ctx, tx, m)
 }

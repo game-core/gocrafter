@@ -1,4 +1,4 @@
-//go:generate mockgen -source=./service.go -destination=./service_mock.gen.go -package=service
+//go:generate mockgen -source=./service.go -destination=./service_mock.go -package=transaction
 package transaction
 
 import (
