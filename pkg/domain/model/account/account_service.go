@@ -1,14 +1,15 @@
+//go:generate mockgen -source=./account_service.gen.go -destination=./account_service_mock.gen.go -package=account
 package account
 
 import (
 	"context"
 
-	"github.com/game-core/gocrafter/internal/tokens"
 	"gorm.io/gorm"
 
 	"github.com/game-core/gocrafter/internal/errors"
 	"github.com/game-core/gocrafter/internal/keys"
 	"github.com/game-core/gocrafter/internal/times"
+	"github.com/game-core/gocrafter/internal/tokens"
 	"github.com/game-core/gocrafter/pkg/domain/model/account/userAccount"
 	"github.com/game-core/gocrafter/pkg/domain/model/shard"
 )
