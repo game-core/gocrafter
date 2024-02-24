@@ -3,11 +3,11 @@ package commonShard
 
 import (
 	"context"
-	"fmt"
 
 	"gorm.io/gorm"
 
 	"github.com/game-core/gocrafter/configs/database"
+	"github.com/game-core/gocrafter/internal/errors"
 	"github.com/game-core/gocrafter/pkg/domain/model/shard/commonShard"
 )
 
@@ -30,7 +30,7 @@ func (s *commonShardDao) Find(ctx context.Context, id int64) (*commonShard.Commo
 		return nil, err
 	}
 	if res.RowsAffected == 0 {
-		return nil, fmt.Errorf("record does not exist")
+		return nil, errors.NewError("record does not exist")
 	}
 
 	return commonShard.SetCommonShard(t.Id, t.ShardKey, t.Name, t.Count), nil
@@ -56,7 +56,7 @@ func (s *commonShardDao) FindByShardKey(ctx context.Context, shardKey string) (*
 		return nil, err
 	}
 	if res.RowsAffected == 0 {
-		return nil, fmt.Errorf("record does not exist")
+		return nil, errors.NewError("record does not exist")
 	}
 
 	return commonShard.SetCommonShard(t.Id, t.ShardKey, t.Name, t.Count), nil

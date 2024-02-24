@@ -3,11 +3,11 @@ package userAccount
 
 import (
 	"context"
-	"fmt"
 
 	"gorm.io/gorm"
 
 	"github.com/game-core/gocrafter/configs/database"
+	"github.com/game-core/gocrafter/internal/errors"
 	"github.com/game-core/gocrafter/internal/keys"
 	"github.com/game-core/gocrafter/pkg/domain/model/account/userAccount"
 )
@@ -29,7 +29,7 @@ func (s *userAccountDao) Find(ctx context.Context, userId string) (*userAccount.
 		return nil, err
 	}
 	if res.RowsAffected == 0 {
-		return nil, fmt.Errorf("record does not exist")
+		return nil, errors.NewError("record does not exist")
 	}
 
 	return userAccount.SetUserAccount(t.UserId, t.Name, t.Password, t.LoginAt, t.LogoutAt), nil
@@ -94,7 +94,7 @@ func (s *userAccountDao) CreateList(ctx context.Context, tx *gorm.DB, ms userAcc
 	fms := ms[0]
 	for _, m := range ms {
 		if m.UserId != fms.UserId {
-			return nil, fmt.Errorf("userId is invalid")
+			return nil, errors.NewError("userId is invalid")
 		}
 	}
 

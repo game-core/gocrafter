@@ -10,6 +10,7 @@ import (
 
 	"github.com/game-core/gocrafter/configs/database"
 	"github.com/game-core/gocrafter/internal/cashes"
+	"github.com/game-core/gocrafter/internal/errors"
 	"github.com/game-core/gocrafter/pkg/domain/model/loginBonus/masterLoginBonus"
 )
 
@@ -41,7 +42,7 @@ func (s *masterLoginBonusDao) Find(ctx context.Context, id int64) (*masterLoginB
 		return nil, err
 	}
 	if res.RowsAffected == 0 {
-		return nil, fmt.Errorf("record does not exist")
+		return nil, errors.NewError("record does not exist")
 	}
 
 	m := masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterEventId, t.Name)
@@ -85,7 +86,7 @@ func (s *masterLoginBonusDao) FindByMasterEventId(ctx context.Context, masterEve
 		return nil, err
 	}
 	if res.RowsAffected == 0 {
-		return nil, fmt.Errorf("record does not exist")
+		return nil, errors.NewError("record does not exist")
 	}
 
 	m := masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterEventId, t.Name)

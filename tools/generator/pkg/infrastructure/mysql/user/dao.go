@@ -12,6 +12,7 @@ import (
 	"gopkg.in/yaml.v3"
 
 	"github.com/game-core/gocrafter/internal/changes"
+	"github.com/game-core/gocrafter/internal/errors"
 )
 
 const daoTemplate = `
@@ -27,6 +28,7 @@ import (
 	{{.Import}}
 	"github.com/game-core/gocrafter/configs/database"
 	"github.com/game-core/gocrafter/internal/keys"
+	"github.com/game-core/gocrafter/internal/errors"
 )
 
 type {{.CamelName}}Dao struct {
@@ -99,7 +101,7 @@ func (s *Dao) getDomainPath(name string) (string, error) {
 	}
 
 	if target == "" {
-		return "", fmt.Errorf("file does not exist")
+		return "", errors.NewError("file does not exist")
 	}
 
 	importPath := fmt.Sprintf("\"github.com/game-core/gocrafter/%s\"", strings.Replace(target, "../../../../../../", "", -1))
@@ -251,7 +253,7 @@ func (s *Dao) createFind(yamlStruct *YamlStruct, primaryFields []string) string 
 				return nil, err
 			}
 			if res.RowsAffected == 0 {
-				return nil, fmt.Errorf("record does not exist")
+				return nil, errors.NewError("record does not exist")
 			}
 
 			return %s, nil
@@ -313,7 +315,7 @@ func (s *Dao) createFindByIndex(yamlStruct *YamlStruct, indexFields []string) st
 				return nil, err
 			}
 			if res.RowsAffected == 0 {
-				return nil, fmt.Errorf("record does not exist")
+				return nil, errors.NewError("record does not exist")
 			}
 
 			return %s, nil
@@ -457,7 +459,7 @@ func (s *Dao) createCreateList(yamlStruct *YamlStruct) string {
 			fms := ms[0]
 			for _, m := range ms {
 				if m.UserId != fms.UserId {
-					return nil, fmt.Errorf("userId is invalid")
+					return nil, errors.NewError("userId is invalid")
 				}
 			}
 

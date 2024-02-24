@@ -3,11 +3,11 @@ package userLoginBonus
 
 import (
 	"context"
-	"fmt"
 
 	"gorm.io/gorm"
 
 	"github.com/game-core/gocrafter/configs/database"
+	"github.com/game-core/gocrafter/internal/errors"
 	"github.com/game-core/gocrafter/internal/keys"
 	"github.com/game-core/gocrafter/pkg/domain/model/loginBonus/userLoginBonus"
 )
@@ -29,7 +29,7 @@ func (s *userLoginBonusDao) Find(ctx context.Context, userId string, masterLogin
 		return nil, err
 	}
 	if res.RowsAffected == 0 {
-		return nil, fmt.Errorf("record does not exist")
+		return nil, errors.NewError("record does not exist")
 	}
 
 	return userLoginBonus.SetUserLoginBonus(t.UserId, t.MasterLoginBonusId, t.ReceivedAt), nil
@@ -55,7 +55,7 @@ func (s *userLoginBonusDao) FindByUserId(ctx context.Context, userId string) (*u
 		return nil, err
 	}
 	if res.RowsAffected == 0 {
-		return nil, fmt.Errorf("record does not exist")
+		return nil, errors.NewError("record does not exist")
 	}
 
 	return userLoginBonus.SetUserLoginBonus(t.UserId, t.MasterLoginBonusId, t.ReceivedAt), nil
@@ -68,7 +68,7 @@ func (s *userLoginBonusDao) FindByMasterLoginBonusIdAndUserId(ctx context.Contex
 		return nil, err
 	}
 	if res.RowsAffected == 0 {
-		return nil, fmt.Errorf("record does not exist")
+		return nil, errors.NewError("record does not exist")
 	}
 
 	return userLoginBonus.SetUserLoginBonus(t.UserId, t.MasterLoginBonusId, t.ReceivedAt), nil
@@ -174,7 +174,7 @@ func (s *userLoginBonusDao) CreateList(ctx context.Context, tx *gorm.DB, ms user
 	fms := ms[0]
 	for _, m := range ms {
 		if m.UserId != fms.UserId {
-			return nil, fmt.Errorf("userId is invalid")
+			return nil, errors.NewError("userId is invalid")
 		}
 	}
 
