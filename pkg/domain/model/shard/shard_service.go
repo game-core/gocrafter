@@ -1,4 +1,4 @@
-//go:generate mockgen -source=./service.go -destination=./service_mock.go -package=shard
+//go:generate mockgen -source=./shard_service.go -destination=./shard_service_mock.gen.go -package=shard
 package shard
 
 import (
