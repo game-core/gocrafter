@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
-	"github.com/game-core/gocrafter/internal/changes"
-	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"sort"
 	"strings"
 	"text/template"
+
+	"github.com/game-core/gocrafter/internal/changes"
+	"gopkg.in/yaml.v3"
 )
 
 type Handler struct{}
@@ -158,6 +159,7 @@ func (s *Handler) getStructure(structures map[string]Structure) []*Structure {
 			&Structure{
 				Name:     value.Name,
 				Method:   value.Method,
+				Auth:     value.Auth,
 				Request:  value.Request,
 				Response: value.Response,
 				Number:   value.Number,

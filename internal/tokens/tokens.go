@@ -3,10 +3,11 @@ package tokens
 import (
 	"context"
 	"fmt"
-	"github.com/golang-jwt/jwt"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/golang-jwt/jwt"
 
 	"github.com/game-core/gocrafter/internal/errors"
 )

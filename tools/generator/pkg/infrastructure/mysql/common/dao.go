@@ -371,7 +371,7 @@ func (s *Dao) createFindList(yamlStruct *YamlStruct) string {
 	return fmt.Sprintf(
 		`func (s *%sDao) FindList(ctx context.Context) (%s.%s, error) {
 			ts := New%s()
-			res := s.ReadConn.WithContext(ctx).Find(ts)
+			res := s.ReadConn.WithContext(ctx).Find(&ts)
 			if err := res.Error; err != nil {
 				return nil, err
 			}
@@ -399,7 +399,7 @@ func (s *Dao) createFindListByIndex(yamlStruct *YamlStruct, indexFields []string
 	return fmt.Sprintf(
 		`func (s *%sDao) FindListBy%s(ctx context.Context, %s) (%s.%s, error) {
 			ts := New%s()
-			res := s.ReadConn.WithContext(ctx).%s.Find(ts)
+			res := s.ReadConn.WithContext(ctx).%s.Find(&ts)
 			if err := res.Error; err != nil {
 				return nil, err
 			}

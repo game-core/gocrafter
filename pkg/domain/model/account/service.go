@@ -14,6 +14,7 @@ import (
 
 type AccountService interface {
 	Create(ctx context.Context, tx *gorm.DB, uam *AccountCreateRequest) (*AccountCreateResponse, error)
+	GenerateUserID(ctx context.Context) (string, error)
 }
 
 type accountService struct {
@@ -50,4 +51,19 @@ func (s *accountService) Create(ctx context.Context, tx *gorm.DB, req *AccountCr
 	userAccount.Password = hashPassword
 
 	return SetAccountCreateResponse(userAccount), nil
+}
+
+// GenerateUserID ユーザーIDを生成する
+func (s *accountService) GenerateUserID(ctx context.Context) (string, error) {
+	shardKey, err := s.shardService.GetShardKeyAndUpdate(ctx, nil)
+	if err != nil {
+		return "", errors.NewMethodError("s.shardService.GetShardKeyAndUpdate", err)
+	}
+
+	userId, err := keys.GenerateUserID(shardKey)
+	if err != nil {
+		return "", errors.NewMethodError("keys.GenerateUserID", err)
+	}
+
+	return userId, nil
 }

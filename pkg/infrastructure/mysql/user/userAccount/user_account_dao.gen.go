@@ -50,7 +50,7 @@ func (s *userAccountDao) FindOrNil(ctx context.Context, userId string) (*userAcc
 
 func (s *userAccountDao) FindList(ctx context.Context, userId string) (userAccount.UserAccounts, error) {
 	ts := NewUserAccounts()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(ts)
+	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}

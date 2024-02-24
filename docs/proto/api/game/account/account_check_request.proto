@@ -1,10 +1,10 @@
-// アカウント作成リクエスト
+// アカウント確認リクエスト
 syntax = "proto3";
 
 package proto;
 
 option go_package = "api/game/presentation/server/account";
 
-message AccountCreateRequest {
-  string name = 1;
+message AccountCheckRequest {
+  string user_id = 1;
 }

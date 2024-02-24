@@ -369,7 +369,7 @@ func (s *Dao) createFindList(yamlStruct *YamlStruct) string {
 	return fmt.Sprintf(
 		`func (s *%sDao) FindList(ctx context.Context, userId string) (%s.%s, error) {
 			ts := New%s()
-			res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(ts)
+			res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(&ts)
 			if err := res.Error; err != nil {
 				return nil, err
 			}
@@ -397,7 +397,7 @@ func (s *Dao) createFindListByIndex(yamlStruct *YamlStruct, indexFields []string
 	return fmt.Sprintf(
 		`func (s *%sDao) FindListBy%s(ctx context.Context, %s) (%s.%s, error) {
 			ts := New%s()
-			res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).%s.Find(ts)
+			res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).%s.Find(&ts)
 			if err := res.Error; err != nil {
 				return nil, err
 			}

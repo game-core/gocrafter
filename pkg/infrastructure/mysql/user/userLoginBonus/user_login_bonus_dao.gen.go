@@ -102,7 +102,7 @@ func (s *userLoginBonusDao) FinOrNilByMasterLoginBonusIdAndUserId(ctx context.Co
 
 func (s *userLoginBonusDao) FindList(ctx context.Context, userId string) (userLoginBonus.UserLoginBonuses, error) {
 	ts := NewUserLoginBonuses()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(ts)
+	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -117,7 +117,7 @@ func (s *userLoginBonusDao) FindList(ctx context.Context, userId string) (userLo
 
 func (s *userLoginBonusDao) FindListByUserId(ctx context.Context, userId string) (userLoginBonus.UserLoginBonuses, error) {
 	ts := NewUserLoginBonuses()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(ts)
+	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -132,7 +132,7 @@ func (s *userLoginBonusDao) FindListByUserId(ctx context.Context, userId string)
 
 func (s *userLoginBonusDao) FindListByMasterLoginBonusIdAndUserId(ctx context.Context, userId string, masterLoginBonusId int64) (userLoginBonus.UserLoginBonuses, error) {
 	ts := NewUserLoginBonuses()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_login_bonus_id = ?", masterLoginBonusId).Find(ts)
+	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_login_bonus_id = ?", masterLoginBonusId).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}

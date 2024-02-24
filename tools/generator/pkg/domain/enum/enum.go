@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"sort"
 	"strings"
 	"text/template"
+
+	"gopkg.in/yaml.v3"
 
 	"github.com/game-core/gocrafter/internal/changes"
 )

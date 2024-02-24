@@ -77,7 +77,7 @@ func (s *commonShardDao) FinOrNilByShardKey(ctx context.Context, shardKey string
 
 func (s *commonShardDao) FindList(ctx context.Context) (commonShard.CommonShards, error) {
 	ts := NewCommonShards()
-	res := s.ReadConn.WithContext(ctx).Find(ts)
+	res := s.ReadConn.WithContext(ctx).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -92,7 +92,7 @@ func (s *commonShardDao) FindList(ctx context.Context) (commonShard.CommonShards
 
 func (s *commonShardDao) FindListByShardKey(ctx context.Context, shardKey string) (commonShard.CommonShards, error) {
 	ts := NewCommonShards()
-	res := s.ReadConn.WithContext(ctx).Where("shard_key = ?", shardKey).Find(ts)
+	res := s.ReadConn.WithContext(ctx).Where("shard_key = ?", shardKey).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}

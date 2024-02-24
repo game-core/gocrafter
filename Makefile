@@ -5,6 +5,16 @@ DOCKER_COMPOSE_TEST = docker compose -f docker-compose.test.yaml
 docker_up:
 	$(DOCKER_COMPOSE) up -d --build
 
+# DBに接続
+docker_db_user0:
+	$(DOCKER_COMPOSE) exec mysql mysql --host=localhost --user=mysql_user --password=mysql_password gocrafter_user_0
+docker_db_user1:
+	$(DOCKER_COMPOSE) exec mysql mysql --host=localhost --user=mysql_user --password=mysql_password gocrafter_user_1
+docker_db_master:
+	$(DOCKER_COMPOSE) exec mysql mysql --host=localhost --user=mysql_user --password=mysql_password gocrafter_master
+docker_db_common:
+	$(DOCKER_COMPOSE) exec mysql mysql --host=localhost --user=mysql_user --password=mysql_password gocrafter_common
+
 # ジェネレータに接続
 docker_gen:
 	$(DOCKER_COMPOSE) exec generator bash

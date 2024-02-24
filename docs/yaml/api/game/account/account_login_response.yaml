@@ -1,0 +1,11 @@
+name: AccountLoginResponse
+package: account
+comment: "アカウントログインレスポンス"
+
+structure:
+  UserAccount:
+    name: user_account
+    type: structure
+    nullable: true
+    number: 1
+    comment: "ユーザーアカウント"

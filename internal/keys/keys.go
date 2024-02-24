@@ -2,9 +2,10 @@ package keys
 
 import (
 	"fmt"
+	"strings"
+
 	gonanoid "github.com/matoous/go-nanoid/v2"
 	"golang.org/x/crypto/bcrypt"
-	"strings"
 )
 
 // GenerateUserID UserIDを生成する

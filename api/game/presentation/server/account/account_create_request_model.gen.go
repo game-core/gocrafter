@@ -1,9 +1,8 @@
 // Package account アカウント作成リクエスト
 package account
 
-func SetAccountCreateRequest(userId string, name string) *AccountCreateRequest {
+func SetAccountCreateRequest(name string) *AccountCreateRequest {
 	return &AccountCreateRequest{
-		UserId: userId,
-		Name:   name,
+		Name: name,
 	}
 }

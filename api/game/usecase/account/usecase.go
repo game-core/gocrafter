@@ -12,6 +12,8 @@ import (
 
 type AccountUsecase interface {
 	Create(ctx context.Context, req *accountServer.AccountCreateRequest) (*accountServer.AccountCreateResponse, error)
+	Login(ctx context.Context, req *accountServer.AccountLoginRequest) (*accountServer.AccountLoginResponse, error)
+	Check(ctx context.Context, req *accountServer.AccountCheckRequest) (*accountServer.AccountCheckResponse, error)
 }
 
 type accountUsecase struct {
@@ -31,8 +33,13 @@ func NewAccountUsecase(
 
 // Create アカウントを作成する
 func (s *accountUsecase) Create(ctx context.Context, req *accountServer.AccountCreateRequest) (*accountServer.AccountCreateResponse, error) {
+	userId, err := s.accountService.GenerateUserID(ctx)
+	if err != nil {
+		return nil, errors.NewMethodError("s.accountService.GenerateUserID", err)
+	}
+
 	// transaction
-	tx, err := s.transactionService.UserBegin(ctx, req.UserId)
+	tx, err := s.transactionService.UserBegin(ctx, userId)
 	if err != nil {
 		return nil, errors.NewMethodError("s.transactionService.UserBegin", err)
 	}
@@ -40,7 +47,7 @@ func (s *accountUsecase) Create(ctx context.Context, req *accountServer.AccountC
 		s.transactionService.UserEnd(ctx, tx, err)
 	}()
 
-	userAccount, err := s.accountService.Create(ctx, tx, accountService.SetAccountCreateRequest(req.UserId, req.Name))
+	userAccount, err := s.accountService.Create(ctx, tx, accountService.SetAccountCreateRequest(userId, req.Name))
 	if err != nil {
 		return nil, errors.NewMethodError("s.accountService.Create", err)
 	}
@@ -55,4 +62,23 @@ func (s *accountUsecase) Create(ctx context.Context, req *accountServer.AccountC
 			times.TimeToPb(&userAccount.UserAccount.LogoutAt),
 		),
 	), nil
+}
+
+// Login アカウントをログインする
+func (s *accountUsecase) Login(ctx context.Context, req *accountServer.AccountLoginRequest) (*accountServer.AccountLoginResponse, error) {
+	// transaction
+	tx, err := s.transactionService.UserBegin(ctx, req.UserId)
+	if err != nil {
+		return nil, errors.NewMethodError("s.transactionService.UserBegin", err)
+	}
+	defer func() {
+		s.transactionService.UserEnd(ctx, tx, err)
+	}()
+
+	return nil, nil
+}
+
+// Check アカウントを確認する
+func (s *accountUsecase) Check(ctx context.Context, req *accountServer.AccountCheckRequest) (*accountServer.AccountCheckResponse, error) {
+	return nil, nil
 }

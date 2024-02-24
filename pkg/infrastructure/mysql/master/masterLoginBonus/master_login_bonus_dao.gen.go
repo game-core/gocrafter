@@ -125,7 +125,7 @@ func (s *masterLoginBonusDao) FindList(ctx context.Context) (masterLoginBonus.Ma
 	}
 
 	ts := NewMasterLoginBonuses()
-	res := s.ReadConn.WithContext(ctx).Find(ts)
+	res := s.ReadConn.WithContext(ctx).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -148,7 +148,7 @@ func (s *masterLoginBonusDao) FindListByMasterEventId(ctx context.Context, maste
 	}
 
 	ts := NewMasterLoginBonuses()
-	res := s.ReadConn.WithContext(ctx).Where("master_event_id = ?", masterEventId).Find(ts)
+	res := s.ReadConn.WithContext(ctx).Where("master_event_id = ?", masterEventId).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}

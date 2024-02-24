@@ -11,3 +11,19 @@ structure:
     response: AccountCreateResponse
     number: 1
     comment: "アカウントを作成する"
+  Login:
+    name: login
+    method: unary
+    auth: false
+    request: AccountLoginRequest
+    response: AccountLoginResponse
+    number: 2
+    comment: "アカウントをログインする"
+  Check:
+    name: check
+    method: unary
+    auth: true
+    request: AccountCheckRequest
+    response: AccountCheckResponse
+    number: 2
+    comment: "アカウントを確認する"
