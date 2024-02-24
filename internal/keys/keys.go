@@ -2,7 +2,6 @@ package keys
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -11,6 +10,8 @@ import (
 	"github.com/golang-jwt/jwt"
 	gonanoid "github.com/matoous/go-nanoid/v2"
 	"golang.org/x/crypto/bcrypt"
+
+	"github.com/game-core/gocrafter/internal/errors"
 )
 
 // GenerateUserID UserIDを生成する
@@ -90,14 +91,14 @@ func CheckAuthToken(userId, token string) error {
 func CheckJwtClaims(ctx context.Context, userId string) error {
 	jwtClaims, ok := ctx.Value("jwtClaims").(map[string]interface{})
 	if !ok {
-		return fmt.Errorf("failed to get jwtClaims from context")
+		return errors.NewError("failed to get jwtClaims from context")
 	}
 	jwtUserId, ok := jwtClaims["userId"].(string)
 	if !ok {
-		return fmt.Errorf("failed to get userId from jwtClaims")
+		return errors.NewError("failed to get userId from jwtClaims")
 	}
 	if userId != jwtUserId {
-		return fmt.Errorf("userId is invalid")
+		return errors.NewError("userId is invalid")
 	}
 
 	return nil
@@ -118,12 +119,12 @@ func extractUserIDFromAuthToken(tokenString string) (string, error) {
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok || !token.Valid {
-		return "", errors.New("invalid token claims")
+		return "", errors.NewError("invalid token claims")
 	}
 
 	userId, ok := claims["userId"].(string)
 	if !ok {
-		return "", errors.New("userId not found in token claims")
+		return "", errors.NewError("userId not found in token claims")
 	}
 
 	return userId, nil
