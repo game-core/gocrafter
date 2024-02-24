@@ -56,6 +56,10 @@ func main() {
 			if err := NewSetter().generate(path, "../../../../api/game/presentation/server"); err != nil {
 				log.Printf("failed to NewSetter().generate: %s", err)
 			}
+
+			if err := NewHandler().generate(path, "../../../../api/game/presentation/handler"); err != nil {
+				log.Printf("failed to NewHandler().generate: %s", err)
+			}
 		}
 
 		return nil
