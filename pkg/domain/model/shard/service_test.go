@@ -2,7 +2,6 @@ package shard
 
 import (
 	"context"
-	"fmt"
 	"reflect"
 	"testing"
 
@@ -193,7 +192,7 @@ func TestShardService_GetShardKeyAndUpdate(t *testing.T) {
 				tx:  nil,
 			},
 			want:    "",
-			wantErr: fmt.Errorf("failed to s.commonShardRepository.FindList: test"),
+			wantErr: errors.NewMethodError("s.commonShardRepository.FindList", errors.NewTestError()),
 		},
 		{
 			name: "異常：common_shard does not exist",
@@ -216,7 +215,7 @@ func TestShardService_GetShardKeyAndUpdate(t *testing.T) {
 				tx:  nil,
 			},
 			want:    "",
-			wantErr: fmt.Errorf("common_shard does not exist"),
+			wantErr: errors.NewError("common_shard does not exist"),
 		},
 		{
 			name: "異常：s.commonShardRepository.Update",
@@ -267,7 +266,7 @@ func TestShardService_GetShardKeyAndUpdate(t *testing.T) {
 				tx:  nil,
 			},
 			want:    "",
-			wantErr: fmt.Errorf("failed to s.commonShardRepository.Update: test"),
+			wantErr: errors.NewMethodError("s.commonShardRepository.Update", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {

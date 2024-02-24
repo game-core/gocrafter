@@ -10,7 +10,7 @@ import (
 	"github.com/game-core/gocrafter/internal/keys"
 	"github.com/game-core/gocrafter/internal/times"
 	"github.com/game-core/gocrafter/pkg/domain/model/account/userAccount"
-	shardService "github.com/game-core/gocrafter/pkg/domain/model/shard"
+	"github.com/game-core/gocrafter/pkg/domain/model/shard"
 )
 
 type AccountService interface {
@@ -22,12 +22,12 @@ type AccountService interface {
 }
 
 type accountService struct {
-	shardService          shardService.ShardService
+	shardService          shard.ShardService
 	userAccountRepository userAccount.UserAccountRepository
 }
 
 func NewAccountService(
-	shardService shardService.ShardService,
+	shardService shard.ShardService,
 	userAccountRepository userAccount.UserAccountRepository,
 ) AccountService {
 	return &accountService{
