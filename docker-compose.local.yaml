@@ -38,6 +38,23 @@ services:
       mysql:
         condition: service_healthy
 
+  api-game:
+    container_name: gocrafter-api-game
+    env_file:
+      - .env.local
+    build:
+      target: dev
+      context: .
+      dockerfile: ./docker/api/game/Dockerfile
+    ports:
+      - "50051:50051"
+    volumes:
+      - ./:/go/src/app
+    tty: true
+    depends_on:
+      mysql:
+        condition: service_healthy
+
 volumes:
   mysql-local:
     driver: local

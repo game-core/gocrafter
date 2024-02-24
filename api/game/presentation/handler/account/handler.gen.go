@@ -4,15 +4,16 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/game-core/gocrafter/api/game/presentation/server/account"
 	accountUsecase "github.com/game-core/gocrafter/api/game/usecase/account"
 )
 
 type AccountHandler interface {
-	AccountServer
+	account.AccountServer
 }
 
 type accountHandler struct {
-	UnimplementedAccountServer
+	account.UnimplementedAccountServer
 	accountUsecase accountUsecase.AccountUsecase
 }
 
@@ -25,7 +26,7 @@ func NewAccountHandler(
 }
 
 // Create アカウントを作成する
-func (s *accountHandler) Create(ctx context.Context, req *AccountCreateRequest) (*AccountCreateResponse, error) {
+func (s *accountHandler) Create(ctx context.Context, req *account.AccountCreateRequest) (*account.AccountCreateResponse, error) {
 	res, err := s.accountUsecase.Create(ctx, req)
 	if err != nil {
 		return nil, fmt.Errorf("s.accountUsecase.Create: %s", err)

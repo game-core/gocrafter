@@ -21,15 +21,21 @@ structure:
     nullable: false
     number: 3
     comment: "パスワード"
+  Token:
+    name: token
+    type: string
+    nullable: false
+    number: 4
+    comment: "トークン"
   LoginAt:
     name: login_at
     type: time
     nullable: false
-    number: 4
+    number: 5
     comment: "ログイン日時"
   LogoutAt:
     name: logout_at
     type: time
     nullable: false
-    number: 5
+    number: 6
     comment: "ログアウト日時"

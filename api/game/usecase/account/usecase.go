@@ -50,6 +50,7 @@ func (s *accountUsecase) Create(ctx context.Context, req *accountServer.AccountC
 			userAccount.UserAccount.UserId,
 			userAccount.UserAccount.Name,
 			userAccount.UserAccount.Password,
+			"",
 			internal.TimeToPb(&userAccount.UserAccount.LoginAt),
 			internal.TimeToPb(&userAccount.UserAccount.LogoutAt),
 		),
