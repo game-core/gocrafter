@@ -12,6 +12,7 @@ structure:
   UserAccount:
     name: user_account
     type: structure
+    package: account/userAccount
     nullable: true
     number: 2
     comment: "ユーザーアカウント"

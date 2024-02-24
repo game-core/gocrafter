@@ -9,6 +9,7 @@ import (
 	"github.com/game-core/gocrafter/configs/database"
 
 	accountHandler "github.com/game-core/gocrafter/api/game/presentation/handler/account"
+	authInterceptor "github.com/game-core/gocrafter/api/game/presentation/interceptor/auth"
 	accountUsecase "github.com/game-core/gocrafter/api/game/usecase/account"
 	accountService "github.com/game-core/gocrafter/pkg/domain/model/account"
 	shardService "github.com/game-core/gocrafter/pkg/domain/model/shard"
@@ -19,6 +20,13 @@ import (
 	userAccountDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userAccount"
 	userTransactionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userTransaction"
 )
+
+func InitializeAuthInterceptor() authInterceptor.AuthInterceptor {
+	wire.Build(
+		authInterceptor.NewAuthInterceptor,
+	)
+	return nil
+}
 
 func InitializeAccountHandler() accountHandler.AccountHandler {
 	wire.Build(

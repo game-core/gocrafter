@@ -11,9 +11,14 @@ import (
 )
 
 func Router(lis net.Listener) {
+	// DI
 	accountHandler := di.InitializeAccountHandler()
+	authInterceptor := di.InitializeAuthInterceptor()
 
-	s := grpc.NewServer()
+	// Server
+	s := grpc.NewServer(
+		grpc.UnaryInterceptor(authInterceptor.JwtAuth),
+	)
 
 	account.RegisterAccountServer(s, accountHandler)
 

@@ -1,6 +1,6 @@
-name: UserAccount
+name: AccountLoginRequest
 package: account
-comment: "ユーザーアカウント"
+comment: "アカウントログインリクエスト"
 
 structure:
   UserId:
@@ -21,15 +21,3 @@ structure:
     nullable: false
     number: 3
     comment: "パスワード"
-  LoginAt:
-    name: login_at
-    type: time
-    nullable: false
-    number: 4
-    comment: "ログイン日時"
-  LogoutAt:
-    name: logout_at
-    type: time
-    nullable: false
-    number: 5
-    comment: "ログアウト日時"

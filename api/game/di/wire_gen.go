@@ -8,6 +8,7 @@ package di
 
 import (
 	"github.com/game-core/gocrafter/api/game/presentation/handler/account"
+	"github.com/game-core/gocrafter/api/game/presentation/interceptor/auth"
 	account2 "github.com/game-core/gocrafter/api/game/usecase/account"
 	"github.com/game-core/gocrafter/configs/database"
 	account3 "github.com/game-core/gocrafter/pkg/domain/model/account"
@@ -21,6 +22,11 @@ import (
 )
 
 // Injectors from wire.go:
+
+func InitializeAuthInterceptor() auth.AuthInterceptor {
+	authInterceptor := auth.NewAuthInterceptor()
+	return authInterceptor
+}
 
 func InitializeAccountHandler() account.AccountHandler {
 	accountUsecase := InitializeAccountUsecase()

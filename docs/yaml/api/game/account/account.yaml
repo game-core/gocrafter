@@ -25,5 +25,5 @@ structure:
     auth: true
     request: AccountCheckRequest
     response: AccountCheckResponse
-    number: 2
+    number: 3
     comment: "アカウントを確認する"

@@ -2,7 +2,6 @@ package account
 
 import (
 	"context"
-
 	accountServer "github.com/game-core/gocrafter/api/game/presentation/server/account"
 	"github.com/game-core/gocrafter/internal/errors"
 	"github.com/game-core/gocrafter/internal/times"
@@ -47,19 +46,18 @@ func (s *accountUsecase) Create(ctx context.Context, req *accountServer.AccountC
 		s.transactionService.UserEnd(ctx, tx, err)
 	}()
 
-	userAccount, err := s.accountService.Create(ctx, tx, accountService.SetAccountCreateRequest(userId, req.Name))
+	result, err := s.accountService.Create(ctx, tx, accountService.SetAccountCreateRequest(userId, req.Name))
 	if err != nil {
 		return nil, errors.NewMethodError("s.accountService.Create", err)
 	}
 
 	return accountServer.SetAccountCreateResponse(
 		accountServer.SetUserAccount(
-			userAccount.UserAccount.UserId,
-			userAccount.UserAccount.Name,
-			userAccount.UserAccount.Password,
-			"",
-			times.TimeToPb(&userAccount.UserAccount.LoginAt),
-			times.TimeToPb(&userAccount.UserAccount.LogoutAt),
+			result.UserAccount.UserId,
+			result.UserAccount.Name,
+			result.UserAccount.Password,
+			times.TimeToPb(&result.UserAccount.LoginAt),
+			times.TimeToPb(&result.UserAccount.LogoutAt),
 		),
 	), nil
 }
@@ -75,10 +73,37 @@ func (s *accountUsecase) Login(ctx context.Context, req *accountServer.AccountLo
 		s.transactionService.UserEnd(ctx, tx, err)
 	}()
 
-	return nil, nil
+	result, err := s.accountService.Login(ctx, tx, accountService.SetAccountLoginRequest(req.UserId, req.Name, req.Password))
+	if err != nil {
+		return nil, errors.NewMethodError("s.accountService.Login", err)
+	}
+
+	return accountServer.SetAccountLoginResponse(
+		result.Token,
+		accountServer.SetUserAccount(
+			result.UserAccount.UserId,
+			result.UserAccount.Name,
+			result.UserAccount.Password,
+			times.TimeToPb(&result.UserAccount.LoginAt),
+			times.TimeToPb(&result.UserAccount.LogoutAt),
+		),
+	), nil
 }
 
 // Check アカウントを確認する
 func (s *accountUsecase) Check(ctx context.Context, req *accountServer.AccountCheckRequest) (*accountServer.AccountCheckResponse, error) {
-	return nil, nil
+	result, err := s.accountService.Check(ctx, accountService.SetAccountCheckRequest(req.UserId))
+	if err != nil {
+		return nil, errors.NewMethodError("s.accountService.Check", err)
+	}
+
+	return accountServer.SetAccountCheckResponse(
+		accountServer.SetUserAccount(
+			result.UserAccount.UserId,
+			result.UserAccount.Name,
+			result.UserAccount.Password,
+			times.TimeToPb(&result.UserAccount.LoginAt),
+			times.TimeToPb(&result.UserAccount.LogoutAt),
+		),
+	), nil
 }
