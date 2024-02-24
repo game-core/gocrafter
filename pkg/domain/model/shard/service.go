@@ -30,7 +30,7 @@ func NewShardService(
 func (s *shardService) GetShardKeyAndUpdate(ctx context.Context, tx *gorm.DB) (string, error) {
 	commonShard, err := s.commonShardRepository.FindList(ctx)
 	if err != nil {
-		return "", errors.NewMethodError("s.commonShardRepository.FindList: %s", err)
+		return "", errors.NewMethodError("s.commonShardRepository.FindList", err)
 	}
 	if len(commonShard) == 0 {
 		return "", errors.NewError("common_shard does not exist")

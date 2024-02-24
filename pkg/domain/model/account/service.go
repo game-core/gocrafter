@@ -93,6 +93,16 @@ func (s *accountService) Login(ctx context.Context, tx *gorm.DB, req *AccountLog
 	return SetAccountLoginResponse(token, result), nil
 }
 
+// Check ユーザーを確認する
+func (s *accountService) Check(ctx context.Context, req *AccountCheckRequest) (*AccountCheckResponse, error) {
+	userAccount, err := s.userAccountRepository.Find(ctx, req.UserId)
+	if err != nil {
+		return nil, errors.NewMethodError("s.userAccountRepository.Find", err)
+	}
+
+	return SetAccountCheckResponse(userAccount), err
+}
+
 // GenerateUserID ユーザーIDを生成する
 func (s *accountService) GenerateUserID(ctx context.Context) (string, error) {
 	shardKey, err := s.shardService.GetShardKeyAndUpdate(ctx, nil)
@@ -106,14 +116,4 @@ func (s *accountService) GenerateUserID(ctx context.Context) (string, error) {
 	}
 
 	return userId, nil
-}
-
-// Check ユーザーを確認する
-func (s *accountService) Check(ctx context.Context, req *AccountCheckRequest) (*AccountCheckResponse, error) {
-	userAccount, err := s.userAccountRepository.Find(ctx, req.UserId)
-	if err != nil {
-		return nil, errors.NewMethodError("s.userAccountRepository.Find", err)
-	}
-
-	return SetAccountCheckResponse(userAccount), err
 }

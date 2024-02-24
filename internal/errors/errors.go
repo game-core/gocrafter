@@ -15,6 +15,6 @@ func NewMethodError(method string, err error) error {
 }
 
 // NewTestError テストエラー
-func NewTestError(method string, err error) error {
-	return fmt.Errorf("test error")
+func NewTestError() error {
+	return fmt.Errorf("test")
 }
