@@ -2,9 +2,9 @@ package account
 
 import (
 	"context"
-	"fmt"
 
 	accountServer "github.com/game-core/gocrafter/api/game/presentation/server/account"
+	"github.com/game-core/gocrafter/internal/errors"
 	"github.com/game-core/gocrafter/internal/times"
 	accountService "github.com/game-core/gocrafter/pkg/domain/model/account"
 	transactionService "github.com/game-core/gocrafter/pkg/domain/model/transaction"
@@ -34,7 +34,7 @@ func (s *accountUsecase) Create(ctx context.Context, req *accountServer.AccountC
 	// transaction
 	tx, err := s.transactionService.UserBegin(ctx, req.UserId)
 	if err != nil {
-		return nil, fmt.Errorf("failed to s.transactionService.UserBegin: %s", err)
+		return nil, errors.NewMethodError("s.transactionService.UserBegin", err)
 	}
 	defer func() {
 		s.transactionService.UserEnd(ctx, tx, err)
@@ -42,7 +42,7 @@ func (s *accountUsecase) Create(ctx context.Context, req *accountServer.AccountC
 
 	userAccount, err := s.accountService.Create(ctx, tx, accountService.SetAccountCreateRequest(req.UserId, req.Name))
 	if err != nil {
-		return nil, fmt.Errorf("failed to s.accountService.Create: %s", err)
+		return nil, errors.NewMethodError("s.accountService.Create", err)
 	}
 
 	return accountServer.SetAccountCreateResponse(

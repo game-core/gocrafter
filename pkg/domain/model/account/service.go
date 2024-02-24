@@ -2,13 +2,12 @@ package account
 
 import (
 	"context"
-	"fmt"
 	"time"
-
-	"github.com/game-core/gocrafter/internal/keys"
 
 	"gorm.io/gorm"
 
+	"github.com/game-core/gocrafter/internal/errors"
+	"github.com/game-core/gocrafter/internal/keys"
 	"github.com/game-core/gocrafter/pkg/domain/model/account/userAccount"
 	shardService "github.com/game-core/gocrafter/pkg/domain/model/shard"
 )
@@ -36,17 +35,17 @@ func NewAccountService(
 func (s *accountService) Create(ctx context.Context, tx *gorm.DB, req *AccountCreateRequest) (*AccountCreateResponse, error) {
 	password, err := keys.GeneratePassword()
 	if err != nil {
-		return nil, fmt.Errorf("failed to internal.GeneratePassword: %s", err)
+		return nil, errors.NewMethodError("keys.GeneratePassword", err)
 	}
 
 	hashPassword, err := keys.GenerateHashPassword(password)
 	if err != nil {
-		return nil, fmt.Errorf("failed to internal.GenerateHashPassword: %s", err)
+		return nil, errors.NewMethodError("keys.GenerateHashPassword", err)
 	}
 
 	userAccount, err := s.userAccountRepository.Create(ctx, tx, userAccount.SetUserAccount(req.UserId, req.Name, hashPassword, time.Now(), time.Now()))
 	if err != nil {
-		return nil, fmt.Errorf("failed to s.userAccountRepository.Create: %s", err)
+		return nil, errors.NewMethodError("s.userAccountRepository.Create", err)
 	}
 	userAccount.Password = hashPassword
 

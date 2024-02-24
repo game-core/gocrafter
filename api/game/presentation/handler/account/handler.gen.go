@@ -2,10 +2,10 @@ package account
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/game-core/gocrafter/api/game/presentation/server/account"
 	accountUsecase "github.com/game-core/gocrafter/api/game/usecase/account"
+	"github.com/game-core/gocrafter/internal/errors"
 )
 
 type AccountHandler interface {
@@ -29,7 +29,7 @@ func NewAccountHandler(
 func (s *accountHandler) Create(ctx context.Context, req *account.AccountCreateRequest) (*account.AccountCreateResponse, error) {
 	res, err := s.accountUsecase.Create(ctx, req)
 	if err != nil {
-		return nil, fmt.Errorf("s.accountUsecase.Create: %s", err)
+		return nil, errors.NewMethodError("s.accountUsecase.Create", err)
 	}
 
 	return res, nil

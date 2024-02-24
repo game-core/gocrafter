@@ -2,10 +2,10 @@ package shard
 
 import (
 	"context"
-	"fmt"
 
 	"gorm.io/gorm"
 
+	"github.com/game-core/gocrafter/internal/errors"
 	"github.com/game-core/gocrafter/pkg/domain/model/shard/commonShard"
 )
 
@@ -29,10 +29,10 @@ func NewShardService(
 func (s *shardService) GetShardKeyAndUpdate(ctx context.Context, tx *gorm.DB) (string, error) {
 	commonShard, err := s.commonShardRepository.FindList(ctx)
 	if err != nil {
-		return "", fmt.Errorf("failed to s.commonShardRepository.FindList: %s", err)
+		return "", errors.NewMethodError("failed to s.commonShardRepository.FindList: %s", err)
 	}
 	if len(commonShard) == 0 {
-		return "", fmt.Errorf("common_shard does not exist")
+		return "", errors.NewError("common_shard does not exist")
 	}
 
 	minShard := (commonShard)[0]
@@ -44,7 +44,7 @@ func (s *shardService) GetShardKeyAndUpdate(ctx context.Context, tx *gorm.DB) (s
 	minShard.Count++
 
 	if _, err := s.commonShardRepository.Update(ctx, tx, minShard); err != nil {
-		return "", fmt.Errorf("failed to s.commonShardRepository.Update: %s", err)
+		return "", errors.NewMethodError("s.commonShardRepository.Update", err)
 	}
 
 	return minShard.ShardKey, nil
