@@ -13,7 +13,7 @@ import (
 
 	"gopkg.in/yaml.v3"
 
-	"github.com/game-core/gocrafter/internal"
+	"github.com/game-core/gocrafter/internal/changes"
 )
 
 const templateCode = `
@@ -87,7 +87,7 @@ func (s *Setter) getYamlStruct(file string) (*YamlStruct, error) {
 
 // getOutputFileName ファイル名を取得する
 func (s *Setter) getOutputFileName(dir, name string) string {
-	return filepath.Join(dir, fmt.Sprintf("%s_model.gen.go", internal.UpperCamelToSnake(name)))
+	return filepath.Join(dir, fmt.Sprintf("%s_model.gen.go", changes.UpperCamelToSnake(name)))
 }
 
 // createOutputFile ファイルを作成する
@@ -135,9 +135,9 @@ func (s *Setter) createScript(yamlStruct *YamlStruct) string {
 	var returnScript []string
 
 	for _, field := range s.getStructure(yamlStruct.Structures) {
-		fieldScript = append(fieldScript, fmt.Sprintf("%s %s", internal.SnakeToUpperCamel(field.Name), s.getType(field)))
-		paramScript = append(paramScript, fmt.Sprintf("%s %s", internal.SnakeToCamel(field.Name), s.getType(field)))
-		returnScript = append(returnScript, fmt.Sprintf("%s: %s,", internal.SnakeToUpperCamel(field.Name), internal.SnakeToCamel(field.Name)))
+		fieldScript = append(fieldScript, fmt.Sprintf("%s %s", changes.SnakeToUpperCamel(field.Name), s.getType(field)))
+		paramScript = append(paramScript, fmt.Sprintf("%s %s", changes.SnakeToCamel(field.Name), s.getType(field)))
+		returnScript = append(returnScript, fmt.Sprintf("%s: %s,", changes.SnakeToUpperCamel(field.Name), changes.SnakeToCamel(field.Name)))
 	}
 
 	return fmt.Sprintf(`%s`, s.createSetter(yamlStruct.Name, strings.Join(paramScript, ","), strings.Join(returnScript, "\n")))
@@ -194,21 +194,21 @@ func (s *Setter) getType(field *Structure) string {
 		return "*timestamppb.Timestamp"
 	case "structure":
 		if field.Package != "" {
-			result = fmt.Sprintf("%s", internal.SnakeToUpperCamel(field.Name))
+			result = fmt.Sprintf("%s", changes.SnakeToUpperCamel(field.Name))
 		} else {
-			result = internal.SnakeToUpperCamel(field.Name)
+			result = changes.SnakeToUpperCamel(field.Name)
 		}
 	case "structures":
 		if field.Package != "" {
-			result = fmt.Sprintf("%s", internal.SnakeToUpperCamel(internal.SingularToPlural(field.Name)))
+			result = fmt.Sprintf("%s", changes.SnakeToUpperCamel(changes.SingularToPlural(field.Name)))
 		} else {
-			result = internal.SnakeToUpperCamel(internal.SingularToPlural(field.Name))
+			result = changes.SnakeToUpperCamel(changes.SingularToPlural(field.Name))
 		}
 	case "enum":
 		if field.Package != "" {
-			result = fmt.Sprintf("%s", internal.SnakeToUpperCamel(field.Name))
+			result = fmt.Sprintf("%s", changes.SnakeToUpperCamel(field.Name))
 		} else {
-			result = internal.SnakeToUpperCamel(field.Name)
+			result = changes.SnakeToUpperCamel(field.Name)
 		}
 	default:
 		result = field.Type

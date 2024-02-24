@@ -5,11 +5,11 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/game-core/gocrafter/internal"
 	"github.com/patrickmn/go-cache"
 	"gorm.io/gorm"
 
 	"github.com/game-core/gocrafter/configs/database"
+	"github.com/game-core/gocrafter/internal/cashes"
 	"github.com/game-core/gocrafter/pkg/domain/model/loginBonus/masterLoginBonus"
 )
 
@@ -28,7 +28,7 @@ func NewMasterLoginBonusDao(conn *database.SqlHandler) masterLoginBonus.MasterLo
 }
 
 func (s *masterLoginBonusDao) Find(ctx context.Context, id int64) (*masterLoginBonus.MasterLoginBonus, error) {
-	cachedResult, found := s.Cache.Get(internal.CreateCacheKey("master_login_bonus", "Find", fmt.Sprintf("%d_", id)))
+	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_login_bonus", "Find", fmt.Sprintf("%d_", id)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterLoginBonus.MasterLoginBonus); ok {
 			return cachedEntity, nil
@@ -45,12 +45,12 @@ func (s *masterLoginBonusDao) Find(ctx context.Context, id int64) (*masterLoginB
 	}
 
 	m := masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterEventId, t.Name)
-	s.Cache.Set(internal.CreateCacheKey("master_login_bonus", "Find", fmt.Sprintf("%d_", id)), m, cache.DefaultExpiration)
+	s.Cache.Set(cashes.CreateCacheKey("master_login_bonus", "Find", fmt.Sprintf("%d_", id)), m, cache.DefaultExpiration)
 	return m, nil
 }
 
 func (s *masterLoginBonusDao) FindOrNil(ctx context.Context, id int64) (*masterLoginBonus.MasterLoginBonus, error) {
-	cachedResult, found := s.Cache.Get(internal.CreateCacheKey("master_login_bonus", "FindOrNil", fmt.Sprintf("%d_", id)))
+	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_login_bonus", "FindOrNil", fmt.Sprintf("%d_", id)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterLoginBonus.MasterLoginBonus); ok {
 			return cachedEntity, nil
@@ -67,12 +67,12 @@ func (s *masterLoginBonusDao) FindOrNil(ctx context.Context, id int64) (*masterL
 	}
 
 	m := masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterEventId, t.Name)
-	s.Cache.Set(internal.CreateCacheKey("master_login_bonus", "FindOrNil", fmt.Sprintf("%d_", id)), m, cache.DefaultExpiration)
+	s.Cache.Set(cashes.CreateCacheKey("master_login_bonus", "FindOrNil", fmt.Sprintf("%d_", id)), m, cache.DefaultExpiration)
 	return m, nil
 }
 
 func (s *masterLoginBonusDao) FindByMasterEventId(ctx context.Context, masterEventId int64) (*masterLoginBonus.MasterLoginBonus, error) {
-	cachedResult, found := s.Cache.Get(internal.CreateCacheKey("master_login_bonus", "FindByMasterEventId", fmt.Sprintf("%d_", masterEventId)))
+	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_login_bonus", "FindByMasterEventId", fmt.Sprintf("%d_", masterEventId)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterLoginBonus.MasterLoginBonus); ok {
 			return cachedEntity, nil
@@ -89,12 +89,12 @@ func (s *masterLoginBonusDao) FindByMasterEventId(ctx context.Context, masterEve
 	}
 
 	m := masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterEventId, t.Name)
-	s.Cache.Set(internal.CreateCacheKey("master_login_bonus", "FindByMasterEventId", fmt.Sprintf("%d_", masterEventId)), m, cache.DefaultExpiration)
+	s.Cache.Set(cashes.CreateCacheKey("master_login_bonus", "FindByMasterEventId", fmt.Sprintf("%d_", masterEventId)), m, cache.DefaultExpiration)
 	return m, nil
 }
 
 func (s *masterLoginBonusDao) FinOrNilByMasterEventId(ctx context.Context, masterEventId int64) (*masterLoginBonus.MasterLoginBonus, error) {
-	cachedResult, found := s.Cache.Get(internal.CreateCacheKey("master_login_bonus", "FindOrNilByMasterEventId", fmt.Sprintf("%d_", masterEventId)))
+	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_login_bonus", "FindOrNilByMasterEventId", fmt.Sprintf("%d_", masterEventId)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterLoginBonus.MasterLoginBonus); ok {
 			return cachedEntity, nil
@@ -111,12 +111,12 @@ func (s *masterLoginBonusDao) FinOrNilByMasterEventId(ctx context.Context, maste
 	}
 
 	m := masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterEventId, t.Name)
-	s.Cache.Set(internal.CreateCacheKey("master_login_bonus", "FindOrNilByMasterEventId", fmt.Sprintf("%d_", masterEventId)), m, cache.DefaultExpiration)
+	s.Cache.Set(cashes.CreateCacheKey("master_login_bonus", "FindOrNilByMasterEventId", fmt.Sprintf("%d_", masterEventId)), m, cache.DefaultExpiration)
 	return m, nil
 }
 
 func (s *masterLoginBonusDao) FindList(ctx context.Context) (masterLoginBonus.MasterLoginBonuses, error) {
-	cachedResult, found := s.Cache.Get(internal.CreateCacheKey("master_login_bonus", "FindList", ""))
+	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_login_bonus", "FindList", ""))
 	if found {
 		if cachedEntity, ok := cachedResult.(masterLoginBonus.MasterLoginBonuses); ok {
 			return cachedEntity, nil
@@ -134,12 +134,12 @@ func (s *masterLoginBonusDao) FindList(ctx context.Context) (masterLoginBonus.Ma
 		ms = append(ms, masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterEventId, t.Name))
 	}
 
-	s.Cache.Set(internal.CreateCacheKey("master_login_bonus", "FindList", ""), ms, cache.DefaultExpiration)
+	s.Cache.Set(cashes.CreateCacheKey("master_login_bonus", "FindList", ""), ms, cache.DefaultExpiration)
 	return ms, nil
 }
 
 func (s *masterLoginBonusDao) FindListByMasterEventId(ctx context.Context, masterEventId int64) (masterLoginBonus.MasterLoginBonuses, error) {
-	cachedResult, found := s.Cache.Get(internal.CreateCacheKey("master_login_bonus", "FindListByMasterEventId", fmt.Sprintf("%d_", masterEventId)))
+	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_login_bonus", "FindListByMasterEventId", fmt.Sprintf("%d_", masterEventId)))
 	if found {
 		if cachedEntity, ok := cachedResult.(masterLoginBonus.MasterLoginBonuses); ok {
 			return cachedEntity, nil
@@ -157,7 +157,7 @@ func (s *masterLoginBonusDao) FindListByMasterEventId(ctx context.Context, maste
 		ms = append(ms, masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterEventId, t.Name))
 	}
 
-	s.Cache.Set(internal.CreateCacheKey("master_login_bonus", "FindListByMasterEventId", fmt.Sprintf("%d_", masterEventId)), ms, cache.DefaultExpiration)
+	s.Cache.Set(cashes.CreateCacheKey("master_login_bonus", "FindListByMasterEventId", fmt.Sprintf("%d_", masterEventId)), ms, cache.DefaultExpiration)
 	return ms, nil
 }
 

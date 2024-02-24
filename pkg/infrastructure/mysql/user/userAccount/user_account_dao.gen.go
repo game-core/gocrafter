@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/game-core/gocrafter/configs/database"
-	"github.com/game-core/gocrafter/internal"
+	"github.com/game-core/gocrafter/internal/keys"
 	"github.com/game-core/gocrafter/pkg/domain/model/account/userAccount"
 )
 
@@ -24,7 +24,7 @@ func NewUserAccountDao(conn *database.SqlHandler) userAccount.UserAccountReposit
 
 func (s *userAccountDao) Find(ctx context.Context, userId string) (*userAccount.UserAccount, error) {
 	t := NewUserAccount()
-	res := s.ShardConn.Shards[internal.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(t)
+	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -37,7 +37,7 @@ func (s *userAccountDao) Find(ctx context.Context, userId string) (*userAccount.
 
 func (s *userAccountDao) FindOrNil(ctx context.Context, userId string) (*userAccount.UserAccount, error) {
 	t := NewUserAccount()
-	res := s.ShardConn.Shards[internal.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(t)
+	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (s *userAccountDao) FindOrNil(ctx context.Context, userId string) (*userAcc
 
 func (s *userAccountDao) FindList(ctx context.Context, userId string) (userAccount.UserAccounts, error) {
 	ts := NewUserAccounts()
-	res := s.ShardConn.Shards[internal.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(ts)
+	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -68,7 +68,7 @@ func (s *userAccountDao) Create(ctx context.Context, tx *gorm.DB, m *userAccount
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[internal.GetShardKeyByUserId(m.UserId)].WriteConn
+		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
 	}
 
 	t := &UserAccount{
@@ -102,7 +102,7 @@ func (s *userAccountDao) CreateList(ctx context.Context, tx *gorm.DB, ms userAcc
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[internal.GetShardKeyByUserId(fms.UserId)].WriteConn
+		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(fms.UserId)].WriteConn
 	}
 
 	ts := NewUserAccounts()
@@ -130,7 +130,7 @@ func (s *userAccountDao) Update(ctx context.Context, tx *gorm.DB, m *userAccount
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[internal.GetShardKeyByUserId(m.UserId)].WriteConn
+		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
 	}
 
 	t := &UserAccount{
@@ -153,7 +153,7 @@ func (s *userAccountDao) Delete(ctx context.Context, tx *gorm.DB, m *userAccount
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[internal.GetShardKeyByUserId(m.UserId)].WriteConn
+		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
 	}
 
 	res := conn.Model(NewUserAccount()).WithContext(ctx).Where("user_id = ?", m.UserId).Delete(NewUserAccount())

@@ -11,7 +11,7 @@ import (
 
 	"gopkg.in/yaml.v3"
 
-	"github.com/game-core/gocrafter/internal"
+	"github.com/game-core/gocrafter/internal/changes"
 )
 
 const protoTemplate = `// {{.Comment}}
@@ -68,7 +68,7 @@ func (s *Proto) getYamlStruct(file string) (*YamlStruct, error) {
 
 // getOutputFileName ファイル名を取得する
 func (s *Proto) getOutputFileName(dir, name string) string {
-	return filepath.Join(dir, fmt.Sprintf("%s.proto", internal.UpperCamelToSnake(name)))
+	return filepath.Join(dir, fmt.Sprintf("%s.proto", changes.UpperCamelToSnake(name)))
 }
 
 // createOutputFile ファイルを作成する
@@ -131,7 +131,7 @@ func (s *Proto) createService(yamlStruct *YamlStruct) string {
 	var services []string
 	for _, field := range s.getStructure(yamlStruct.Structures) {
 		checkReq := true
-		req := fmt.Sprintf("import \"%s.proto\";", internal.UpperCamelToSnake(field.Request))
+		req := fmt.Sprintf("import \"%s.proto\";", changes.UpperCamelToSnake(field.Request))
 		for _, m := range imports {
 			if m == req {
 				checkReq = false
@@ -143,7 +143,7 @@ func (s *Proto) createService(yamlStruct *YamlStruct) string {
 		}
 
 		checkRes := true
-		res := fmt.Sprintf("import \"%s.proto\";", internal.UpperCamelToSnake(field.Response))
+		res := fmt.Sprintf("import \"%s.proto\";", changes.UpperCamelToSnake(field.Response))
 		for _, m := range imports {
 			if m == res {
 				checkRes = false
@@ -154,7 +154,7 @@ func (s *Proto) createService(yamlStruct *YamlStruct) string {
 			imports = append(imports, res)
 		}
 
-		services = append(services, fmt.Sprintf("  rpc %s (%s) returns (%s);", internal.SnakeToUpperCamel(field.Name), field.Request, field.Response))
+		services = append(services, fmt.Sprintf("  rpc %s (%s) returns (%s);", changes.SnakeToUpperCamel(field.Name), field.Request, field.Response))
 	}
 
 	script := ""
@@ -191,13 +191,13 @@ func (s *Proto) createStructure(yamlStruct *YamlStruct) string {
 		switch field.Type {
 		case "structure":
 			imports = append(imports, fmt.Sprintf("import \"%s_structure.proto\";", field.Name))
-			fe = fmt.Sprintf("%s %s = %v;", internal.SnakeToUpperCamel(field.Name), field.Name, field.Number)
+			fe = fmt.Sprintf("%s %s = %v;", changes.SnakeToUpperCamel(field.Name), field.Name, field.Number)
 		case "structures":
-			imports = append(imports, fmt.Sprintf("import \"%s_structure.proto\";", internal.PluralToSingular(field.Name)))
-			fe = fmt.Sprintf("repeated %s %s = %v;", internal.SnakeToUpperCamel(internal.PluralToSingular(field.Name)), field.Name, field.Number)
+			imports = append(imports, fmt.Sprintf("import \"%s_structure.proto\";", changes.PluralToSingular(field.Name)))
+			fe = fmt.Sprintf("repeated %s %s = %v;", changes.SnakeToUpperCamel(changes.PluralToSingular(field.Name)), field.Name, field.Number)
 		case "enum":
-			imports = append(imports, fmt.Sprintf("import \"%s_enum.proto\";", internal.PluralToSingular(field.Name)))
-			fe = fmt.Sprintf("%s %s = %v;", internal.SnakeToUpperCamel(field.Name), field.Name, field.Number)
+			imports = append(imports, fmt.Sprintf("import \"%s_enum.proto\";", changes.PluralToSingular(field.Name)))
+			fe = fmt.Sprintf("%s %s = %v;", changes.SnakeToUpperCamel(field.Name), field.Name, field.Number)
 		case "time":
 			check := true
 			for _, im := range imports {

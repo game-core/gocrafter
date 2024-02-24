@@ -5,9 +5,10 @@ import (
 	"context"
 	"log"
 
+	"github.com/game-core/gocrafter/internal/keys"
+
 	"gorm.io/gorm"
 
-	"github.com/game-core/gocrafter/internal"
 	"github.com/game-core/gocrafter/pkg/domain/model/transaction/commonTransaction"
 	"github.com/game-core/gocrafter/pkg/domain/model/transaction/masterTransaction"
 	"github.com/game-core/gocrafter/pkg/domain/model/transaction/userTransaction"
@@ -90,7 +91,7 @@ func (s *transactionService) MasterEnd(ctx context.Context, tx *gorm.DB, err err
 
 // UserBegin トランザクションを開始する
 func (s *transactionService) UserBegin(ctx context.Context, userId string) (*gorm.DB, error) {
-	tx, err := s.userTransactionRepository.Begin(ctx, internal.GetShardKeyByUserId(userId))
+	tx, err := s.userTransactionRepository.Begin(ctx, keys.GetShardKeyByUserId(userId))
 	if err != nil {
 		return nil, err
 	}
@@ -115,7 +116,7 @@ func (s *transactionService) UserEnd(ctx context.Context, tx *gorm.DB, err error
 func (s *transactionService) MultiUserBegin(ctx context.Context, userIds []string) (map[string]*gorm.DB, error) {
 	txs := make(map[string]*gorm.DB)
 	for _, userId := range userIds {
-		tx, err := s.userTransactionRepository.Begin(ctx, internal.GetShardKeyByUserId(userId))
+		tx, err := s.userTransactionRepository.Begin(ctx, keys.GetShardKeyByUserId(userId))
 		if err != nil {
 			return nil, err
 		}

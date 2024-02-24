@@ -13,7 +13,7 @@ import (
 
 	"gopkg.in/yaml.v3"
 
-	"github.com/game-core/gocrafter/internal"
+	"github.com/game-core/gocrafter/internal/changes"
 )
 
 const sqlTemplate = `{{.Script}}
@@ -64,12 +64,12 @@ func (s *Sql) getYamlStruct(file string) (*YamlStruct, error) {
 
 // getOutputFileName ファイル名を取得する
 func (s *Sql) getOutputFileName(dir, name string) string {
-	return filepath.Join(dir, fmt.Sprintf("%s.sql", fmt.Sprintf("%s_%s", time.Now().Format("20060102"), internal.UpperCamelToSnake(name))))
+	return filepath.Join(dir, fmt.Sprintf("%s.sql", fmt.Sprintf("%s_%s", time.Now().Format("20060102"), changes.UpperCamelToSnake(name))))
 }
 
 // checkFileExists ファイルがあるか確認する
 func (s *Sql) checkFileExists(directory, name string) bool {
-	targetFileName := fmt.Sprintf("%s.sql", internal.UpperCamelToSnake(s.extractFileName(name)))
+	targetFileName := fmt.Sprintf("%s.sql", changes.UpperCamelToSnake(s.extractFileName(name)))
 	fileList, err := filepath.Glob(filepath.Join(directory, "*"))
 	if err != nil {
 		return false
@@ -143,7 +143,7 @@ func (s *Sql) createScript(yamlStruct *YamlStruct) string {
 (
     %s
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`,
-		internal.UpperCamelToSnake(yamlStruct.Name),
+		changes.UpperCamelToSnake(yamlStruct.Name),
 		strings.Join(s.createFields(yamlStruct), ",\n"),
 	)
 }
@@ -259,7 +259,7 @@ func (s *Sql) getKey(keys string) string {
 	keyList := strings.Split(keys, ",")
 	var k []string
 	for _, key := range keyList {
-		k = append(k, internal.UpperCamelToSnake(key))
+		k = append(k, changes.UpperCamelToSnake(key))
 	}
 
 	return strings.Join(k, ",")

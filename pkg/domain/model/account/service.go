@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/game-core/gocrafter/internal"
+	"github.com/game-core/gocrafter/internal/keys"
 
 	"gorm.io/gorm"
 
 	"github.com/game-core/gocrafter/pkg/domain/model/account/userAccount"
-	"github.com/game-core/gocrafter/pkg/domain/model/shard"
+	shardService "github.com/game-core/gocrafter/pkg/domain/model/shard"
 )
 
 type AccountService interface {
@@ -18,12 +18,12 @@ type AccountService interface {
 }
 
 type accountService struct {
-	shardService          shard.ShardService
+	shardService          shardService.ShardService
 	userAccountRepository userAccount.UserAccountRepository
 }
 
 func NewAccountService(
-	shardService shard.ShardService,
+	shardService shardService.ShardService,
 	userAccountRepository userAccount.UserAccountRepository,
 ) AccountService {
 	return &accountService{
@@ -34,12 +34,12 @@ func NewAccountService(
 
 // Create アカウントを作成する
 func (s *accountService) Create(ctx context.Context, tx *gorm.DB, req *AccountCreateRequest) (*AccountCreateResponse, error) {
-	password, err := internal.GeneratePassword()
+	password, err := keys.GeneratePassword()
 	if err != nil {
 		return nil, fmt.Errorf("failed to internal.GeneratePassword: %s", err)
 	}
 
-	hashPassword, err := internal.GenerateHashPassword(password)
+	hashPassword, err := keys.GenerateHashPassword(password)
 	if err != nil {
 		return nil, fmt.Errorf("failed to internal.GenerateHashPassword: %s", err)
 	}

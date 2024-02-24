@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	accountServer "github.com/game-core/gocrafter/api/game/presentation/server/account"
-	"github.com/game-core/gocrafter/internal"
+	"github.com/game-core/gocrafter/internal/times"
 	accountService "github.com/game-core/gocrafter/pkg/domain/model/account"
 	transactionService "github.com/game-core/gocrafter/pkg/domain/model/transaction"
 )
@@ -51,8 +51,8 @@ func (s *accountUsecase) Create(ctx context.Context, req *accountServer.AccountC
 			userAccount.UserAccount.Name,
 			userAccount.UserAccount.Password,
 			"",
-			internal.TimeToPb(&userAccount.UserAccount.LoginAt),
-			internal.TimeToPb(&userAccount.UserAccount.LogoutAt),
+			times.TimeToPb(&userAccount.UserAccount.LoginAt),
+			times.TimeToPb(&userAccount.UserAccount.LogoutAt),
 		),
 	), nil
 }

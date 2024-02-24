@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"gopkg.in/yaml.v3"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -9,8 +10,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/game-core/gocrafter/internal"
-	"gopkg.in/yaml.v3"
+	"github.com/game-core/gocrafter/internal/changes"
 )
 
 const enumTemplate = `
@@ -78,7 +78,7 @@ func (s *Enum) createOutputFile(yamlStruct *YamlStruct, outputFileName string) e
 
 // getOutputFileName ファイル名を取得する
 func (s *Enum) getOutputFileName(dir, name string) string {
-	return filepath.Join(dir, fmt.Sprintf("%s_enum.gen.go", internal.UpperCamelToSnake(name)))
+	return filepath.Join(dir, fmt.Sprintf("%s_enum.gen.go", changes.UpperCamelToSnake(name)))
 }
 
 // createTemplate テンプレートを作成する

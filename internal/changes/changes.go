@@ -1,4 +1,4 @@
-package internal
+package changes
 
 import (
 	"strings"
@@ -181,7 +181,6 @@ func returnToOriginalCase(original string, converted string) string {
 		return converted
 	}
 
-	// 他の形式に対する判定や変換ルールを追加する必要があればここに追加
 	return converted
 }
 

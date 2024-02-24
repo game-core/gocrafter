@@ -9,8 +9,9 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/game-core/gocrafter/internal"
 	"gopkg.in/yaml.v3"
+
+	"github.com/game-core/gocrafter/internal/changes"
 )
 
 type Repository struct{}
@@ -46,7 +47,7 @@ func (s *Repository) generate(path string, base string) error {
 		return err
 	}
 
-	if err := s.createOutputFile(yamlStruct, s.getOutputFileName(base, internal.UpperCamelToSnake(yamlStruct.Name))); err != nil {
+	if err := s.createOutputFile(yamlStruct, s.getOutputFileName(base, changes.UpperCamelToSnake(yamlStruct.Name))); err != nil {
 		return err
 	}
 
@@ -84,7 +85,7 @@ func (s *Repository) createOutputFile(yamlStruct *YamlStruct, outputFileName str
 
 // getOutputFileName ファイル名を取得する
 func (s *Repository) getOutputFileName(dir, name string) string {
-	return filepath.Join(dir, fmt.Sprintf("%s_repository.gen.go", internal.UpperCamelToSnake(name)))
+	return filepath.Join(dir, fmt.Sprintf("%s_repository.gen.go", changes.UpperCamelToSnake(name)))
 }
 
 // createTemplate テンプレートを作成する
@@ -100,8 +101,8 @@ func (s *Repository) createTemplate(yamlStruct *YamlStruct, outputFile *os.File)
 		TemplateStruct{
 			Name:       yamlStruct.Name,
 			Package:    yamlStruct.Package,
-			PluralName: internal.SingularToPlural(yamlStruct.Name),
-			CamelName:  internal.UpperCamelToCamel(yamlStruct.Name),
+			PluralName: changes.SingularToPlural(yamlStruct.Name),
+			CamelName:  changes.UpperCamelToCamel(yamlStruct.Name),
 			Comment:    yamlStruct.Comment,
 			Script:     s.createScript(yamlStruct),
 			Import:     importCode,
@@ -118,9 +119,9 @@ func (s *Repository) createTemplate(yamlStruct *YamlStruct, outputFile *os.File)
 func createMock(yamlStruct *YamlStruct) string {
 	return fmt.Sprintf(
 		"//go:generate mockgen -source=./%s_repository.gen.go -destination=./%s_repository_mock.gen.go -package=%s",
-		internal.UpperCamelToSnake(yamlStruct.Name),
-		internal.UpperCamelToSnake(yamlStruct.Name),
-		internal.UpperCamelToCamel(yamlStruct.Package),
+		changes.UpperCamelToSnake(yamlStruct.Name),
+		changes.UpperCamelToSnake(yamlStruct.Name),
+		changes.UpperCamelToCamel(yamlStruct.Package),
 	)
 }
 
@@ -248,7 +249,7 @@ func (s *Repository) createFindOrNilByIndex(yamlStruct *YamlStruct, indexFields 
 func (s *Repository) createFindList(yamlStruct *YamlStruct) string {
 	return fmt.Sprintf(
 		`FindList(ctx context.Context, userId string) (%s, error)`,
-		internal.SingularToPlural(yamlStruct.Name),
+		changes.SingularToPlural(yamlStruct.Name),
 	)
 }
 
@@ -263,7 +264,7 @@ func (s *Repository) createFindListByIndex(yamlStruct *YamlStruct, indexFields [
 		`FindListBy%s(ctx context.Context, %s) (%s, error)`,
 		strings.Join(indexFields, "And"),
 		s.createParam(keys),
-		internal.SingularToPlural(yamlStruct.Name),
+		changes.SingularToPlural(yamlStruct.Name),
 	)
 }
 
@@ -280,8 +281,8 @@ func (s *Repository) createCreate(yamlStruct *YamlStruct) string {
 func (s *Repository) createCreateList(yamlStruct *YamlStruct) string {
 	return fmt.Sprintf(
 		`CreateList(ctx context.Context, tx *gorm.DB, ms %s) (%s, error)`,
-		internal.SingularToPlural(yamlStruct.Name),
-		internal.SingularToPlural(yamlStruct.Name),
+		changes.SingularToPlural(yamlStruct.Name),
+		changes.SingularToPlural(yamlStruct.Name),
 	)
 }
 
@@ -316,7 +317,7 @@ func (s *Repository) createDelete(yamlStruct *YamlStruct, primaryFields []string
 func (s *Repository) createParam(keys map[string]Structure) string {
 	var paramStrings []string
 	for _, field := range s.getStructures(keys) {
-		paramStrings = append(paramStrings, fmt.Sprintf("%s %s", internal.SnakeToCamel(field.Name), s.getType(field)))
+		paramStrings = append(paramStrings, fmt.Sprintf("%s %s", changes.SnakeToCamel(field.Name), s.getType(field)))
 	}
 
 	return strings.Join(paramStrings, ",")
@@ -355,21 +356,21 @@ func (s *Repository) getType(field *Structure) string {
 		result = "time.Time"
 	case "structure":
 		if field.Package != "" {
-			result = fmt.Sprintf("%s.%s", internal.SnakeToCamel(field.Name), internal.SnakeToUpperCamel(field.Name))
+			result = fmt.Sprintf("%s.%s", changes.SnakeToCamel(field.Name), changes.SnakeToUpperCamel(field.Name))
 		} else {
-			result = internal.SnakeToUpperCamel(field.Name)
+			result = changes.SnakeToUpperCamel(field.Name)
 		}
 	case "structures":
 		if field.Package != "" {
-			result = fmt.Sprintf("%s.%s", internal.SnakeToCamel(field.Name), internal.SnakeToUpperCamel(internal.SingularToPlural(field.Name)))
+			result = fmt.Sprintf("%s.%s", changes.SnakeToCamel(field.Name), changes.SnakeToUpperCamel(changes.SingularToPlural(field.Name)))
 		} else {
-			result = internal.SnakeToUpperCamel(internal.SingularToPlural(field.Name))
+			result = changes.SnakeToUpperCamel(changes.SingularToPlural(field.Name))
 		}
 	case "enum":
 		if field.Package != "" {
-			result = fmt.Sprintf("emun.%s", internal.SnakeToUpperCamel(field.Name))
+			result = fmt.Sprintf("emun.%s", changes.SnakeToUpperCamel(field.Name))
 		} else {
-			result = internal.SnakeToUpperCamel(field.Name)
+			result = changes.SnakeToUpperCamel(field.Name)
 		}
 	default:
 		result = field.Type

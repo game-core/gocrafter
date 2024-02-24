@@ -9,8 +9,9 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/game-core/gocrafter/internal"
 	"gopkg.in/yaml.v3"
+
+	"github.com/game-core/gocrafter/internal/changes"
 )
 
 const daoTemplate = `
@@ -25,7 +26,7 @@ import (
 
 	{{.Import}}
 	"github.com/game-core/gocrafter/configs/database"
-	"github.com/game-core/gocrafter/internal"
+	"github.com/game-core/gocrafter/internal/cashes"
 )
 
 type {{.CamelName}}Dao struct {
@@ -58,7 +59,7 @@ func (s *Dao) generate(path string, base string) error {
 		return err
 	}
 
-	domainPath, err := s.getDomainPath(fmt.Sprintf("%s_model.gen.go", internal.UpperCamelToSnake(yamlStruct.Name)))
+	domainPath, err := s.getDomainPath(fmt.Sprintf("%s_model.gen.go", changes.UpperCamelToSnake(yamlStruct.Name)))
 	if err != nil {
 		return err
 	}
@@ -72,7 +73,7 @@ func (s *Dao) generate(path string, base string) error {
 		return err
 	}
 
-	if err := s.createOutputFile(yamlStruct, s.getOutputFileName(outputDir, internal.UpperCamelToSnake(yamlStruct.Name))); err != nil {
+	if err := s.createOutputFile(yamlStruct, s.getOutputFileName(outputDir, changes.UpperCamelToSnake(yamlStruct.Name))); err != nil {
 		return err
 	}
 
@@ -126,7 +127,7 @@ func (s *Dao) getYamlStruct(file string) (*YamlStruct, error) {
 
 // getOutputFileName ファイル名を取得する
 func (s *Dao) getOutputFileName(dir, name string) string {
-	return filepath.Join(dir, fmt.Sprintf("%s_dao.gen.go", internal.UpperCamelToSnake(name)))
+	return filepath.Join(dir, fmt.Sprintf("%s_dao.gen.go", changes.UpperCamelToSnake(name)))
 }
 
 // createOutputFile ファイルを作成する
@@ -156,8 +157,8 @@ func (s *Dao) createTemplate(yamlStruct *YamlStruct, outputFile *os.File) error 
 		TemplateStruct{
 			Name:       yamlStruct.Name,
 			Package:    yamlStruct.Package,
-			PluralName: internal.SingularToPlural(yamlStruct.Name),
-			CamelName:  internal.UpperCamelToCamel(yamlStruct.Name),
+			PluralName: changes.SingularToPlural(yamlStruct.Name),
+			CamelName:  changes.UpperCamelToCamel(yamlStruct.Name),
 			Comment:    yamlStruct.Comment,
 			Script:     s.createScript(yamlStruct),
 			Import:     importCode,
@@ -258,7 +259,7 @@ func (s *Dao) createFind(yamlStruct *YamlStruct, primaryFields []string) string 
 			return %s, nil
 		}
 		`,
-		internal.UpperCamelToCamel(yamlStruct.Name),
+		changes.UpperCamelToCamel(yamlStruct.Name),
 		s.createParam(keys),
 		yamlStruct.Package,
 		yamlStruct.Name,
@@ -289,7 +290,7 @@ func (s *Dao) createFindOrNil(yamlStruct *YamlStruct, primaryFields []string) st
 			return %s, nil
 		}
 		`,
-		internal.UpperCamelToCamel(yamlStruct.Name),
+		changes.UpperCamelToCamel(yamlStruct.Name),
 		s.createParam(keys),
 		yamlStruct.Package,
 		yamlStruct.Name,
@@ -320,7 +321,7 @@ func (s *Dao) createFindByIndex(yamlStruct *YamlStruct, indexFields []string) st
 			return %s, nil
 		}
 		`,
-		internal.UpperCamelToCamel(yamlStruct.Name),
+		changes.UpperCamelToCamel(yamlStruct.Name),
 		strings.Join(indexFields, "And"),
 		s.createParam(keys),
 		yamlStruct.Package,
@@ -352,7 +353,7 @@ func (s *Dao) createFindOrNilByIndex(yamlStruct *YamlStruct, indexFields []strin
 			return %s, nil
 		}
 		`,
-		internal.UpperCamelToCamel(yamlStruct.Name),
+		changes.UpperCamelToCamel(yamlStruct.Name),
 		strings.Join(indexFields, "And"),
 		s.createParam(keys),
 		yamlStruct.Package,
@@ -378,10 +379,10 @@ func (s *Dao) createFindList(yamlStruct *YamlStruct) string {
 			return ms, nil
 		}
 		`,
-		internal.UpperCamelToCamel(yamlStruct.Name),
+		changes.UpperCamelToCamel(yamlStruct.Name),
 		yamlStruct.Package,
-		internal.SingularToPlural(yamlStruct.Name),
-		internal.SingularToPlural(yamlStruct.Name),
+		changes.SingularToPlural(yamlStruct.Name),
+		changes.SingularToPlural(yamlStruct.Name),
 		s.createModelSetters(yamlStruct),
 	)
 }
@@ -406,12 +407,12 @@ func (s *Dao) createFindListByIndex(yamlStruct *YamlStruct, indexFields []string
 			return ms, nil
 		}
 		`,
-		internal.UpperCamelToCamel(yamlStruct.Name),
+		changes.UpperCamelToCamel(yamlStruct.Name),
 		strings.Join(indexFields, "And"),
 		s.createParam(keys),
 		yamlStruct.Package,
-		internal.SingularToPlural(yamlStruct.Name),
-		internal.SingularToPlural(yamlStruct.Name),
+		changes.SingularToPlural(yamlStruct.Name),
+		changes.SingularToPlural(yamlStruct.Name),
 		s.createQuery(keys),
 		s.createModelSetters(yamlStruct),
 	)
@@ -436,7 +437,7 @@ func (s *Dao) createCreate(yamlStruct *YamlStruct) string {
 		
 			return %s, nil
 		}`,
-		internal.UpperCamelToCamel(yamlStruct.Name),
+		changes.UpperCamelToCamel(yamlStruct.Name),
 		yamlStruct.Package,
 		yamlStruct.Name,
 		yamlStruct.Package,
@@ -471,12 +472,12 @@ func (s *Dao) createCreateList(yamlStruct *YamlStruct) string {
 		
 			return ms, nil
 		}`,
-		internal.UpperCamelToCamel(yamlStruct.Name),
+		changes.UpperCamelToCamel(yamlStruct.Name),
 		yamlStruct.Package,
-		internal.SingularToPlural(yamlStruct.Name),
+		changes.SingularToPlural(yamlStruct.Name),
 		yamlStruct.Package,
-		internal.SingularToPlural(yamlStruct.Name),
-		internal.SingularToPlural(yamlStruct.Name),
+		changes.SingularToPlural(yamlStruct.Name),
+		changes.SingularToPlural(yamlStruct.Name),
 		s.createTableSetter(yamlStruct),
 		yamlStruct.Name,
 	)
@@ -506,7 +507,7 @@ func (s *Dao) createUpdate(yamlStruct *YamlStruct, primaryFields []string) strin
 		
 			return %s, nil
 		}`,
-		internal.UpperCamelToCamel(yamlStruct.Name),
+		changes.UpperCamelToCamel(yamlStruct.Name),
 		yamlStruct.Package,
 		yamlStruct.Name,
 		yamlStruct.Package,
@@ -541,7 +542,7 @@ func (s *Dao) createDelete(yamlStruct *YamlStruct, primaryFields []string) strin
 		
 			return nil
 		}`,
-		internal.UpperCamelToCamel(yamlStruct.Name),
+		changes.UpperCamelToCamel(yamlStruct.Name),
 		yamlStruct.Package,
 		yamlStruct.Name,
 		yamlStruct.Name,
@@ -554,7 +555,7 @@ func (s *Dao) createDelete(yamlStruct *YamlStruct, primaryFields []string) strin
 func (s *Dao) createQuery(keys map[string]Structure) string {
 	var queryStrings []string
 	for _, field := range s.getStructures(keys) {
-		queryStrings = append(queryStrings, fmt.Sprintf("Where(\"%s = ?\", %s)", field.Name, internal.SnakeToCamel(field.Name)))
+		queryStrings = append(queryStrings, fmt.Sprintf("Where(\"%s = ?\", %s)", field.Name, changes.SnakeToCamel(field.Name)))
 	}
 
 	return strings.Join(queryStrings, ".")
@@ -564,7 +565,7 @@ func (s *Dao) createQuery(keys map[string]Structure) string {
 func (s *Dao) createModelQuery(keys map[string]Structure) string {
 	var queryStrings []string
 	for _, field := range s.getStructures(keys) {
-		queryStrings = append(queryStrings, fmt.Sprintf("Where(\"%s = ?\", m.%s)", field.Name, internal.SnakeToUpperCamel(field.Name)))
+		queryStrings = append(queryStrings, fmt.Sprintf("Where(\"%s = ?\", m.%s)", field.Name, changes.SnakeToUpperCamel(field.Name)))
 	}
 
 	return strings.Join(queryStrings, ".")
@@ -574,7 +575,7 @@ func (s *Dao) createModelQuery(keys map[string]Structure) string {
 func (s *Dao) createParam(keys map[string]Structure) string {
 	var paramStrings []string
 	for _, field := range s.getStructures(keys) {
-		paramStrings = append(paramStrings, fmt.Sprintf("%s %s", internal.SnakeToCamel(field.Name), s.getType(field)))
+		paramStrings = append(paramStrings, fmt.Sprintf("%s %s", changes.SnakeToCamel(field.Name), s.getType(field)))
 	}
 
 	return strings.Join(paramStrings, ",")
@@ -585,7 +586,7 @@ func (s *Dao) createModelSetter(yamlStruct *YamlStruct) string {
 	var paramStrings []string
 	for _, field := range s.getStructures(yamlStruct.Structures) {
 		if field.Name != "created_at" && field.Name != "updated_at" {
-			paramStrings = append(paramStrings, fmt.Sprintf("t.%s,", internal.SnakeToUpperCamel(field.Name)))
+			paramStrings = append(paramStrings, fmt.Sprintf("t.%s,", changes.SnakeToUpperCamel(field.Name)))
 		}
 	}
 
@@ -602,7 +603,7 @@ func (s *Dao) createModelSetters(yamlStruct *YamlStruct) string {
 	var paramStrings []string
 	for _, field := range s.getStructures(yamlStruct.Structures) {
 		if field.Name != "created_at" && field.Name != "updated_at" {
-			paramStrings = append(paramStrings, fmt.Sprintf("t.%s,", internal.SnakeToUpperCamel(field.Name)))
+			paramStrings = append(paramStrings, fmt.Sprintf("t.%s,", changes.SnakeToUpperCamel(field.Name)))
 		}
 	}
 
@@ -612,7 +613,7 @@ func (s *Dao) createModelSetters(yamlStruct *YamlStruct) string {
 			ms = append(ms, %s)
 		}`,
 		yamlStruct.Package,
-		internal.SingularToPlural(yamlStruct.Name),
+		changes.SingularToPlural(yamlStruct.Name),
 		fmt.Sprintf(
 			`%s.Set%s(%s)`,
 			yamlStruct.Package,
@@ -627,7 +628,7 @@ func (s *Dao) createTableSetter(yamlStruct *YamlStruct) string {
 	var paramStrings []string
 	for _, field := range s.getStructures(yamlStruct.Structures) {
 		if field.Name != "created_at" && field.Name != "updated_at" {
-			paramStrings = append(paramStrings, fmt.Sprintf("%s: m.%s,", internal.SnakeToUpperCamel(field.Name), internal.SnakeToUpperCamel(field.Name)))
+			paramStrings = append(paramStrings, fmt.Sprintf("%s: m.%s,", changes.SnakeToUpperCamel(field.Name), changes.SnakeToUpperCamel(field.Name)))
 		}
 	}
 
@@ -675,23 +676,23 @@ func (s *Dao) getType(field *Structure) string {
 	case "structure":
 		if field.Package != "" {
 			importCode = fmt.Sprintf("%s\n%s", importCode, fmt.Sprintf("\"github.com/game-core/gocrafter/pkg/domain/model/%s\"", field.Package))
-			result = fmt.Sprintf("%s.%s", internal.SnakeToCamel(field.Name), internal.SnakeToUpperCamel(field.Name))
+			result = fmt.Sprintf("%s.%s", changes.SnakeToCamel(field.Name), changes.SnakeToUpperCamel(field.Name))
 		} else {
-			result = internal.SnakeToUpperCamel(field.Name)
+			result = changes.SnakeToUpperCamel(field.Name)
 		}
 	case "structures":
 		if field.Package != "" {
 			importCode = fmt.Sprintf("%s\n%s", importCode, fmt.Sprintf("\"github.com/game-core/gocrafter/pkg/domain/model/%s\"", field.Package))
-			result = fmt.Sprintf("%s.%s", internal.SnakeToCamel(field.Name), internal.SnakeToUpperCamel(internal.SingularToPlural(field.Name)))
+			result = fmt.Sprintf("%s.%s", changes.SnakeToCamel(field.Name), changes.SnakeToUpperCamel(changes.SingularToPlural(field.Name)))
 		} else {
-			result = internal.SnakeToUpperCamel(internal.SingularToPlural(field.Name))
+			result = changes.SnakeToUpperCamel(changes.SingularToPlural(field.Name))
 		}
 	case "enum":
 		if field.Package != "" {
 			importCode = fmt.Sprintf("%s\n%s", importCode, "github.com/game-core/gocrafter/pkg/domain/enum")
-			result = fmt.Sprintf("emun.%s", internal.SnakeToUpperCamel(field.Name))
+			result = fmt.Sprintf("emun.%s", changes.SnakeToUpperCamel(field.Name))
 		} else {
-			result = internal.SnakeToUpperCamel(field.Name)
+			result = changes.SnakeToUpperCamel(field.Name)
 		}
 	default:
 		result = field.Type

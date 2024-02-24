@@ -11,7 +11,7 @@ import (
 
 	"gopkg.in/yaml.v3"
 
-	"github.com/game-core/gocrafter/internal"
+	"github.com/game-core/gocrafter/internal/changes"
 )
 
 const templateCode = `
@@ -69,7 +69,7 @@ func (s *Model) getYamlStruct(file string) (*YamlStruct, error) {
 
 // getOutputFileName ファイル名を取得する
 func (s *Model) getOutputFileName(dir, name string) string {
-	return filepath.Join(dir, fmt.Sprintf("%s_model.gen.go", internal.UpperCamelToSnake(name)))
+	return filepath.Join(dir, fmt.Sprintf("%s_model.gen.go", changes.UpperCamelToSnake(name)))
 }
 
 // createOutputFile ファイルを作成する
@@ -99,7 +99,7 @@ func (s *Model) createTemplate(yamlStruct *YamlStruct, outputFile *os.File) erro
 		TemplateStruct{
 			Name:       yamlStruct.Name,
 			Package:    yamlStruct.Package,
-			PluralName: internal.SingularToPlural(yamlStruct.Name),
+			PluralName: changes.SingularToPlural(yamlStruct.Name),
 			Comment:    yamlStruct.Comment,
 			Script:     s.createScript(yamlStruct),
 			Import:     importCode,
@@ -118,9 +118,9 @@ func (s *Model) createScript(yamlStruct *YamlStruct) string {
 	var returnScript []string
 
 	for _, field := range s.getStructure(yamlStruct.Structures) {
-		fieldScript = append(fieldScript, fmt.Sprintf("%s %s", internal.SnakeToUpperCamel(field.Name), s.getType(field)))
-		paramScript = append(paramScript, fmt.Sprintf("%s %s", internal.SnakeToCamel(field.Name), s.getType(field)))
-		returnScript = append(returnScript, fmt.Sprintf("%s: %s,", internal.SnakeToUpperCamel(field.Name), internal.SnakeToCamel(field.Name)))
+		fieldScript = append(fieldScript, fmt.Sprintf("%s %s", changes.SnakeToUpperCamel(field.Name), s.getType(field)))
+		paramScript = append(paramScript, fmt.Sprintf("%s %s", changes.SnakeToCamel(field.Name), s.getType(field)))
+		returnScript = append(returnScript, fmt.Sprintf("%s: %s,", changes.SnakeToUpperCamel(field.Name), changes.SnakeToCamel(field.Name)))
 	}
 
 	return fmt.Sprintf(
@@ -130,7 +130,7 @@ func (s *Model) createScript(yamlStruct *YamlStruct) string {
 
 		%s`,
 		s.createStruct(yamlStruct.Name, strings.Join(fieldScript, "\n")),
-		s.createNew(yamlStruct.Name, internal.SingularToPlural(yamlStruct.Name)),
+		s.createNew(yamlStruct.Name, changes.SingularToPlural(yamlStruct.Name)),
 		s.createSetter(yamlStruct.Name, strings.Join(paramScript, ","), strings.Join(returnScript, "\n")),
 	)
 }
@@ -216,23 +216,23 @@ func (s *Model) getType(field *Structure) string {
 	case "structure":
 		if field.Package != "" {
 			importCode = fmt.Sprintf("%s\n%s", importCode, fmt.Sprintf("\"github.com/game-core/gocrafter/pkg/domain/model/%s\"", field.Package))
-			result = fmt.Sprintf("%s.%s", internal.SnakeToCamel(field.Name), internal.SnakeToUpperCamel(field.Name))
+			result = fmt.Sprintf("%s.%s", changes.SnakeToCamel(field.Name), changes.SnakeToUpperCamel(field.Name))
 		} else {
-			result = internal.SnakeToUpperCamel(field.Name)
+			result = changes.SnakeToUpperCamel(field.Name)
 		}
 	case "structures":
 		if field.Package != "" {
 			importCode = fmt.Sprintf("%s\n%s", importCode, fmt.Sprintf("\"github.com/game-core/gocrafter/pkg/domain/model/%s\"", field.Package))
-			result = fmt.Sprintf("%s.%s", internal.SnakeToCamel(field.Name), internal.SnakeToUpperCamel(internal.SingularToPlural(field.Name)))
+			result = fmt.Sprintf("%s.%s", changes.SnakeToCamel(field.Name), changes.SnakeToUpperCamel(changes.SingularToPlural(field.Name)))
 		} else {
-			result = internal.SnakeToUpperCamel(internal.SingularToPlural(field.Name))
+			result = changes.SnakeToUpperCamel(changes.SingularToPlural(field.Name))
 		}
 	case "enum":
 		if field.Package != "" {
 			importCode = fmt.Sprintf("%s\n%s", importCode, "github.com/game-core/gocrafter/pkg/domain/enum")
-			result = fmt.Sprintf("emun.%s", internal.SnakeToUpperCamel(field.Name))
+			result = fmt.Sprintf("emun.%s", changes.SnakeToUpperCamel(field.Name))
 		} else {
-			result = internal.SnakeToUpperCamel(field.Name)
+			result = changes.SnakeToUpperCamel(field.Name)
 		}
 	default:
 		result = field.Type

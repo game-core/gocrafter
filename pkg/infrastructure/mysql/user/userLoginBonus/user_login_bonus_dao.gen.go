@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/game-core/gocrafter/configs/database"
-	"github.com/game-core/gocrafter/internal"
+	"github.com/game-core/gocrafter/internal/keys"
 	"github.com/game-core/gocrafter/pkg/domain/model/loginBonus/userLoginBonus"
 )
 
@@ -24,7 +24,7 @@ func NewUserLoginBonusDao(conn *database.SqlHandler) userLoginBonus.UserLoginBon
 
 func (s *userLoginBonusDao) Find(ctx context.Context, userId string, masterLoginBonusId int64) (*userLoginBonus.UserLoginBonus, error) {
 	t := NewUserLoginBonus()
-	res := s.ShardConn.Shards[internal.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_login_bonus_id = ?", masterLoginBonusId).Find(t)
+	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_login_bonus_id = ?", masterLoginBonusId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -37,7 +37,7 @@ func (s *userLoginBonusDao) Find(ctx context.Context, userId string, masterLogin
 
 func (s *userLoginBonusDao) FindOrNil(ctx context.Context, userId string, masterLoginBonusId int64) (*userLoginBonus.UserLoginBonus, error) {
 	t := NewUserLoginBonus()
-	res := s.ShardConn.Shards[internal.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_login_bonus_id = ?", masterLoginBonusId).Find(t)
+	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_login_bonus_id = ?", masterLoginBonusId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (s *userLoginBonusDao) FindOrNil(ctx context.Context, userId string, master
 
 func (s *userLoginBonusDao) FindByUserId(ctx context.Context, userId string) (*userLoginBonus.UserLoginBonus, error) {
 	t := NewUserLoginBonus()
-	res := s.ShardConn.Shards[internal.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(t)
+	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -63,7 +63,7 @@ func (s *userLoginBonusDao) FindByUserId(ctx context.Context, userId string) (*u
 
 func (s *userLoginBonusDao) FindByMasterLoginBonusIdAndUserId(ctx context.Context, userId string, masterLoginBonusId int64) (*userLoginBonus.UserLoginBonus, error) {
 	t := NewUserLoginBonus()
-	res := s.ShardConn.Shards[internal.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_login_bonus_id = ?", masterLoginBonusId).Find(t)
+	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_login_bonus_id = ?", masterLoginBonusId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -76,7 +76,7 @@ func (s *userLoginBonusDao) FindByMasterLoginBonusIdAndUserId(ctx context.Contex
 
 func (s *userLoginBonusDao) FinOrNilByUserId(ctx context.Context, userId string) (*userLoginBonus.UserLoginBonus, error) {
 	t := NewUserLoginBonus()
-	res := s.ShardConn.Shards[internal.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(t)
+	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -89,7 +89,7 @@ func (s *userLoginBonusDao) FinOrNilByUserId(ctx context.Context, userId string)
 
 func (s *userLoginBonusDao) FinOrNilByMasterLoginBonusIdAndUserId(ctx context.Context, userId string, masterLoginBonusId int64) (*userLoginBonus.UserLoginBonus, error) {
 	t := NewUserLoginBonus()
-	res := s.ShardConn.Shards[internal.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_login_bonus_id = ?", masterLoginBonusId).Find(t)
+	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_login_bonus_id = ?", masterLoginBonusId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -102,7 +102,7 @@ func (s *userLoginBonusDao) FinOrNilByMasterLoginBonusIdAndUserId(ctx context.Co
 
 func (s *userLoginBonusDao) FindList(ctx context.Context, userId string) (userLoginBonus.UserLoginBonuses, error) {
 	ts := NewUserLoginBonuses()
-	res := s.ShardConn.Shards[internal.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(ts)
+	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -117,7 +117,7 @@ func (s *userLoginBonusDao) FindList(ctx context.Context, userId string) (userLo
 
 func (s *userLoginBonusDao) FindListByUserId(ctx context.Context, userId string) (userLoginBonus.UserLoginBonuses, error) {
 	ts := NewUserLoginBonuses()
-	res := s.ShardConn.Shards[internal.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(ts)
+	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -132,7 +132,7 @@ func (s *userLoginBonusDao) FindListByUserId(ctx context.Context, userId string)
 
 func (s *userLoginBonusDao) FindListByMasterLoginBonusIdAndUserId(ctx context.Context, userId string, masterLoginBonusId int64) (userLoginBonus.UserLoginBonuses, error) {
 	ts := NewUserLoginBonuses()
-	res := s.ShardConn.Shards[internal.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_login_bonus_id = ?", masterLoginBonusId).Find(ts)
+	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_login_bonus_id = ?", masterLoginBonusId).Find(ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -150,7 +150,7 @@ func (s *userLoginBonusDao) Create(ctx context.Context, tx *gorm.DB, m *userLogi
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[internal.GetShardKeyByUserId(m.UserId)].WriteConn
+		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
 	}
 
 	t := &UserLoginBonus{
@@ -182,7 +182,7 @@ func (s *userLoginBonusDao) CreateList(ctx context.Context, tx *gorm.DB, ms user
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[internal.GetShardKeyByUserId(fms.UserId)].WriteConn
+		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(fms.UserId)].WriteConn
 	}
 
 	ts := NewUserLoginBonuses()
@@ -208,7 +208,7 @@ func (s *userLoginBonusDao) Update(ctx context.Context, tx *gorm.DB, m *userLogi
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[internal.GetShardKeyByUserId(m.UserId)].WriteConn
+		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
 	}
 
 	t := &UserLoginBonus{
@@ -229,7 +229,7 @@ func (s *userLoginBonusDao) Delete(ctx context.Context, tx *gorm.DB, m *userLogi
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[internal.GetShardKeyByUserId(m.UserId)].WriteConn
+		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
 	}
 
 	res := conn.Model(NewUserLoginBonus()).WithContext(ctx).Where("user_id = ?", m.UserId).Where("master_login_bonus_id = ?", m.MasterLoginBonusId).Delete(NewUserLoginBonus())
