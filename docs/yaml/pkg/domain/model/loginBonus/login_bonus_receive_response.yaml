@@ -28,7 +28,7 @@ structure:
     name: master_login_bonus_items
     type: structures
     package: loginBonus/masterLoginBonusItem
-    nullable: true
+    nullable: false
     number: 4
     comment: "マスターログインボーナスアイテム一覧"
   MasterLoginBonusSchedule:

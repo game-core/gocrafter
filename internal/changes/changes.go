@@ -62,49 +62,40 @@ func SingularToPlural(s string) string {
 		return s
 	}
 
-	// 単語ごとに分割
-	words := strings.FieldsFunc(s, func(r rune) bool {
-		return r == '_' || r == '-'
-	})
-
 	// 最後の単語を複数形に変換
+	words := splitWords(s)
 	words[len(words)-1] = convertSingularToPlural(words[len(words)-1])
 
-	// 変換した単語を結合して返す
 	return strings.Join(words, "")
+}
+
+// splitWords 文字列を単語に分割
+func splitWords(s string) []string {
+	var result []string
+	start := 0
+	for i, c := range s {
+		if i > 0 && (unicode.IsUpper(c) || (unicode.IsLower(c) && i+1 < len(s) && unicode.IsUpper(rune(s[i+1])))) {
+			result = append(result, s[start:i])
+			start = i
+		}
+	}
+
+	return append(result, s[start:])
 }
 
 // convertSingularToPlural 単語ごとに単数形から複数形に変換
 func convertSingularToPlural(s string) string {
-	// 例外的な変換ルール
-	irregularForms := map[string]string{
-		"person":    "people",
-		"child":     "children",
-		"ox":        "oxen",
-		"man":       "men",
-		"woman":     "women",
-		"tooth":     "teeth",
-		"foot":      "feet",
-		"goose":     "geese",
-		"cactus":    "cacti",
-		"fungus":    "fungi",
-		"focus":     "foci",
-		"datum":     "data",
-		"medium":    "media",
-		"analysis":  "analyses",
-		"basis":     "bases",
-		"diagnosis": "diagnoses",
-		"ellipsis":  "ellipses",
-	}
-
 	// 例外的な変換があればそれを返す
-	if val, ok := irregularForms[s]; ok {
+	if val, ok := GetConvertMap()[strings.ToLower(s)]; ok {
+		if unicode.IsUpper(rune(s[0])) {
+			return strings.Title(val)
+		}
 		return val
 	}
 
 	// 最後の文字を判定して変換
 	lastChar := s[len(s)-1:]
-	if lastChar == "y" && len(s) > 1 && !strings.ContainsAny(string(s[len(s)-2]), "aeiouy") {
+	if lastChar == "y" && len(s) > 1 && !strings.ContainsAny(string(s[len(s)-2]), "aeiouyAEIOUY") {
 		return s[:len(s)-1] + "ies"
 	} else if lastChar == "s" {
 		return s + "es"
@@ -119,12 +110,8 @@ func PluralToSingular(s string) string {
 		return s
 	}
 
-	// 単語ごとに分割
-	words := strings.FieldsFunc(s, func(r rune) bool {
-		return r == '_' || r == '-'
-	})
-
 	// 最後の単語を単数形に変換
+	words := splitWords(s)
 	words[len(words)-1] = convertPluralToSingular(words[len(words)-1])
 
 	// 変換した単語を結合して返す
@@ -133,31 +120,11 @@ func PluralToSingular(s string) string {
 
 // convertPluralToSingular 単語ごとに複数形から単数形に変換
 func convertPluralToSingular(s string) string {
-	// 例外的な変換ルールの逆
-	irregularFormsReverse := map[string]string{
-		"people":    "person",
-		"children":  "child",
-		"oxen":      "ox",
-		"men":       "man",
-		"women":     "woman",
-		"teeth":     "tooth",
-		"feet":      "foot",
-		"geese":     "goose",
-		"cacti":     "cactus",
-		"fungi":     "fungus",
-		"foci":      "focus",
-		"data":      "datum",
-		"media":     "medium",
-		"analysis":  "analysis",
-		"basis":     "basis",
-		"diagnosis": "diagnosis",
-		"ellipsis":  "ellipsis",
-		"bonuses":   "bonus",
-		"schedules": "schedule",
-	}
-
-	// すでに単数形の場合はそのまま返す
-	if val, ok := irregularFormsReverse[s]; ok {
+	// 例外的な変換があればそれを返す
+	if val, ok := GetInverseConvertMap()[strings.ToLower(s)]; ok {
+		if unicode.IsUpper(rune(s[0])) {
+			return strings.Title(val)
+		}
 		return val
 	}
 

@@ -1,0 +1,17 @@
+name: ItemReceiveRequest
+package: item
+comment: "アイテム受け取りリクエスト"
+
+structure:
+  UserId:
+    name: user_id
+    type: string
+    nullable: false
+    number: 1
+    comment: "ユーザーID"
+  MasterItemIds:
+    name: master_item_ids
+    type: int64
+    nullable: false
+    number: 2
+    comment: "アイテムID"

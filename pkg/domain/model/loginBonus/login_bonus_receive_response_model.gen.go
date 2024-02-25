@@ -15,7 +15,7 @@ type LoginBonusReceiveResponse struct {
 	UserLoginBonus           *userLoginBonus.UserLoginBonus
 	MasterLoginBonus         *masterLoginBonus.MasterLoginBonus
 	MasterLoginBonusEvent    *masterLoginBonusEvent.MasterLoginBonusEvent
-	MasterLoginBonusItems    *masterLoginBonusItem.MasterLoginBonusItems
+	MasterLoginBonusItems    masterLoginBonusItem.MasterLoginBonusItems
 	MasterLoginBonusSchedule *masterLoginBonusSchedule.MasterLoginBonusSchedule
 }
 
@@ -27,7 +27,7 @@ func NewLoginBonusReceiveResponses() LoginBonusReceiveResponses {
 	return LoginBonusReceiveResponses{}
 }
 
-func SetLoginBonusReceiveResponse(userLoginBonus *userLoginBonus.UserLoginBonus, masterLoginBonus *masterLoginBonus.MasterLoginBonus, masterLoginBonusEvent *masterLoginBonusEvent.MasterLoginBonusEvent, masterLoginBonusItems *masterLoginBonusItem.MasterLoginBonusItems, masterLoginBonusSchedule *masterLoginBonusSchedule.MasterLoginBonusSchedule) *LoginBonusReceiveResponse {
+func SetLoginBonusReceiveResponse(userLoginBonus *userLoginBonus.UserLoginBonus, masterLoginBonus *masterLoginBonus.MasterLoginBonus, masterLoginBonusEvent *masterLoginBonusEvent.MasterLoginBonusEvent, masterLoginBonusItems masterLoginBonusItem.MasterLoginBonusItems, masterLoginBonusSchedule *masterLoginBonusSchedule.MasterLoginBonusSchedule) *LoginBonusReceiveResponse {
 	return &LoginBonusReceiveResponse{
 		UserLoginBonus:           userLoginBonus,
 		MasterLoginBonus:         masterLoginBonus,

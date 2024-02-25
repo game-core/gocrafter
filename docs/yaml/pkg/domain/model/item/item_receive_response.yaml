@@ -1,0 +1,19 @@
+name: ItemReceiveResponse
+package: item
+comment: "アイテム受け取りレスポンス"
+
+structure:
+  UserItemBoxes:
+    name: user_item_boxes
+    type: structures
+    package: item/userItemBox
+    nullable: false
+    number: 1
+    comment: "ユーザーアイテムボックス一覧"
+  MasterItems:
+    name: master_items
+    type: structures
+    package: item/masterItem
+    nullable: false
+    number: 2
+    comment: "マスターアイテム一覧"
