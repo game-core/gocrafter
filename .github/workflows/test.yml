@@ -17,8 +17,5 @@ jobs:
       - name: Sleep for 20 seconds
         run: sleep 20
 
-      - name: Usecase Test
-        run: docker-compose -f docker-compose.test.yaml exec api-game-test go test -v ./api/game/usecase/...
-
-      - name: Domain Test
-        run: docker-compose -f docker-compose.test.yaml exec api-game-test go test -v ./pkg/domain/...
+      - name: Test
+        run: make docker_test_run
