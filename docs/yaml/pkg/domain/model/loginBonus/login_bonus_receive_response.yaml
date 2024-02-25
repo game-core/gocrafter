@@ -1,0 +1,40 @@
+name: LoginBonusReceiveResponse
+package: loginBonus
+comment: "ログインボーナス受け取りレスポンス"
+
+structure:
+  UserLoginBonus:
+    name: user_login_bonus
+    type: structure
+    package: loginBonus/userLoginBonus
+    nullable: true
+    number: 1
+    comment: "ユーザーログインボーナス"
+  MasterLoginBonus:
+    name: master_login_bonus
+    type: structure
+    package: loginBonus/masterLoginBonus
+    nullable: true
+    number: 2
+    comment: "マスターログインボーナス"
+  MasterLoginBonusEvent:
+    name: master_login_bonus_event
+    type: structure
+    package: loginBonus/masterLoginBonusEvent
+    nullable: true
+    number: 3
+    comment: "マスターログインボーナスイベント"
+  MasterLoginBonusItems:
+    name: master_login_bonus_items
+    type: structures
+    package: loginBonus/masterLoginBonusItem
+    nullable: true
+    number: 4
+    comment: "マスターログインボーナスアイテム一覧"
+  MasterLoginBonusSchedule:
+    name: master_login_bonus_schedule
+    type: structure
+    package: loginBonus/masterLoginBonusSchedule
+    nullable: true
+    number: 5
+    comment: "マスターログインボーナススケジュール"

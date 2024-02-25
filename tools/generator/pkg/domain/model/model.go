@@ -223,7 +223,7 @@ func (s *Model) getType(field *Structure) string {
 	case "structures":
 		if field.Package != "" {
 			importCode = fmt.Sprintf("%s\n%s", importCode, fmt.Sprintf("\"github.com/game-core/gocrafter/pkg/domain/model/%s\"", field.Package))
-			result = fmt.Sprintf("%s.%s", changes.SnakeToCamel(field.Name), changes.SnakeToUpperCamel(changes.SingularToPlural(field.Name)))
+			result = fmt.Sprintf("%s.%s", changes.SnakeToCamel(changes.PluralToSingular(field.Name)), changes.SnakeToUpperCamel(field.Name))
 		} else {
 			result = changes.SnakeToUpperCamel(changes.SingularToPlural(field.Name))
 		}
