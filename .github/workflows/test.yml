@@ -6,8 +6,8 @@ on:
       - main
 
 jobs:
-  usecase_test:
-    name: Run Usecase Test
+  domain_test:
+    name: Run Test
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
@@ -20,16 +20,5 @@ jobs:
       - name: Usecase Test
         run: docker compose -f docker-compose.test.yaml exec api-game-test go test -v ./api/game/usecase/...
 
-  domain_test:
-    name: Run Domain Test
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v3
-      - name: Build
-        run: docker compose -f docker-compose.test.yaml up -d --build
-
-      - name: Sleep for 10 seconds
-        run: sleep 10
-
-      - name: Service Test
+      - name: Domain Test
         run: docker compose -f docker-compose.test.yaml exec api-game-test go test -v ./pkg/domain/...
