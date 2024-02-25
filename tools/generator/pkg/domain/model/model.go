@@ -225,7 +225,7 @@ func (s *Model) getType(field *Structure) string {
 			importCode = fmt.Sprintf("%s\n%s", importCode, fmt.Sprintf("\"github.com/game-core/gocrafter/pkg/domain/model/%s\"", field.Package))
 			result = fmt.Sprintf("%s.%s", changes.SnakeToCamel(changes.PluralToSingular(field.Name)), changes.SnakeToUpperCamel(field.Name))
 		} else {
-			result = changes.SnakeToUpperCamel(changes.SingularToPlural(field.Name))
+			result = changes.SnakeToUpperCamel(field.Name)
 		}
 	case "enum":
 		importCode = fmt.Sprintf("%s\n%s", importCode, "\"github.com/game-core/gocrafter/pkg/domain/enum\"")

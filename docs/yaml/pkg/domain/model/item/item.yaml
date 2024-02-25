@@ -1,0 +1,17 @@
+name: Item
+package: item
+comment: "アイテム"
+
+structure:
+  MasterItemId:
+    name: master_item_id
+    type: int64
+    nullable: false
+    number: 1
+    comment: "アイテムID"
+  Count:
+    name: count
+    type: int32
+    nullable: false
+    number: 2
+    comment: "個数"

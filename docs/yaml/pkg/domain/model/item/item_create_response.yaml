@@ -1,0 +1,19 @@
+name: ItemCreateResponse
+package: item
+comment: "アイテム作成レスポンス"
+
+structure:
+  UserItemBox:
+    name: user_item_box
+    type: structure
+    package: item/userItemBox
+    nullable: true
+    number: 1
+    comment: "ユーザーアイテムボックス"
+  MasterItem:
+    name: master_item
+    type: structure
+    package: item/masterItem
+    nullable: true
+    number: 2
+    comment: "マスターアイテム"

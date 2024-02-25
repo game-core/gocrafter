@@ -9,9 +9,9 @@ structure:
     nullable: false
     number: 1
     comment: "ユーザーID"
-  MasterItemIds:
-    name: master_item_ids
-    type: int64
+  Items:
+    name: items
+    type: structures
     nullable: false
     number: 2
-    comment: "アイテムID"
+    comment: "アイテム一覧"

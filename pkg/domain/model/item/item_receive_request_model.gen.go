@@ -4,8 +4,8 @@ package item
 type ItemReceiveRequests []*ItemReceiveRequest
 
 type ItemReceiveRequest struct {
-	UserId        string
-	MasterItemIds int64
+	UserId string
+	Items  Items
 }
 
 func NewItemReceiveRequest() *ItemReceiveRequest {
@@ -16,9 +16,9 @@ func NewItemReceiveRequests() ItemReceiveRequests {
 	return ItemReceiveRequests{}
 }
 
-func SetItemReceiveRequest(userId string, masterItemIds int64) *ItemReceiveRequest {
+func SetItemReceiveRequest(userId string, items Items) *ItemReceiveRequest {
 	return &ItemReceiveRequest{
-		UserId:        userId,
-		MasterItemIds: masterItemIds,
+		UserId: userId,
+		Items:  items,
 	}
 }
