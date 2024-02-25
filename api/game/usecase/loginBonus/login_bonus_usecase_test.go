@@ -221,7 +221,7 @@ func TestLoginBonusUsecase_Login(t *testing.T) {
 			wantErr: errors.NewMethodError("s.transactionService.UserBegin", errors.NewTestError()),
 		},
 		{
-			name: "正常：受け取りできる",
+			name: "異常：s.loginBonusService.Receive",
 			fields: fields{
 				loginBonusService: func(ctrl *gomock.Controller) loginBonusService.LoginBonusService {
 					m := loginBonusService.NewMockLoginBonusService(ctrl)
