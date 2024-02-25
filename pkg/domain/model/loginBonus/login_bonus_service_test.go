@@ -2,17 +2,18 @@ package loginBonus
 
 import (
 	"context"
-	"github.com/game-core/gocrafter/internal/errors"
-	"github.com/game-core/gocrafter/pkg/domain/enum"
-	"github.com/game-core/gocrafter/pkg/domain/model/item/masterItem"
-	"github.com/game-core/gocrafter/pkg/domain/model/item/userItemBox"
-	"github.com/golang/mock/gomock"
-	"gorm.io/gorm"
 	"reflect"
 	"testing"
 	"time"
 
+	"github.com/golang/mock/gomock"
+	"gorm.io/gorm"
+
+	"github.com/game-core/gocrafter/internal/errors"
+	"github.com/game-core/gocrafter/pkg/domain/enum"
 	"github.com/game-core/gocrafter/pkg/domain/model/item"
+	"github.com/game-core/gocrafter/pkg/domain/model/item/masterItem"
+	"github.com/game-core/gocrafter/pkg/domain/model/item/userItemBox"
 	"github.com/game-core/gocrafter/pkg/domain/model/loginBonus/masterLoginBonus"
 	"github.com/game-core/gocrafter/pkg/domain/model/loginBonus/masterLoginBonusEvent"
 	"github.com/game-core/gocrafter/pkg/domain/model/loginBonus/masterLoginBonusItem"
@@ -821,7 +822,7 @@ func TestNewItemService_Receive(t *testing.T) {
 			wantErr: errors.NewMethodError("s.masterLoginBonusItemRepository.FindListByMasterLoginBonusScheduleId", errors.NewTestError()),
 		},
 		{
-			name: "正常：作成できる場合（既に取得したことがあるアイテム）",
+			name: "異常：s.userLoginBonusRepository.FindOrNil）",
 			fields: fields{
 				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
 					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)

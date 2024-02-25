@@ -9,8 +9,8 @@ structure:
     nullable: false
     number: 1
     comment: "ID"
-  MasterEventId:
-    name: master_event_id
+  MasterLoginBonusEventId:
+    name: master_login_bonus_event_id
     type: int64
     nullable: false
     number: 2

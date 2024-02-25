@@ -7,6 +7,6 @@ option go_package = "api/game/presentation/server/loginBonus";
 
 message MasterLoginBonus {
   int64 id = 1;
-  int64 master_event_id = 2;
+  int64 master_login_bonus_event_id = 2;
   string name = 3;
 }

@@ -1,10 +1,10 @@
 // Package loginBonus ログインボーナス
 package loginBonus
 
-func SetMasterLoginBonus(id int64, masterEventId int64, name string) *MasterLoginBonus {
+func SetMasterLoginBonus(id int64, masterLoginBonusEventId int64, name string) *MasterLoginBonus {
 	return &MasterLoginBonus{
-		Id:            id,
-		MasterEventId: masterEventId,
-		Name:          name,
+		Id:                      id,
+		MasterLoginBonusEventId: masterLoginBonusEventId,
+		Name:                    name,
 	}
 }
