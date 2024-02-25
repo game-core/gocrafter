@@ -1,0 +1,17 @@
+name: LoginBonusReceiveRequest
+package: loginBonus
+comment: "ログインボーナス受け取りリクエスト"
+
+structure:
+  UserId:
+    name: user_id
+    type: string
+    nullable: false
+    number: 1
+    comment: "ユーザーID"
+  MasterLoginBonusId:
+    name: master_login_bonus_id
+    type: int64
+    nullable: false
+    number: 2
+    comment: "ログインボーナスID"

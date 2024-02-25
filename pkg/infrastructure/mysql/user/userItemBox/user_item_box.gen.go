@@ -1,7 +1,9 @@
 // Package userItemBox ユーザーアイテムボックス
 package userItemBox
 
-import "time"
+import (
+	"time"
+)
 
 type UserItemBoxes []*UserItemBox
 

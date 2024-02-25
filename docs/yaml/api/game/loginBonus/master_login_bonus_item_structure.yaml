@@ -1,0 +1,35 @@
+name: MasterLoginBonusItem
+package: loginBonus
+comment: "ログインボーナスアイテム"
+
+structure:
+  Id:
+    name: id
+    type: int64
+    nullable: false
+    number: 1
+    comment: "ID"
+  MasterLoginBonusScheduleId:
+    name: master_login_bonus_schedule_id
+    type: int64
+    nullable: false
+    number: 2
+    comment: "ログインボーナススケジュールID"
+  MasterItemId:
+    name: master_item_id
+    type: int64
+    nullable: false
+    number: 3
+    comment: "アイテムID"
+  Name:
+    name: name
+    type: string
+    nullable: false
+    number: 4
+    comment: "ログインボーナスアイテム名"
+  Count:
+    name: count
+    type: int32
+    nullable: false
+    number: 5
+    comment: "個数"

@@ -1,0 +1,23 @@
+name: UserLoginBonus
+package: loginBonus
+comment: "ユーザーログインボーナス"
+
+structure:
+  UserId:
+    name: user_id
+    type: string
+    nullable: false
+    number: 1
+    comment: "ユーザーID"
+  MasterLoginBonusId:
+    name: master_login_bonus_id
+    type: int64
+    nullable: false
+    number: 2
+    comment: "ログインボーナスID"
+  ReceivedAt:
+    name: received_at
+    type: time
+    nullable: false
+    number: 3
+    comment: "受け取り日時"

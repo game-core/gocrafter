@@ -25,7 +25,7 @@ import (
 	"context"
 
 	"github.com/game-core/gocrafter/api/game/presentation/server/{{.Package}}"
-	accountUsecase "github.com/game-core/gocrafter/api/game/usecase/{{.Package}}"
+	{{.Package}}Usecase "github.com/game-core/gocrafter/api/game/usecase/{{.Package}}"
 	"github.com/game-core/gocrafter/internal/errors"
 	"github.com/game-core/gocrafter/internal/tokens"
 )

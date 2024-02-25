@@ -1,5 +1,5 @@
 name: MasterLoginBonusEvent
-package: masterLoginBonusEvent
+package: loginBonus
 comment: "ログインボーナスイベント"
 
 structure:

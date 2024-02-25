@@ -1,0 +1,13 @@
+name: LoginBonus
+package: loginBonus
+comment: "ログインボーナス"
+
+structure:
+  Receive:
+    name: receive
+    method: unary
+    auth: false
+    request: LoginBonusReceiveRequest
+    response: LoginBonusReceiveResponse
+    number: 1
+    comment: "ログインボーナスを受け取る"

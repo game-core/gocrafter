@@ -9,15 +9,26 @@ import (
 	"github.com/game-core/gocrafter/configs/database"
 
 	accountHandler "github.com/game-core/gocrafter/api/game/presentation/handler/account"
+	loginBonusHandler "github.com/game-core/gocrafter/api/game/presentation/handler/loginBonus"
 	authInterceptor "github.com/game-core/gocrafter/api/game/presentation/interceptor/auth"
 	accountUsecase "github.com/game-core/gocrafter/api/game/usecase/account"
+	loginBonusUsecase "github.com/game-core/gocrafter/api/game/usecase/loginBonus"
 	accountService "github.com/game-core/gocrafter/pkg/domain/model/account"
+	itemService "github.com/game-core/gocrafter/pkg/domain/model/item"
+	loginBonusService "github.com/game-core/gocrafter/pkg/domain/model/loginBonus"
 	shardService "github.com/game-core/gocrafter/pkg/domain/model/shard"
 	transactionService "github.com/game-core/gocrafter/pkg/domain/model/transaction"
 	commonShardDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonShard"
 	commonTransactionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonTransaction"
+	masterItemDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterItem"
+	masterLoginBonusDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonus"
+	masterLoginBonusEventDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusEvent"
+	masterLoginBonusItemDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusItem"
+	masterLoginBonusScheduleDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusSchedule"
 	masterTransactionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterTransaction"
 	userAccountDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userAccount"
+	userItemBoxDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userItemBox"
+	userLoginBonusDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userLoginBonus"
 	userTransactionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userTransaction"
 )
 
@@ -36,10 +47,27 @@ func InitializeAccountHandler() accountHandler.AccountHandler {
 	return nil
 }
 
+func InitializeLoginBonusHandler() loginBonusHandler.LoginBonusHandler {
+	wire.Build(
+		loginBonusHandler.NewLoginBonusHandler,
+		InitializeLoginBonusUsecase,
+	)
+	return nil
+}
+
 func InitializeAccountUsecase() accountUsecase.AccountUsecase {
 	wire.Build(
 		accountUsecase.NewAccountUsecase,
 		InitializeAccountService,
+		InitializeTransactionService,
+	)
+	return nil
+}
+
+func InitializeLoginBonusUsecase() loginBonusUsecase.LoginBonusUsecase {
+	wire.Build(
+		loginBonusUsecase.NewLoginBonusUsecase,
+		InitializeLoginBonusService,
 		InitializeTransactionService,
 	)
 	return nil
@@ -51,6 +79,30 @@ func InitializeAccountService() accountService.AccountService {
 		InitializeShardService,
 		database.NewDB,
 		userAccountDao.NewUserAccountDao,
+	)
+	return nil
+}
+
+func InitializeLoginBonusService() loginBonusService.LoginBonusService {
+	wire.Build(
+		loginBonusService.NewLoginBonusService,
+		InitializeItemService,
+		database.NewDB,
+		userLoginBonusDao.NewUserLoginBonusDao,
+		masterLoginBonusDao.NewMasterLoginBonusDao,
+		masterLoginBonusItemDao.NewMasterLoginBonusItemDao,
+		masterLoginBonusEventDao.NewMasterLoginBonusEventDao,
+		masterLoginBonusScheduleDao.NewMasterLoginBonusScheduleDao,
+	)
+	return nil
+}
+
+func InitializeItemService() itemService.ItemService {
+	wire.Build(
+		itemService.NewItemService,
+		database.NewDB,
+		userItemBoxDao.NewUserItemBoxDao,
+		masterItemDao.NewMasterItemDao,
 	)
 	return nil
 }

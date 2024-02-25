@@ -87,7 +87,7 @@ func (s *Setter) getYamlStruct(file string) (*YamlStruct, error) {
 
 // getOutputFileName ファイル名を取得する
 func (s *Setter) getOutputFileName(dir, name string) string {
-	return filepath.Join(dir, fmt.Sprintf("%s_model.gen.go", changes.UpperCamelToSnake(name)))
+	return filepath.Join(dir, fmt.Sprintf("%s.gen.go", changes.UpperCamelToSnake(name)))
 }
 
 // createOutputFile ファイルを作成する
@@ -193,23 +193,11 @@ func (s *Setter) getType(field *Structure) string {
 		// timeの場合はポインタ固定にする
 		return "*timestamppb.Timestamp"
 	case "structure":
-		if field.Package != "" {
-			result = fmt.Sprintf("%s", changes.SnakeToUpperCamel(field.Name))
-		} else {
-			result = changes.SnakeToUpperCamel(field.Name)
-		}
+		result = changes.SnakeToUpperCamel(field.Name)
 	case "structures":
-		if field.Package != "" {
-			result = fmt.Sprintf("%s", changes.SnakeToUpperCamel(changes.SingularToPlural(field.Name)))
-		} else {
-			result = changes.SnakeToUpperCamel(changes.SingularToPlural(field.Name))
-		}
+		result = fmt.Sprintf("[]*%s", changes.SnakeToUpperCamel(changes.PluralToSingular(field.Name)))
 	case "enum":
-		if field.Package != "" {
-			result = fmt.Sprintf("%s", changes.SnakeToUpperCamel(field.Name))
-		} else {
-			result = changes.SnakeToUpperCamel(field.Name)
-		}
+		result = changes.SnakeToUpperCamel(field.Name)
 	default:
 		result = field.Type
 	}

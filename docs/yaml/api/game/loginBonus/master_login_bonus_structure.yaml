@@ -1,5 +1,5 @@
 name: MasterLoginBonus
-package: masterLoginBonus
+package: loginBonus
 comment: "ログインボーナス"
 
 structure:
@@ -9,12 +9,12 @@ structure:
     nullable: false
     number: 1
     comment: "ID"
-  MasterLoginBonusEventId:
-    name: master_login_bonus_event_id
+  MasterEventId:
+    name: master_event_id
     type: int64
     nullable: false
     number: 2
-    comment: "ログボーナスイベントID"
+    comment: "イベントID"
   Name:
     name: name
     type: string

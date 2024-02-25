@@ -23,13 +23,13 @@ structure:
     comment: "個数"
   CreatedAt:
     name: created_at
-    type: time.Time
+    type: time
     nullable: false
     number: 4
     comment: "作成日時"
   UpdatedAt:
     name: updated_at
-    type: time.Time
+    type: time
     nullable: false
     number: 5
     comment: "更新日時"

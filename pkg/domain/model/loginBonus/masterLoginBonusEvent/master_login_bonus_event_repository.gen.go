@@ -4,7 +4,7 @@
 package masterLoginBonusEvent
 
 import (
-	"context"
+	context "context"
 
 	"gorm.io/gorm"
 )
@@ -12,10 +12,7 @@ import (
 type MasterLoginBonusEventRepository interface {
 	Find(ctx context.Context, id int64) (*MasterLoginBonusEvent, error)
 	FindOrNil(ctx context.Context, id int64) (*MasterLoginBonusEvent, error)
-	FindByMasterLoginBonusId(ctx context.Context, masterLoginBonusId int64) (*MasterLoginBonusEvent, error)
-	FinOrNilByMasterLoginBonusId(ctx context.Context, masterLoginBonusId int64) (*MasterLoginBonusEvent, error)
 	FindList(ctx context.Context) (MasterLoginBonusEvents, error)
-	FindListByMasterLoginBonusId(ctx context.Context, masterLoginBonusId int64) (MasterLoginBonusEvents, error)
 	Create(ctx context.Context, tx *gorm.DB, m *MasterLoginBonusEvent) (*MasterLoginBonusEvent, error)
 	CreateList(ctx context.Context, tx *gorm.DB, ms MasterLoginBonusEvents) (MasterLoginBonusEvents, error)
 	Update(ctx context.Context, tx *gorm.DB, m *MasterLoginBonusEvent) (*MasterLoginBonusEvent, error)

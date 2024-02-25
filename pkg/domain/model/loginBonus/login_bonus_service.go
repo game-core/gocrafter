@@ -54,7 +54,7 @@ func (s *loginBonusService) Receive(ctx context.Context, tx *gorm.DB, now time.T
 		return nil, errors.NewMethodError("s.masterLoginBonusRepository.Find", err)
 	}
 
-	masterLoginBonusEventModel, err := s.getEvent(ctx, now, req.MasterLoginBonusId)
+	masterLoginBonusEventModel, err := s.getEvent(ctx, now, masterLoginBonusModel.MasterLoginBonusEventId)
 	if err != nil {
 		return nil, errors.NewMethodError("s.getEvent", err)
 	}
@@ -96,8 +96,8 @@ func (s *loginBonusService) Receive(ctx context.Context, tx *gorm.DB, now time.T
 }
 
 // getEvent イベントを取得する
-func (s *loginBonusService) getEvent(ctx context.Context, now time.Time, masterLoginBonusId int64) (*masterLoginBonusEvent.MasterLoginBonusEvent, error) {
-	masterLoginBonusEvent, err := s.masterLoginBonusEventRepository.FindByMasterLoginBonusId(ctx, masterLoginBonusId)
+func (s *loginBonusService) getEvent(ctx context.Context, now time.Time, masterLoginBonusEventId int64) (*masterLoginBonusEvent.MasterLoginBonusEvent, error) {
+	masterLoginBonusEvent, err := s.masterLoginBonusEventRepository.Find(ctx, masterLoginBonusEventId)
 	if err != nil {
 		return nil, errors.NewMethodError("s.masterLoginBonusEventRepository.FindByMasterLoginBonusId", err)
 	}
