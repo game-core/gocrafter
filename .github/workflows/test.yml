@@ -14,11 +14,11 @@ jobs:
       - name: Build
         run: docker compose -f docker-compose.test.yaml up -d --build
 
-      - name: Sleep for 10 seconds
-        run: sleep 10
+      - name: Sleep for 20 seconds
+        run: sleep 20
 
-      - name: Application Test
-        run: docker-compose -f docker-compose.test.yaml exec api-game-test go test -v ./api/game/...
+      - name: Usecase Test
+        run: docker-compose -f docker-compose.test.yaml exec api-game-test go test -v ./api/game/usecase/...
 
       - name: Domain Test
         run: docker-compose -f docker-compose.test.yaml exec api-game-test go test -v ./pkg/domain/...
