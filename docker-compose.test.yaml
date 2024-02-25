@@ -26,7 +26,7 @@ services:
   api-game-test:
     container_name: gocrafter-api-game-test
     env_file:
-      - .env.local
+      - .env.test
     build:
       target: dev
       context: .
