@@ -1,0 +1,37 @@
+name: MasterLoginBonusSchedule
+package: masterLoginBonusSchedule
+comment: "ログインボーナススケジュール"
+
+structure:
+  Id:
+    name: id
+    type: int64
+    nullable: false
+    number: 1
+    comment: "ID"
+  MasterLoginBonusId:
+    name: master_login_bonus_id
+    type: int64
+    nullable: false
+    number: 2
+    comment: "ログインボーナスID"
+  Step:
+    name: step
+    type: int32
+    nullable: false
+    number: 3
+    comment: "ステップ"
+  Name:
+    name: name
+    type: string
+    nullable: false
+    number: 4
+    comment: "ログインボーナススケジュール名"
+primary:
+  - Id
+unique:
+  - Id
+index:
+  - MasterLoginBonusId
+  - Step
+  - MasterLoginBonusId,Step

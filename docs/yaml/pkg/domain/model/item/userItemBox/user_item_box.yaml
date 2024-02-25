@@ -1,0 +1,23 @@
+name: UserItemBox
+package: userItemBox
+comment: "ユーザーアイテムボックス"
+
+structure:
+  UserId:
+    name: user_id
+    type: string
+    nullable: false
+    number: 1
+    comment: "ユーザーID"
+  MasterItemId:
+    name: master_item_id
+    type: int64
+    nullable: false
+    number: 2
+    comment: "アイテムID"
+  Count:
+    name: count
+    type: int32
+    nullable: false
+    number: 3
+    comment: "個数"

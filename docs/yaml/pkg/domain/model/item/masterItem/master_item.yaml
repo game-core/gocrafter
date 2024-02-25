@@ -1,0 +1,35 @@
+name: MasterItem
+package: masterItem
+comment: "アイテム"
+
+structure:
+  Id:
+    name: id
+    type: int64
+    nullable: false
+    number: 1
+    comment: "ID"
+  Name:
+    name: name
+    type: string
+    nullable: false
+    number: 2
+    comment: "アイテム名"
+  ResourceType:
+    name: resource_type
+    type: enum
+    nullable: false
+    number: 3
+    comment: "リソースタイプ"
+  RarityType:
+    name: rarity_type
+    type: enum
+    nullable: false
+    number: 4
+    comment: "レアリティタイプ"
+  Content:
+    name: content
+    type: string
+    nullable: false
+    number: 5
+    comment: "コンテンツ"

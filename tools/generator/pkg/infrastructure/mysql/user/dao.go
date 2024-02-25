@@ -699,12 +699,8 @@ func (s *Dao) getType(field *Structure) string {
 			result = changes.SnakeToUpperCamel(changes.SingularToPlural(field.Name))
 		}
 	case "enum":
-		if field.Package != "" {
-			importCode = fmt.Sprintf("%s\n%s", importCode, "github.com/game-core/gocrafter/pkg/domain/enum")
-			result = fmt.Sprintf("emun.%s", changes.SnakeToUpperCamel(field.Name))
-		} else {
-			result = changes.SnakeToUpperCamel(field.Name)
-		}
+		importCode = fmt.Sprintf("%s\n%s", importCode, "\"github.com/game-core/gocrafter/pkg/domain/enum\"")
+		result = fmt.Sprintf("enum.%s", changes.SnakeToUpperCamel(field.Name))
 	default:
 		result = field.Type
 	}

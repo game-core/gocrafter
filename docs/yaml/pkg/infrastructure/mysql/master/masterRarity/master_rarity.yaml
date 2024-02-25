@@ -1,0 +1,29 @@
+name: MasterRarity
+package: masterRarity
+comment: "レアリティ"
+
+structure:
+  Id:
+    name: id
+    type: int64
+    nullable: false
+    number: 1
+    comment: "ID"
+  Name:
+    name: name
+    type: string
+    nullable: false
+    number: 2
+    comment: "レアリティ名"
+  RarityType:
+    name: rarity_type
+    type: enum
+    nullable: false
+    number: 3
+    comment: "レアリティタイプ"
+primary:
+  - Id
+unique:
+  - Id
+index:
+  - RarityType

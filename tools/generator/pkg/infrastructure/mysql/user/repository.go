@@ -367,11 +367,7 @@ func (s *Repository) getType(field *Structure) string {
 			result = changes.SnakeToUpperCamel(changes.SingularToPlural(field.Name))
 		}
 	case "enum":
-		if field.Package != "" {
-			result = fmt.Sprintf("emun.%s", changes.SnakeToUpperCamel(field.Name))
-		} else {
-			result = changes.SnakeToUpperCamel(field.Name)
-		}
+		result = fmt.Sprintf("enum.%s", changes.SnakeToUpperCamel(field.Name))
 	default:
 		result = field.Type
 	}

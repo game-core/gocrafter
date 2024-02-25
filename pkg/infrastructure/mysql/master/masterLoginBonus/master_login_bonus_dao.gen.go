@@ -45,7 +45,7 @@ func (s *masterLoginBonusDao) Find(ctx context.Context, id int64) (*masterLoginB
 		return nil, errors.NewError("record does not exist")
 	}
 
-	m := masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterEventId, t.Name)
+	m := masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterLoginBonusEventId, t.Name)
 	s.Cache.Set(cashes.CreateCacheKey("master_login_bonus", "Find", fmt.Sprintf("%d_", id)), m, cache.DefaultExpiration)
 	return m, nil
 }
@@ -67,13 +67,13 @@ func (s *masterLoginBonusDao) FindOrNil(ctx context.Context, id int64) (*masterL
 		return nil, nil
 	}
 
-	m := masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterEventId, t.Name)
+	m := masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterLoginBonusEventId, t.Name)
 	s.Cache.Set(cashes.CreateCacheKey("master_login_bonus", "FindOrNil", fmt.Sprintf("%d_", id)), m, cache.DefaultExpiration)
 	return m, nil
 }
 
-func (s *masterLoginBonusDao) FindByMasterEventId(ctx context.Context, masterEventId int64) (*masterLoginBonus.MasterLoginBonus, error) {
-	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_login_bonus", "FindByMasterEventId", fmt.Sprintf("%d_", masterEventId)))
+func (s *masterLoginBonusDao) FindByMasterLoginBonusEventId(ctx context.Context, masterLoginBonusEventId int64) (*masterLoginBonus.MasterLoginBonus, error) {
+	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_login_bonus", "FindByMasterLoginBonusEventId", fmt.Sprintf("%d_", masterLoginBonusEventId)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterLoginBonus.MasterLoginBonus); ok {
 			return cachedEntity, nil
@@ -81,7 +81,7 @@ func (s *masterLoginBonusDao) FindByMasterEventId(ctx context.Context, masterEve
 	}
 
 	t := NewMasterLoginBonus()
-	res := s.ReadConn.WithContext(ctx).Where("master_event_id = ?", masterEventId).Find(t)
+	res := s.ReadConn.WithContext(ctx).Where("master_login_bonus_event_id = ?", masterLoginBonusEventId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -89,13 +89,13 @@ func (s *masterLoginBonusDao) FindByMasterEventId(ctx context.Context, masterEve
 		return nil, errors.NewError("record does not exist")
 	}
 
-	m := masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterEventId, t.Name)
-	s.Cache.Set(cashes.CreateCacheKey("master_login_bonus", "FindByMasterEventId", fmt.Sprintf("%d_", masterEventId)), m, cache.DefaultExpiration)
+	m := masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterLoginBonusEventId, t.Name)
+	s.Cache.Set(cashes.CreateCacheKey("master_login_bonus", "FindByMasterLoginBonusEventId", fmt.Sprintf("%d_", masterLoginBonusEventId)), m, cache.DefaultExpiration)
 	return m, nil
 }
 
-func (s *masterLoginBonusDao) FinOrNilByMasterEventId(ctx context.Context, masterEventId int64) (*masterLoginBonus.MasterLoginBonus, error) {
-	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_login_bonus", "FindOrNilByMasterEventId", fmt.Sprintf("%d_", masterEventId)))
+func (s *masterLoginBonusDao) FinOrNilByMasterLoginBonusEventId(ctx context.Context, masterLoginBonusEventId int64) (*masterLoginBonus.MasterLoginBonus, error) {
+	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_login_bonus", "FindOrNilByMasterLoginBonusEventId", fmt.Sprintf("%d_", masterLoginBonusEventId)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterLoginBonus.MasterLoginBonus); ok {
 			return cachedEntity, nil
@@ -103,7 +103,7 @@ func (s *masterLoginBonusDao) FinOrNilByMasterEventId(ctx context.Context, maste
 	}
 
 	t := NewMasterLoginBonus()
-	res := s.ReadConn.WithContext(ctx).Where("master_event_id = ?", masterEventId).Find(t)
+	res := s.ReadConn.WithContext(ctx).Where("master_login_bonus_event_id = ?", masterLoginBonusEventId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -111,8 +111,8 @@ func (s *masterLoginBonusDao) FinOrNilByMasterEventId(ctx context.Context, maste
 		return nil, nil
 	}
 
-	m := masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterEventId, t.Name)
-	s.Cache.Set(cashes.CreateCacheKey("master_login_bonus", "FindOrNilByMasterEventId", fmt.Sprintf("%d_", masterEventId)), m, cache.DefaultExpiration)
+	m := masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterLoginBonusEventId, t.Name)
+	s.Cache.Set(cashes.CreateCacheKey("master_login_bonus", "FindOrNilByMasterLoginBonusEventId", fmt.Sprintf("%d_", masterLoginBonusEventId)), m, cache.DefaultExpiration)
 	return m, nil
 }
 
@@ -132,15 +132,15 @@ func (s *masterLoginBonusDao) FindList(ctx context.Context) (masterLoginBonus.Ma
 
 	ms := masterLoginBonus.NewMasterLoginBonuses()
 	for _, t := range ts {
-		ms = append(ms, masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterEventId, t.Name))
+		ms = append(ms, masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterLoginBonusEventId, t.Name))
 	}
 
 	s.Cache.Set(cashes.CreateCacheKey("master_login_bonus", "FindList", ""), ms, cache.DefaultExpiration)
 	return ms, nil
 }
 
-func (s *masterLoginBonusDao) FindListByMasterEventId(ctx context.Context, masterEventId int64) (masterLoginBonus.MasterLoginBonuses, error) {
-	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_login_bonus", "FindListByMasterEventId", fmt.Sprintf("%d_", masterEventId)))
+func (s *masterLoginBonusDao) FindListByMasterLoginBonusEventId(ctx context.Context, masterLoginBonusEventId int64) (masterLoginBonus.MasterLoginBonuses, error) {
+	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_login_bonus", "FindListByMasterLoginBonusEventId", fmt.Sprintf("%d_", masterLoginBonusEventId)))
 	if found {
 		if cachedEntity, ok := cachedResult.(masterLoginBonus.MasterLoginBonuses); ok {
 			return cachedEntity, nil
@@ -148,17 +148,17 @@ func (s *masterLoginBonusDao) FindListByMasterEventId(ctx context.Context, maste
 	}
 
 	ts := NewMasterLoginBonuses()
-	res := s.ReadConn.WithContext(ctx).Where("master_event_id = ?", masterEventId).Find(&ts)
+	res := s.ReadConn.WithContext(ctx).Where("master_login_bonus_event_id = ?", masterLoginBonusEventId).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
 
 	ms := masterLoginBonus.NewMasterLoginBonuses()
 	for _, t := range ts {
-		ms = append(ms, masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterEventId, t.Name))
+		ms = append(ms, masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterLoginBonusEventId, t.Name))
 	}
 
-	s.Cache.Set(cashes.CreateCacheKey("master_login_bonus", "FindListByMasterEventId", fmt.Sprintf("%d_", masterEventId)), ms, cache.DefaultExpiration)
+	s.Cache.Set(cashes.CreateCacheKey("master_login_bonus", "FindListByMasterLoginBonusEventId", fmt.Sprintf("%d_", masterLoginBonusEventId)), ms, cache.DefaultExpiration)
 	return ms, nil
 }
 
@@ -171,16 +171,16 @@ func (s *masterLoginBonusDao) Create(ctx context.Context, tx *gorm.DB, m *master
 	}
 
 	t := &MasterLoginBonus{
-		Id:            m.Id,
-		MasterEventId: m.MasterEventId,
-		Name:          m.Name,
+		Id:                      m.Id,
+		MasterLoginBonusEventId: m.MasterLoginBonusEventId,
+		Name:                    m.Name,
 	}
 	res := conn.Model(NewMasterLoginBonus()).WithContext(ctx).Create(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
 
-	return masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterEventId, t.Name), nil
+	return masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterLoginBonusEventId, t.Name), nil
 }
 
 func (s *masterLoginBonusDao) CreateList(ctx context.Context, tx *gorm.DB, ms masterLoginBonus.MasterLoginBonuses) (masterLoginBonus.MasterLoginBonuses, error) {
@@ -194,9 +194,9 @@ func (s *masterLoginBonusDao) CreateList(ctx context.Context, tx *gorm.DB, ms ma
 	ts := NewMasterLoginBonuses()
 	for _, m := range ms {
 		t := &MasterLoginBonus{
-			Id:            m.Id,
-			MasterEventId: m.MasterEventId,
-			Name:          m.Name,
+			Id:                      m.Id,
+			MasterLoginBonusEventId: m.MasterLoginBonusEventId,
+			Name:                    m.Name,
 		}
 		ts = append(ts, t)
 	}
@@ -218,16 +218,16 @@ func (s *masterLoginBonusDao) Update(ctx context.Context, tx *gorm.DB, m *master
 	}
 
 	t := &MasterLoginBonus{
-		Id:            m.Id,
-		MasterEventId: m.MasterEventId,
-		Name:          m.Name,
+		Id:                      m.Id,
+		MasterLoginBonusEventId: m.MasterLoginBonusEventId,
+		Name:                    m.Name,
 	}
 	res := conn.Model(NewMasterLoginBonus()).WithContext(ctx).Where("id = ?", m.Id).Updates(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
 
-	return masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterEventId, t.Name), nil
+	return masterLoginBonus.SetMasterLoginBonus(t.Id, t.MasterLoginBonusEventId, t.Name), nil
 }
 
 func (s *masterLoginBonusDao) Delete(ctx context.Context, tx *gorm.DB, m *masterLoginBonus.MasterLoginBonus) error {

@@ -1,0 +1,29 @@
+name: MasterResource
+package: masterResource
+comment: "レアリティ"
+
+structure:
+  Id:
+    name: id
+    type: int64
+    nullable: false
+    number: 1
+    comment: "ID"
+  Name:
+    name: name
+    type: string
+    nullable: false
+    number: 2
+    comment: "リソース名"
+  ResourceType:
+    name: resource_type
+    type: enum
+    nullable: false
+    number: 3
+    comment: "リソースタイプ"
+primary:
+  - Id
+unique:
+  - Id
+index:
+  - ResourceType

@@ -4,9 +4,9 @@ package masterLoginBonus
 type MasterLoginBonuses []*MasterLoginBonus
 
 type MasterLoginBonus struct {
-	Id            int64
-	MasterEventId int64
-	Name          string
+	Id                      int64
+	MasterLoginBonusEventId int64
+	Name                    string
 }
 
 func NewMasterLoginBonus() *MasterLoginBonus {
@@ -17,11 +17,11 @@ func NewMasterLoginBonuses() MasterLoginBonuses {
 	return MasterLoginBonuses{}
 }
 
-func SetMasterLoginBonus(id int64, masterEventId int64, name string) *MasterLoginBonus {
+func SetMasterLoginBonus(id int64, masterLoginBonusEventId int64, name string) *MasterLoginBonus {
 	return &MasterLoginBonus{
-		Id:            id,
-		MasterEventId: masterEventId,
-		Name:          name,
+		Id:                      id,
+		MasterLoginBonusEventId: masterLoginBonusEventId,
+		Name:                    name,
 	}
 }
 
