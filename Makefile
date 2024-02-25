@@ -55,6 +55,10 @@ docker_gen_sql:
 docker_migration:
 	$(DOCKER_COMPOSE) exec generator go run ./tools/migration/migration.go
 
+# マスターインポート
+docker_master_import:
+	$(DOCKER_COMPOSE) exec generator go run ./tools/masterImport/main.go
+
 # fmt
 docker_fmt:
 	$(DOCKER_COMPOSE) exec generator goimports -w .
