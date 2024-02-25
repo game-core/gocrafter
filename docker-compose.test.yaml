@@ -1,0 +1,45 @@
+version: '3.8'
+
+name: gocrafter-server-test
+
+services:
+  mysql-test:
+    container_name: gocrafter-mysql-test
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql_root
+      MYSQL_USER: mysql_user
+      MYSQL_PASSWORD: mysql_password
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - ./docker/mysql/conf.d:/etc/mysql/conf.d
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+      - mysql-local-test:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    tty: true
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+
+  api-game-test:
+    container_name: gocrafter-api-game-test
+    env_file:
+      - .env.local
+    build:
+      target: dev
+      context: .
+      dockerfile: ./docker/api/game/Dockerfile
+    ports:
+      - "50052:50051"
+    volumes:
+      - ./:/go/src/app
+    tty: true
+    depends_on:
+      mysql-test:
+        condition: service_healthy
+
+volumes:
+  mysql-local-test:
+    driver: local

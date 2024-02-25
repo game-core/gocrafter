@@ -19,3 +19,8 @@ func TimeToPb(t *time.Time) *timestamppb.Timestamp {
 
 	return timestamppb.New(*t)
 }
+
+// TimeToPointer timeをポインタに変換
+func TimeToPointer(t time.Time) *time.Time {
+	return &t
+}

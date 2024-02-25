@@ -4,6 +4,14 @@ DOCKER_COMPOSE_TEST = docker compose -f docker-compose.test.yaml
 # コンテナを起動
 docker_up:
 	$(DOCKER_COMPOSE) up -d --build
+docker_test_up:
+	$(DOCKER_COMPOSE_TEST) up -d --build
+
+# テスト
+docker_test_run:
+	$(DOCKER_COMPOSE_TEST) exec api-game-test go clean -testcache
+	$(DOCKER_COMPOSE_TEST) exec api-game-test go test -v ./api/game/usecase/...
+	$(DOCKER_COMPOSE_TEST) exec api-game-test go test -v ./pkg/domain/model/...
 
 # DBに接続
 docker_db_user0:

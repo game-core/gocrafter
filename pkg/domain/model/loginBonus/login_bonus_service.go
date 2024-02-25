@@ -61,17 +61,17 @@ func (s *loginBonusService) Receive(ctx context.Context, tx *gorm.DB, now time.T
 
 	masterLoginBonusScheduleModel, err := s.getSchedule(ctx, now, req.MasterLoginBonusId, masterLoginBonusEventModel.IntervalHour, masterLoginBonusEventModel.StartAt)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterLoginBonusScheduleRepository.FindListByMasterLoginBonusId", err)
+		return nil, errors.NewMethodError("s.getSchedule", err)
 	}
 
 	masterLoginBonusItemModels, err := s.masterLoginBonusItemRepository.FindListByMasterLoginBonusScheduleId(ctx, masterLoginBonusScheduleModel.Id)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterLoginBonusItemRepository.FindByMasterLoginBonusScheduleId", err)
+		return nil, errors.NewMethodError("s.masterLoginBonusItemRepository.FindListByMasterLoginBonusScheduleId", err)
 	}
 
 	userLoginBonusModel, err := s.userLoginBonusRepository.FindOrNil(ctx, req.UserId, req.MasterLoginBonusId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.userLoginBonusRepository.Find", err)
+		return nil, errors.NewMethodError("s.userLoginBonusRepository.FindOrNil", err)
 	}
 	if userLoginBonusModel != nil && userLoginBonusModel.CheckReceived(masterLoginBonusEventModel.ResetHour, now) {
 		return nil, errors.NewError("already received")
@@ -149,7 +149,7 @@ func (s *loginBonusService) update(ctx context.Context, tx *gorm.DB, now time.Ti
 
 	result, err := s.userLoginBonusRepository.Create(ctx, tx, userLoginBonus.SetUserLoginBonus(userId, masterLoginBonusId, now))
 	if err != nil {
-		return nil, errors.NewMethodError("s.userLoginBonusRepository.Update", err)
+		return nil, errors.NewMethodError("s.userLoginBonusRepository.Create", err)
 	}
 
 	return result, nil
