@@ -12,7 +12,7 @@ import (
 	"github.com/game-core/gocrafter/internal/cashes"
 	"github.com/game-core/gocrafter/internal/errors"
 	"github.com/game-core/gocrafter/pkg/domain/enum"
-	"github.com/game-core/gocrafter/pkg/domain/model/master/masterResource"
+	"github.com/game-core/gocrafter/pkg/domain/model/resource/masterResource"
 )
 
 type masterResourceDao struct {

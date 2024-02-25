@@ -12,7 +12,7 @@ import (
 	"github.com/game-core/gocrafter/internal/cashes"
 	"github.com/game-core/gocrafter/internal/errors"
 	"github.com/game-core/gocrafter/pkg/domain/enum"
-	"github.com/game-core/gocrafter/pkg/domain/model/master/masterRarity"
+	"github.com/game-core/gocrafter/pkg/domain/model/rarity/masterRarity"
 )
 
 type masterRarityDao struct {
