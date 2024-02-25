@@ -2,7 +2,6 @@ package loginBonus
 
 import (
 	"context"
-	"github.com/game-core/gocrafter/internal/errors"
 	"reflect"
 	"testing"
 	"time"
@@ -10,6 +9,7 @@ import (
 	"github.com/golang/mock/gomock"
 
 	loginBonusServer "github.com/game-core/gocrafter/api/game/presentation/server/loginBonus"
+	"github.com/game-core/gocrafter/internal/errors"
 	"github.com/game-core/gocrafter/internal/times"
 	loginBonusService "github.com/game-core/gocrafter/pkg/domain/model/loginBonus"
 	"github.com/game-core/gocrafter/pkg/domain/model/loginBonus/masterLoginBonus"

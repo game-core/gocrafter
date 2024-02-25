@@ -1,10 +1,11 @@
 package masterLoginBonusEvent
 
 import (
-	"github.com/game-core/gocrafter/internal/times"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/game-core/gocrafter/internal/times"
 )
 
 func TestNewUserLoginBonus_CheckReceived(t *testing.T) {
