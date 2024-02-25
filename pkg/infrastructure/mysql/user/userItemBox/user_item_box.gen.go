@@ -3,7 +3,7 @@ package userItemBox
 
 import "time"
 
-type UserItemBoxs []*UserItemBox
+type UserItemBoxes []*UserItemBox
 
 type UserItemBox struct {
 	UserId       string
@@ -17,8 +17,8 @@ func NewUserItemBox() *UserItemBox {
 	return &UserItemBox{}
 }
 
-func NewUserItemBoxs() UserItemBoxs {
-	return UserItemBoxs{}
+func NewUserItemBoxes() UserItemBoxes {
+	return UserItemBoxes{}
 }
 
 func SetUserItemBox(userId string, masterItemId int64, count int32, createdAt time.Time, updatedAt time.Time) *UserItemBox {

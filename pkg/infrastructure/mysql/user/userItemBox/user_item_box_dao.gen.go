@@ -48,14 +48,14 @@ func (s *userItemBoxDao) FindOrNil(ctx context.Context, userId string, masterIte
 	return userItemBox.SetUserItemBox(t.UserId, t.MasterItemId, t.Count), nil
 }
 
-func (s *userItemBoxDao) FindList(ctx context.Context, userId string) (userItemBox.UserItemBoxs, error) {
-	ts := NewUserItemBoxs()
+func (s *userItemBoxDao) FindList(ctx context.Context, userId string) (userItemBox.UserItemBoxes, error) {
+	ts := NewUserItemBoxes()
 	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
 
-	ms := userItemBox.NewUserItemBoxs()
+	ms := userItemBox.NewUserItemBoxes()
 	for _, t := range ts {
 		ms = append(ms, userItemBox.SetUserItemBox(t.UserId, t.MasterItemId, t.Count))
 	}
@@ -84,7 +84,7 @@ func (s *userItemBoxDao) Create(ctx context.Context, tx *gorm.DB, m *userItemBox
 	return userItemBox.SetUserItemBox(t.UserId, t.MasterItemId, t.Count), nil
 }
 
-func (s *userItemBoxDao) CreateList(ctx context.Context, tx *gorm.DB, ms userItemBox.UserItemBoxs) (userItemBox.UserItemBoxs, error) {
+func (s *userItemBoxDao) CreateList(ctx context.Context, tx *gorm.DB, ms userItemBox.UserItemBoxes) (userItemBox.UserItemBoxes, error) {
 	if len(ms) <= 0 {
 		return ms, nil
 	}
@@ -103,7 +103,7 @@ func (s *userItemBoxDao) CreateList(ctx context.Context, tx *gorm.DB, ms userIte
 		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(fms.UserId)].WriteConn
 	}
 
-	ts := NewUserItemBoxs()
+	ts := NewUserItemBoxes()
 	for _, m := range ms {
 		t := &UserItemBox{
 			UserId:       m.UserId,
