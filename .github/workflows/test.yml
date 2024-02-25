@@ -6,16 +6,30 @@ on:
       - main
 
 jobs:
-  domain_test:
-    name: Run Test
+  usecase_test:
+    name: Run Usecase Test
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
       - name: Build
         run: docker compose -f docker-compose.test.yaml up -d --build
 
-      - name: Sleep for 20 seconds
-        run: sleep 20
+      - name: Sleep for 10 seconds
+        run: sleep 10
 
-      - name: Test
-        run: make docker_test_run
+      - name: Usecase Test
+        run: docker compose -f docker-compose.test.yaml exec api-game-test go test -v ./api/game/usecase/...
+
+  domain_test:
+    name: Run Domain Test
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build
+        run: docker compose -f docker-compose.test.yaml up -d --build
+
+      - name: Sleep for 10 seconds
+        run: sleep 10
+
+      - name: Domain Test
+        run: docker compose -f docker-compose.test.yaml exec api-game-test go test -v pkg/domain/...
