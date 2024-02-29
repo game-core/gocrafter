@@ -1,6 +1,6 @@
-name: FriendSendRequest
+name: FriendApproveRequest
 package: friend
-comment: "フレンド送信リクエスト"
+comment: "フレンド承認リクエスト"
 
 structure:
   UserId:

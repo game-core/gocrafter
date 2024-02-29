@@ -38,3 +38,16 @@ func (s *friendHandler) Send(ctx context.Context, req *friend.FriendSendRequest)
 
 	return res, nil
 }
+
+// Approve フレンド申請を承諾する
+func (s *friendHandler) Approve(ctx context.Context, req *friend.FriendApproveRequest) (*friend.FriendApproveResponse, error) {
+	if err := tokens.CheckJwtClaims(ctx, req.UserId); err != nil {
+		return nil, errors.NewMethodError("internal.CheckJwtClaims", err)
+	}
+	res, err := s.friendUsecase.Approve(ctx, req)
+	if err != nil {
+		return nil, errors.NewMethodError("s.friendUsecase.Approve", err)
+	}
+
+	return res, nil
+}

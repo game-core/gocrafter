@@ -91,9 +91,10 @@ func InitializeAccountService() account3.AccountService {
 }
 
 func InitializeFriendService() friend3.FriendService {
+	accountService := InitializeAccountService()
 	sqlHandler := database.NewDB()
 	userFriendRepository := userFriend.NewUserFriendDao(sqlHandler)
-	friendService := friend3.NewFriendService(userFriendRepository)
+	friendService := friend3.NewFriendService(accountService, userFriendRepository)
 	return friendService
 }
 

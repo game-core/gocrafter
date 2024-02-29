@@ -1,4 +1,4 @@
-// Package friend フレンド申請レスポンス
+// Package friend フレンド送信レスポンス
 package friend
 
 import (

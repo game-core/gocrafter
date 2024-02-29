@@ -22,7 +22,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Friend_Send_FullMethodName = "/proto.Friend/Send"
+	Friend_Send_FullMethodName    = "/proto.Friend/Send"
+	Friend_Approve_FullMethodName = "/proto.Friend/Approve"
 )
 
 // FriendClient is the client API for Friend service.
@@ -30,6 +31,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type FriendClient interface {
 	Send(ctx context.Context, in *FriendSendRequest, opts ...grpc.CallOption) (*FriendSendResponse, error)
+	Approve(ctx context.Context, in *FriendApproveRequest, opts ...grpc.CallOption) (*FriendApproveResponse, error)
 }
 
 type friendClient struct {
@@ -49,11 +51,21 @@ func (c *friendClient) Send(ctx context.Context, in *FriendSendRequest, opts ...
 	return out, nil
 }
 
+func (c *friendClient) Approve(ctx context.Context, in *FriendApproveRequest, opts ...grpc.CallOption) (*FriendApproveResponse, error) {
+	out := new(FriendApproveResponse)
+	err := c.cc.Invoke(ctx, Friend_Approve_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FriendServer is the server API for Friend service.
 // All implementations must embed UnimplementedFriendServer
 // for forward compatibility
 type FriendServer interface {
 	Send(context.Context, *FriendSendRequest) (*FriendSendResponse, error)
+	Approve(context.Context, *FriendApproveRequest) (*FriendApproveResponse, error)
 	mustEmbedUnimplementedFriendServer()
 }
 
@@ -63,6 +75,9 @@ type UnimplementedFriendServer struct {
 
 func (UnimplementedFriendServer) Send(context.Context, *FriendSendRequest) (*FriendSendResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Send not implemented")
+}
+func (UnimplementedFriendServer) Approve(context.Context, *FriendApproveRequest) (*FriendApproveResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Approve not implemented")
 }
 func (UnimplementedFriendServer) mustEmbedUnimplementedFriendServer() {}
 
@@ -95,6 +110,24 @@ func _Friend_Send_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Friend_Approve_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FriendApproveRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FriendServer).Approve(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Friend_Approve_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FriendServer).Approve(ctx, req.(*FriendApproveRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Friend_ServiceDesc is the grpc.ServiceDesc for Friend service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -105,6 +138,10 @@ var Friend_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Send",
 			Handler:    _Friend_Send_Handler,
+		},
+		{
+			MethodName: "Approve",
+			Handler:    _Friend_Approve_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

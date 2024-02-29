@@ -8,27 +8,36 @@ import (
 
 	"github.com/game-core/gocrafter/internal/errors"
 	"github.com/game-core/gocrafter/pkg/domain/enum"
+	"github.com/game-core/gocrafter/pkg/domain/model/account"
 	"github.com/game-core/gocrafter/pkg/domain/model/friend/userFriend"
 )
 
 type FriendService interface {
 	Send(ctx context.Context, txs map[string]*gorm.DB, req *FriendSendRequest) (*FriendSendResponse, error)
+	Approve(ctx context.Context, txs map[string]*gorm.DB, req *FriendApproveRequest) (*FriendApproveResponse, error)
 }
 
 type friendService struct {
+	accountService       account.AccountService
 	userFriendRepository userFriend.UserFriendRepository
 }
 
 func NewFriendService(
+	accountService account.AccountService,
 	userFriendRepository userFriend.UserFriendRepository,
 ) FriendService {
 	return &friendService{
+		accountService:       accountService,
 		userFriendRepository: userFriendRepository,
 	}
 }
 
 // Send フレンド申請を送信する
 func (s *friendService) Send(ctx context.Context, txs map[string]*gorm.DB, req *FriendSendRequest) (*FriendSendResponse, error) {
+	if _, err := s.accountService.FindByUserId(ctx, req.FriendUserId); err != nil {
+		return nil, errors.NewMethodError("s.accountService.FindByUserId", err)
+	}
+
 	userFriendModel, err := s.userFriendRepository.FindOrNil(ctx, req.UserId, req.FriendUserId)
 	if err != nil {
 		return nil, errors.NewMethodError("s.userFriendRepository.FindOrNil", err)
@@ -48,4 +57,27 @@ func (s *friendService) Send(ctx context.Context, txs map[string]*gorm.DB, req *
 	}
 
 	return SetFriendSendResponse(result), nil
+}
+
+// Approve フレンド申請を承認する
+func (s *friendService) Approve(ctx context.Context, txs map[string]*gorm.DB, req *FriendApproveRequest) (*FriendApproveResponse, error) {
+	userFriendModel, err := s.userFriendRepository.FindOrNil(ctx, req.UserId, req.FriendUserId)
+	if err != nil {
+		return nil, errors.NewMethodError("s.userFriendRepository.FindOrNil", err)
+	}
+
+	if userFriendModel == nil || userFriendModel.FriendType != enum.FriendType_NotApproved {
+		return nil, errors.NewError("not applied")
+	}
+
+	if _, err := s.userFriendRepository.Update(ctx, txs[req.FriendUserId], userFriend.SetUserFriend(req.FriendUserId, req.UserId, enum.FriendType_Approved)); err != nil {
+		return nil, errors.NewMethodError("s.userFriendRepository.Update", err)
+	}
+
+	result, err := s.userFriendRepository.Update(ctx, txs[req.UserId], userFriend.SetUserFriend(req.UserId, req.FriendUserId, enum.FriendType_Approved))
+	if err != nil {
+		return nil, errors.NewMethodError("s.userFriendRepository.Update", err)
+	}
+
+	return SetFriendApproveResponse(result), nil
 }

@@ -1,4 +1,4 @@
-// Package friend フレンド申請リクエスト
+// Package friend フレンド送信リクエスト
 package friend
 
 type FriendSendRequests []*FriendSendRequest

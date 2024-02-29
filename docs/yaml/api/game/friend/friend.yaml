@@ -11,3 +11,11 @@ structure:
     response: FriendSendResponse
     number: 1
     comment: "フレンド申請を送信する"
+  Approve:
+    name: approve
+    method: unary
+    auth: true
+    request: FriendApproveRequest
+    response: FriendApproveResponse
+    number: 1
+    comment: "フレンド申請を承諾する"

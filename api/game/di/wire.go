@@ -107,6 +107,7 @@ func InitializeAccountService() accountService.AccountService {
 func InitializeFriendService() friendService.FriendService {
 	wire.Build(
 		friendService.NewFriendService,
+		InitializeAccountService,
 		database.NewDB,
 		userFriendDao.NewUserFriendDao,
 	)

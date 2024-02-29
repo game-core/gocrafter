@@ -11,6 +11,7 @@ import (
 
 type FriendUsecase interface {
 	Send(ctx context.Context, req *friendServer.FriendSendRequest) (*friendServer.FriendSendResponse, error)
+	Approve(ctx context.Context, req *friendServer.FriendApproveRequest) (*friendServer.FriendApproveResponse, error)
 }
 
 type friendUsecase struct {
@@ -45,6 +46,31 @@ func (s *friendUsecase) Send(ctx context.Context, req *friendServer.FriendSendRe
 	}
 
 	return friendServer.SetFriendSendResponse(
+		friendServer.SetUserFriend(
+			result.UserFriend.UserId,
+			result.UserFriend.FriendUserId,
+			friendServer.FriendType(result.UserFriend.FriendType),
+		),
+	), nil
+}
+
+// Approve フレンド申請を承諾する
+func (s *friendUsecase) Approve(ctx context.Context, req *friendServer.FriendApproveRequest) (*friendServer.FriendApproveResponse, error) {
+	// transaction
+	txs, err := s.transactionService.MultiUserBegin(ctx, []string{req.UserId, req.FriendUserId})
+	if err != nil {
+		return nil, errors.NewMethodError("s.transactionService.MultiUserBegin", err)
+	}
+	defer func() {
+		s.transactionService.MultiUserEnd(ctx, txs, err)
+	}()
+
+	result, err := s.friendService.Approve(ctx, txs, friendService.SetFriendApproveRequest(req.UserId, req.FriendUserId))
+	if err != nil {
+		return nil, errors.NewMethodError("s.friendService.Approve", err)
+	}
+
+	return friendServer.SetFriendApproveResponse(
 		friendServer.SetUserFriend(
 			result.UserFriend.UserId,
 			result.UserFriend.FriendUserId,

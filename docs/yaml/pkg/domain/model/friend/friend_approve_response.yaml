@@ -1,6 +1,6 @@
-name: FriendSendResponse
+name: FriendApproveResponse
 package: friend
-comment: "フレンド送信レスポンス"
+comment: "フレンド承認レスポンス"
 
 structure:
   UserFriend:
