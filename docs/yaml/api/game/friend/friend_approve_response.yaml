@@ -1,0 +1,11 @@
+name: FriendApproveResponse
+package: friend
+comment: "フレンド承認レスポンス"
+
+structure:
+  UserFriend:
+    name: user_friend
+    type: structure
+    nullable: true
+    number: 1
+    comment: "ユーザーフレンド"

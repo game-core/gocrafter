@@ -1,0 +1,17 @@
+name: FriendDeleteRequest
+package: friend
+comment: "フレンド削除リクエスト"
+
+structure:
+  UserId:
+    name: user_id
+    type: string
+    nullable: false
+    number: 1
+    comment: "ユーザーID"
+  FriendUserId:
+    name: friend_user_id
+    type: string
+    nullable: false
+    number: 2
+    comment: "フレンドユーザーID"

@@ -9,11 +9,14 @@ import (
 	"github.com/game-core/gocrafter/configs/database"
 
 	accountHandler "github.com/game-core/gocrafter/api/game/presentation/handler/account"
+	friendHandler "github.com/game-core/gocrafter/api/game/presentation/handler/friend"
 	loginBonusHandler "github.com/game-core/gocrafter/api/game/presentation/handler/loginBonus"
 	authInterceptor "github.com/game-core/gocrafter/api/game/presentation/interceptor/auth"
 	accountUsecase "github.com/game-core/gocrafter/api/game/usecase/account"
+	friendUsecase "github.com/game-core/gocrafter/api/game/usecase/friend"
 	loginBonusUsecase "github.com/game-core/gocrafter/api/game/usecase/loginBonus"
 	accountService "github.com/game-core/gocrafter/pkg/domain/model/account"
+	friendService "github.com/game-core/gocrafter/pkg/domain/model/friend"
 	itemService "github.com/game-core/gocrafter/pkg/domain/model/item"
 	loginBonusService "github.com/game-core/gocrafter/pkg/domain/model/loginBonus"
 	shardService "github.com/game-core/gocrafter/pkg/domain/model/shard"
@@ -27,6 +30,7 @@ import (
 	masterLoginBonusScheduleDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusSchedule"
 	masterTransactionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterTransaction"
 	userAccountDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userAccount"
+	userFriendDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userFriend"
 	userItemBoxDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userItemBox"
 	userLoginBonusDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userLoginBonus"
 	userTransactionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userTransaction"
@@ -43,6 +47,14 @@ func InitializeAccountHandler() accountHandler.AccountHandler {
 	wire.Build(
 		accountHandler.NewAccountHandler,
 		InitializeAccountUsecase,
+	)
+	return nil
+}
+
+func InitializeFriendHandler() friendHandler.FriendHandler {
+	wire.Build(
+		friendHandler.NewFriendHandler,
+		InitializeFriendUsecase,
 	)
 	return nil
 }
@@ -64,6 +76,15 @@ func InitializeAccountUsecase() accountUsecase.AccountUsecase {
 	return nil
 }
 
+func InitializeFriendUsecase() friendUsecase.FriendUsecase {
+	wire.Build(
+		friendUsecase.NewFriendUsecase,
+		InitializeFriendService,
+		InitializeTransactionService,
+	)
+	return nil
+}
+
 func InitializeLoginBonusUsecase() loginBonusUsecase.LoginBonusUsecase {
 	wire.Build(
 		loginBonusUsecase.NewLoginBonusUsecase,
@@ -79,6 +100,16 @@ func InitializeAccountService() accountService.AccountService {
 		InitializeShardService,
 		database.NewDB,
 		userAccountDao.NewUserAccountDao,
+	)
+	return nil
+}
+
+func InitializeFriendService() friendService.FriendService {
+	wire.Build(
+		friendService.NewFriendService,
+		InitializeAccountService,
+		database.NewDB,
+		userFriendDao.NewUserFriendDao,
 	)
 	return nil
 }

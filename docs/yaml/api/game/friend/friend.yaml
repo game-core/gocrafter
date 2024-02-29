@@ -1,0 +1,45 @@
+name: Friend
+package: friend
+comment: "フレンド"
+
+structure:
+  Get:
+    name: get
+    method: unary
+    auth: true
+    request: FriendGetRequest
+    response: FriendGetResponse
+    number: 1
+    comment: "フレンドを取得する"
+  Send:
+    name: send
+    method: unary
+    auth: true
+    request: FriendSendRequest
+    response: FriendSendResponse
+    number: 2
+    comment: "フレンド申請を送信する"
+  Approve:
+    name: approve
+    method: unary
+    auth: true
+    request: FriendApproveRequest
+    response: FriendApproveResponse
+    number: 3
+    comment: "フレンド申請を承諾する"
+  Disapprove:
+    name: disapprove
+    method: unary
+    auth: true
+    request: FriendDisapproveRequest
+    response: FriendDisapproveResponse
+    number: 4
+    comment: "フレンド申請を拒否する"
+  Delete:
+    name: delete
+    method: unary
+    auth: true
+    request: FriendDeleteRequest
+    response: FriendDeleteResponse
+    number: 5
+    comment: "フレンドを削除する"

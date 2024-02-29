@@ -1,0 +1,17 @@
+name: FriendDisapproveRequest
+package: friend
+comment: "フレンド承認拒否リクエスト"
+
+structure:
+  UserId:
+    name: user_id
+    type: string
+    nullable: false
+    number: 1
+    comment: "ユーザーID"
+  FriendUserId:
+    name: friend_user_id
+    type: string
+    nullable: false
+    number: 2
+    comment: "フレンドユーザーID"

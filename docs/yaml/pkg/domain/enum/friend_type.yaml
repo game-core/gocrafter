@@ -1,0 +1,25 @@
+name: FriendType
+package: enum
+comment: "フレンドタイプ"
+
+structure:
+  Applying:
+    name: Applying
+    number: 0
+    comment: "申請中"
+  NotApproved:
+    name: NotApproved
+    number: 1
+    comment: "未承諾"
+  Approved:
+    name: Approved
+    number: 2
+    comment: "承諾済"
+  Disapproved:
+    name: Disapproved
+    number: 3
+    comment: "拒否"
+  NotFriend:
+    name: NotFriend
+    number: 4
+    comment: "フレンドではない"

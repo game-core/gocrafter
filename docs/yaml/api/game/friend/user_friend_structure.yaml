@@ -1,0 +1,23 @@
+name: UserFriend
+package: friend
+comment: "ユーザーフレンド"
+
+structure:
+  UserId:
+    name: user_id
+    type: string
+    nullable: false
+    number: 1
+    comment: "ユーザーID"
+  FriendUserId:
+    name: friend_user_id
+    type: string
+    nullable: false
+    number: 2
+    comment: "フレンドユーザーID"
+  FriendType:
+    name: friend_type
+    type: enum
+    nullable: false
+    number: 3
+    comment: "フレンドタイプ"

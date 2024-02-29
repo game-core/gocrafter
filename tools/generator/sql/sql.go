@@ -229,7 +229,7 @@ func (s *Sql) getType(t string) string {
 	case "enum":
 		return "INT"
 	case "bool":
-		return "INT"
+		return "TINYINT"
 	case "time":
 		return "TIMESTAMP"
 	default:
