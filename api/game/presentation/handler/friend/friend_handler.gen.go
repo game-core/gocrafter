@@ -51,3 +51,29 @@ func (s *friendHandler) Approve(ctx context.Context, req *friend.FriendApproveRe
 
 	return res, nil
 }
+
+// Disapprove フレンド申請を拒否する
+func (s *friendHandler) Disapprove(ctx context.Context, req *friend.FriendDisapproveRequest) (*friend.FriendDisapproveResponse, error) {
+	if err := tokens.CheckJwtClaims(ctx, req.UserId); err != nil {
+		return nil, errors.NewMethodError("internal.CheckJwtClaims", err)
+	}
+	res, err := s.friendUsecase.Disapprove(ctx, req)
+	if err != nil {
+		return nil, errors.NewMethodError("s.friendUsecase.Disapprove", err)
+	}
+
+	return res, nil
+}
+
+// Delete フレンドを削除する
+func (s *friendHandler) Delete(ctx context.Context, req *friend.FriendDeleteRequest) (*friend.FriendDeleteResponse, error) {
+	if err := tokens.CheckJwtClaims(ctx, req.UserId); err != nil {
+		return nil, errors.NewMethodError("internal.CheckJwtClaims", err)
+	}
+	res, err := s.friendUsecase.Delete(ctx, req)
+	if err != nil {
+		return nil, errors.NewMethodError("s.friendUsecase.Delete", err)
+	}
+
+	return res, nil
+}

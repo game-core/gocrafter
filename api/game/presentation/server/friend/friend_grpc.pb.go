@@ -22,8 +22,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Friend_Send_FullMethodName    = "/proto.Friend/Send"
-	Friend_Approve_FullMethodName = "/proto.Friend/Approve"
+	Friend_Send_FullMethodName       = "/proto.Friend/Send"
+	Friend_Approve_FullMethodName    = "/proto.Friend/Approve"
+	Friend_Disapprove_FullMethodName = "/proto.Friend/Disapprove"
+	Friend_Delete_FullMethodName     = "/proto.Friend/Delete"
 )
 
 // FriendClient is the client API for Friend service.
@@ -32,6 +34,8 @@ const (
 type FriendClient interface {
 	Send(ctx context.Context, in *FriendSendRequest, opts ...grpc.CallOption) (*FriendSendResponse, error)
 	Approve(ctx context.Context, in *FriendApproveRequest, opts ...grpc.CallOption) (*FriendApproveResponse, error)
+	Disapprove(ctx context.Context, in *FriendDisapproveRequest, opts ...grpc.CallOption) (*FriendDisapproveResponse, error)
+	Delete(ctx context.Context, in *FriendDeleteRequest, opts ...grpc.CallOption) (*FriendDeleteResponse, error)
 }
 
 type friendClient struct {
@@ -60,12 +64,32 @@ func (c *friendClient) Approve(ctx context.Context, in *FriendApproveRequest, op
 	return out, nil
 }
 
+func (c *friendClient) Disapprove(ctx context.Context, in *FriendDisapproveRequest, opts ...grpc.CallOption) (*FriendDisapproveResponse, error) {
+	out := new(FriendDisapproveResponse)
+	err := c.cc.Invoke(ctx, Friend_Disapprove_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *friendClient) Delete(ctx context.Context, in *FriendDeleteRequest, opts ...grpc.CallOption) (*FriendDeleteResponse, error) {
+	out := new(FriendDeleteResponse)
+	err := c.cc.Invoke(ctx, Friend_Delete_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FriendServer is the server API for Friend service.
 // All implementations must embed UnimplementedFriendServer
 // for forward compatibility
 type FriendServer interface {
 	Send(context.Context, *FriendSendRequest) (*FriendSendResponse, error)
 	Approve(context.Context, *FriendApproveRequest) (*FriendApproveResponse, error)
+	Disapprove(context.Context, *FriendDisapproveRequest) (*FriendDisapproveResponse, error)
+	Delete(context.Context, *FriendDeleteRequest) (*FriendDeleteResponse, error)
 	mustEmbedUnimplementedFriendServer()
 }
 
@@ -78,6 +102,12 @@ func (UnimplementedFriendServer) Send(context.Context, *FriendSendRequest) (*Fri
 }
 func (UnimplementedFriendServer) Approve(context.Context, *FriendApproveRequest) (*FriendApproveResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Approve not implemented")
+}
+func (UnimplementedFriendServer) Disapprove(context.Context, *FriendDisapproveRequest) (*FriendDisapproveResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Disapprove not implemented")
+}
+func (UnimplementedFriendServer) Delete(context.Context, *FriendDeleteRequest) (*FriendDeleteResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedFriendServer) mustEmbedUnimplementedFriendServer() {}
 
@@ -128,6 +158,42 @@ func _Friend_Approve_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Friend_Disapprove_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FriendDisapproveRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FriendServer).Disapprove(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Friend_Disapprove_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FriendServer).Disapprove(ctx, req.(*FriendDisapproveRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Friend_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FriendDeleteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FriendServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Friend_Delete_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FriendServer).Delete(ctx, req.(*FriendDeleteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Friend_ServiceDesc is the grpc.ServiceDesc for Friend service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -142,6 +208,14 @@ var Friend_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Approve",
 			Handler:    _Friend_Approve_Handler,
+		},
+		{
+			MethodName: "Disapprove",
+			Handler:    _Friend_Disapprove_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _Friend_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -10,4 +10,5 @@ enum FriendType {
   NotApproved = 1;
   Approved = 2;
   Disapproved = 3;
+  NotFriend = 4;
 }

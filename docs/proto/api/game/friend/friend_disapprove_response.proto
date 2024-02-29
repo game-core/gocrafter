@@ -1,0 +1,12 @@
+// フレンド承認拒否レスポンス
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/friend";
+
+import "user_friend_structure.proto";
+
+message FriendDisapproveResponse {
+  optional UserFriend user_friend = 1;
+}

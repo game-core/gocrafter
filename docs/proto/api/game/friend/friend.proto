@@ -9,8 +9,14 @@ import "friend_send_request.proto";
 import "friend_send_response.proto";
 import "friend_approve_request.proto";
 import "friend_approve_response.proto";
+import "friend_disapprove_request.proto";
+import "friend_disapprove_response.proto";
+import "friend_delete_request.proto";
+import "friend_delete_response.proto";
 
 service Friend {
   rpc Send (FriendSendRequest) returns (FriendSendResponse);
   rpc Approve (FriendApproveRequest) returns (FriendApproveResponse);
+  rpc Disapprove (FriendDisapproveRequest) returns (FriendDisapproveResponse);
+  rpc Delete (FriendDeleteRequest) returns (FriendDeleteResponse);
 }

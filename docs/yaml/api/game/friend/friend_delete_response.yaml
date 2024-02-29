@@ -1,0 +1,11 @@
+name: FriendDeleteResponse
+package: friend
+comment: "フレンド削除レスポンス"
+
+structure:
+  UserFriend:
+    name: user_friend
+    type: structure
+    nullable: true
+    number: 1
+    comment: "ユーザーフレンド"

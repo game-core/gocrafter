@@ -17,5 +17,21 @@ structure:
     auth: true
     request: FriendApproveRequest
     response: FriendApproveResponse
-    number: 1
+    number: 2
     comment: "フレンド申請を承諾する"
+  Disapprove:
+    name: disapprove
+    method: unary
+    auth: true
+    request: FriendDisapproveRequest
+    response: FriendDisapproveResponse
+    number: 3
+    comment: "フレンド申請を拒否する"
+  Delete:
+    name: delete
+    method: unary
+    auth: true
+    request: FriendDeleteRequest
+    response: FriendDeleteResponse
+    number: 3
+    comment: "フレンドを削除する"

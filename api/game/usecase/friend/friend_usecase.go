@@ -12,6 +12,8 @@ import (
 type FriendUsecase interface {
 	Send(ctx context.Context, req *friendServer.FriendSendRequest) (*friendServer.FriendSendResponse, error)
 	Approve(ctx context.Context, req *friendServer.FriendApproveRequest) (*friendServer.FriendApproveResponse, error)
+	Disapprove(ctx context.Context, req *friendServer.FriendDisapproveRequest) (*friendServer.FriendDisapproveResponse, error)
+	Delete(ctx context.Context, req *friendServer.FriendDeleteRequest) (*friendServer.FriendDeleteResponse, error)
 }
 
 type friendUsecase struct {
@@ -71,6 +73,56 @@ func (s *friendUsecase) Approve(ctx context.Context, req *friendServer.FriendApp
 	}
 
 	return friendServer.SetFriendApproveResponse(
+		friendServer.SetUserFriend(
+			result.UserFriend.UserId,
+			result.UserFriend.FriendUserId,
+			friendServer.FriendType(result.UserFriend.FriendType),
+		),
+	), nil
+}
+
+// Disapprove フレンド申請を拒否する
+func (s *friendUsecase) Disapprove(ctx context.Context, req *friendServer.FriendDisapproveRequest) (*friendServer.FriendDisapproveResponse, error) {
+	// transaction
+	txs, err := s.transactionService.MultiUserBegin(ctx, []string{req.UserId, req.FriendUserId})
+	if err != nil {
+		return nil, errors.NewMethodError("s.transactionService.MultiUserBegin", err)
+	}
+	defer func() {
+		s.transactionService.MultiUserEnd(ctx, txs, err)
+	}()
+
+	result, err := s.friendService.Disapprove(ctx, txs, friendService.SetFriendDisapproveRequest(req.UserId, req.FriendUserId))
+	if err != nil {
+		return nil, errors.NewMethodError("s.friendService.Disapprove", err)
+	}
+
+	return friendServer.SetFriendDisapproveResponse(
+		friendServer.SetUserFriend(
+			result.UserFriend.UserId,
+			result.UserFriend.FriendUserId,
+			friendServer.FriendType(result.UserFriend.FriendType),
+		),
+	), nil
+}
+
+// Delete フレンドを削除する
+func (s *friendUsecase) Delete(ctx context.Context, req *friendServer.FriendDeleteRequest) (*friendServer.FriendDeleteResponse, error) {
+	// transaction
+	txs, err := s.transactionService.MultiUserBegin(ctx, []string{req.UserId, req.FriendUserId})
+	if err != nil {
+		return nil, errors.NewMethodError("s.transactionService.MultiUserBegin", err)
+	}
+	defer func() {
+		s.transactionService.MultiUserEnd(ctx, txs, err)
+	}()
+
+	result, err := s.friendService.Delete(ctx, txs, friendService.SetFriendDeleteRequest(req.UserId, req.FriendUserId))
+	if err != nil {
+		return nil, errors.NewMethodError("s.friendService.Delete", err)
+	}
+
+	return friendServer.SetFriendDeleteResponse(
 		friendServer.SetUserFriend(
 			result.UserFriend.UserId,
 			result.UserFriend.FriendUserId,

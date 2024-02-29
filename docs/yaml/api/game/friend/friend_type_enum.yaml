@@ -19,3 +19,7 @@ structure:
     name: Disapproved
     number: 3
     comment: "拒否"
+  NotFriend:
+    name: NotFriend
+    number: 4
+    comment: "フレンドではない"
