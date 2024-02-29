@@ -1,0 +1,13 @@
+// フレンドタイプ
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/friend";
+
+enum FriendType {
+  Applying = 0;
+  NotApproved = 1;
+  Approved = 2;
+  Disapproved = 3;
+}

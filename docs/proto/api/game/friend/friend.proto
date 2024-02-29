@@ -1,0 +1,13 @@
+// フレンド
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/friend";
+
+import "friend_send_request.proto";
+import "friend_send_response.proto";
+
+service Friend {
+  rpc Send (FriendSendRequest) returns (FriendSendResponse);
+}

@@ -1,0 +1,13 @@
+name: Friend
+package: friend
+comment: "フレンド"
+
+structure:
+  Send:
+    name: send
+    method: unary
+    auth: true
+    request: FriendSendRequest
+    response: FriendSendResponse
+    number: 1
+    comment: "フレンド申請を送信する"
