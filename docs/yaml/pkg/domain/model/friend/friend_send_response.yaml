@@ -1,0 +1,12 @@
+name: FriendSendResponse
+package: friend
+comment: "フレンド申請レスポンス"
+
+structure:
+  UserFriend:
+    name: user_friend
+    type: structure
+    package: friend/userFriend
+    nullable: true
+    number: 1
+    comment: "ユーザーフレンド"
