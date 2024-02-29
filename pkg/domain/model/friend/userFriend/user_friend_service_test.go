@@ -21,7 +21,7 @@ func TestNewUserLoginBonus_CheckReceived(t *testing.T) {
 		wantErr error
 	}{
 		{
-			name: "正常：イベント期間内の場合",
+			name: "正常：取得できる",
 			fields: fields{
 				UserFriends: UserFriends{
 					{
