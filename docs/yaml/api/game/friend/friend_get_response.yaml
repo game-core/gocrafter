@@ -1,0 +1,11 @@
+name: FriendGetResponse
+package: friend
+comment: "フレンド取得レスポンス"
+
+structure:
+  UserFriends:
+    name: user_friends
+    type: structures
+    nullable: false
+    number: 1
+    comment: "ユーザーフレンド一覧"

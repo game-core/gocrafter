@@ -26,6 +26,19 @@ func NewFriendHandler(
 	}
 }
 
+// Get フレンドを取得する
+func (s *friendHandler) Get(ctx context.Context, req *friend.FriendGetRequest) (*friend.FriendGetResponse, error) {
+	if err := tokens.CheckJwtClaims(ctx, req.UserId); err != nil {
+		return nil, errors.NewMethodError("internal.CheckJwtClaims", err)
+	}
+	res, err := s.friendUsecase.Get(ctx, req)
+	if err != nil {
+		return nil, errors.NewMethodError("s.friendUsecase.Get", err)
+	}
+
+	return res, nil
+}
+
 // Send フレンド申請を送信する
 func (s *friendHandler) Send(ctx context.Context, req *friend.FriendSendRequest) (*friend.FriendSendResponse, error) {
 	if err := tokens.CheckJwtClaims(ctx, req.UserId); err != nil {

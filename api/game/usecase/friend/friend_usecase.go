@@ -10,6 +10,7 @@ import (
 )
 
 type FriendUsecase interface {
+	Get(ctx context.Context, req *friendServer.FriendGetRequest) (*friendServer.FriendGetResponse, error)
 	Send(ctx context.Context, req *friendServer.FriendSendRequest) (*friendServer.FriendSendResponse, error)
 	Approve(ctx context.Context, req *friendServer.FriendApproveRequest) (*friendServer.FriendApproveResponse, error)
 	Disapprove(ctx context.Context, req *friendServer.FriendDisapproveRequest) (*friendServer.FriendDisapproveResponse, error)
@@ -29,6 +30,20 @@ func NewFriendUsecase(
 		friendService:      friendService,
 		transactionService: transactionService,
 	}
+}
+
+// Get フレンド一覧を取得する
+func (s *friendUsecase) Get(ctx context.Context, req *friendServer.FriendGetRequest) (*friendServer.FriendGetResponse, error) {
+	result, err := s.friendService.Get(ctx, friendService.SetFriendGetRequest(req.UserId))
+	if err != nil {
+		return nil, errors.NewMethodError("s.friendService.Get", err)
+	}
+
+	return friendServer.SetFriendGetResponse(
+		friendServer.SetUserFriends(
+			result.UserFriends,
+		),
+	), nil
 }
 
 // Send フレンド申請を送信する
