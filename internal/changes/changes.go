@@ -1,6 +1,7 @@
 package changes
 
 import (
+	"regexp"
 	"strings"
 	"unicode"
 )
@@ -26,6 +27,11 @@ func SnakeToCamel(s string) string {
 	result = strings.ToLower(string(result[0])) + result[1:]
 
 	return result
+}
+
+// CamelToSnake キャメルケースからスネークケースに変換
+func CamelToSnake(s string) string {
+	return strings.ToLower(regexp.MustCompile(`([a-z0-9])([A-Z])`).ReplaceAllString(s, "${1}_${2}"))
 }
 
 // CamelToUpperCamel アッパーキャメルケースからアッパーキャメルケースに変換

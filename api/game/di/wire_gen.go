@@ -98,6 +98,14 @@ func InitializeFriendService() friend3.FriendService {
 	return friendService
 }
 
+func InitializeItemService() item.ItemService {
+	sqlHandler := database.NewDB()
+	userItemBoxRepository := userItemBox.NewUserItemBoxDao(sqlHandler)
+	masterItemRepository := masterItem.NewMasterItemDao(sqlHandler)
+	itemService := item.NewItemService(userItemBoxRepository, masterItemRepository)
+	return itemService
+}
+
 func InitializeLoginBonusService() loginBonus3.LoginBonusService {
 	itemService := InitializeItemService()
 	sqlHandler := database.NewDB()
@@ -108,14 +116,6 @@ func InitializeLoginBonusService() loginBonus3.LoginBonusService {
 	masterLoginBonusScheduleRepository := masterLoginBonusSchedule.NewMasterLoginBonusScheduleDao(sqlHandler)
 	loginBonusService := loginBonus3.NewLoginBonusService(itemService, userLoginBonusRepository, masterLoginBonusRepository, masterLoginBonusEventRepository, masterLoginBonusItemRepository, masterLoginBonusScheduleRepository)
 	return loginBonusService
-}
-
-func InitializeItemService() item.ItemService {
-	sqlHandler := database.NewDB()
-	userItemBoxRepository := userItemBox.NewUserItemBoxDao(sqlHandler)
-	masterItemRepository := masterItem.NewMasterItemDao(sqlHandler)
-	itemService := item.NewItemService(userItemBoxRepository, masterItemRepository)
-	return itemService
 }
 
 func InitializeShardService() shard.ShardService {

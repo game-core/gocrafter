@@ -1,4 +1,4 @@
-//go:generate mockgen -source=./common_transaction_repository.go -destination=./common_transaction_repository_mock.go -package=commonTransaction
+//go:generate mockgen -source=./common_transaction_repository.gen.go -destination=./common_transaction_repository_mock.gen.go -package=commonTransaction
 package commonTransaction
 
 import (

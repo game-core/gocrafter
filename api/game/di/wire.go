@@ -96,9 +96,9 @@ func InitializeLoginBonusUsecase() loginBonusUsecase.LoginBonusUsecase {
 
 func InitializeAccountService() accountService.AccountService {
 	wire.Build(
+		database.NewDB,
 		accountService.NewAccountService,
 		InitializeShardService,
-		database.NewDB,
 		userAccountDao.NewUserAccountDao,
 	)
 	return nil
@@ -106,42 +106,42 @@ func InitializeAccountService() accountService.AccountService {
 
 func InitializeFriendService() friendService.FriendService {
 	wire.Build(
+		database.NewDB,
 		friendService.NewFriendService,
 		InitializeAccountService,
-		database.NewDB,
 		userFriendDao.NewUserFriendDao,
-	)
-	return nil
-}
-
-func InitializeLoginBonusService() loginBonusService.LoginBonusService {
-	wire.Build(
-		loginBonusService.NewLoginBonusService,
-		InitializeItemService,
-		database.NewDB,
-		userLoginBonusDao.NewUserLoginBonusDao,
-		masterLoginBonusDao.NewMasterLoginBonusDao,
-		masterLoginBonusItemDao.NewMasterLoginBonusItemDao,
-		masterLoginBonusEventDao.NewMasterLoginBonusEventDao,
-		masterLoginBonusScheduleDao.NewMasterLoginBonusScheduleDao,
 	)
 	return nil
 }
 
 func InitializeItemService() itemService.ItemService {
 	wire.Build(
-		itemService.NewItemService,
 		database.NewDB,
+		itemService.NewItemService,
 		userItemBoxDao.NewUserItemBoxDao,
 		masterItemDao.NewMasterItemDao,
 	)
 	return nil
 }
 
+func InitializeLoginBonusService() loginBonusService.LoginBonusService {
+	wire.Build(
+		database.NewDB,
+		loginBonusService.NewLoginBonusService,
+		InitializeItemService,
+		userLoginBonusDao.NewUserLoginBonusDao,
+		masterLoginBonusDao.NewMasterLoginBonusDao,
+		masterLoginBonusEventDao.NewMasterLoginBonusEventDao,
+		masterLoginBonusItemDao.NewMasterLoginBonusItemDao,
+		masterLoginBonusScheduleDao.NewMasterLoginBonusScheduleDao,
+	)
+	return nil
+}
+
 func InitializeShardService() shardService.ShardService {
 	wire.Build(
-		shardService.NewShardService,
 		database.NewDB,
+		shardService.NewShardService,
 		commonShardDao.NewCommonShardDao,
 	)
 	return nil
@@ -149,8 +149,8 @@ func InitializeShardService() shardService.ShardService {
 
 func InitializeTransactionService() transactionService.TransactionService {
 	wire.Build(
-		transactionService.NewTransactionService,
 		database.NewDB,
+		transactionService.NewTransactionService,
 		commonTransactionDao.NewCommonTransactionDao,
 		masterTransactionDao.NewMasterTransactionDao,
 		userTransactionDao.NewUserTransactionDao,

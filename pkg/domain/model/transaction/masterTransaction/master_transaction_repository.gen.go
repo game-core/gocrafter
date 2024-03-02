@@ -1,4 +1,4 @@
-//go:generate mockgen -source=./master_transaction_repository.go -destination=./master_transaction_repository_mock.go -package=masterTransaction
+//go:generate mockgen -source=./master_transaction_repository.gen.go -destination=./master_transaction_repository_mock.gen.go -package=masterTransaction
 package masterTransaction
 
 import (
