@@ -28,6 +28,14 @@ func SnakeToCamel(s string) string {
 	return result
 }
 
+// CamelToUpperCamel アッパーキャメルケースからアッパーキャメルケースに変換
+func CamelToUpperCamel(s string) string {
+	if s == "" {
+		return s
+	}
+	return string(s[0]-'a'+'A') + s[1:]
+}
+
 // UpperCamelToSnake アッパーキャメルケースからスネークケースに変換
 func UpperCamelToSnake(s string) string {
 	var result strings.Builder
