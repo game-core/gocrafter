@@ -867,3 +867,523 @@ func TestFriendService_Approve(t *testing.T) {
 		})
 	}
 }
+
+func TestFriendService_Disapprove(t *testing.T) {
+	type fields struct {
+		userFriendRepository func(ctrl *gomock.Controller) userFriend.UserFriendRepository
+	}
+	type args struct {
+		ctx context.Context
+		txs map[string]*gorm.DB
+		req *FriendDisapproveRequest
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *FriendDisapproveResponse
+		wantErr error
+	}{
+		{
+			name: "正常：拒否できる",
+			fields: fields{
+				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
+					m := userFriend.NewMockUserFriendRepository(ctrl)
+					m.EXPECT().
+						FindOrNil(
+							nil,
+							"0:0000",
+							"1:1111",
+						).
+						Return(
+							&userFriend.UserFriend{
+								UserId:       "0:0000",
+								FriendUserId: "1:1111",
+								FriendType:   enum.FriendType_NotApproved,
+							},
+							nil,
+						)
+					m.EXPECT().
+						Delete(
+							nil,
+							nil,
+							&userFriend.UserFriend{
+								UserId:       "1:1111",
+								FriendUserId: "0:0000",
+								FriendType:   enum.FriendType_NotApproved,
+							},
+						).
+						Return(
+							nil,
+						)
+					m.EXPECT().
+						Delete(
+							nil,
+							nil,
+							&userFriend.UserFriend{
+								UserId:       "0:0000",
+								FriendUserId: "1:1111",
+								FriendType:   enum.FriendType_NotApproved,
+							},
+						).
+						Return(
+							nil,
+						)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &FriendDisapproveRequest{
+					UserId:       "0:0000",
+					FriendUserId: "1:1111",
+				},
+			},
+			want: &FriendDisapproveResponse{
+				UserFriend: &userFriend.UserFriend{
+					UserId:       "0:0000",
+					FriendUserId: "1:1111",
+					FriendType:   enum.FriendType_Disapproved,
+				},
+			},
+			wantErr: nil,
+		},
+		{
+			name: "異常：s.userFriendRepository.FindOrNil",
+			fields: fields{
+				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
+					m := userFriend.NewMockUserFriendRepository(ctrl)
+					m.EXPECT().
+						FindOrNil(
+							nil,
+							"0:0000",
+							"1:1111",
+						).
+						Return(
+							nil,
+							errors.NewTestError(),
+						)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &FriendDisapproveRequest{
+					UserId:       "0:0000",
+					FriendUserId: "1:1111",
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.userFriendRepository.FindOrNil", errors.NewTestError()),
+		},
+		{
+			name: "異常：not applied",
+			fields: fields{
+				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
+					m := userFriend.NewMockUserFriendRepository(ctrl)
+					m.EXPECT().
+						FindOrNil(
+							nil,
+							"0:0000",
+							"1:1111",
+						).
+						Return(
+							nil,
+							nil,
+						)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &FriendDisapproveRequest{
+					UserId:       "0:0000",
+					FriendUserId: "1:1111",
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewError("not applied"),
+		},
+		{
+			name: "異常：s.userFriendRepository.Delete",
+			fields: fields{
+				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
+					m := userFriend.NewMockUserFriendRepository(ctrl)
+					m.EXPECT().
+						FindOrNil(
+							nil,
+							"0:0000",
+							"1:1111",
+						).
+						Return(
+							&userFriend.UserFriend{
+								UserId:       "0:0000",
+								FriendUserId: "1:1111",
+								FriendType:   enum.FriendType_NotApproved,
+							},
+							nil,
+						)
+					m.EXPECT().
+						Delete(
+							nil,
+							nil,
+							&userFriend.UserFriend{
+								UserId:       "1:1111",
+								FriendUserId: "0:0000",
+								FriendType:   enum.FriendType_NotApproved,
+							},
+						).
+						Return(
+							errors.NewTestError(),
+						)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &FriendDisapproveRequest{
+					UserId:       "0:0000",
+					FriendUserId: "1:1111",
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.userFriendRepository.Delete", errors.NewTestError()),
+		},
+		{
+			name: "異常：s.userFriendRepository.Delete",
+			fields: fields{
+				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
+					m := userFriend.NewMockUserFriendRepository(ctrl)
+					m.EXPECT().
+						FindOrNil(
+							nil,
+							"0:0000",
+							"1:1111",
+						).
+						Return(
+							&userFriend.UserFriend{
+								UserId:       "0:0000",
+								FriendUserId: "1:1111",
+								FriendType:   enum.FriendType_NotApproved,
+							},
+							nil,
+						)
+					m.EXPECT().
+						Delete(
+							nil,
+							nil,
+							&userFriend.UserFriend{
+								UserId:       "1:1111",
+								FriendUserId: "0:0000",
+								FriendType:   enum.FriendType_NotApproved,
+							},
+						).
+						Return(
+							nil,
+						)
+					m.EXPECT().
+						Delete(
+							nil,
+							nil,
+							&userFriend.UserFriend{
+								UserId:       "0:0000",
+								FriendUserId: "1:1111",
+								FriendType:   enum.FriendType_NotApproved,
+							},
+						).
+						Return(
+							errors.NewTestError(),
+						)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &FriendDisapproveRequest{
+					UserId:       "0:0000",
+					FriendUserId: "1:1111",
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.userFriendRepository.Delete", errors.NewTestError()),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctrl := gomock.NewController(t)
+
+			s := &friendService{
+				userFriendRepository: tt.fields.userFriendRepository(ctrl),
+			}
+
+			got, err := s.Disapprove(tt.args.ctx, tt.args.txs, tt.args.req)
+			if !reflect.DeepEqual(err, tt.wantErr) {
+				t.Errorf("Disapprove() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Disapprove() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestFriendService_Delete(t *testing.T) {
+	type fields struct {
+		userFriendRepository func(ctrl *gomock.Controller) userFriend.UserFriendRepository
+	}
+	type args struct {
+		ctx context.Context
+		txs map[string]*gorm.DB
+		req *FriendDeleteRequest
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *FriendDeleteResponse
+		wantErr error
+	}{
+		{
+			name: "正常：削除できる",
+			fields: fields{
+				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
+					m := userFriend.NewMockUserFriendRepository(ctrl)
+					m.EXPECT().
+						FindOrNil(
+							nil,
+							"0:0000",
+							"1:1111",
+						).
+						Return(
+							&userFriend.UserFriend{
+								UserId:       "0:0000",
+								FriendUserId: "1:1111",
+								FriendType:   enum.FriendType_Approved,
+							},
+							nil,
+						)
+					m.EXPECT().
+						Delete(
+							nil,
+							nil,
+							&userFriend.UserFriend{
+								UserId:       "1:1111",
+								FriendUserId: "0:0000",
+								FriendType:   enum.FriendType_Approved,
+							},
+						).
+						Return(
+							nil,
+						)
+					m.EXPECT().
+						Delete(
+							nil,
+							nil,
+							&userFriend.UserFriend{
+								UserId:       "0:0000",
+								FriendUserId: "1:1111",
+								FriendType:   enum.FriendType_Approved,
+							},
+						).
+						Return(
+							nil,
+						)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &FriendDeleteRequest{
+					UserId:       "0:0000",
+					FriendUserId: "1:1111",
+				},
+			},
+			want: &FriendDeleteResponse{
+				UserFriend: &userFriend.UserFriend{
+					UserId:       "0:0000",
+					FriendUserId: "1:1111",
+					FriendType:   enum.FriendType_NotFriend,
+				},
+			},
+			wantErr: nil,
+		},
+		{
+			name: "異常：s.userFriendRepository.FindOrNil",
+			fields: fields{
+				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
+					m := userFriend.NewMockUserFriendRepository(ctrl)
+					m.EXPECT().
+						FindOrNil(
+							nil,
+							"0:0000",
+							"1:1111",
+						).
+						Return(
+							nil,
+							errors.NewTestError(),
+						)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &FriendDeleteRequest{
+					UserId:       "0:0000",
+					FriendUserId: "1:1111",
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.userFriendRepository.FindOrNil", errors.NewTestError()),
+		},
+		{
+			name: "異常：not friend",
+			fields: fields{
+				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
+					m := userFriend.NewMockUserFriendRepository(ctrl)
+					m.EXPECT().
+						FindOrNil(
+							nil,
+							"0:0000",
+							"1:1111",
+						).
+						Return(
+							nil,
+							nil,
+						)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &FriendDeleteRequest{
+					UserId:       "0:0000",
+					FriendUserId: "1:1111",
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewError("not friend"),
+		},
+		{
+			name: "異常：s.userFriendRepository.Delete",
+			fields: fields{
+				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
+					m := userFriend.NewMockUserFriendRepository(ctrl)
+					m.EXPECT().
+						FindOrNil(
+							nil,
+							"0:0000",
+							"1:1111",
+						).
+						Return(
+							&userFriend.UserFriend{
+								UserId:       "0:0000",
+								FriendUserId: "1:1111",
+								FriendType:   enum.FriendType_Approved,
+							},
+							nil,
+						)
+					m.EXPECT().
+						Delete(
+							nil,
+							nil,
+							&userFriend.UserFriend{
+								UserId:       "1:1111",
+								FriendUserId: "0:0000",
+								FriendType:   enum.FriendType_Approved,
+							},
+						).
+						Return(
+							errors.NewTestError(),
+						)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &FriendDeleteRequest{
+					UserId:       "0:0000",
+					FriendUserId: "1:1111",
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.userFriendRepository.Delete", errors.NewTestError()),
+		},
+		{
+			name: "異常：s.userFriendRepository.Delete",
+			fields: fields{
+				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
+					m := userFriend.NewMockUserFriendRepository(ctrl)
+					m.EXPECT().
+						FindOrNil(
+							nil,
+							"0:0000",
+							"1:1111",
+						).
+						Return(
+							&userFriend.UserFriend{
+								UserId:       "0:0000",
+								FriendUserId: "1:1111",
+								FriendType:   enum.FriendType_Approved,
+							},
+							nil,
+						)
+					m.EXPECT().
+						Delete(
+							nil,
+							nil,
+							&userFriend.UserFriend{
+								UserId:       "1:1111",
+								FriendUserId: "0:0000",
+								FriendType:   enum.FriendType_Approved,
+							},
+						).
+						Return(
+							nil,
+						)
+					m.EXPECT().
+						Delete(
+							nil,
+							nil,
+							&userFriend.UserFriend{
+								UserId:       "0:0000",
+								FriendUserId: "1:1111",
+								FriendType:   enum.FriendType_Approved,
+							},
+						).
+						Return(
+							errors.NewTestError(),
+						)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &FriendDeleteRequest{
+					UserId:       "0:0000",
+					FriendUserId: "1:1111",
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.userFriendRepository.Delete", errors.NewTestError()),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctrl := gomock.NewController(t)
+
+			s := &friendService{
+				userFriendRepository: tt.fields.userFriendRepository(ctrl),
+			}
+
+			got, err := s.Delete(tt.args.ctx, tt.args.txs, tt.args.req)
+			if !reflect.DeepEqual(err, tt.wantErr) {
+				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Delete() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
