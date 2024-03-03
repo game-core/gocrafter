@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/game-core/gocrafter/internal/changes"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -10,6 +9,8 @@ import (
 	"path/filepath"
 	"strings"
 	"text/template"
+
+	"github.com/game-core/gocrafter/internal/changes"
 )
 
 type Di struct{}
