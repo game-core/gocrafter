@@ -42,7 +42,7 @@ func (s *friendService) Get(ctx context.Context, req *FriendGetRequest) (*Friend
 		return nil, errors.NewMethodError("s.userFriendRepository.FindList", err)
 	}
 
-	return SetFriendGetResponse(userFriendModels.GetFriends()), nil
+	return SetFriendGetResponse(userFriendModels), nil
 }
 
 // Send フレンド申請を送信する
