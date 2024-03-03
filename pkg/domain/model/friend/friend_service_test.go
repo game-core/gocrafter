@@ -113,6 +113,11 @@ func TestFriendService_Get(t *testing.T) {
 					},
 					{
 						UserId:       "0:0000",
+						FriendUserId: "1:2222",
+						FriendType:   enum.FriendType_Applying,
+					},
+					{
+						UserId:       "0:0000",
 						FriendUserId: "1:3333",
 						FriendType:   enum.FriendType_Approved,
 					},
