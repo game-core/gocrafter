@@ -2,7 +2,8 @@
 ゲームサーバー基盤(gRPC)
 
 ## アーキテクチャ
-![architecture drawio](https://github.com/game-core/gocrafter/assets/71867595/3d794b1e-7186-490d-b74c-d8c4176ae3ef)
+![architecture](https://github.com/game-core/gocrafter/assets/71867595/67847572-8401-403d-a347-8c078d58c2cc)
+
 
 ## リンク
 - [環境構築](./docs/md/environment.md)
