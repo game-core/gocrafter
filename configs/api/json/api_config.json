@@ -1,8 +1,0 @@
-{
-  "api_config": {
-    "port": {
-      "http_port": 80,
-      "grpc_port": 50051
-    }
-  }
-}

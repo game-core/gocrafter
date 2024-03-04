@@ -10,13 +10,8 @@ import (
 )
 
 func main() {
-	setting, err := apiConfig.GetAppConfig()
-	if err != nil {
-		log.Fatalf("failed to net.Listen: %v", err)
-		return
-	}
-
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%v", setting.APIConfig.Port.GrpcPort))
+	apiConfig := apiConfig.GetAppConfig()
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%v", apiConfig.Port.GrpcPort))
 	if err != nil {
 		log.Fatalf("failed to net.Listen: %v", err)
 	}
