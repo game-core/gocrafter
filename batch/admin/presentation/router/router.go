@@ -18,7 +18,7 @@ func Router() {
 
 	// Run
 	if batch, ok := batchList[selectedCommand]; ok {
-		logFile := logger.GenerateBatchGameDebug()
+		logFile := logger.DebugLog("./pkg/logger/batch/game/", "game_debug.")
 		log.SetOutput(logFile)
 		if err := batch(); err != nil {
 			log.Printf("failed to batch(): %s", err)
