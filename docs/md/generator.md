@@ -289,7 +289,7 @@ type MasterLoginBonusRepository interface {
 ### Infrastructure
 - `./docs/yaml/pkg/domain/infrastructure`配下にyamlファイルを定義する
   - 定義したフィールドやキーに応じたTable, Dao, SQLを生成してくれる
-    - 現状、新規カラムを追加したくなった場合はS対応しているSQLを削除して新規生成するか、AlterのSQLを自前で追加する必要がある
+    - 現状、新規カラムを追加したくなった場合は対応しているSQLを削除して新規生成するか、AlterのSQLを自前で追加する必要がある
     - Dao, Tableに関しては上書き生成できる
 ```yaml
 name: MasterLoginBonus
