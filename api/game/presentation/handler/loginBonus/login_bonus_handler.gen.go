@@ -6,6 +6,7 @@ import (
 	"github.com/game-core/gocrafter/api/game/presentation/server/loginBonus"
 	loginBonusUsecase "github.com/game-core/gocrafter/api/game/usecase/loginBonus"
 	"github.com/game-core/gocrafter/internal/errors"
+	"github.com/game-core/gocrafter/internal/tokens"
 )
 
 type LoginBonusHandler interface {
@@ -27,6 +28,9 @@ func NewLoginBonusHandler(
 
 // Receive ログインボーナスを受け取る
 func (s *loginBonusHandler) Receive(ctx context.Context, req *loginBonus.LoginBonusReceiveRequest) (*loginBonus.LoginBonusReceiveResponse, error) {
+	if err := tokens.CheckJwtClaims(ctx, req.UserId); err != nil {
+		return nil, errors.NewMethodError("internal.CheckJwtClaims", err)
+	}
 	res, err := s.loginBonusUsecase.Receive(ctx, req)
 	if err != nil {
 		return nil, errors.NewMethodError("s.loginBonusUsecase.Receive", err)
