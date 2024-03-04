@@ -152,6 +152,7 @@ func (s *loginBonusHandler) Receive(ctx context.Context, req *loginBonus.LoginBo
 ### diの生成
 - 下記のようにusecaseやserviceに依存しているパッケージを引数にしたfuncを定義すると、wireで記述されるdiを自動生成してくれる
   - 記述の際の命名規則
+    - メソッド名: New + パッケージ名 + レイヤー名をアッパーキャメルケースで記述する
     - handler: 自動生成されるため不要
     - usecase
       - usecaseからservice依存のみ許可する
