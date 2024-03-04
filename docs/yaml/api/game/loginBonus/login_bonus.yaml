@@ -6,7 +6,7 @@ structure:
   Receive:
     name: receive
     method: unary
-    auth: false
+    auth: true
     request: LoginBonusReceiveRequest
     response: LoginBonusReceiveResponse
     number: 1
