@@ -26,10 +26,12 @@ type Conn struct {
 	WriteConn *gorm.DB
 }
 
+// NewDB インスタンスを作成する
 func NewDB() *SqlHandler {
 	return SqlHandlerInstance
 }
 
+// InitDB 初期化する
 func InitDB() (*SqlHandler, error) {
 	common, err := commonDB()
 	if err != nil {
@@ -55,6 +57,7 @@ func InitDB() (*SqlHandler, error) {
 	return SqlHandlerInstance, err
 }
 
+// commonDB コネクションを作成する
 func commonDB() (*Conn, error) {
 	readConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
@@ -92,6 +95,7 @@ func commonDB() (*Conn, error) {
 	}, nil
 }
 
+// masterDB コネクションを作成する
 func masterDB() (*Conn, error) {
 	readConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
@@ -129,6 +133,7 @@ func masterDB() (*Conn, error) {
 	}, nil
 }
 
+// shardUserDB コネクションを作成する
 func shardUserDB() (*ShardConn, error) {
 	shardCountStr := os.Getenv("SHARD_COUNT")
 	shardCount, err := strconv.Atoi(shardCountStr)
@@ -150,6 +155,7 @@ func shardUserDB() (*ShardConn, error) {
 	}, nil
 }
 
+// userDB コネクションを作成する
 func userDB(shard string) (*Conn, error) {
 	readConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
