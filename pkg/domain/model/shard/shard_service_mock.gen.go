@@ -35,17 +35,17 @@ func (m *MockShardService) EXPECT() *MockShardServiceMockRecorder {
 	return m.recorder
 }
 
-// GetShardKeyAndUpdate mocks base method.
-func (m *MockShardService) GetShardKeyAndUpdate(ctx context.Context, tx *gorm.DB) (string, error) {
+// GetShardKey mocks base method.
+func (m *MockShardService) GetShardKey(ctx context.Context, tx *gorm.DB) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetShardKeyAndUpdate", ctx, tx)
+	ret := m.ctrl.Call(m, "GetShardKey", ctx, tx)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetShardKeyAndUpdate indicates an expected call of GetShardKeyAndUpdate.
-func (mr *MockShardServiceMockRecorder) GetShardKeyAndUpdate(ctx, tx interface{}) *gomock.Call {
+// GetShardKey indicates an expected call of GetShardKey.
+func (mr *MockShardServiceMockRecorder) GetShardKey(ctx, tx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetShardKeyAndUpdate", reflect.TypeOf((*MockShardService)(nil).GetShardKeyAndUpdate), ctx, tx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetShardKey", reflect.TypeOf((*MockShardService)(nil).GetShardKey), ctx, tx)
 }
