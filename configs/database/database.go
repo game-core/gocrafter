@@ -9,6 +9,8 @@ import (
 	"gorm.io/gorm"
 )
 
+var SqlHandlerInstance *SqlHandler
+
 type SqlHandler struct {
 	Common *Conn
 	Master *Conn
@@ -25,14 +27,35 @@ type Conn struct {
 }
 
 func NewDB() *SqlHandler {
-	return &SqlHandler{
-		Common: commonDB(),
-		Master: masterDB(),
-		User:   shardUserDB(),
-	}
+	return SqlHandlerInstance
 }
 
-func commonDB() *Conn {
+func InitDB() (*SqlHandler, error) {
+	common, err := commonDB()
+	if err != nil {
+		return nil, err
+	}
+
+	master, err := masterDB()
+	if err != nil {
+		return nil, err
+	}
+
+	user, err := shardUserDB()
+	if err != nil {
+		return nil, err
+	}
+
+	SqlHandlerInstance = &SqlHandler{
+		Common: common,
+		Master: master,
+		User:   user,
+	}
+
+	return SqlHandlerInstance, err
+}
+
+func commonDB() (*Conn, error) {
 	readConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		os.Getenv("COMMON_MYSQL_READ_USER"),
@@ -53,23 +76,23 @@ func commonDB() *Conn {
 		DSN: readConn,
 	}), &gorm.Config{})
 	if err != nil {
-		panic(err.Error())
+		return nil, err
 	}
 
 	writeDB, err := gorm.Open(mysql.New(mysql.Config{
 		DSN: writeConn,
 	}), &gorm.Config{})
 	if err != nil {
-		panic(err.Error())
+		return nil, err
 	}
 
 	return &Conn{
 		ReadConn:  readDB,
 		WriteConn: writeDB,
-	}
+	}, nil
 }
 
-func masterDB() *Conn {
+func masterDB() (*Conn, error) {
 	readConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		os.Getenv("MASTER_MYSQL_READ_USER"),
@@ -90,40 +113,44 @@ func masterDB() *Conn {
 		DSN: readConn,
 	}), &gorm.Config{})
 	if err != nil {
-		panic(err.Error())
+		return nil, err
 	}
 
 	writeDB, err := gorm.Open(mysql.New(mysql.Config{
 		DSN: writeConn,
 	}), &gorm.Config{})
 	if err != nil {
-		panic(err.Error())
+		return nil, err
 	}
 
 	return &Conn{
 		ReadConn:  readDB,
 		WriteConn: writeDB,
-	}
+	}, nil
 }
 
-func shardUserDB() *ShardConn {
+func shardUserDB() (*ShardConn, error) {
 	shardCountStr := os.Getenv("SHARD_COUNT")
 	shardCount, err := strconv.Atoi(shardCountStr)
 	if err != nil {
-		panic(err.Error())
+		return nil, err
 	}
 
 	shards := make(map[string]*Conn)
 	for i := 0; i <= shardCount; i++ {
-		shards[os.Getenv(fmt.Sprintf("USER_MYSQL_SHARD_KEY_%v", i))] = userDB(fmt.Sprintf("_%v", i))
+		userConn, err := userDB(fmt.Sprintf("_%v", i))
+		if err != nil {
+			return nil, err
+		}
+		shards[os.Getenv(fmt.Sprintf("USER_MYSQL_SHARD_KEY_%v", i))] = userConn
 	}
 
 	return &ShardConn{
 		Shards: shards,
-	}
+	}, nil
 }
 
-func userDB(shard string) *Conn {
+func userDB(shard string) (*Conn, error) {
 	readConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		os.Getenv(fmt.Sprintf("USER_MYSQL_READ_USER%s", shard)),
@@ -144,18 +171,18 @@ func userDB(shard string) *Conn {
 		DSN: readConn,
 	}), &gorm.Config{})
 	if err != nil {
-		panic(err.Error())
+		return nil, err
 	}
 
 	writeDB, err := gorm.Open(mysql.New(mysql.Config{
 		DSN: writeConn,
 	}), &gorm.Config{})
 	if err != nil {
-		panic(err.Error())
+		return nil, err
 	}
 
 	return &Conn{
 		ReadConn:  readDB,
 		WriteConn: writeDB,
-	}
+	}, nil
 }
