@@ -22,6 +22,10 @@
 
 ## API
 ### request, responseの生成
+- コマンド
+```
+make docker_gen_api
+```
   - `./docs/yaml/api`配下にyamlファイルを定義する
   
 
@@ -150,6 +154,10 @@ func (s *loginBonusHandler) Receive(ctx context.Context, req *loginBonus.LoginBo
 ```
 
 ### diの生成
+- コマンド
+```
+make docker_gen_di
+```
 - 下記のようにusecaseやserviceに依存しているパッケージを引数にしたfuncを定義すると、wireで記述されるdiを自動生成してくれる
   - 記述の際の命名規則
     - メソッド名: New + パッケージ名 + レイヤー名をアッパーキャメルケースで記述する
@@ -200,6 +208,10 @@ func InitializeLoginBonusService() loginBonusService.LoginBonusService {
 ```
 
 ### Domain
+- コマンド
+```
+make docker_gen_domain
+```
 - `./docs/yaml/pkg/domain/model`配下にyamlファイルを定義する
   - Domainサービス毎にディレクトリを作成してその中にyamlを定義する
   - Infrastructure層のDaoとRepositoryを繋ぎこみたい場合は、さらにディレクトリ内にInfrastructureと同名のディレクトリとyamlを定義する(([例：ログインボーナス](https://github.com/game-core/gocrafter/tree/main/docs/yaml/pkg/domain/model/loginBonus)))
@@ -288,6 +300,10 @@ type MasterLoginBonusRepository interface {
 ```
 
 ### Infrastructure
+- コマンド
+```
+make docker_gen_infra
+```
 - `./docs/yaml/pkg/domain/infrastructure`配下にyamlファイルを定義する
   - 定義したフィールドやキーに応じたTable, Dao, SQLを生成してくれる
     - 現状、新規カラムを追加したくなった場合は対応しているSQLを削除して新規生成するか、AlterのSQLを自前で追加する必要がある
