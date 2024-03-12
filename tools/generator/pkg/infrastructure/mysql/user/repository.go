@@ -26,6 +26,7 @@ const repositoryTemplate = `
 package {{.Package}}
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
