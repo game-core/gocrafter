@@ -6,22 +6,23 @@
 
 ## 機能
 - API
-  - Account
-  - Profile
-  - Friend
-  - IdleBonus
-  - LoginBonus
+  - [Account：アカウント]()
+  - [Profile：プロフィール]()
+  - [Friend：フレンド]()
+  - [IdleBonus：放置ボーナス]()
+  - [LoginBonus：ログインボーナス]()
 - Service
-  - Account
-  - Profile
-  - Friend
-  - Item
-  - IdleBonus
-  - LoginBonus
-  - Rarity
-  - Resource
-  - Shard
-  - Transaction
+  - [Account：アカウント]()
+  - [Action：ユーザー行動管理]()
+  - [Profile：プロフィール]()
+  - [Friend：フレンド]()
+  - [Item：アイテム基盤]()
+  - [IdleBonus：放置ボーナス]()
+  - [LoginBonus：ログインボーナス]()
+  - [Rarity：レアリティ基盤]()
+  - [Resource：リソース基盤]()
+  - [Shard：シャード管理]()
+  - [Transaction：トランザクション管理]()
 ## リンク
 - [環境構築](./docs/md/environment.md)
 - [自動生成](./docs/md/generator.md)
