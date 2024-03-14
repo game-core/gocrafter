@@ -29,7 +29,7 @@ type AccountLoginResponse struct {
 	unknownFields protoimpl.UnknownFields
 
 	Token       string       `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
-	UserAccount *UserAccount `protobuf:"bytes,2,opt,name=user_account,json=userAccount,proto3,oneof" json:"user_account,omitempty"`
+	UserAccount *UserAccount `protobuf:"bytes,2,opt,name=user_account,json=userAction,proto3,oneof" json:"user_account,omitempty"`
 }
 
 func (x *AccountLoginResponse) Reset() {
