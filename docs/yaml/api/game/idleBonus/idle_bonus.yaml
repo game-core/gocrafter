@@ -1,0 +1,13 @@
+name: IdleBonus
+package: idleBonus
+comment: "放置ボーナス"
+
+structure:
+  Receive:
+    name: receive
+    method: unary
+    auth: true
+    request: IdleBonusReceiveRequest
+    response: IdleBonusReceiveResponse
+    number: 1
+    comment: "放置ボーナスを受け取る"

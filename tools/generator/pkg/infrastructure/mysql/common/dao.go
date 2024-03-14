@@ -383,8 +383,8 @@ func (s *Dao) createFindList(yamlStruct *YamlStruct) string {
 		`,
 		changes.UpperCamelToCamel(yamlStruct.Name),
 		yamlStruct.Package,
-		changes.SingularToPlural(yamlStruct.Name),
-		changes.SingularToPlural(yamlStruct.Name),
+		changes.SnakeToUpperCamel(changes.SingularToPlural(changes.UpperCamelToSnake(yamlStruct.Name))),
+		changes.SnakeToUpperCamel(changes.SingularToPlural(changes.UpperCamelToSnake(yamlStruct.Name))),
 		s.createModelSetters(yamlStruct),
 	)
 }
@@ -413,8 +413,8 @@ func (s *Dao) createFindListByIndex(yamlStruct *YamlStruct, indexFields []string
 		strings.Join(indexFields, "And"),
 		s.createParam(keys),
 		yamlStruct.Package,
-		changes.SingularToPlural(yamlStruct.Name),
-		changes.SingularToPlural(yamlStruct.Name),
+		changes.SnakeToUpperCamel(changes.SingularToPlural(changes.UpperCamelToSnake(yamlStruct.Name))),
+		changes.SnakeToUpperCamel(changes.SingularToPlural(changes.UpperCamelToSnake(yamlStruct.Name))),
 		s.createQuery(keys),
 		s.createModelSetters(yamlStruct),
 	)
@@ -476,10 +476,10 @@ func (s *Dao) createCreateList(yamlStruct *YamlStruct) string {
 		}`,
 		changes.UpperCamelToCamel(yamlStruct.Name),
 		yamlStruct.Package,
-		changes.SingularToPlural(yamlStruct.Name),
+		changes.SnakeToUpperCamel(changes.SingularToPlural(changes.UpperCamelToSnake(yamlStruct.Name))),
 		yamlStruct.Package,
-		changes.SingularToPlural(yamlStruct.Name),
-		changes.SingularToPlural(yamlStruct.Name),
+		changes.SnakeToUpperCamel(changes.SingularToPlural(changes.UpperCamelToSnake(yamlStruct.Name))),
+		changes.SnakeToUpperCamel(changes.SingularToPlural(changes.UpperCamelToSnake(yamlStruct.Name))),
 		s.createTableSetter(yamlStruct),
 		yamlStruct.Name,
 	)
@@ -615,7 +615,7 @@ func (s *Dao) createModelSetters(yamlStruct *YamlStruct) string {
 			ms = append(ms, %s)
 		}`,
 		yamlStruct.Package,
-		changes.SingularToPlural(yamlStruct.Name),
+		changes.SnakeToUpperCamel(changes.SingularToPlural(changes.UpperCamelToSnake(yamlStruct.Name))),
 		fmt.Sprintf(
 			`%s.Set%s(%s)`,
 			yamlStruct.Package,

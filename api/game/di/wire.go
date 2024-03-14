@@ -10,6 +10,7 @@ import (
 
 	accountHandler "github.com/game-core/gocrafter/api/game/presentation/handler/account"
 	friendHandler "github.com/game-core/gocrafter/api/game/presentation/handler/friend"
+	idleBonusHandler "github.com/game-core/gocrafter/api/game/presentation/handler/idleBonus"
 	loginBonusHandler "github.com/game-core/gocrafter/api/game/presentation/handler/loginBonus"
 	profileHandler "github.com/game-core/gocrafter/api/game/presentation/handler/profile"
 	authInterceptor "github.com/game-core/gocrafter/api/game/presentation/interceptor/auth"
@@ -26,6 +27,10 @@ import (
 	transactionService "github.com/game-core/gocrafter/pkg/domain/model/transaction"
 	commonShardDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonShard"
 	commonTransactionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonTransaction"
+	masterIdleBonusDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonus"
+	masterIdleBonusEventDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusEvent"
+	masterIdleBonusItemDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusItem"
+	masterIdleBonusScheduleDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusSchedule"
 	masterItemDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterItem"
 	masterLoginBonusDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonus"
 	masterLoginBonusEventDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusEvent"
@@ -34,6 +39,7 @@ import (
 	masterTransactionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterTransaction"
 	userAccountDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userAccount"
 	userFriendDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userFriend"
+	userIdleBonusDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userIdleBonus"
 	userItemBoxDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userItemBox"
 	userLoginBonusDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userLoginBonus"
 	userProfileDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userProfile"
@@ -59,6 +65,14 @@ func InitializeFriendHandler() friendHandler.FriendHandler {
 	wire.Build(
 		friendHandler.NewFriendHandler,
 		InitializeFriendUsecase,
+	)
+	return nil
+}
+
+func InitializeIdleBonusHandler() idleBonusHandler.IdleBonusHandler {
+	wire.Build(
+		idleBonusHandler.NewIdleBonusHandler,
+		InitializeIdleBonusUsecase,
 	)
 	return nil
 }
@@ -131,6 +145,20 @@ func InitializeFriendService() friendService.FriendService {
 		friendService.NewFriendService,
 		InitializeAccountService,
 		userFriendDao.NewUserFriendDao,
+	)
+	return nil
+}
+
+func InitializeIdleBonusService() idleBonusService.IdleBonusService {
+	wire.Build(
+		database.NewDB,
+		idleBonusService.NewIdleBonusService,
+		InitializeItemService,
+		userIdleBonusDao.NewUserIdleBonusDao,
+		masterIdleBonusDao.NewMasterIdleBonusDao,
+		masterIdleBonusEventDao.NewMasterIdleBonusEventDao,
+		masterIdleBonusItemDao.NewMasterIdleBonusItemDao,
+		masterIdleBonusScheduleDao.NewMasterIdleBonusScheduleDao,
 	)
 	return nil
 }

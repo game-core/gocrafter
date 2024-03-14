@@ -250,7 +250,7 @@ func (s *Repository) createFindOrNilByIndex(yamlStruct *YamlStruct, indexFields 
 func (s *Repository) createFindList(yamlStruct *YamlStruct) string {
 	return fmt.Sprintf(
 		`FindList(ctx context.Context) (%s, error)`,
-		changes.SingularToPlural(yamlStruct.Name),
+		changes.SnakeToUpperCamel(changes.SingularToPlural(changes.UpperCamelToSnake(yamlStruct.Name))),
 	)
 }
 
@@ -265,7 +265,7 @@ func (s *Repository) createFindListByIndex(yamlStruct *YamlStruct, indexFields [
 		`FindListBy%s(ctx context.Context, %s) (%s, error)`,
 		strings.Join(indexFields, "And"),
 		s.createParam(keys),
-		changes.SingularToPlural(yamlStruct.Name),
+		changes.SnakeToUpperCamel(changes.SingularToPlural(changes.UpperCamelToSnake(yamlStruct.Name))),
 	)
 }
 
@@ -282,8 +282,8 @@ func (s *Repository) createCreate(yamlStruct *YamlStruct) string {
 func (s *Repository) createCreateList(yamlStruct *YamlStruct) string {
 	return fmt.Sprintf(
 		`CreateList(ctx context.Context, tx *gorm.DB, ms %s) (%s, error)`,
-		changes.SingularToPlural(yamlStruct.Name),
-		changes.SingularToPlural(yamlStruct.Name),
+		changes.SnakeToUpperCamel(changes.SingularToPlural(changes.UpperCamelToSnake(yamlStruct.Name))),
+		changes.SnakeToUpperCamel(changes.SingularToPlural(changes.UpperCamelToSnake(yamlStruct.Name))),
 	)
 }
 

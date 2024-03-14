@@ -101,7 +101,7 @@ func (s *Table) createTemplate(yamlStruct *YamlStruct, outputFile *os.File) erro
 		TemplateStruct{
 			Name:       yamlStruct.Name,
 			Package:    yamlStruct.Package,
-			PluralName: changes.SingularToPlural(yamlStruct.Name),
+			PluralName: changes.SnakeToUpperCamel(changes.SingularToPlural(changes.UpperCamelToSnake(yamlStruct.Name))),
 			Comment:    yamlStruct.Comment,
 			Script:     s.createScript(yamlStruct),
 			Import:     importCode,
@@ -134,7 +134,7 @@ func (s *Table) createScript(yamlStruct *YamlStruct) string {
 
 		%s`,
 		s.createStruct(yamlStruct.Name, strings.Join(fieldScript, "\n")),
-		s.createNew(yamlStruct.Name, changes.SingularToPlural(yamlStruct.Name)),
+		s.createNew(yamlStruct.Name, changes.SnakeToUpperCamel(changes.SingularToPlural(changes.UpperCamelToSnake(yamlStruct.Name)))),
 		s.createSetter(yamlStruct.Name, strings.Join(paramScript, ","), strings.Join(returnScript, "\n")),
 		s.createTableName(yamlStruct.Name),
 	)

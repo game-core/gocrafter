@@ -1,0 +1,40 @@
+name: IdleBonusReceiveResponse
+package: idleBonus
+comment: "放置ボーナス受け取りレスポンス"
+
+structure:
+  UserIdleBonus:
+    name: user_idle_bonus
+    type: structure
+    package: idleBonus/userIdleBonus
+    nullable: true
+    number: 1
+    comment: "放置ログインボーナス"
+  MasterIdleBonus:
+    name: master_idle_bonus
+    type: structure
+    package: idleBonus/masterIdleBonus
+    nullable: true
+    number: 2
+    comment: "マスター放置ボーナス"
+  MasterIdleBonusEvent:
+    name: master_idle_bonus_event
+    type: structure
+    package: idleBonus/masterIdleBonusEvent
+    nullable: true
+    number: 3
+    comment: "マスター放置ボーナスイベント"
+  MasterIdleBonusItems:
+    name: master_idle_bonus_items
+    type: structures
+    package: idleBonus/masterIdleBonusItem
+    nullable: false
+    number: 4
+    comment: "マスター放置ボーナスアイテム一覧"
+  MasterIdleBonusSchedules:
+    name: master_idle_bonus_schedules
+    type: structures
+    package: idleBonus/masterIdleBonusSchedule
+    nullable: false
+    number: 5
+    comment: "マスター放置ボーナススケジュール一覧"
