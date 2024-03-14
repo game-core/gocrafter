@@ -1,0 +1,38 @@
+// Package userIdleBonus ユーザー放置ボーナス
+package userIdleBonus
+
+import (
+	"time"
+)
+
+type UserIdleBonuses []*UserIdleBonus
+
+type UserIdleBonus struct {
+	UserId            string
+	MasterIdleBonusId int64
+	ReceivedAt        time.Time
+	CreatedAt         time.Time
+	UpdatedAt         time.Time
+}
+
+func NewUserIdleBonus() *UserIdleBonus {
+	return &UserIdleBonus{}
+}
+
+func NewUserIdleBonuses() UserIdleBonuses {
+	return UserIdleBonuses{}
+}
+
+func SetUserIdleBonus(userId string, masterIdleBonusId int64, receivedAt time.Time, createdAt time.Time, updatedAt time.Time) *UserIdleBonus {
+	return &UserIdleBonus{
+		UserId:            userId,
+		MasterIdleBonusId: masterIdleBonusId,
+		ReceivedAt:        receivedAt,
+		CreatedAt:         createdAt,
+		UpdatedAt:         updatedAt,
+	}
+}
+
+func (t *UserIdleBonus) TableName() string {
+	return "user_idle_bonus"
+}

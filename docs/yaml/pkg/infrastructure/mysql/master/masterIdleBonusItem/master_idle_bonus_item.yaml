@@ -1,0 +1,43 @@
+name: MasterIdleBonusItem
+package: masterIdleBonusItem
+comment: "放置ボーナスアイテム"
+
+structure:
+  Id:
+    name: id
+    type: int64
+    nullable: false
+    number: 1
+    comment: "ID"
+  MasterIdleBonusScheduleId:
+    name: master_idle_bonus_schedule_id
+    type: int64
+    nullable: false
+    number: 2
+    comment: "放置ボーナススケジュールID"
+  MasterItemId:
+    name: master_item_id
+    type: int64
+    nullable: false
+    number: 3
+    comment: "アイテムID"
+  Name:
+    name: name
+    type: string
+    nullable: false
+    number: 4
+    comment: "放置ボーナスアイテム名"
+  Count:
+    name: count
+    type: int32
+    nullable: false
+    number: 5
+    comment: "個数"
+primary:
+  - Id
+unique:
+  - Id
+index:
+  - MasterIdleBonusScheduleId
+  - MasterItemId
+  - MasterIdleBonusScheduleId,MasterItemId
