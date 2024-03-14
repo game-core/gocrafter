@@ -8,7 +8,7 @@ import (
 	"github.com/game-core/gocrafter/internal/times"
 )
 
-func TestNewUserLoginBonus_CheckReceived(t *testing.T) {
+func TestMasterLoginBonusEvent_CheckEventPeriod(t *testing.T) {
 	type fields struct {
 		MasterLoginBonusEvent *MasterLoginBonusEvent
 	}
