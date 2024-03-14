@@ -64,7 +64,7 @@ func (s *idleBonusService) Receive(ctx context.Context, tx *gorm.DB, now time.Ti
 		return nil, errors.NewMethodError("s.userIdleBonusRepository.FindOrNil", err)
 	}
 
-	masterIdleBonusScheduleModel, err := s.getSchedules(ctx, now, req.MasterIdleBonusId, masterIdleBonusEventModel.IntervalHour, userIdleBonusModel.ReceivedAt)
+	masterIdleBonusScheduleModel, err := s.getSchedules(ctx, now, req.MasterIdleBonusId, masterIdleBonusEventModel.IntervalHour, userIdleBonusModel.GetReceivedAt(now))
 	if err != nil {
 		return nil, errors.NewMethodError("s.getSchedules", err)
 	}
