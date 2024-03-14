@@ -18,7 +18,7 @@
   - Item
   - IdleBonus
   - LoginBonus
-  - Rearity
+  - Rarity
   - Resource
   - Shard
   - Transaction
