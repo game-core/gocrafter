@@ -8,7 +8,7 @@ import (
 func (s *MasterIdleBonusSchedules) GetSchedulesByStep(step int32) MasterIdleBonusSchedules {
 	masterIdleBonusSchedules := NewMasterIdleBonusSchedules()
 	for _, mlbst := range *s {
-		if step >= mlbst.Step {
+		if step > mlbst.Step {
 			masterIdleBonusSchedules = append(masterIdleBonusSchedules, mlbst)
 		}
 	}
