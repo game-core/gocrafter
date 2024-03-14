@@ -20,15 +20,19 @@ import (
 	profile2 "github.com/game-core/gocrafter/api/game/usecase/profile"
 	"github.com/game-core/gocrafter/configs/database"
 	account3 "github.com/game-core/gocrafter/pkg/domain/model/account"
+	"github.com/game-core/gocrafter/pkg/domain/model/action"
 	friend3 "github.com/game-core/gocrafter/pkg/domain/model/friend"
 	idleBonus3 "github.com/game-core/gocrafter/pkg/domain/model/idleBonus"
 	"github.com/game-core/gocrafter/pkg/domain/model/item"
 	loginBonus3 "github.com/game-core/gocrafter/pkg/domain/model/loginBonus"
 	profile3 "github.com/game-core/gocrafter/pkg/domain/model/profile"
+	"github.com/game-core/gocrafter/pkg/domain/model/rarity"
+	"github.com/game-core/gocrafter/pkg/domain/model/resource"
 	"github.com/game-core/gocrafter/pkg/domain/model/shard"
 	"github.com/game-core/gocrafter/pkg/domain/model/transaction"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonShard"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonTransaction"
+	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterAction"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonus"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusEvent"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusItem"
@@ -38,8 +42,11 @@ import (
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusEvent"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusItem"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusSchedule"
+	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterRarity"
+	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterResource"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterTransaction"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userAccount"
+	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userAction"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userFriend"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userIdleBonus"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userItemBox"
@@ -128,6 +135,14 @@ func InitializeAccountService() account3.AccountService {
 	return accountService
 }
 
+func InitializeActionService() action.ActionService {
+	sqlHandler := database.NewDB()
+	masterActionRepository := masterAction.NewMasterActionDao(sqlHandler)
+	userActionRepository := userAction.NewUserActionDao(sqlHandler)
+	actionService := action.NewActionService(masterActionRepository, userActionRepository)
+	return actionService
+}
+
 func InitializeFriendService() friend3.FriendService {
 	accountService := InitializeAccountService()
 	sqlHandler := database.NewDB()
@@ -173,6 +188,20 @@ func InitializeProfileService() profile3.ProfileService {
 	userProfileRepository := userProfile.NewUserProfileDao(sqlHandler)
 	profileService := profile3.NewProfileService(userProfileRepository)
 	return profileService
+}
+
+func InitializeRarityService() rarity.RarityService {
+	sqlHandler := database.NewDB()
+	masterRarityRepository := masterRarity.NewMasterRarityDao(sqlHandler)
+	rarityService := rarity.NewRarityService(masterRarityRepository)
+	return rarityService
+}
+
+func InitializeResourceService() resource.ResourceService {
+	sqlHandler := database.NewDB()
+	masterResourceRepository := masterResource.NewMasterResourceDao(sqlHandler)
+	resourceService := resource.NewResourceService(masterResourceRepository)
+	return resourceService
 }
 
 func InitializeShardService() shard.ShardService {

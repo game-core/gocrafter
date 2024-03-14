@@ -28,7 +28,7 @@ type AccountCheckResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserAccount *UserAccount `protobuf:"bytes,1,opt,name=user_account,json=userAction,proto3,oneof" json:"user_account,omitempty"`
+	UserAccount *UserAccount `protobuf:"bytes,1,opt,name=user_account,json=userAccount,proto3,oneof" json:"user_account,omitempty"`
 }
 
 func (x *AccountCheckResponse) Reset() {

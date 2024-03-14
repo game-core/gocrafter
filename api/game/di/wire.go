@@ -20,15 +20,19 @@ import (
 	loginBonusUsecase "github.com/game-core/gocrafter/api/game/usecase/loginBonus"
 	profileUsecase "github.com/game-core/gocrafter/api/game/usecase/profile"
 	accountService "github.com/game-core/gocrafter/pkg/domain/model/account"
+	actionService "github.com/game-core/gocrafter/pkg/domain/model/action"
 	friendService "github.com/game-core/gocrafter/pkg/domain/model/friend"
 	idleBonusService "github.com/game-core/gocrafter/pkg/domain/model/idleBonus"
 	itemService "github.com/game-core/gocrafter/pkg/domain/model/item"
 	loginBonusService "github.com/game-core/gocrafter/pkg/domain/model/loginBonus"
 	profileService "github.com/game-core/gocrafter/pkg/domain/model/profile"
+	rarityService "github.com/game-core/gocrafter/pkg/domain/model/rarity"
+	resourceService "github.com/game-core/gocrafter/pkg/domain/model/resource"
 	shardService "github.com/game-core/gocrafter/pkg/domain/model/shard"
 	transactionService "github.com/game-core/gocrafter/pkg/domain/model/transaction"
 	commonShardDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonShard"
 	commonTransactionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonTransaction"
+	masterActionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterAction"
 	masterIdleBonusDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonus"
 	masterIdleBonusEventDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusEvent"
 	masterIdleBonusItemDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusItem"
@@ -38,8 +42,11 @@ import (
 	masterLoginBonusEventDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusEvent"
 	masterLoginBonusItemDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusItem"
 	masterLoginBonusScheduleDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusSchedule"
+	masterRarityDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterRarity"
+	masterResourceDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterResource"
 	masterTransactionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterTransaction"
 	userAccountDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userAccount"
+	userActionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userAction"
 	userFriendDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userFriend"
 	userIdleBonusDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userIdleBonus"
 	userItemBoxDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userItemBox"
@@ -150,6 +157,16 @@ func InitializeAccountService() accountService.AccountService {
 	return nil
 }
 
+func InitializeActionService() actionService.ActionService {
+	wire.Build(
+		database.NewDB,
+		actionService.NewActionService,
+		masterActionDao.NewMasterActionDao,
+		userActionDao.NewUserActionDao,
+	)
+	return nil
+}
+
 func InitializeFriendService() friendService.FriendService {
 	wire.Build(
 		database.NewDB,
@@ -203,6 +220,24 @@ func InitializeProfileService() profileService.ProfileService {
 		database.NewDB,
 		profileService.NewProfileService,
 		userProfileDao.NewUserProfileDao,
+	)
+	return nil
+}
+
+func InitializeRarityService() rarityService.RarityService {
+	wire.Build(
+		database.NewDB,
+		rarityService.NewRarityService,
+		masterRarityDao.NewMasterRarityDao,
+	)
+	return nil
+}
+
+func InitializeResourceService() resourceService.ResourceService {
+	wire.Build(
+		database.NewDB,
+		resourceService.NewResourceService,
+		masterResourceDao.NewMasterResourceDao,
 	)
 	return nil
 }

@@ -284,6 +284,8 @@ func (s *Di) usecaseScript(structName string, fields []*ast.Field) string {
 
 // serviceScript serviceを生成する
 func (s *Di) serviceScript(structName string, fields []*ast.Field) string {
+	importCode = fmt.Sprintf("%s\n%s", importCode, fmt.Sprintf("%s \"github.com/game-core/gocrafter/pkg/domain/model/%s\"", structName, strings.Replace(structName, "Service", "", -1)))
+
 	var scripts []string
 
 	for _, field := range fields {
