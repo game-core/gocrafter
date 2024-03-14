@@ -1,0 +1,21 @@
+name: Profile
+package: profile
+comment: "プロフィール"
+
+structure:
+  Create:
+    name: create
+    method: unary
+    auth: true
+    request: ProfileCreateRequest
+    response: ProfileCreateResponse
+    number: 1
+    comment: "フレンドを作成する"
+  Update:
+    name: update
+    method: unary
+    auth: true
+    request: ProfileUpdateRequest
+    response: ProfileUpdateResponse
+    number: 2
+    comment: "フレンドを更新する"

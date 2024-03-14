@@ -12,6 +12,7 @@ import (
 
 type ProfileService interface {
 	Create(ctx context.Context, tx *gorm.DB, req *ProfileCreateRequest) (*ProfileCreateResponse, error)
+	Update(ctx context.Context, tx *gorm.DB, req *ProfileUpdateRequest) (*ProfileUpdateResponse, error)
 }
 
 type profileService struct {
@@ -34,4 +35,14 @@ func (s *profileService) Create(ctx context.Context, tx *gorm.DB, req *ProfileCr
 	}
 
 	return SetProfileCreateResponse(userProfileModel), nil
+}
+
+// Update プロフィールを更新する
+func (s *profileService) Update(ctx context.Context, tx *gorm.DB, req *ProfileUpdateRequest) (*ProfileUpdateResponse, error) {
+	userProfileModel, err := s.userProfileRepository.Update(ctx, tx, userProfile.SetUserProfile(req.UserId, req.Name, req.Content))
+	if err != nil {
+		return nil, errors.NewMethodError("s.userProfileRepository.Update", err)
+	}
+
+	return SetProfileUpdateResponse(userProfileModel), nil
 }

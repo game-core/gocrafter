@@ -1,0 +1,12 @@
+name: ProfileUpdateResponse
+package: profile
+comment: "プロフィール更新レスポンス"
+
+structure:
+  UserProfile:
+    name: user_profile
+    type: structure
+    package: profile/userProfile
+    nullable: true
+    number: 1
+    comment: "ユーザープロフィール"

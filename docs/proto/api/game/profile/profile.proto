@@ -1,0 +1,16 @@
+// プロフィール
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/profile";
+
+import "profile_create_request.proto";
+import "profile_create_response.proto";
+import "profile_update_request.proto";
+import "profile_update_response.proto";
+
+service Profile {
+  rpc Create (ProfileCreateRequest) returns (ProfileCreateResponse);
+  rpc Update (ProfileUpdateRequest) returns (ProfileUpdateResponse);
+}

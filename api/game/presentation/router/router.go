@@ -10,6 +10,7 @@ import (
 	"github.com/game-core/gocrafter/api/game/presentation/server/account"
 	"github.com/game-core/gocrafter/api/game/presentation/server/friend"
 	"github.com/game-core/gocrafter/api/game/presentation/server/loginBonus"
+	"github.com/game-core/gocrafter/api/game/presentation/server/profile"
 )
 
 func Router(lis net.Listener) {
@@ -18,6 +19,7 @@ func Router(lis net.Listener) {
 	friendHandler := di.InitializeFriendHandler()
 	authInterceptor := di.InitializeAuthInterceptor()
 	loginBonusHandler := di.InitializeLoginBonusHandler()
+	profileHandler := di.InitializeProfileHandler()
 
 	// Server
 	s := grpc.NewServer(
@@ -27,6 +29,7 @@ func Router(lis net.Listener) {
 	account.RegisterAccountServer(s, accountHandler)
 	friend.RegisterFriendServer(s, friendHandler)
 	loginBonus.RegisterLoginBonusServer(s, loginBonusHandler)
+	profile.RegisterProfileServer(s, profileHandler)
 
 	log.Printf("gRPC server started")
 	if err := s.Serve(lis); err != nil {

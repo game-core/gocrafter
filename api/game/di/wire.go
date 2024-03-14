@@ -11,14 +11,17 @@ import (
 	accountHandler "github.com/game-core/gocrafter/api/game/presentation/handler/account"
 	friendHandler "github.com/game-core/gocrafter/api/game/presentation/handler/friend"
 	loginBonusHandler "github.com/game-core/gocrafter/api/game/presentation/handler/loginBonus"
+	profileHandler "github.com/game-core/gocrafter/api/game/presentation/handler/profile"
 	authInterceptor "github.com/game-core/gocrafter/api/game/presentation/interceptor/auth"
 	accountUsecase "github.com/game-core/gocrafter/api/game/usecase/account"
 	friendUsecase "github.com/game-core/gocrafter/api/game/usecase/friend"
 	loginBonusUsecase "github.com/game-core/gocrafter/api/game/usecase/loginBonus"
+	profileUsecase "github.com/game-core/gocrafter/api/game/usecase/profile"
 	accountService "github.com/game-core/gocrafter/pkg/domain/model/account"
 	friendService "github.com/game-core/gocrafter/pkg/domain/model/friend"
 	itemService "github.com/game-core/gocrafter/pkg/domain/model/item"
 	loginBonusService "github.com/game-core/gocrafter/pkg/domain/model/loginBonus"
+	profileService "github.com/game-core/gocrafter/pkg/domain/model/profile"
 	shardService "github.com/game-core/gocrafter/pkg/domain/model/shard"
 	transactionService "github.com/game-core/gocrafter/pkg/domain/model/transaction"
 	commonShardDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonShard"
@@ -33,6 +36,7 @@ import (
 	userFriendDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userFriend"
 	userItemBoxDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userItemBox"
 	userLoginBonusDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userLoginBonus"
+	userProfileDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userProfile"
 	userTransactionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userTransaction"
 )
 
@@ -67,6 +71,14 @@ func InitializeLoginBonusHandler() loginBonusHandler.LoginBonusHandler {
 	return nil
 }
 
+func InitializeProfileHandler() profileHandler.ProfileHandler {
+	wire.Build(
+		profileHandler.NewProfileHandler,
+		InitializeProfileUsecase,
+	)
+	return nil
+}
+
 func InitializeAccountUsecase() accountUsecase.AccountUsecase {
 	wire.Build(
 		accountUsecase.NewAccountUsecase,
@@ -89,6 +101,15 @@ func InitializeLoginBonusUsecase() loginBonusUsecase.LoginBonusUsecase {
 	wire.Build(
 		loginBonusUsecase.NewLoginBonusUsecase,
 		InitializeLoginBonusService,
+		InitializeTransactionService,
+	)
+	return nil
+}
+
+func InitializeProfileUsecase() profileUsecase.ProfileUsecase {
+	wire.Build(
+		profileUsecase.NewProfileUsecase,
+		InitializeProfileService,
 		InitializeTransactionService,
 	)
 	return nil
@@ -134,6 +155,15 @@ func InitializeLoginBonusService() loginBonusService.LoginBonusService {
 		masterLoginBonusEventDao.NewMasterLoginBonusEventDao,
 		masterLoginBonusItemDao.NewMasterLoginBonusItemDao,
 		masterLoginBonusScheduleDao.NewMasterLoginBonusScheduleDao,
+	)
+	return nil
+}
+
+func InitializeProfileService() profileService.ProfileService {
+	wire.Build(
+		database.NewDB,
+		profileService.NewProfileService,
+		userProfileDao.NewUserProfileDao,
 	)
 	return nil
 }

@@ -10,15 +10,18 @@ import (
 	"github.com/game-core/gocrafter/api/game/presentation/handler/account"
 	"github.com/game-core/gocrafter/api/game/presentation/handler/friend"
 	"github.com/game-core/gocrafter/api/game/presentation/handler/loginBonus"
+	"github.com/game-core/gocrafter/api/game/presentation/handler/profile"
 	"github.com/game-core/gocrafter/api/game/presentation/interceptor/auth"
 	account2 "github.com/game-core/gocrafter/api/game/usecase/account"
 	friend2 "github.com/game-core/gocrafter/api/game/usecase/friend"
 	loginBonus2 "github.com/game-core/gocrafter/api/game/usecase/loginBonus"
+	profile2 "github.com/game-core/gocrafter/api/game/usecase/profile"
 	"github.com/game-core/gocrafter/configs/database"
 	account3 "github.com/game-core/gocrafter/pkg/domain/model/account"
 	friend3 "github.com/game-core/gocrafter/pkg/domain/model/friend"
 	"github.com/game-core/gocrafter/pkg/domain/model/item"
 	loginBonus3 "github.com/game-core/gocrafter/pkg/domain/model/loginBonus"
+	profile3 "github.com/game-core/gocrafter/pkg/domain/model/profile"
 	"github.com/game-core/gocrafter/pkg/domain/model/shard"
 	"github.com/game-core/gocrafter/pkg/domain/model/transaction"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonShard"
@@ -33,6 +36,7 @@ import (
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userFriend"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userItemBox"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userLoginBonus"
+	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userProfile"
 	masterTransaction2 "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userTransaction"
 )
 
@@ -61,6 +65,12 @@ func InitializeLoginBonusHandler() loginBonus.LoginBonusHandler {
 	return loginBonusHandler
 }
 
+func InitializeProfileHandler() profile.ProfileHandler {
+	profileUsecase := InitializeProfileUsecase()
+	profileHandler := profile.NewProfileHandler(profileUsecase)
+	return profileHandler
+}
+
 func InitializeAccountUsecase() account2.AccountUsecase {
 	accountService := InitializeAccountService()
 	transactionService := InitializeTransactionService()
@@ -80,6 +90,13 @@ func InitializeLoginBonusUsecase() loginBonus2.LoginBonusUsecase {
 	transactionService := InitializeTransactionService()
 	loginBonusUsecase := loginBonus2.NewLoginBonusUsecase(loginBonusService, transactionService)
 	return loginBonusUsecase
+}
+
+func InitializeProfileUsecase() profile2.ProfileUsecase {
+	profileService := InitializeProfileService()
+	transactionService := InitializeTransactionService()
+	profileUsecase := profile2.NewProfileUsecase(profileService, transactionService)
+	return profileUsecase
 }
 
 func InitializeAccountService() account3.AccountService {
@@ -116,6 +133,13 @@ func InitializeLoginBonusService() loginBonus3.LoginBonusService {
 	masterLoginBonusScheduleRepository := masterLoginBonusSchedule.NewMasterLoginBonusScheduleDao(sqlHandler)
 	loginBonusService := loginBonus3.NewLoginBonusService(itemService, userLoginBonusRepository, masterLoginBonusRepository, masterLoginBonusEventRepository, masterLoginBonusItemRepository, masterLoginBonusScheduleRepository)
 	return loginBonusService
+}
+
+func InitializeProfileService() profile3.ProfileService {
+	sqlHandler := database.NewDB()
+	userProfileRepository := userProfile.NewUserProfileDao(sqlHandler)
+	profileService := profile3.NewProfileService(userProfileRepository)
+	return profileService
 }
 
 func InitializeShardService() shard.ShardService {

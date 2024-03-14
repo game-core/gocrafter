@@ -1,0 +1,23 @@
+name: ProfileUpdateRequest
+package: profile
+comment: "プロフィール更新リクエスト"
+
+structure:
+  UserId:
+    name: user_id
+    type: string
+    nullable: false
+    number: 1
+    comment: "ユーザーID"
+  Name:
+    name: name
+    type: string
+    nullable: false
+    number: 2
+    comment: "ユーザープロフィール名"
+  Content:
+    name: content
+    type: string
+    nullable: false
+    number: 3
+    comment: "コンテンツ"
