@@ -52,7 +52,7 @@ func TestLoginBonusUsecase_NewLoginBonusUsecase(t *testing.T) {
 	}
 }
 
-func TestLoginBonusUsecase_Login(t *testing.T) {
+func TestLoginBonusUsecase_Receive(t *testing.T) {
 	type fields struct {
 		loginBonusService  func(ctrl *gomock.Controller) loginBonusService.LoginBonusService
 		transactionService func(ctrl *gomock.Controller) transactionService.TransactionService
