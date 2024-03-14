@@ -63,8 +63,22 @@ func (s *idleBonusService) Receive(ctx context.Context, tx *gorm.DB, now time.Ti
 	if err != nil {
 		return nil, errors.NewMethodError("s.userIdleBonusRepository.FindOrNil", err)
 	}
+	if userIdleBonusModel == nil {
+		result, err := s.userIdleBonusRepository.Create(ctx, tx, userIdleBonus.SetUserIdleBonus(req.UserId, req.MasterIdleBonusId, now))
+		if err != nil {
+			return nil, errors.NewMethodError("s.userIdleBonusRepository.Create", err)
+		}
 
-	masterIdleBonusScheduleModel, err := s.getSchedules(ctx, now, req.MasterIdleBonusId, masterIdleBonusEventModel.IntervalHour, userIdleBonusModel.GetReceivedAt(now))
+		return SetIdleBonusReceiveResponse(
+			result,
+			masterIdleBonusModel,
+			masterIdleBonusEventModel,
+			masterIdleBonusItem.NewMasterIdleBonusItems(),
+			masterIdleBonusSchedule.NewMasterIdleBonusSchedules(),
+		), nil
+	}
+
+	masterIdleBonusScheduleModel, err := s.getSchedules(ctx, now, req.MasterIdleBonusId, masterIdleBonusEventModel.IntervalHour, userIdleBonusModel.ReceivedAt)
 	if err != nil {
 		return nil, errors.NewMethodError("s.getSchedules", err)
 	}
@@ -114,7 +128,12 @@ func (s *idleBonusService) getSchedules(ctx context.Context, now time.Time, mast
 		return nil, errors.NewMethodError("s.masterIdleBonusScheduleRepository.FindListByMasterIdleBonusId", err)
 	}
 
-	return masterIdleBonusSchedules.GetSchedulesByStep(masterIdleBonusSchedules.GetStep(intervalHour, receivedAt, now)), nil
+	step, err := masterIdleBonusSchedules.GetStep(intervalHour, receivedAt, now)
+	if err != nil {
+		return nil, errors.NewMethodError("masterIdleBonusSchedules.GetStep", err)
+	}
+
+	return masterIdleBonusSchedules.GetSchedulesByStep(step), nil
 }
 
 // getItems アイテム一覧を取得する
@@ -150,19 +169,10 @@ func (s *idleBonusService) receive(ctx context.Context, tx *gorm.DB, userId stri
 
 // update ユーザーログインボーナスを更新
 func (s *idleBonusService) update(ctx context.Context, tx *gorm.DB, now time.Time, userId string, masterIdleBonusId int64, userIdleBonusModel *userIdleBonus.UserIdleBonus) (*userIdleBonus.UserIdleBonus, error) {
-	if userIdleBonusModel != nil {
-		userIdleBonusModel.ReceivedAt = now
-		result, err := s.userIdleBonusRepository.Update(ctx, tx, userIdleBonusModel)
-		if err != nil {
-			return nil, errors.NewMethodError("s.userIdleBonusRepository.Update", err)
-		}
-
-		return result, nil
-	}
-
-	result, err := s.userIdleBonusRepository.Create(ctx, tx, userIdleBonus.SetUserIdleBonus(userId, masterIdleBonusId, now))
+	userIdleBonusModel.ReceivedAt = now
+	result, err := s.userIdleBonusRepository.Update(ctx, tx, userIdleBonusModel)
 	if err != nil {
-		return nil, errors.NewMethodError("s.userIdleBonusRepository.Create", err)
+		return nil, errors.NewMethodError("s.userIdleBonusRepository.Update", err)
 	}
 
 	return result, nil
