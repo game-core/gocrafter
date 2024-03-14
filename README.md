@@ -9,12 +9,14 @@
   - Account
   - Profile
   - Friend
+  - IdleBonus
   - LoginBonus
 - Service
   - Account
   - Profile
   - Friend
   - Item
+  - IdleBonus
   - LoginBonus
   - Rearity
   - Resource
