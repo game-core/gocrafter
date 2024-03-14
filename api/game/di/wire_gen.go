@@ -9,16 +9,19 @@ package di
 import (
 	"github.com/game-core/gocrafter/api/game/presentation/handler/account"
 	"github.com/game-core/gocrafter/api/game/presentation/handler/friend"
+	"github.com/game-core/gocrafter/api/game/presentation/handler/idleBonus"
 	"github.com/game-core/gocrafter/api/game/presentation/handler/loginBonus"
 	"github.com/game-core/gocrafter/api/game/presentation/handler/profile"
 	"github.com/game-core/gocrafter/api/game/presentation/interceptor/auth"
 	account2 "github.com/game-core/gocrafter/api/game/usecase/account"
 	friend2 "github.com/game-core/gocrafter/api/game/usecase/friend"
+	idleBonus2 "github.com/game-core/gocrafter/api/game/usecase/idleBonus"
 	loginBonus2 "github.com/game-core/gocrafter/api/game/usecase/loginBonus"
 	profile2 "github.com/game-core/gocrafter/api/game/usecase/profile"
 	"github.com/game-core/gocrafter/configs/database"
 	account3 "github.com/game-core/gocrafter/pkg/domain/model/account"
 	friend3 "github.com/game-core/gocrafter/pkg/domain/model/friend"
+	idleBonus3 "github.com/game-core/gocrafter/pkg/domain/model/idleBonus"
 	"github.com/game-core/gocrafter/pkg/domain/model/item"
 	loginBonus3 "github.com/game-core/gocrafter/pkg/domain/model/loginBonus"
 	profile3 "github.com/game-core/gocrafter/pkg/domain/model/profile"
@@ -26,6 +29,10 @@ import (
 	"github.com/game-core/gocrafter/pkg/domain/model/transaction"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonShard"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonTransaction"
+	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonus"
+	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusEvent"
+	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusItem"
+	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusSchedule"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterItem"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonus"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusEvent"
@@ -34,6 +41,7 @@ import (
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterTransaction"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userAccount"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userFriend"
+	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userIdleBonus"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userItemBox"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userLoginBonus"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userProfile"
@@ -57,6 +65,12 @@ func InitializeFriendHandler() friend.FriendHandler {
 	friendUsecase := InitializeFriendUsecase()
 	friendHandler := friend.NewFriendHandler(friendUsecase)
 	return friendHandler
+}
+
+func InitializeIdleBonusHandler() idleBonus.IdleBonusHandler {
+	idleBonusUsecase := InitializeIdleBonusUsecase()
+	idleBonusHandler := idleBonus.NewIdleBonusHandler(idleBonusUsecase)
+	return idleBonusHandler
 }
 
 func InitializeLoginBonusHandler() loginBonus.LoginBonusHandler {
@@ -83,6 +97,13 @@ func InitializeFriendUsecase() friend2.FriendUsecase {
 	transactionService := InitializeTransactionService()
 	friendUsecase := friend2.NewFriendUsecase(friendService, transactionService)
 	return friendUsecase
+}
+
+func InitializeIdleBonusUsecase() idleBonus2.IdleBonusUsecase {
+	idleBonusService := InitializeIdleBonusService()
+	transactionService := InitializeTransactionService()
+	idleBonusUsecase := idleBonus2.NewIdleBonusUsecase(idleBonusService, transactionService)
+	return idleBonusUsecase
 }
 
 func InitializeLoginBonusUsecase() loginBonus2.LoginBonusUsecase {
@@ -113,6 +134,18 @@ func InitializeFriendService() friend3.FriendService {
 	userFriendRepository := userFriend.NewUserFriendDao(sqlHandler)
 	friendService := friend3.NewFriendService(accountService, userFriendRepository)
 	return friendService
+}
+
+func InitializeIdleBonusService() idleBonus3.IdleBonusService {
+	itemService := InitializeItemService()
+	sqlHandler := database.NewDB()
+	userIdleBonusRepository := userIdleBonus.NewUserIdleBonusDao(sqlHandler)
+	masterIdleBonusRepository := masterIdleBonus.NewMasterIdleBonusDao(sqlHandler)
+	masterIdleBonusEventRepository := masterIdleBonusEvent.NewMasterIdleBonusEventDao(sqlHandler)
+	masterIdleBonusItemRepository := masterIdleBonusItem.NewMasterIdleBonusItemDao(sqlHandler)
+	masterIdleBonusScheduleRepository := masterIdleBonusSchedule.NewMasterIdleBonusScheduleDao(sqlHandler)
+	idleBonusService := idleBonus3.NewIdleBonusService(itemService, userIdleBonusRepository, masterIdleBonusRepository, masterIdleBonusEventRepository, masterIdleBonusItemRepository, masterIdleBonusScheduleRepository)
+	return idleBonusService
 }
 
 func InitializeItemService() item.ItemService {

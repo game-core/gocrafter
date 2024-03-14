@@ -59,7 +59,12 @@ func (s *idleBonusService) Receive(ctx context.Context, tx *gorm.DB, now time.Ti
 		return nil, errors.NewMethodError("s.getEvent", err)
 	}
 
-	masterIdleBonusScheduleModel, err := s.getSchedules(ctx, now, req.MasterIdleBonusId, masterIdleBonusEventModel.IntervalHour, masterIdleBonusEventModel.StartAt)
+	userIdleBonusModel, err := s.userIdleBonusRepository.FindOrNil(ctx, req.UserId, req.MasterIdleBonusId)
+	if err != nil {
+		return nil, errors.NewMethodError("s.userIdleBonusRepository.FindOrNil", err)
+	}
+
+	masterIdleBonusScheduleModel, err := s.getSchedules(ctx, now, req.MasterIdleBonusId, masterIdleBonusEventModel.IntervalHour, userIdleBonusModel.ReceivedAt)
 	if err != nil {
 		return nil, errors.NewMethodError("s.getSchedules", err)
 	}
@@ -67,14 +72,6 @@ func (s *idleBonusService) Receive(ctx context.Context, tx *gorm.DB, now time.Ti
 	masterIdleBonusItemModels, err := s.getItems(ctx, masterIdleBonusScheduleModel)
 	if err != nil {
 		return nil, errors.NewMethodError("s.getItems", err)
-	}
-
-	userIdleBonusModel, err := s.userIdleBonusRepository.FindOrNil(ctx, req.UserId, req.MasterIdleBonusId)
-	if err != nil {
-		return nil, errors.NewMethodError("s.userIdleBonusRepository.FindOrNil", err)
-	}
-	if userIdleBonusModel != nil {
-		return nil, errors.NewError("already received")
 	}
 
 	if err := s.receive(ctx, tx, req.UserId, masterIdleBonusItemModels); err != nil {
@@ -111,13 +108,13 @@ func (s *idleBonusService) getEvent(ctx context.Context, now time.Time, masterId
 }
 
 // getSchedules スケジュール一覧を取得する
-func (s *idleBonusService) getSchedules(ctx context.Context, now time.Time, masterIdleBonusId int64, intervalHour int32, startAt time.Time) (masterIdleBonusSchedule.MasterIdleBonusSchedules, error) {
+func (s *idleBonusService) getSchedules(ctx context.Context, now time.Time, masterIdleBonusId int64, intervalHour int32, receivedAt time.Time) (masterIdleBonusSchedule.MasterIdleBonusSchedules, error) {
 	masterIdleBonusSchedules, err := s.masterIdleBonusScheduleRepository.FindListByMasterIdleBonusId(ctx, masterIdleBonusId)
 	if err != nil {
 		return nil, errors.NewMethodError("s.masterIdleBonusScheduleRepository.FindListByMasterIdleBonusId", err)
 	}
 
-	return masterIdleBonusSchedules.GetSchedulesByStep(masterIdleBonusSchedules.GetStep(intervalHour, startAt, now)), nil
+	return masterIdleBonusSchedules.GetSchedulesByStep(masterIdleBonusSchedules.GetStep(intervalHour, receivedAt, now)), nil
 }
 
 // getItems アイテム一覧を取得する

@@ -16,10 +16,12 @@ import (
 	authInterceptor "github.com/game-core/gocrafter/api/game/presentation/interceptor/auth"
 	accountUsecase "github.com/game-core/gocrafter/api/game/usecase/account"
 	friendUsecase "github.com/game-core/gocrafter/api/game/usecase/friend"
+	idleBonusUsecase "github.com/game-core/gocrafter/api/game/usecase/idleBonus"
 	loginBonusUsecase "github.com/game-core/gocrafter/api/game/usecase/loginBonus"
 	profileUsecase "github.com/game-core/gocrafter/api/game/usecase/profile"
 	accountService "github.com/game-core/gocrafter/pkg/domain/model/account"
 	friendService "github.com/game-core/gocrafter/pkg/domain/model/friend"
+	idleBonusService "github.com/game-core/gocrafter/pkg/domain/model/idleBonus"
 	itemService "github.com/game-core/gocrafter/pkg/domain/model/item"
 	loginBonusService "github.com/game-core/gocrafter/pkg/domain/model/loginBonus"
 	profileService "github.com/game-core/gocrafter/pkg/domain/model/profile"
@@ -106,6 +108,15 @@ func InitializeFriendUsecase() friendUsecase.FriendUsecase {
 	wire.Build(
 		friendUsecase.NewFriendUsecase,
 		InitializeFriendService,
+		InitializeTransactionService,
+	)
+	return nil
+}
+
+func InitializeIdleBonusUsecase() idleBonusUsecase.IdleBonusUsecase {
+	wire.Build(
+		idleBonusUsecase.NewIdleBonusUsecase,
+		InitializeIdleBonusService,
 		InitializeTransactionService,
 	)
 	return nil
