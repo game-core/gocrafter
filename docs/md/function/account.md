@@ -1,96 +1,85 @@
 # Account
 アカウント関連。  
-[protobuf](https://github.com/game-core/gocrafter/tree/main/docs/proto/api/game/account)  
+[model](https://github.com/game-core/gocrafter/tree/main/pkg/domain/model/account)
 
-- [Create](https://github.com/game-core/gocrafter/blob/main/docs/md/function/account.md#create)
-- [Login](https://github.com/game-core/gocrafter/blob/main/docs/md/function/account.md#login)
-- [Check](https://github.com/game-core/gocrafter/blob/main/docs/md/function/account.md#check)
+## FindByUserId
+ユーザーIDから取得する。
+- request
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| ctx | context.Context | コンテキスト |
+| userId | string | ユーザーID |
+
+- response
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| userAccount | *userAccount.UserAccount | ユーザーアカウントモデル |
+| err | error | エラー |
+
 
 ## Create
 アカウントを作成する。
 - request
-```json
-{
-    "name": "ユーザー1"
-}
-```
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| ctx | context.Context | コンテキスト |
+| tx | *gorm.DB | トランザクション |
+| req | *AccountCreateRequest | リクエスト |
+
 - response
-```json
-{
-    "user_account": {
-        "user_id": "0:BAgor1YTA5DdwE3K1UoO",
-        "name": "ユーザー1",
-        "password": "n8zm6ZgNg_4uazTbt4CD",
-        "login_at": {
-            "seconds": "1710568860",
-            "nanos": 199408602
-        },
-        "logout_at": {
-            "seconds": "1710568860",
-            "nanos": 199408673
-        }
-    }
-}
-```
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| accountCreateResponse | *AccountCreateResponse | レスポンス |
+| err | error | エラー |
 
 ## Login
 アカウントをログインする。
 - request
-```json
-{
-    "user_id": "0:BAgor1YTA5DdwE3K1UoO",
-    "name": "ユーザー1",
-    "password": "n8zm6ZgNg_4uazTbt4CD"
-}
-```
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| ctx | context.Context | コンテキスト |
+| tx | *gorm.DB | トランザクション |
+| req | *AccountLoginRequest | リクエスト |
+
 - response
-```json
-{
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTA4MjgyODYsIm5hbWUiOiLjg6bjg7zjgrbjg7wxIiwidXNlcklkIjoiMDpCQWdvcjFZVEE1RGR3RTNLMVVvTyJ9.8ZvYDtNQDbQ0egKn1Qx1OArppISj95rzMh3ARxDTDtQ",
-    "user_account": {
-        "user_id": "0:BAgor1YTA5DdwE3K1UoO",
-        "name": "ユーザー1",
-        "password": "$2a$10$hXU3vhvHF04dj1e5N1GhQOJrnPTo95nq74UojoNg1D1mo5xxKs8m.",
-        "login_at": {
-            "seconds": "1710569086",
-            "nanos": 878253584
-        },
-        "logout_at": {
-            "seconds": "1710568860",
-            "nanos": 0
-        }
-    }
-}
-```
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| accountLoginResponse | *AccountLoginResponse | レスポンス |
+| err | error | エラー |
 
 ## Check
 アカウントを確認する。
 - request
 
-| Key | Value | Description |
+| Name | Type | Description |
 | :--- | :--- | :--- |
-| Authorization | Bearer eyJhbG... | 認証トークン |
+| ctx | context.Context | コンテキスト |
+| req | *AccountCheckRequest | リクエスト |
 
-```json
-{
-    "user_id": "0:BAgor1YTA5DdwE3K1UoO",
-}
-```
 - response
-```json
-{
-    "user_account": {
-        "user_id": "0:BAgor1YTA5DdwE3K1UoO",
-        "name": "ユーザー1",
-        "password": "$2a$10$hXU3vhvHF04dj1e5N1GhQOJrnPTo95nq74UojoNg1D1mo5xxKs8m.",
-        "login_at": {
-            "seconds": "1710569368",
-            "nanos": 0
-        },
-        "logout_at": {
-            "seconds": "1710568860",
-            "nanos": 0
-        }
-    }
-}
-```
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| accountCheckResponse | *AccountCheckResponse | レスポンス |
+| err | error | エラー |
+
+## GenerateUserID
+ユーザーIDを生成する。
+- request
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| ctx | context.Context | コンテキスト |
+
+- response
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| userId | string | ユーザーID |
+| err | error | エラー |
