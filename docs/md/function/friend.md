@@ -12,131 +12,82 @@
 フレンドを取得する。
 - request
 
-| Key | Value | Description |
+| Name | Type | Description |
 | :--- | :--- | :--- |
-| Authorization | Bearer eyJhbG... | 認証トークン |
-```json
-{
-    "user_id": "0:BAgor1YTA5DdwE3K1UoO"
-}
-```
+| ctx | context.Context | コンテキスト |
+| req | *FriendGetRequest | リクエスト |
+
 - response
-```json
-{
-    "user_friends": [
-        {
-            "user_id": "0:BAgor1YTA5DdwE3K1UoO",
-            "friend_user_id": "1:BAgor1YTA5DdwE3K1UoO",
-            "friend_type": "FriendType_Approved"
-        },
-        {
-            "user_id": "0:BAgor1YTA5DdwE3K1UoO",
-            "friend_user_id": "1:BAgor1YTA5DdwE3K1Uo1",
-            "friend_type": "FriendType_Approved"
-        }
-        {
-            "user_id": "0:BAgor1YTA5DdwE3K1UoO",
-            "friend_user_id": "1:BAgor1YTA5DdwE3K1Uo2",
-            "friend_type": "FriendType_NotApproved"
-        }
-    ]
-}
-```
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| friendGetResponse | *FriendGetResponse | レスポンス |
+| err | error | エラー |
 
 ## Send
 フレンド申請を送る。
 - request
 
-| Key | Value | Description |
+| Name | Type | Description |
 | :--- | :--- | :--- |
-| Authorization | Bearer eyJhbG... | 認証トークン |
-```json
-{
-    "user_id": "0:BAgor1YTA5DdwE3K1UoO",
-    "friend_user_id": "0:BAgor1YTA5DfajK1so1"
-}
-```
+| ctx | context.Context | コンテキスト |
+| txs | map[string]*gorm.DB | トランザクションマップ |
+| req | *FriendSendRequest | リクエスト |
+
 - response
-```json
-{
-    "user_friend": {
-        "user_id":  "0:BAgor1YTA5DdwE3K1UoO",
-        "friend_user_id": "0:BAgor1YTA5DfajK1so1",
-        "friend_type": "FriendType_Applying"
-    }
-}
-```
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| friendSendResponse | *FriendSendResponse | レスポンス |
+| err | error | エラー |
 
 ## Approve
 フレンド申請を承認する。
 - request
 
-| Key | Value | Description |
+| Name | Type | Description |
 | :--- | :--- | :--- |
-| Authorization | Bearer eyJhbG... | 認証トークン |
-```json
-{
-    "user_id": "0:BAgor1YTA5DdwE3K1UoO",
-    "friend_user_id": "0:BAgor1YTA5DfajK1so1"
-}
-```
+| ctx | context.Context | コンテキスト |
+| txs | map[string]*gorm.DB | トランザクションマップ |
+| req | *FriendApproveRequest | リクエスト |
+
 - response
-```json
-{
-    "user_friend": {
-        "user_id":  "0:BAgor1YTA5DdwE3K1UoO",
-        "friend_user_id": "0:BAgor1YTA5DfajK1so1",
-        "friend_type": "FriendType_Approved"
-    }
-}
-```
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| friendApproveResponse | *FriendApproveResponse | レスポンス |
+| err | error | エラー |
 
 ## Disapprove
 フレンド申請を拒否する。
 - request
 
-| Key | Value | Description |
+| Name | Type | Description |
 | :--- | :--- | :--- |
-| Authorization | Bearer eyJhbG... | 認証トークン |
-```json
-{
-    "user_id": "0:BAgor1YTA5DdwE3K1UoO",
-    "friend_user_id": "0:BAgor1YTA5DfajK1so1"
-}
-```
+| ctx | context.Context | コンテキスト |
+| txs | map[string]*gorm.DB | トランザクションマップ |
+| req | *FriendDisapproveRequest | リクエスト |
+
 - response
-```json
-{
-    "user_friend": {
-        "user_id":  "0:BAgor1YTA5DdwE3K1UoO",
-        "friend_user_id": "0:BAgor1YTA5DfajK1so1",
-        "friend_type": "FriendType_Disapproved"
-    }
-}
-```
+
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| friendDisapproveResponse | *FriendDisapproveResponse | レスポンス |
+| err | error | エラー |
 
 ## Delete
 フレンド申請を削除する。
 - request
 
-| Key | Value | Description |
+| Name | Type | Description |
 | :--- | :--- | :--- |
-| Authorization | Bearer eyJhbG... | 認証トークン |
-```json
-{
-    "user_id": "0:BAgor1YTA5DdwE3K1UoO",
-    "friend_user_id": "0:BAgor1YTA5DfajK1so1"
-}
-```
+| ctx | context.Context | コンテキスト |
+| txs | map[string]*gorm.DB | トランザクションマップ |
+| req | *FriendDeleteRequest | リクエスト |
+
 - response
-```json
-{
-    "user_friend": {
-        "user_id":  "0:BAgor1YTA5DdwE3K1UoO",
-        "friend_user_id": "0:BAgor1YTA5DfajK1so1",
-        "friend_type": "FriendType_NotFriend"
-    }
-}
-```
 
-
+| Name | Type | Description |
+| :--- | :--- | :--- |
+| friendDeleteResponse | *FriendDeleteResponse | レスポンス |
+| err | error | エラー |
