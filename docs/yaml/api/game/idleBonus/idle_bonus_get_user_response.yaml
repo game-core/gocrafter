@@ -6,7 +6,6 @@ structure:
   UserIdleBonuses:
     name: user_idle_bonuses
     type: structures
-    package: idleBonus/userIdleBonus
     nullable: false
     number: 1
     comment: "放置ログインボーナス一覧"

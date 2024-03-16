@@ -17,6 +17,7 @@ import (
 )
 
 type IdleBonusService interface {
+	GetUser(ctx context.Context, req *IdleBonusGetUserRequest) (*IdleBonusGetUserResponse, error)
 	GetMaster(ctx context.Context, req *IdleBonusGetMasterRequest) (*IdleBonusGetMasterResponse, error)
 	Receive(ctx context.Context, tx *gorm.DB, now time.Time, req *IdleBonusReceiveRequest) (*IdleBonusReceiveResponse, error)
 }
@@ -46,6 +47,16 @@ func NewIdleBonusService(
 		masterIdleBonusItemRepository:     masterIdleBonusItemRepository,
 		masterIdleBonusScheduleRepository: masterIdleBonusScheduleRepository,
 	}
+}
+
+// GetUser ユーザーデータを取得する
+func (s *idleBonusService) GetUser(ctx context.Context, req *IdleBonusGetUserRequest) (*IdleBonusGetUserResponse, error) {
+	result, err := s.userIdleBonusRepository.FindListByUserId(ctx, req.UserId)
+	if err != nil {
+		return nil, errors.NewMethodError("s.userIdleBonusRepository.FindListByUserId", err)
+	}
+
+	return SetIdleBonusGetUserResponse(result), nil
 }
 
 // GetMaster マスターデータを取得する

@@ -52,6 +52,144 @@ func TestIdleBonusUsecase_NewIdleBonusUsecase(t *testing.T) {
 	}
 }
 
+func TestIdleBonusUsecase_GetUser(t *testing.T) {
+	type fields struct {
+		idleBonusService   func(ctrl *gomock.Controller) idleBonusService.IdleBonusService
+		transactionService func(ctrl *gomock.Controller) transactionService.TransactionService
+	}
+	type args struct {
+		ctx context.Context
+		req *idleBonusServer.IdleBonusGetUserRequest
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *idleBonusServer.IdleBonusGetUserResponse
+		wantErr error
+	}{
+		{
+			name: "正常：取得できる",
+			fields: fields{
+				idleBonusService: func(ctrl *gomock.Controller) idleBonusService.IdleBonusService {
+					m := idleBonusService.NewMockIdleBonusService(ctrl)
+					m.EXPECT().
+						GetUser(
+							gomock.Any(),
+							&idleBonusService.IdleBonusGetUserRequest{
+								UserId: "0:test",
+							},
+						).
+						Return(
+							&idleBonusService.IdleBonusGetUserResponse{
+								UserIdleBonuses: userIdleBonus.UserIdleBonuses{
+									{
+										UserId:            "0:test",
+										MasterIdleBonusId: 1,
+										ReceivedAt:        time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+									},
+									{
+										UserId:            "0:test",
+										MasterIdleBonusId: 2,
+										ReceivedAt:        time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+									},
+									{
+										UserId:            "0:test",
+										MasterIdleBonusId: 3,
+										ReceivedAt:        time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+									},
+								},
+							},
+							nil,
+						)
+					return m
+				},
+				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
+					m := transactionService.NewMockTransactionService(ctrl)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &idleBonusServer.IdleBonusGetUserRequest{
+					UserId: "0:test",
+				},
+			},
+			want: &idleBonusServer.IdleBonusGetUserResponse{
+				UserIdleBonuses: []*idleBonusServer.UserIdleBonus{
+					{
+						UserId:            "0:test",
+						MasterIdleBonusId: 1,
+						ReceivedAt:        times.TimeToPb(times.TimeToPointer(time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC))),
+					},
+					{
+						UserId:            "0:test",
+						MasterIdleBonusId: 2,
+						ReceivedAt:        times.TimeToPb(times.TimeToPointer(time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC))),
+					},
+					{
+						UserId:            "0:test",
+						MasterIdleBonusId: 3,
+						ReceivedAt:        times.TimeToPb(times.TimeToPointer(time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC))),
+					},
+				},
+			},
+			wantErr: nil,
+		},
+		{
+			name: "異常：s.idleBonusService.GetUser",
+			fields: fields{
+				idleBonusService: func(ctrl *gomock.Controller) idleBonusService.IdleBonusService {
+					m := idleBonusService.NewMockIdleBonusService(ctrl)
+					m.EXPECT().
+						GetUser(
+							gomock.Any(),
+							&idleBonusService.IdleBonusGetUserRequest{
+								UserId: "0:test",
+							},
+						).
+						Return(
+							nil,
+							errors.NewTestError(),
+						)
+					return m
+				},
+				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
+					m := transactionService.NewMockTransactionService(ctrl)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &idleBonusServer.IdleBonusGetUserRequest{
+					UserId: "0:test",
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.idleBonusService.GetUser", errors.NewTestError()),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctrl := gomock.NewController(t)
+
+			u := &idleBonusUsecase{
+				idleBonusService:   tt.fields.idleBonusService(ctrl),
+				transactionService: tt.fields.transactionService(ctrl),
+			}
+
+			got, err := u.GetUser(tt.args.ctx, tt.args.req)
+			if !reflect.DeepEqual(err, tt.wantErr) {
+				t.Errorf("GetUser() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GetUser() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestIdleBonusUsecase_GetMaster(t *testing.T) {
 	type fields struct {
 		idleBonusService   func(ctrl *gomock.Controller) idleBonusService.IdleBonusService
@@ -69,7 +207,7 @@ func TestIdleBonusUsecase_GetMaster(t *testing.T) {
 		wantErr error
 	}{
 		{
-			name: "正常：受け取りできる",
+			name: "正常：取得できる",
 			fields: fields{
 				idleBonusService: func(ctrl *gomock.Controller) idleBonusService.IdleBonusService {
 					m := idleBonusService.NewMockIdleBonusService(ctrl)

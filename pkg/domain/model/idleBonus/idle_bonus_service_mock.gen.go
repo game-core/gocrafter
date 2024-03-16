@@ -51,6 +51,21 @@ func (mr *MockIdleBonusServiceMockRecorder) GetMaster(ctx, req interface{}) *gom
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMaster", reflect.TypeOf((*MockIdleBonusService)(nil).GetMaster), ctx, req)
 }
 
+// GetUser mocks base method.
+func (m *MockIdleBonusService) GetUser(ctx context.Context, req *IdleBonusGetUserRequest) (*IdleBonusGetUserResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUser", ctx, req)
+	ret0, _ := ret[0].(*IdleBonusGetUserResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUser indicates an expected call of GetUser.
+func (mr *MockIdleBonusServiceMockRecorder) GetUser(ctx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUser", reflect.TypeOf((*MockIdleBonusService)(nil).GetUser), ctx, req)
+}
+
 // Receive mocks base method.
 func (m *MockIdleBonusService) Receive(ctx context.Context, tx *gorm.DB, now time.Time, req *IdleBonusReceiveRequest) (*IdleBonusReceiveResponse, error) {
 	m.ctrl.T.Helper()

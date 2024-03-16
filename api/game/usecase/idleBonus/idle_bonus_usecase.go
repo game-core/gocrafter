@@ -11,6 +11,7 @@ import (
 )
 
 type IdleBonusUsecase interface {
+	GetUser(ctx context.Context, req *idleBonusServer.IdleBonusGetUserRequest) (*idleBonusServer.IdleBonusGetUserResponse, error)
 	GetMaster(ctx context.Context, req *idleBonusServer.IdleBonusGetMasterRequest) (*idleBonusServer.IdleBonusGetMasterResponse, error)
 	Receive(ctx context.Context, req *idleBonusServer.IdleBonusReceiveRequest) (*idleBonusServer.IdleBonusReceiveResponse, error)
 }
@@ -28,6 +29,16 @@ func NewIdleBonusUsecase(
 		idleBonusService:   idleBonusService,
 		transactionService: transactionService,
 	}
+}
+
+// GetUser ユーザーデータを取得する
+func (s *idleBonusUsecase) GetUser(ctx context.Context, req *idleBonusServer.IdleBonusGetUserRequest) (*idleBonusServer.IdleBonusGetUserResponse, error) {
+	result, err := s.idleBonusService.GetUser(ctx, idleBonusService.SetIdleBonusGetUserRequest(req.UserId))
+	if err != nil {
+		return nil, errors.NewMethodError("s.idleBonusService.GetUser", err)
+	}
+
+	return idleBonusServer.SetIdleBonusGetUserResponse(idleBonusServer.SetUserIdleBonuses(result.UserIdleBonuses)), nil
 }
 
 // GetMaster マスターデータを取得する

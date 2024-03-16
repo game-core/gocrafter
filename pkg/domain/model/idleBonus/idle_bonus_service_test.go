@@ -72,6 +72,178 @@ func TestNewItemService_NewItemService(t *testing.T) {
 	}
 }
 
+func TestNewItemService_GetUser(t *testing.T) {
+	type fields struct {
+		itemService                       func(ctrl *gomock.Controller) item.ItemService
+		userIdleBonusRepository           func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository
+		masterIdleBonusRepository         func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository
+		masterIdleBonusEventRepository    func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository
+		masterIdleBonusItemRepository     func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository
+		masterIdleBonusScheduleRepository func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository
+	}
+	type args struct {
+		ctx context.Context
+		req *IdleBonusGetUserRequest
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *IdleBonusGetUserResponse
+		wantErr error
+	}{
+		{
+			name: "正常：取得できる場合",
+			fields: fields{
+				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+					return m
+				},
+				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+					return m
+				},
+				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+					return m
+				},
+				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+					return m
+				},
+				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
+					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+					m.EXPECT().
+						FindListByUserId(
+							gomock.Any(),
+							"0:test",
+						).
+						Return(
+							userIdleBonus.UserIdleBonuses{
+								{
+									UserId:            "0:test",
+									MasterIdleBonusId: 1,
+									ReceivedAt:        time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+								},
+								{
+									UserId:            "0:test",
+									MasterIdleBonusId: 2,
+									ReceivedAt:        time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+								},
+								{
+									UserId:            "0:test",
+									MasterIdleBonusId: 3,
+									ReceivedAt:        time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+								},
+							},
+							nil,
+						)
+					return m
+				},
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &IdleBonusGetUserRequest{
+					UserId: "0:test",
+				},
+			},
+			want: &IdleBonusGetUserResponse{
+				UserIdleBonuses: userIdleBonus.UserIdleBonuses{
+					{
+						UserId:            "0:test",
+						MasterIdleBonusId: 1,
+						ReceivedAt:        time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+					},
+					{
+						UserId:            "0:test",
+						MasterIdleBonusId: 2,
+						ReceivedAt:        time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+					},
+					{
+						UserId:            "0:test",
+						MasterIdleBonusId: 3,
+						ReceivedAt:        time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+					},
+				},
+			},
+			wantErr: nil,
+		},
+		{
+			name: "異常：s.userIdleBonusRepository.FindListByUserId",
+			fields: fields{
+				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+					return m
+				},
+				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+					return m
+				},
+				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+					return m
+				},
+				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+					return m
+				},
+				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
+					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+					m.EXPECT().
+						FindListByUserId(
+							gomock.Any(),
+							"0:test",
+						).
+						Return(
+							nil,
+							errors.NewTestError(),
+						)
+					return m
+				},
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &IdleBonusGetUserRequest{
+					UserId: "0:test",
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.userIdleBonusRepository.FindListByUserId", errors.NewTestError()),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctrl := gomock.NewController(t)
+
+			s := &idleBonusService{
+				itemService:                       tt.fields.itemService(ctrl),
+				userIdleBonusRepository:           tt.fields.userIdleBonusRepository(ctrl),
+				masterIdleBonusRepository:         tt.fields.masterIdleBonusRepository(ctrl),
+				masterIdleBonusEventRepository:    tt.fields.masterIdleBonusEventRepository(ctrl),
+				masterIdleBonusItemRepository:     tt.fields.masterIdleBonusItemRepository(ctrl),
+				masterIdleBonusScheduleRepository: tt.fields.masterIdleBonusScheduleRepository(ctrl),
+			}
+
+			got, err := s.GetUser(tt.args.ctx, tt.args.req)
+			if !reflect.DeepEqual(err, tt.wantErr) {
+				t.Errorf("GetUser() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GetUser() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestNewItemService_GetMaster(t *testing.T) {
 	type fields struct {
 		itemService                       func(ctrl *gomock.Controller) item.ItemService

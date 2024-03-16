@@ -79,21 +79,6 @@ func (mr *MockUserIdleBonusRepositoryMockRecorder) Delete(ctx, tx, m interface{}
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockUserIdleBonusRepository)(nil).Delete), ctx, tx, m)
 }
 
-// FinOrNilByMasterIdleBonusIdAndUserId mocks base method.
-func (m *MockUserIdleBonusRepository) FinOrNilByMasterIdleBonusIdAndUserId(ctx context.Context, userId string, masterIdleBonusId int64) (*UserIdleBonus, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FinOrNilByMasterIdleBonusIdAndUserId", ctx, userId, masterIdleBonusId)
-	ret0, _ := ret[0].(*UserIdleBonus)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FinOrNilByMasterIdleBonusIdAndUserId indicates an expected call of FinOrNilByMasterIdleBonusIdAndUserId.
-func (mr *MockUserIdleBonusRepositoryMockRecorder) FinOrNilByMasterIdleBonusIdAndUserId(ctx, userId, masterIdleBonusId interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FinOrNilByMasterIdleBonusIdAndUserId", reflect.TypeOf((*MockUserIdleBonusRepository)(nil).FinOrNilByMasterIdleBonusIdAndUserId), ctx, userId, masterIdleBonusId)
-}
-
 // FinOrNilByUserId mocks base method.
 func (m *MockUserIdleBonusRepository) FinOrNilByUserId(ctx context.Context, userId string) (*UserIdleBonus, error) {
 	m.ctrl.T.Helper()
@@ -107,6 +92,21 @@ func (m *MockUserIdleBonusRepository) FinOrNilByUserId(ctx context.Context, user
 func (mr *MockUserIdleBonusRepositoryMockRecorder) FinOrNilByUserId(ctx, userId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FinOrNilByUserId", reflect.TypeOf((*MockUserIdleBonusRepository)(nil).FinOrNilByUserId), ctx, userId)
+}
+
+// FinOrNilByUserIdAndMasterIdleBonusId mocks base method.
+func (m *MockUserIdleBonusRepository) FinOrNilByUserIdAndMasterIdleBonusId(ctx context.Context, userId string, masterIdleBonusId int64) (*UserIdleBonus, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FinOrNilByUserIdAndMasterIdleBonusId", ctx, userId, masterIdleBonusId)
+	ret0, _ := ret[0].(*UserIdleBonus)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FinOrNilByUserIdAndMasterIdleBonusId indicates an expected call of FinOrNilByUserIdAndMasterIdleBonusId.
+func (mr *MockUserIdleBonusRepositoryMockRecorder) FinOrNilByUserIdAndMasterIdleBonusId(ctx, userId, masterIdleBonusId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FinOrNilByUserIdAndMasterIdleBonusId", reflect.TypeOf((*MockUserIdleBonusRepository)(nil).FinOrNilByUserIdAndMasterIdleBonusId), ctx, userId, masterIdleBonusId)
 }
 
 // Find mocks base method.
@@ -124,21 +124,6 @@ func (mr *MockUserIdleBonusRepositoryMockRecorder) Find(ctx, userId, masterIdleB
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Find", reflect.TypeOf((*MockUserIdleBonusRepository)(nil).Find), ctx, userId, masterIdleBonusId)
 }
 
-// FindByMasterIdleBonusIdAndUserId mocks base method.
-func (m *MockUserIdleBonusRepository) FindByMasterIdleBonusIdAndUserId(ctx context.Context, userId string, masterIdleBonusId int64) (*UserIdleBonus, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindByMasterIdleBonusIdAndUserId", ctx, userId, masterIdleBonusId)
-	ret0, _ := ret[0].(*UserIdleBonus)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindByMasterIdleBonusIdAndUserId indicates an expected call of FindByMasterIdleBonusIdAndUserId.
-func (mr *MockUserIdleBonusRepositoryMockRecorder) FindByMasterIdleBonusIdAndUserId(ctx, userId, masterIdleBonusId interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByMasterIdleBonusIdAndUserId", reflect.TypeOf((*MockUserIdleBonusRepository)(nil).FindByMasterIdleBonusIdAndUserId), ctx, userId, masterIdleBonusId)
-}
-
 // FindByUserId mocks base method.
 func (m *MockUserIdleBonusRepository) FindByUserId(ctx context.Context, userId string) (*UserIdleBonus, error) {
 	m.ctrl.T.Helper()
@@ -152,6 +137,21 @@ func (m *MockUserIdleBonusRepository) FindByUserId(ctx context.Context, userId s
 func (mr *MockUserIdleBonusRepositoryMockRecorder) FindByUserId(ctx, userId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByUserId", reflect.TypeOf((*MockUserIdleBonusRepository)(nil).FindByUserId), ctx, userId)
+}
+
+// FindByUserIdAndMasterIdleBonusId mocks base method.
+func (m *MockUserIdleBonusRepository) FindByUserIdAndMasterIdleBonusId(ctx context.Context, userId string, masterIdleBonusId int64) (*UserIdleBonus, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindByUserIdAndMasterIdleBonusId", ctx, userId, masterIdleBonusId)
+	ret0, _ := ret[0].(*UserIdleBonus)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindByUserIdAndMasterIdleBonusId indicates an expected call of FindByUserIdAndMasterIdleBonusId.
+func (mr *MockUserIdleBonusRepositoryMockRecorder) FindByUserIdAndMasterIdleBonusId(ctx, userId, masterIdleBonusId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByUserIdAndMasterIdleBonusId", reflect.TypeOf((*MockUserIdleBonusRepository)(nil).FindByUserIdAndMasterIdleBonusId), ctx, userId, masterIdleBonusId)
 }
 
 // FindList mocks base method.
@@ -169,21 +169,6 @@ func (mr *MockUserIdleBonusRepositoryMockRecorder) FindList(ctx, userId interfac
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindList", reflect.TypeOf((*MockUserIdleBonusRepository)(nil).FindList), ctx, userId)
 }
 
-// FindListByMasterIdleBonusIdAndUserId mocks base method.
-func (m *MockUserIdleBonusRepository) FindListByMasterIdleBonusIdAndUserId(ctx context.Context, userId string, masterIdleBonusId int64) (UserIdleBonuses, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindListByMasterIdleBonusIdAndUserId", ctx, userId, masterIdleBonusId)
-	ret0, _ := ret[0].(UserIdleBonuses)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindListByMasterIdleBonusIdAndUserId indicates an expected call of FindListByMasterIdleBonusIdAndUserId.
-func (mr *MockUserIdleBonusRepositoryMockRecorder) FindListByMasterIdleBonusIdAndUserId(ctx, userId, masterIdleBonusId interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindListByMasterIdleBonusIdAndUserId", reflect.TypeOf((*MockUserIdleBonusRepository)(nil).FindListByMasterIdleBonusIdAndUserId), ctx, userId, masterIdleBonusId)
-}
-
 // FindListByUserId mocks base method.
 func (m *MockUserIdleBonusRepository) FindListByUserId(ctx context.Context, userId string) (UserIdleBonuses, error) {
 	m.ctrl.T.Helper()
@@ -197,6 +182,21 @@ func (m *MockUserIdleBonusRepository) FindListByUserId(ctx context.Context, user
 func (mr *MockUserIdleBonusRepositoryMockRecorder) FindListByUserId(ctx, userId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindListByUserId", reflect.TypeOf((*MockUserIdleBonusRepository)(nil).FindListByUserId), ctx, userId)
+}
+
+// FindListByUserIdAndMasterIdleBonusId mocks base method.
+func (m *MockUserIdleBonusRepository) FindListByUserIdAndMasterIdleBonusId(ctx context.Context, userId string, masterIdleBonusId int64) (UserIdleBonuses, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindListByUserIdAndMasterIdleBonusId", ctx, userId, masterIdleBonusId)
+	ret0, _ := ret[0].(UserIdleBonuses)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindListByUserIdAndMasterIdleBonusId indicates an expected call of FindListByUserIdAndMasterIdleBonusId.
+func (mr *MockUserIdleBonusRepositoryMockRecorder) FindListByUserIdAndMasterIdleBonusId(ctx, userId, masterIdleBonusId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindListByUserIdAndMasterIdleBonusId", reflect.TypeOf((*MockUserIdleBonusRepository)(nil).FindListByUserIdAndMasterIdleBonusId), ctx, userId, masterIdleBonusId)
 }
 
 // FindOrNil mocks base method.
