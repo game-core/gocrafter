@@ -72,6 +72,558 @@ func TestNewItemService_NewItemService(t *testing.T) {
 	}
 }
 
+func TestNewItemService_GetMaster(t *testing.T) {
+	type fields struct {
+		itemService                       func(ctrl *gomock.Controller) item.ItemService
+		userIdleBonusRepository           func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository
+		masterIdleBonusRepository         func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository
+		masterIdleBonusEventRepository    func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository
+		masterIdleBonusItemRepository     func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository
+		masterIdleBonusScheduleRepository func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository
+	}
+	type args struct {
+		ctx context.Context
+		req *IdleBonusGetMasterRequest
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *IdleBonusGetMasterResponse
+		wantErr error
+	}{
+		{
+			name: "正常：取得できる場合",
+			fields: fields{
+				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							int64(1),
+						).
+						Return(
+							&masterIdleBonus.MasterIdleBonus{
+								Id:                     1,
+								MasterIdleBonusEventId: 1,
+								Name:                   "テストログインボーナス",
+							},
+							nil,
+						)
+					return m
+				},
+				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							int64(1),
+						).
+						Return(
+							&masterIdleBonusEvent.MasterIdleBonusEvent{
+								Id:            1,
+								Name:          "テストログインボーナスイベント",
+								ResetHour:     9,
+								IntervalHour:  24,
+								RepeatSetting: true,
+								StartAt:       time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+								EndAt:         nil,
+							},
+							nil,
+						)
+					return m
+				},
+				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+					m.EXPECT().
+						FindListByMasterIdleBonusId(
+							nil,
+							int64(1),
+						).
+						Return(
+							masterIdleBonusSchedule.MasterIdleBonusSchedules{
+								{
+									Id:                1,
+									MasterIdleBonusId: 1,
+									Step:              0,
+									Name:              "ステップ0",
+								},
+								{
+									Id:                2,
+									MasterIdleBonusId: 1,
+									Step:              1,
+									Name:              "ステップ1",
+								},
+								{
+									Id:                3,
+									MasterIdleBonusId: 1,
+									Step:              2,
+									Name:              "ステップ2",
+								},
+							},
+							nil,
+						)
+					return m
+				},
+				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+					m.EXPECT().
+						FindListByMasterIdleBonusScheduleId(
+							nil,
+							int64(1),
+						).
+						Return(
+							masterIdleBonusItem.MasterIdleBonusItems{
+								{
+									Id:                        1,
+									MasterIdleBonusScheduleId: 1,
+									MasterItemId:              1,
+									Name:                      "テストログインボーナスアイテム1",
+									Count:                     1,
+								},
+							},
+							nil,
+						)
+					m.EXPECT().
+						FindListByMasterIdleBonusScheduleId(
+							nil,
+							int64(2),
+						).
+						Return(
+							masterIdleBonusItem.MasterIdleBonusItems{
+								{
+									Id:                        2,
+									MasterIdleBonusScheduleId: 2,
+									MasterItemId:              1,
+									Name:                      "テストログインボーナスアイテム2",
+									Count:                     1,
+								},
+							},
+							nil,
+						)
+					m.EXPECT().
+						FindListByMasterIdleBonusScheduleId(
+							nil,
+							int64(3),
+						).
+						Return(
+							masterIdleBonusItem.MasterIdleBonusItems{
+								{
+									Id:                        3,
+									MasterIdleBonusScheduleId: 3,
+									MasterItemId:              1,
+									Name:                      "テストログインボーナスアイテム3",
+									Count:                     1,
+								},
+							},
+							nil,
+						)
+					return m
+				},
+				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
+					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+					return m
+				},
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &IdleBonusGetMasterRequest{
+					MasterIdleBonusId: 1,
+				},
+			},
+			want: &IdleBonusGetMasterResponse{
+				MasterIdleBonus: &masterIdleBonus.MasterIdleBonus{
+					Id:                     1,
+					MasterIdleBonusEventId: 1,
+					Name:                   "テストログインボーナス",
+				},
+				MasterIdleBonusEvent: &masterIdleBonusEvent.MasterIdleBonusEvent{
+					Id:            1,
+					Name:          "テストログインボーナスイベント",
+					ResetHour:     9,
+					IntervalHour:  24,
+					RepeatSetting: true,
+					StartAt:       time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+					EndAt:         nil,
+				},
+				MasterIdleBonusItems: masterIdleBonusItem.MasterIdleBonusItems{
+					{
+						Id:                        1,
+						MasterIdleBonusScheduleId: 1,
+						MasterItemId:              1,
+						Name:                      "テストログインボーナスアイテム1",
+						Count:                     1,
+					},
+					{
+						Id:                        2,
+						MasterIdleBonusScheduleId: 2,
+						MasterItemId:              1,
+						Name:                      "テストログインボーナスアイテム2",
+						Count:                     1,
+					},
+					{
+						Id:                        3,
+						MasterIdleBonusScheduleId: 3,
+						MasterItemId:              1,
+						Name:                      "テストログインボーナスアイテム3",
+						Count:                     1,
+					},
+				},
+				MasterIdleBonusSchedules: masterIdleBonusSchedule.MasterIdleBonusSchedules{
+					{
+						Id:                1,
+						MasterIdleBonusId: 1,
+						Step:              0,
+						Name:              "ステップ0",
+					},
+					{
+						Id:                2,
+						MasterIdleBonusId: 1,
+						Step:              1,
+						Name:              "ステップ1",
+					},
+					{
+						Id:                3,
+						MasterIdleBonusId: 1,
+						Step:              2,
+						Name:              "ステップ2",
+					},
+				},
+			},
+			wantErr: nil,
+		},
+		{
+			name: "異常：s.masterIdleBonusRepository.Find",
+			fields: fields{
+				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							int64(1),
+						).
+						Return(
+							nil,
+							errors.NewTestError(),
+						)
+					return m
+				},
+				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+					return m
+				},
+				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+					return m
+				},
+				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+					return m
+				},
+				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
+					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+					return m
+				},
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &IdleBonusGetMasterRequest{
+					MasterIdleBonusId: 1,
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.masterIdleBonusRepository.Find", errors.NewTestError()),
+		},
+		{
+			name: "異常：s.masterIdleBonusEventRepository.FindByMasterIdleBonusId",
+			fields: fields{
+				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							int64(1),
+						).
+						Return(
+							&masterIdleBonus.MasterIdleBonus{
+								Id:                     1,
+								MasterIdleBonusEventId: 1,
+								Name:                   "テストログインボーナス",
+							},
+							nil,
+						)
+					return m
+				},
+				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							int64(1),
+						).
+						Return(
+							nil,
+							errors.NewTestError(),
+						)
+					return m
+				},
+				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+					return m
+				},
+				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+					return m
+				},
+				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
+					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+					return m
+				},
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &IdleBonusGetMasterRequest{
+					MasterIdleBonusId: 1,
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.masterIdleBonusEventRepository.FindByMasterIdleBonusId", errors.NewTestError()),
+		},
+		{
+			name: "異常：s.masterIdleBonusScheduleRepository.FindListByMasterIdleBonusId",
+			fields: fields{
+				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							int64(1),
+						).
+						Return(
+							&masterIdleBonus.MasterIdleBonus{
+								Id:                     1,
+								MasterIdleBonusEventId: 1,
+								Name:                   "テストログインボーナス",
+							},
+							nil,
+						)
+					return m
+				},
+				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							int64(1),
+						).
+						Return(
+							&masterIdleBonusEvent.MasterIdleBonusEvent{
+								Id:            1,
+								Name:          "テストログインボーナスイベント",
+								ResetHour:     9,
+								IntervalHour:  24,
+								RepeatSetting: true,
+								StartAt:       time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+								EndAt:         nil,
+							},
+							nil,
+						)
+					return m
+				},
+				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+					m.EXPECT().
+						FindListByMasterIdleBonusId(
+							nil,
+							int64(1),
+						).
+						Return(
+							nil,
+							errors.NewTestError(),
+						)
+					return m
+				},
+				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+					return m
+				},
+				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
+					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+					return m
+				},
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &IdleBonusGetMasterRequest{
+					MasterIdleBonusId: 1,
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.masterIdleBonusScheduleRepository.FindListByMasterIdleBonusId", errors.NewTestError()),
+		},
+		{
+			name: "異常：s.getItems",
+			fields: fields{
+				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							int64(1),
+						).
+						Return(
+							&masterIdleBonus.MasterIdleBonus{
+								Id:                     1,
+								MasterIdleBonusEventId: 1,
+								Name:                   "テストログインボーナス",
+							},
+							nil,
+						)
+					return m
+				},
+				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							int64(1),
+						).
+						Return(
+							&masterIdleBonusEvent.MasterIdleBonusEvent{
+								Id:            1,
+								Name:          "テストログインボーナスイベント",
+								ResetHour:     9,
+								IntervalHour:  24,
+								RepeatSetting: true,
+								StartAt:       time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+								EndAt:         nil,
+							},
+							nil,
+						)
+					return m
+				},
+				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+					m.EXPECT().
+						FindListByMasterIdleBonusId(
+							nil,
+							int64(1),
+						).
+						Return(
+							masterIdleBonusSchedule.MasterIdleBonusSchedules{
+								{
+									Id:                1,
+									MasterIdleBonusId: 1,
+									Step:              0,
+									Name:              "ステップ0",
+								},
+								{
+									Id:                2,
+									MasterIdleBonusId: 1,
+									Step:              1,
+									Name:              "ステップ1",
+								},
+								{
+									Id:                3,
+									MasterIdleBonusId: 1,
+									Step:              2,
+									Name:              "ステップ2",
+								},
+							},
+							nil,
+						)
+					return m
+				},
+				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+					m.EXPECT().
+						FindListByMasterIdleBonusScheduleId(
+							nil,
+							int64(1),
+						).
+						Return(
+							masterIdleBonusItem.MasterIdleBonusItems{
+								{
+									Id:                        1,
+									MasterIdleBonusScheduleId: 1,
+									MasterItemId:              1,
+									Name:                      "テストログインボーナスアイテム1",
+									Count:                     1,
+								},
+							},
+							nil,
+						)
+					m.EXPECT().
+						FindListByMasterIdleBonusScheduleId(
+							nil,
+							int64(2),
+						).
+						Return(
+							nil,
+							errors.NewTestError(),
+						)
+					return m
+				},
+				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
+					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+					return m
+				},
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &IdleBonusGetMasterRequest{
+					MasterIdleBonusId: 1,
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.getItems: failed to s.masterIdleBonusItemRepository.FindListByMasterIdleBonusScheduleId", errors.NewTestError()),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctrl := gomock.NewController(t)
+
+			s := &idleBonusService{
+				itemService:                       tt.fields.itemService(ctrl),
+				userIdleBonusRepository:           tt.fields.userIdleBonusRepository(ctrl),
+				masterIdleBonusRepository:         tt.fields.masterIdleBonusRepository(ctrl),
+				masterIdleBonusEventRepository:    tt.fields.masterIdleBonusEventRepository(ctrl),
+				masterIdleBonusItemRepository:     tt.fields.masterIdleBonusItemRepository(ctrl),
+				masterIdleBonusScheduleRepository: tt.fields.masterIdleBonusScheduleRepository(ctrl),
+			}
+
+			got, err := s.GetMaster(tt.args.ctx, tt.args.req)
+			if !reflect.DeepEqual(err, tt.wantErr) {
+				t.Errorf("GetMaster() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GetMaster() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestNewItemService_Receive(t *testing.T) {
 	type fields struct {
 		itemService                       func(ctrl *gomock.Controller) item.ItemService
