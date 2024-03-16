@@ -2,9 +2,9 @@
 放置ボーナス関連。  
 [protobuf](https://github.com/game-core/gocrafter/tree/main/docs/proto/api/game/idleBonus)  
 
-- [GetUser](https://github.com/game-core/gocrafter/blob/main/docs/md/function/idleBonus.md#GetUser)
-- [GetMaster](https://github.com/game-core/gocrafter/blob/main/docs/md/function/idleBonus.md#GetMaster)
-- [Receive](https://github.com/game-core/gocrafter/blob/main/docs/md/function/idleBonus.md#Receive)
+- [GetUser](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/idleBonus.md#GetUser)
+- [GetMaster](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/idleBonus.md#GetMaster)
+- [Receive](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/idleBonus.md#Receive)
 
 ## GetUser
 放置ボーナスのユーザーステータスを取得する。
