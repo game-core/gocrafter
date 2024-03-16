@@ -22,13 +22,15 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	LoginBonus_Receive_FullMethodName = "/proto.LoginBonus/Receive"
+	LoginBonus_GetMaster_FullMethodName = "/proto.LoginBonus/GetMaster"
+	LoginBonus_Receive_FullMethodName   = "/proto.LoginBonus/Receive"
 )
 
 // LoginBonusClient is the client API for LoginBonus service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type LoginBonusClient interface {
+	GetMaster(ctx context.Context, in *LoginBonusGetMasterRequest, opts ...grpc.CallOption) (*LoginBonusGetMasterResponse, error)
 	Receive(ctx context.Context, in *LoginBonusReceiveRequest, opts ...grpc.CallOption) (*LoginBonusReceiveResponse, error)
 }
 
@@ -38,6 +40,15 @@ type loginBonusClient struct {
 
 func NewLoginBonusClient(cc grpc.ClientConnInterface) LoginBonusClient {
 	return &loginBonusClient{cc}
+}
+
+func (c *loginBonusClient) GetMaster(ctx context.Context, in *LoginBonusGetMasterRequest, opts ...grpc.CallOption) (*LoginBonusGetMasterResponse, error) {
+	out := new(LoginBonusGetMasterResponse)
+	err := c.cc.Invoke(ctx, LoginBonus_GetMaster_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *loginBonusClient) Receive(ctx context.Context, in *LoginBonusReceiveRequest, opts ...grpc.CallOption) (*LoginBonusReceiveResponse, error) {
@@ -53,6 +64,7 @@ func (c *loginBonusClient) Receive(ctx context.Context, in *LoginBonusReceiveReq
 // All implementations must embed UnimplementedLoginBonusServer
 // for forward compatibility
 type LoginBonusServer interface {
+	GetMaster(context.Context, *LoginBonusGetMasterRequest) (*LoginBonusGetMasterResponse, error)
 	Receive(context.Context, *LoginBonusReceiveRequest) (*LoginBonusReceiveResponse, error)
 	mustEmbedUnimplementedLoginBonusServer()
 }
@@ -61,6 +73,9 @@ type LoginBonusServer interface {
 type UnimplementedLoginBonusServer struct {
 }
 
+func (UnimplementedLoginBonusServer) GetMaster(context.Context, *LoginBonusGetMasterRequest) (*LoginBonusGetMasterResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMaster not implemented")
+}
 func (UnimplementedLoginBonusServer) Receive(context.Context, *LoginBonusReceiveRequest) (*LoginBonusReceiveResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Receive not implemented")
 }
@@ -75,6 +90,24 @@ type UnsafeLoginBonusServer interface {
 
 func RegisterLoginBonusServer(s grpc.ServiceRegistrar, srv LoginBonusServer) {
 	s.RegisterService(&LoginBonus_ServiceDesc, srv)
+}
+
+func _LoginBonus_GetMaster_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LoginBonusGetMasterRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LoginBonusServer).GetMaster(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: LoginBonus_GetMaster_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LoginBonusServer).GetMaster(ctx, req.(*LoginBonusGetMasterRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _LoginBonus_Receive_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -102,6 +135,10 @@ var LoginBonus_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "proto.LoginBonus",
 	HandlerType: (*LoginBonusServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetMaster",
+			Handler:    _LoginBonus_GetMaster_Handler,
+		},
 		{
 			MethodName: "Receive",
 			Handler:    _LoginBonus_Receive_Handler,
