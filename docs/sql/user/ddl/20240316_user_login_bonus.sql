@@ -8,5 +8,5 @@ CREATE TABLE user_login_bonus
 	PRIMARY KEY(user_id,master_login_bonus_id),
 	UNIQUE KEY(user_id,master_login_bonus_id),
 	INDEX(user_id),
-	INDEX(master_login_bonus_id,user_id)
+	INDEX(user_id,master_login_bonus_id)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

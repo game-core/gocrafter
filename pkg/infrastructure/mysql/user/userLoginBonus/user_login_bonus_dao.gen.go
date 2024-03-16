@@ -61,7 +61,7 @@ func (s *userLoginBonusDao) FindByUserId(ctx context.Context, userId string) (*u
 	return userLoginBonus.SetUserLoginBonus(t.UserId, t.MasterLoginBonusId, t.ReceivedAt), nil
 }
 
-func (s *userLoginBonusDao) FindByMasterLoginBonusIdAndUserId(ctx context.Context, userId string, masterLoginBonusId int64) (*userLoginBonus.UserLoginBonus, error) {
+func (s *userLoginBonusDao) FindByUserIdAndMasterLoginBonusId(ctx context.Context, userId string, masterLoginBonusId int64) (*userLoginBonus.UserLoginBonus, error) {
 	t := NewUserLoginBonus()
 	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_login_bonus_id = ?", masterLoginBonusId).Find(t)
 	if err := res.Error; err != nil {
@@ -87,7 +87,7 @@ func (s *userLoginBonusDao) FinOrNilByUserId(ctx context.Context, userId string)
 	return userLoginBonus.SetUserLoginBonus(t.UserId, t.MasterLoginBonusId, t.ReceivedAt), nil
 }
 
-func (s *userLoginBonusDao) FinOrNilByMasterLoginBonusIdAndUserId(ctx context.Context, userId string, masterLoginBonusId int64) (*userLoginBonus.UserLoginBonus, error) {
+func (s *userLoginBonusDao) FinOrNilByUserIdAndMasterLoginBonusId(ctx context.Context, userId string, masterLoginBonusId int64) (*userLoginBonus.UserLoginBonus, error) {
 	t := NewUserLoginBonus()
 	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_login_bonus_id = ?", masterLoginBonusId).Find(t)
 	if err := res.Error; err != nil {
@@ -130,7 +130,7 @@ func (s *userLoginBonusDao) FindListByUserId(ctx context.Context, userId string)
 	return ms, nil
 }
 
-func (s *userLoginBonusDao) FindListByMasterLoginBonusIdAndUserId(ctx context.Context, userId string, masterLoginBonusId int64) (userLoginBonus.UserLoginBonuses, error) {
+func (s *userLoginBonusDao) FindListByUserIdAndMasterLoginBonusId(ctx context.Context, userId string, masterLoginBonusId int64) (userLoginBonus.UserLoginBonuses, error) {
 	ts := NewUserLoginBonuses()
 	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_login_bonus_id = ?", masterLoginBonusId).Find(&ts)
 	if err := res.Error; err != nil {
