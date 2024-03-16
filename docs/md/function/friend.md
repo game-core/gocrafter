@@ -21,7 +21,7 @@
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| friendGetResponse | *FriendGetResponse | レスポンス |
+| res | *FriendGetResponse | レスポンス |
 | err | error | エラー |
 
 ## Send
@@ -38,7 +38,7 @@
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| friendSendResponse | *FriendSendResponse | レスポンス |
+| res | *FriendSendResponse | レスポンス |
 | err | error | エラー |
 
 ## Approve
@@ -55,7 +55,7 @@
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| friendApproveResponse | *FriendApproveResponse | レスポンス |
+| res | *FriendApproveResponse | レスポンス |
 | err | error | エラー |
 
 ## Disapprove
@@ -72,7 +72,7 @@
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| friendDisapproveResponse | *FriendDisapproveResponse | レスポンス |
+| res | *FriendDisapproveResponse | レスポンス |
 | err | error | エラー |
 
 ## Delete
@@ -89,5 +89,5 @@
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| friendDeleteResponse | *FriendDeleteResponse | レスポンス |
+| res | *FriendDeleteResponse | レスポンス |
 | err | error | エラー |
