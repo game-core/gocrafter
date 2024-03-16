@@ -2,9 +2,9 @@
 ログインボーナス関連。  
 [protobuf](https://github.com/game-core/gocrafter/tree/main/docs/proto/api/game/loginBonus)  
 
-- [GetUser](https://github.com/game-core/gocrafter/blob/main/docs/md/function/loginBonus.md#GetUser)
-- [GetMaster](https://github.com/game-core/gocrafter/blob/main/docs/md/function/loginBonus.md#GetMaster)
-- [Receive](https://github.com/game-core/gocrafter/blob/main/docs/md/function/loginBonus.md#Receive)
+- [GetUser](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/loginBonus.md#GetUser)
+- [GetMaster](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/loginBonus.md#GetMaster)
+- [Receive](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/loginBonus.md#Receive)
 
 ## GetUser
 ログインボーナスのユーザーステータスを取得する。
