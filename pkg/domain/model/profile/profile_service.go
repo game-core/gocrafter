@@ -11,6 +11,7 @@ import (
 )
 
 type ProfileService interface {
+	Get(ctx context.Context, req *ProfileGetRequest) (*ProfileGetResponse, error)
 	Create(ctx context.Context, tx *gorm.DB, req *ProfileCreateRequest) (*ProfileCreateResponse, error)
 	Update(ctx context.Context, tx *gorm.DB, req *ProfileUpdateRequest) (*ProfileUpdateResponse, error)
 }
@@ -25,6 +26,16 @@ func NewProfileService(
 	return &profileService{
 		userProfileRepository: userProfileRepository,
 	}
+}
+
+// Get プロフィールを取得する
+func (s *profileService) Get(ctx context.Context, req *ProfileGetRequest) (*ProfileGetResponse, error) {
+	userProfileModel, err := s.userProfileRepository.Find(ctx, req.UserId)
+	if err != nil {
+		return nil, errors.NewMethodError("s.userProfileRepository.Find", err)
+	}
+
+	return SetProfileGetResponse(userProfileModel), nil
 }
 
 // Create プロフィールを作成する

@@ -43,6 +43,107 @@ func TestNewProfileService_NewProfileService(t *testing.T) {
 	}
 }
 
+func TestProfileService_Get(t *testing.T) {
+	type fields struct {
+		userProfileRepository func(ctrl *gomock.Controller) userProfile.UserProfileRepository
+	}
+	type args struct {
+		ctx context.Context
+		tx  *gorm.DB
+		req *ProfileGetRequest
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *ProfileGetResponse
+		wantErr error
+	}{
+		{
+			name: "正常：取得できる場合",
+			fields: fields{
+				userProfileRepository: func(ctrl *gomock.Controller) userProfile.UserProfileRepository {
+					m := userProfile.NewMockUserProfileRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							"0:WntR-PyhOJeDiE5jodeR",
+						).
+						Return(
+							&userProfile.UserProfile{
+								UserId:  "0:WntR-PyhOJeDiE5jodeR",
+								Name:    "test_user_profile",
+								Content: "test_user_profile_content",
+							},
+							nil,
+						)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				tx:  nil,
+				req: &ProfileGetRequest{
+					UserId: "0:WntR-PyhOJeDiE5jodeR",
+				},
+			},
+			want: &ProfileGetResponse{
+				UserProfile: &userProfile.UserProfile{
+					UserId:  "0:WntR-PyhOJeDiE5jodeR",
+					Name:    "test_user_profile",
+					Content: "test_user_profile_content",
+				},
+			},
+			wantErr: nil,
+		},
+		{
+			name: "異常：s.userProfileRepository.Find",
+			fields: fields{
+				userProfileRepository: func(ctrl *gomock.Controller) userProfile.UserProfileRepository {
+					m := userProfile.NewMockUserProfileRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							"0:WntR-PyhOJeDiE5jodeR",
+						).
+						Return(
+							nil,
+							errors.NewTestError(),
+						)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				tx:  nil,
+				req: &ProfileGetRequest{
+					UserId: "0:WntR-PyhOJeDiE5jodeR",
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.userProfileRepository.Find", errors.NewTestError()),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctrl := gomock.NewController(t)
+
+			s := &profileService{
+				userProfileRepository: tt.fields.userProfileRepository(ctrl),
+			}
+
+			got, err := s.Get(tt.args.ctx, tt.args.req)
+			if !reflect.DeepEqual(err, tt.wantErr) {
+				t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Get() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestProfileService_Create(t *testing.T) {
 	type fields struct {
 		userProfileRepository func(ctrl *gomock.Controller) userProfile.UserProfileRepository
