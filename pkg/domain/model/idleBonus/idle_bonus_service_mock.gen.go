@@ -36,6 +36,21 @@ func (m *MockIdleBonusService) EXPECT() *MockIdleBonusServiceMockRecorder {
 	return m.recorder
 }
 
+// GetMaster mocks base method.
+func (m *MockIdleBonusService) GetMaster(ctx context.Context, req *IdleBonusGetMasterRequest) (*IdleBonusGetMasterResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetMaster", ctx, req)
+	ret0, _ := ret[0].(*IdleBonusGetMasterResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetMaster indicates an expected call of GetMaster.
+func (mr *MockIdleBonusServiceMockRecorder) GetMaster(ctx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMaster", reflect.TypeOf((*MockIdleBonusService)(nil).GetMaster), ctx, req)
+}
+
 // Receive mocks base method.
 func (m *MockIdleBonusService) Receive(ctx context.Context, tx *gorm.DB, now time.Time, req *IdleBonusReceiveRequest) (*IdleBonusReceiveResponse, error) {
 	m.ctrl.T.Helper()

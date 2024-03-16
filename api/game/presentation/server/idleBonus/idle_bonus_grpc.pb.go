@@ -22,13 +22,15 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	IdleBonus_Receive_FullMethodName = "/proto.IdleBonus/Receive"
+	IdleBonus_GetMaster_FullMethodName = "/proto.IdleBonus/GetMaster"
+	IdleBonus_Receive_FullMethodName   = "/proto.IdleBonus/Receive"
 )
 
 // IdleBonusClient is the client API for IdleBonus service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type IdleBonusClient interface {
+	GetMaster(ctx context.Context, in *IdleBonusGetMasterRequest, opts ...grpc.CallOption) (*IdleBonusGetMasterResponse, error)
 	Receive(ctx context.Context, in *IdleBonusReceiveRequest, opts ...grpc.CallOption) (*IdleBonusReceiveResponse, error)
 }
 
@@ -38,6 +40,15 @@ type idleBonusClient struct {
 
 func NewIdleBonusClient(cc grpc.ClientConnInterface) IdleBonusClient {
 	return &idleBonusClient{cc}
+}
+
+func (c *idleBonusClient) GetMaster(ctx context.Context, in *IdleBonusGetMasterRequest, opts ...grpc.CallOption) (*IdleBonusGetMasterResponse, error) {
+	out := new(IdleBonusGetMasterResponse)
+	err := c.cc.Invoke(ctx, IdleBonus_GetMaster_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *idleBonusClient) Receive(ctx context.Context, in *IdleBonusReceiveRequest, opts ...grpc.CallOption) (*IdleBonusReceiveResponse, error) {
@@ -53,6 +64,7 @@ func (c *idleBonusClient) Receive(ctx context.Context, in *IdleBonusReceiveReque
 // All implementations must embed UnimplementedIdleBonusServer
 // for forward compatibility
 type IdleBonusServer interface {
+	GetMaster(context.Context, *IdleBonusGetMasterRequest) (*IdleBonusGetMasterResponse, error)
 	Receive(context.Context, *IdleBonusReceiveRequest) (*IdleBonusReceiveResponse, error)
 	mustEmbedUnimplementedIdleBonusServer()
 }
@@ -61,6 +73,9 @@ type IdleBonusServer interface {
 type UnimplementedIdleBonusServer struct {
 }
 
+func (UnimplementedIdleBonusServer) GetMaster(context.Context, *IdleBonusGetMasterRequest) (*IdleBonusGetMasterResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMaster not implemented")
+}
 func (UnimplementedIdleBonusServer) Receive(context.Context, *IdleBonusReceiveRequest) (*IdleBonusReceiveResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Receive not implemented")
 }
@@ -75,6 +90,24 @@ type UnsafeIdleBonusServer interface {
 
 func RegisterIdleBonusServer(s grpc.ServiceRegistrar, srv IdleBonusServer) {
 	s.RegisterService(&IdleBonus_ServiceDesc, srv)
+}
+
+func _IdleBonus_GetMaster_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IdleBonusGetMasterRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(IdleBonusServer).GetMaster(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: IdleBonus_GetMaster_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(IdleBonusServer).GetMaster(ctx, req.(*IdleBonusGetMasterRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _IdleBonus_Receive_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -102,6 +135,10 @@ var IdleBonus_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "proto.IdleBonus",
 	HandlerType: (*IdleBonusServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetMaster",
+			Handler:    _IdleBonus_GetMaster_Handler,
+		},
 		{
 			MethodName: "Receive",
 			Handler:    _IdleBonus_Receive_Handler,

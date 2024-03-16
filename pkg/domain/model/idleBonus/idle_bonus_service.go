@@ -17,6 +17,7 @@ import (
 )
 
 type IdleBonusService interface {
+	GetMaster(ctx context.Context, req *IdleBonusGetMasterRequest) (*IdleBonusGetMasterResponse, error)
 	Receive(ctx context.Context, tx *gorm.DB, now time.Time, req *IdleBonusReceiveRequest) (*IdleBonusReceiveResponse, error)
 }
 
@@ -45,6 +46,36 @@ func NewIdleBonusService(
 		masterIdleBonusItemRepository:     masterIdleBonusItemRepository,
 		masterIdleBonusScheduleRepository: masterIdleBonusScheduleRepository,
 	}
+}
+
+// GetMaster マスターデータを取得する
+func (s *idleBonusService) GetMaster(ctx context.Context, req *IdleBonusGetMasterRequest) (*IdleBonusGetMasterResponse, error) {
+	masterIdleBonusModel, err := s.masterIdleBonusRepository.Find(ctx, req.MasterIdleBonusId)
+	if err != nil {
+		return nil, errors.NewMethodError("s.masterIdleBonusRepository.Find", err)
+	}
+
+	masterIdleBonusEventModel, err := s.masterIdleBonusEventRepository.Find(ctx, masterIdleBonusModel.MasterIdleBonusEventId)
+	if err != nil {
+		return nil, errors.NewMethodError("s.masterIdleBonusEventRepository.FindByMasterIdleBonusId", err)
+	}
+
+	masterIdleBonusScheduleModels, err := s.masterIdleBonusScheduleRepository.FindListByMasterIdleBonusId(ctx, masterIdleBonusModel.Id)
+	if err != nil {
+		return nil, errors.NewMethodError("s.masterIdleBonusScheduleRepository.FindListByMasterIdleBonusId", err)
+	}
+
+	masterIdleBonusItemModels, err := s.getItems(ctx, masterIdleBonusScheduleModels)
+	if err != nil {
+		return nil, errors.NewMethodError("s.getItems", err)
+	}
+
+	return SetIdleBonusGetMasterResponse(
+		masterIdleBonusModel,
+		masterIdleBonusEventModel,
+		masterIdleBonusItemModels,
+		masterIdleBonusScheduleModels,
+	), nil
 }
 
 // Receive 放置ボーナスを受け取る

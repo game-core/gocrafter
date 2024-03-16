@@ -1,0 +1,29 @@
+name: IdleBonusGetMasterResponse
+package: idleBonus
+comment: "放置ボーナスマスター取得レスポンス"
+
+structure:
+  MasterIdleBonus:
+    name: master_idle_bonus
+    type: structure
+    nullable: true
+    number: 1
+    comment: "マスター放置ボーナス"
+  MasterIdleBonusEvent:
+    name: master_idle_bonus_event
+    type: structure
+    nullable: true
+    number: 2
+    comment: "マスター放置ボーナスイベント"
+  MasterIdleBonusItems:
+    name: master_idle_bonus_items
+    type: structures
+    nullable: false
+    number: 3
+    comment: "マスター放置ボーナスアイテム一覧"
+  MasterIdleBonusSchedules:
+    name: master_idle_bonus_schedules
+    type: structures
+    nullable: false
+    number: 4
+    comment: "マスター放置ボーナススケジュール一覧"

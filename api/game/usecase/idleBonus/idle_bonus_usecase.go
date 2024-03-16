@@ -11,6 +11,7 @@ import (
 )
 
 type IdleBonusUsecase interface {
+	GetMaster(ctx context.Context, req *idleBonusServer.IdleBonusGetMasterRequest) (*idleBonusServer.IdleBonusGetMasterResponse, error)
 	Receive(ctx context.Context, req *idleBonusServer.IdleBonusReceiveRequest) (*idleBonusServer.IdleBonusReceiveResponse, error)
 }
 
@@ -27,6 +28,33 @@ func NewIdleBonusUsecase(
 		idleBonusService:   idleBonusService,
 		transactionService: transactionService,
 	}
+}
+
+// GetMaster マスターデータを取得する
+func (s *idleBonusUsecase) GetMaster(ctx context.Context, req *idleBonusServer.IdleBonusGetMasterRequest) (*idleBonusServer.IdleBonusGetMasterResponse, error) {
+	result, err := s.idleBonusService.GetMaster(ctx, idleBonusService.SetIdleBonusGetMasterRequest(req.MasterIdleBonusId))
+	if err != nil {
+		return nil, errors.NewMethodError("s.idleBonusService.GetMaster", err)
+	}
+
+	return idleBonusServer.SetIdleBonusGetMasterResponse(
+		idleBonusServer.SetMasterIdleBonus(
+			result.MasterIdleBonus.Id,
+			result.MasterIdleBonus.MasterIdleBonusEventId,
+			result.MasterIdleBonus.Name,
+		),
+		idleBonusServer.SetMasterIdleBonusEvent(
+			result.MasterIdleBonusEvent.Id,
+			result.MasterIdleBonusEvent.Name,
+			result.MasterIdleBonusEvent.ResetHour,
+			result.MasterIdleBonusEvent.IntervalHour,
+			result.MasterIdleBonusEvent.RepeatSetting,
+			times.TimeToPb(&result.MasterIdleBonusEvent.StartAt),
+			times.TimeToPb(result.MasterIdleBonusEvent.EndAt),
+		),
+		idleBonusServer.SetMasterIdleBonusItems(result.MasterIdleBonusItems),
+		idleBonusServer.SetMasterIdleBonusSchedules(result.MasterIdleBonusSchedules),
+	), nil
 }
 
 // Receive 放置ボーナス受け取り
