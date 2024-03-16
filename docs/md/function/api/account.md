@@ -2,9 +2,9 @@
 アカウント関連。  
 [protobuf](https://github.com/game-core/gocrafter/tree/main/docs/proto/api/game/account)  
 
-- [Create](https://github.com/game-core/gocrafter/blob/main/docs/md/function/account.md#create)
-- [Login](https://github.com/game-core/gocrafter/blob/main/docs/md/function/account.md#login)
-- [Check](https://github.com/game-core/gocrafter/blob/main/docs/md/function/account.md#check)
+- [Create](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/account.md#create)
+- [Login](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/account.md#login)
+- [Check](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/account.md#check)
 
 ## Create
 アカウントを作成する。
