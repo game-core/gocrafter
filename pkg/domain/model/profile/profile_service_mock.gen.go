@@ -50,6 +50,21 @@ func (mr *MockProfileServiceMockRecorder) Create(ctx, tx, req interface{}) *gomo
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockProfileService)(nil).Create), ctx, tx, req)
 }
 
+// Get mocks base method.
+func (m *MockProfileService) Get(ctx context.Context, req *ProfileGetRequest) (*ProfileGetResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Get", ctx, req)
+	ret0, _ := ret[0].(*ProfileGetResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Get indicates an expected call of Get.
+func (mr *MockProfileServiceMockRecorder) Get(ctx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockProfileService)(nil).Get), ctx, req)
+}
+
 // Update mocks base method.
 func (m *MockProfileService) Update(ctx context.Context, tx *gorm.DB, req *ProfileUpdateRequest) (*ProfileUpdateResponse, error) {
 	m.ctrl.T.Helper()

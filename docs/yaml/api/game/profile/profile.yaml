@@ -3,19 +3,27 @@ package: profile
 comment: "プロフィール"
 
 structure:
+  Get:
+    name: get
+    method: unary
+    auth: true
+    request: ProfileGetRequest
+    response: ProfileGetResponse
+    number: 1
+    comment: "プロフィールを取得する"
   Create:
     name: create
     method: unary
     auth: true
     request: ProfileCreateRequest
     response: ProfileCreateResponse
-    number: 1
-    comment: "フレンドを作成する"
+    number: 2
+    comment: "プロフィールを作成する"
   Update:
     name: update
     method: unary
     auth: true
     request: ProfileUpdateRequest
     response: ProfileUpdateResponse
-    number: 2
-    comment: "フレンドを更新する"
+    number: 3
+    comment: "プロフィールを更新する"

@@ -46,6 +46,120 @@ func TestProfileUsecase_NewProfileUsecase(t *testing.T) {
 	}
 }
 
+func TestProfileUsecase_Get(t *testing.T) {
+	type fields struct {
+		profileService     func(ctrl *gomock.Controller) profileService.ProfileService
+		transactionService func(ctrl *gomock.Controller) transactionService.TransactionService
+	}
+	type args struct {
+		ctx context.Context
+		req *profileServer.ProfileGetRequest
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *profileServer.ProfileGetResponse
+		wantErr error
+	}{
+		{
+			name: "正常：プロフィールが取得できる",
+			fields: fields{
+				profileService: func(ctrl *gomock.Controller) profileService.ProfileService {
+					m := profileService.NewMockProfileService(ctrl)
+					m.EXPECT().
+						Get(
+							gomock.Any(),
+							&profileService.ProfileGetRequest{
+								UserId: "0:test",
+							},
+						).
+						Return(
+							&profileService.ProfileGetResponse{
+								UserProfile: &userProfile.UserProfile{
+									UserId:  "0:test",
+									Name:    "test_user_profile",
+									Content: "test_user_profile_contest",
+								},
+							},
+							nil,
+						)
+					return m
+				},
+				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
+					m := transactionService.NewMockTransactionService(ctrl)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &profileServer.ProfileGetRequest{
+					UserId: "0:test",
+				},
+			},
+			want: &profileServer.ProfileGetResponse{
+				UserProfile: &profileServer.UserProfile{
+					UserId:  "0:test",
+					Name:    "test_user_profile",
+					Content: "test_user_profile_contest",
+				},
+			},
+			wantErr: nil,
+		},
+		{
+			name: "異常：s.profileService.Get",
+			fields: fields{
+				profileService: func(ctrl *gomock.Controller) profileService.ProfileService {
+					m := profileService.NewMockProfileService(ctrl)
+					m.EXPECT().
+						Get(
+							gomock.Any(),
+							&profileService.ProfileGetRequest{
+								UserId: "0:test",
+							},
+						).
+						Return(
+							nil,
+							errors.NewTestError(),
+						)
+					return m
+				},
+				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
+					m := transactionService.NewMockTransactionService(ctrl)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &profileServer.ProfileGetRequest{
+					UserId: "0:test",
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.profileService.Get", errors.NewTestError()),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctrl := gomock.NewController(t)
+
+			u := &profileUsecase{
+				profileService:     tt.fields.profileService(ctrl),
+				transactionService: tt.fields.transactionService(ctrl),
+			}
+
+			got, err := u.Get(tt.args.ctx, tt.args.req)
+			if !reflect.DeepEqual(err, tt.wantErr) {
+				t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Get() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestProfileUsecase_Create(t *testing.T) {
 	type fields struct {
 		profileService     func(ctrl *gomock.Controller) profileService.ProfileService

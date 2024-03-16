@@ -10,6 +10,7 @@ import (
 )
 
 type ProfileUsecase interface {
+	Get(ctx context.Context, req *profileServer.ProfileGetRequest) (*profileServer.ProfileGetResponse, error)
 	Create(ctx context.Context, req *profileServer.ProfileCreateRequest) (*profileServer.ProfileCreateResponse, error)
 	Update(ctx context.Context, req *profileServer.ProfileUpdateRequest) (*profileServer.ProfileUpdateResponse, error)
 }
@@ -29,7 +30,23 @@ func NewProfileUsecase(
 	}
 }
 
-// Create アカウントを作成する
+// Get プロフィールを作成する
+func (s *profileUsecase) Get(ctx context.Context, req *profileServer.ProfileGetRequest) (*profileServer.ProfileGetResponse, error) {
+	result, err := s.profileService.Get(ctx, profileService.SetProfileGetRequest(req.UserId))
+	if err != nil {
+		return nil, errors.NewMethodError("s.profileService.Get", err)
+	}
+
+	return profileServer.SetProfileGetResponse(
+		profileServer.SetUserProfile(
+			result.UserProfile.UserId,
+			result.UserProfile.Name,
+			result.UserProfile.Content,
+		),
+	), nil
+}
+
+// Create プロフィールを作成する
 func (s *profileUsecase) Create(ctx context.Context, req *profileServer.ProfileCreateRequest) (*profileServer.ProfileCreateResponse, error) {
 	// transaction
 	tx, err := s.transactionService.UserBegin(ctx, req.UserId)
@@ -54,7 +71,7 @@ func (s *profileUsecase) Create(ctx context.Context, req *profileServer.ProfileC
 	), nil
 }
 
-// Update アカウントを更新する
+// Update プロフィールを更新する
 func (s *profileUsecase) Update(ctx context.Context, req *profileServer.ProfileUpdateRequest) (*profileServer.ProfileUpdateResponse, error) {
 	// transaction
 	tx, err := s.transactionService.UserBegin(ctx, req.UserId)
