@@ -52,6 +52,144 @@ func TestLoginBonusUsecase_NewLoginBonusUsecase(t *testing.T) {
 	}
 }
 
+func TestLoginBonusUsecase_GetUser(t *testing.T) {
+	type fields struct {
+		loginBonusService  func(ctrl *gomock.Controller) loginBonusService.LoginBonusService
+		transactionService func(ctrl *gomock.Controller) transactionService.TransactionService
+	}
+	type args struct {
+		ctx context.Context
+		req *loginBonusServer.LoginBonusGetUserRequest
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *loginBonusServer.LoginBonusGetUserResponse
+		wantErr error
+	}{
+		{
+			name: "正常：取得できる",
+			fields: fields{
+				loginBonusService: func(ctrl *gomock.Controller) loginBonusService.LoginBonusService {
+					m := loginBonusService.NewMockLoginBonusService(ctrl)
+					m.EXPECT().
+						GetUser(
+							gomock.Any(),
+							&loginBonusService.LoginBonusGetUserRequest{
+								UserId: "0:test",
+							},
+						).
+						Return(
+							&loginBonusService.LoginBonusGetUserResponse{
+								UserLoginBonuses: userLoginBonus.UserLoginBonuses{
+									{
+										UserId:             "0:test",
+										MasterLoginBonusId: 1,
+										ReceivedAt:         time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+									},
+									{
+										UserId:             "0:test",
+										MasterLoginBonusId: 2,
+										ReceivedAt:         time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+									},
+									{
+										UserId:             "0:test",
+										MasterLoginBonusId: 3,
+										ReceivedAt:         time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+									},
+								},
+							},
+							nil,
+						)
+					return m
+				},
+				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
+					m := transactionService.NewMockTransactionService(ctrl)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &loginBonusServer.LoginBonusGetUserRequest{
+					UserId: "0:test",
+				},
+			},
+			want: &loginBonusServer.LoginBonusGetUserResponse{
+				UserLoginBonuses: []*loginBonusServer.UserLoginBonus{
+					{
+						UserId:             "0:test",
+						MasterLoginBonusId: 1,
+						ReceivedAt:         times.TimeToPb(times.TimeToPointer(time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC))),
+					},
+					{
+						UserId:             "0:test",
+						MasterLoginBonusId: 2,
+						ReceivedAt:         times.TimeToPb(times.TimeToPointer(time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC))),
+					},
+					{
+						UserId:             "0:test",
+						MasterLoginBonusId: 3,
+						ReceivedAt:         times.TimeToPb(times.TimeToPointer(time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC))),
+					},
+				},
+			},
+			wantErr: nil,
+		},
+		{
+			name: "異常：s.loginBonusService.GetUser",
+			fields: fields{
+				loginBonusService: func(ctrl *gomock.Controller) loginBonusService.LoginBonusService {
+					m := loginBonusService.NewMockLoginBonusService(ctrl)
+					m.EXPECT().
+						GetUser(
+							gomock.Any(),
+							&loginBonusService.LoginBonusGetUserRequest{
+								UserId: "0:test",
+							},
+						).
+						Return(
+							nil,
+							errors.NewTestError(),
+						)
+					return m
+				},
+				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
+					m := transactionService.NewMockTransactionService(ctrl)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &loginBonusServer.LoginBonusGetUserRequest{
+					UserId: "0:test",
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.loginBonusService.GetUser", errors.NewTestError()),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctrl := gomock.NewController(t)
+
+			u := &loginBonusUsecase{
+				loginBonusService:  tt.fields.loginBonusService(ctrl),
+				transactionService: tt.fields.transactionService(ctrl),
+			}
+
+			got, err := u.GetUser(tt.args.ctx, tt.args.req)
+			if !reflect.DeepEqual(err, tt.wantErr) {
+				t.Errorf("GetUser() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GetUser() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestLoginBonusUsecase_GetMaster(t *testing.T) {
 	type fields struct {
 		loginBonusService  func(ctrl *gomock.Controller) loginBonusService.LoginBonusService

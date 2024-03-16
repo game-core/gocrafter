@@ -8,4 +8,4 @@ structure:
     type: structures
     nullable: false
     number: 1
-    comment: "放置ログインボーナス一覧"
+    comment: "放置ボーナス一覧"

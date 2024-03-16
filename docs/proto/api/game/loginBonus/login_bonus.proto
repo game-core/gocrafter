@@ -5,12 +5,15 @@ package proto;
 
 option go_package = "api/game/presentation/server/loginBonus";
 
+import "login_bonus_get_user_request.proto";
+import "login_bonus_get_user_response.proto";
 import "login_bonus_get_master_request.proto";
 import "login_bonus_get_master_response.proto";
 import "login_bonus_receive_request.proto";
 import "login_bonus_receive_response.proto";
 
 service LoginBonus {
+  rpc GetUser (LoginBonusGetUserRequest) returns (LoginBonusGetUserResponse);
   rpc GetMaster (LoginBonusGetMasterRequest) returns (LoginBonusGetMasterResponse);
   rpc Receive (LoginBonusReceiveRequest) returns (LoginBonusReceiveResponse);
 }

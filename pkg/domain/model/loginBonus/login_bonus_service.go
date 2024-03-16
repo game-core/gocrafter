@@ -17,6 +17,7 @@ import (
 )
 
 type LoginBonusService interface {
+	GetUser(ctx context.Context, req *LoginBonusGetUserRequest) (*LoginBonusGetUserResponse, error)
 	GetMaster(ctx context.Context, req *LoginBonusGetMasterRequest) (*LoginBonusGetMasterResponse, error)
 	Receive(ctx context.Context, tx *gorm.DB, now time.Time, req *LoginBonusReceiveRequest) (*LoginBonusReceiveResponse, error)
 }
@@ -46,6 +47,16 @@ func NewLoginBonusService(
 		masterLoginBonusItemRepository:     masterLoginBonusItemRepository,
 		masterLoginBonusScheduleRepository: masterLoginBonusScheduleRepository,
 	}
+}
+
+// GetUser ユーザーデータを取得する
+func (s *loginBonusService) GetUser(ctx context.Context, req *LoginBonusGetUserRequest) (*LoginBonusGetUserResponse, error) {
+	result, err := s.userLoginBonusRepository.FindListByUserId(ctx, req.UserId)
+	if err != nil {
+		return nil, errors.NewMethodError("s.userLoginBonusRepository.FindListByUserId", err)
+	}
+
+	return SetLoginBonusGetUserResponse(result), nil
 }
 
 // GetMaster マスターデータを取得する

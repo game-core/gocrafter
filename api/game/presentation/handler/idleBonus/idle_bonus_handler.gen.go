@@ -26,6 +26,19 @@ func NewIdleBonusHandler(
 	}
 }
 
+// GetUser 放置ボーナスユーザーを取得する
+func (s *idleBonusHandler) GetUser(ctx context.Context, req *idleBonus.IdleBonusGetUserRequest) (*idleBonus.IdleBonusGetUserResponse, error) {
+	if err := tokens.CheckJwtClaims(ctx, req.UserId); err != nil {
+		return nil, errors.NewMethodError("internal.CheckJwtClaims", err)
+	}
+	res, err := s.idleBonusUsecase.GetUser(ctx, req)
+	if err != nil {
+		return nil, errors.NewMethodError("s.idleBonusUsecase.GetUser", err)
+	}
+
+	return res, nil
+}
+
 // GetMaster 放置ボーナスマスターを取得する
 func (s *idleBonusHandler) GetMaster(ctx context.Context, req *idleBonus.IdleBonusGetMasterRequest) (*idleBonus.IdleBonusGetMasterResponse, error) {
 	if err := tokens.CheckJwtClaims(ctx, req.UserId); err != nil {

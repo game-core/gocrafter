@@ -26,6 +26,19 @@ func NewLoginBonusHandler(
 	}
 }
 
+// GetUser ログインボーナスユーザーを取得する
+func (s *loginBonusHandler) GetUser(ctx context.Context, req *loginBonus.LoginBonusGetUserRequest) (*loginBonus.LoginBonusGetUserResponse, error) {
+	if err := tokens.CheckJwtClaims(ctx, req.UserId); err != nil {
+		return nil, errors.NewMethodError("internal.CheckJwtClaims", err)
+	}
+	res, err := s.loginBonusUsecase.GetUser(ctx, req)
+	if err != nil {
+		return nil, errors.NewMethodError("s.loginBonusUsecase.GetUser", err)
+	}
+
+	return res, nil
+}
+
 // GetMaster ログインボーナスマスターを取得する
 func (s *loginBonusHandler) GetMaster(ctx context.Context, req *loginBonus.LoginBonusGetMasterRequest) (*loginBonus.LoginBonusGetMasterResponse, error) {
 	if err := tokens.CheckJwtClaims(ctx, req.UserId); err != nil {

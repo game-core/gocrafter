@@ -3,13 +3,21 @@ package: loginBonus
 comment: "ログインボーナス"
 
 structure:
+  GetUser:
+    name: get_user
+    method: unary
+    auth: true
+    request: LoginBonusGetUserRequest
+    response: LoginBonusGetUserResponse
+    number: 1
+    comment: "ログインボーナスユーザーを取得する"
   GetMaster:
     name: get_master
     method: unary
     auth: true
     request: LoginBonusGetMasterRequest
     response: LoginBonusGetMasterResponse
-    number: 1
+    number: 2
     comment: "ログインボーナスマスターを取得する"
   Receive:
     name: receive
@@ -17,5 +25,5 @@ structure:
     auth: true
     request: LoginBonusReceiveRequest
     response: LoginBonusReceiveResponse
-    number: 2
+    number: 3
     comment: "ログインボーナスを受け取る"

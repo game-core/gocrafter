@@ -11,6 +11,7 @@ import (
 )
 
 type LoginBonusUsecase interface {
+	GetUser(ctx context.Context, req *loginBonusServer.LoginBonusGetUserRequest) (*loginBonusServer.LoginBonusGetUserResponse, error)
 	GetMaster(ctx context.Context, req *loginBonusServer.LoginBonusGetMasterRequest) (*loginBonusServer.LoginBonusGetMasterResponse, error)
 	Receive(ctx context.Context, req *loginBonusServer.LoginBonusReceiveRequest) (*loginBonusServer.LoginBonusReceiveResponse, error)
 }
@@ -28,6 +29,16 @@ func NewLoginBonusUsecase(
 		loginBonusService:  loginBonusService,
 		transactionService: transactionService,
 	}
+}
+
+// GetUser ユーザーデータを取得する
+func (s *loginBonusUsecase) GetUser(ctx context.Context, req *loginBonusServer.LoginBonusGetUserRequest) (*loginBonusServer.LoginBonusGetUserResponse, error) {
+	result, err := s.loginBonusService.GetUser(ctx, loginBonusService.SetLoginBonusGetUserRequest(req.UserId))
+	if err != nil {
+		return nil, errors.NewMethodError("s.loginBonusService.GetUser", err)
+	}
+
+	return loginBonusServer.SetLoginBonusGetUserResponse(loginBonusServer.SetUserLoginBonuses(result.UserLoginBonuses)), nil
 }
 
 // GetMaster マスターデータを取得する

@@ -51,6 +51,21 @@ func (mr *MockLoginBonusServiceMockRecorder) GetMaster(ctx, req interface{}) *go
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMaster", reflect.TypeOf((*MockLoginBonusService)(nil).GetMaster), ctx, req)
 }
 
+// GetUser mocks base method.
+func (m *MockLoginBonusService) GetUser(ctx context.Context, req *LoginBonusGetUserRequest) (*LoginBonusGetUserResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUser", ctx, req)
+	ret0, _ := ret[0].(*LoginBonusGetUserResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUser indicates an expected call of GetUser.
+func (mr *MockLoginBonusServiceMockRecorder) GetUser(ctx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUser", reflect.TypeOf((*MockLoginBonusService)(nil).GetUser), ctx, req)
+}
+
 // Receive mocks base method.
 func (m *MockLoginBonusService) Receive(ctx context.Context, tx *gorm.DB, now time.Time, req *LoginBonusReceiveRequest) (*LoginBonusReceiveResponse, error) {
 	m.ctrl.T.Helper()
