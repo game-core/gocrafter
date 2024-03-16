@@ -21,7 +21,7 @@
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| userAccount | *userAccount.UserAccount | ユーザーアカウントモデル |
+| res | *userAccount.UserAccount | ユーザーアカウントモデル |
 | err | error | エラー |
 
 
@@ -39,7 +39,7 @@
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| accountCreateResponse | *AccountCreateResponse | レスポンス |
+| res | *AccountCreateResponse | レスポンス |
 | err | error | エラー |
 
 ## Login
@@ -56,7 +56,7 @@
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| accountLoginResponse | *AccountLoginResponse | レスポンス |
+| res | *AccountLoginResponse | レスポンス |
 | err | error | エラー |
 
 ## Check
@@ -72,7 +72,7 @@
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| accountCheckResponse | *AccountCheckResponse | レスポンス |
+| res | *AccountCheckResponse | レスポンス |
 | err | error | エラー |
 
 ## GenerateUserID
