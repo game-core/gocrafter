@@ -66,9 +66,11 @@
 ## Check
 アカウントを確認する。
 - request
-```
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTA4Mjg1NjgsIm5hbWUiOiLjg6bjg7zjgrbjg7wxIiwidXNlcklkIjoiMDpCQWdvcjFZVEE1RGR3RTNLMVVvTyJ9.3fLwSmWdbKISYbPJA68NYJP5jcsy9KgFKBDkEfXmxqI
-```
+
+| Key | Value | Description |
+| :--- | :--- | :--- |
+| Authorization | Bearer eyJhbG... | 認証トークン |
+
 ```json
 {
     "user_id": "0:BAgor1YTA5DdwE3K1UoO",
