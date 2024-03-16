@@ -2,6 +2,12 @@
 アカウント関連。  
 [model](https://github.com/game-core/gocrafter/tree/main/pkg/domain/model/account)
 
+- [FindByUserId](https://github.com/game-core/gocrafter/blob/main/docs/md/function/account.md#FindByUserId)
+- [Create](https://github.com/game-core/gocrafter/blob/main/docs/md/function/account.md#Create)
+- [Login](https://github.com/game-core/gocrafter/blob/main/docs/md/function/account.md#Login)
+- [Check](https://github.com/game-core/gocrafter/blob/main/docs/md/function/account.md#Check)
+- [GenerateUserID](https://github.com/game-core/gocrafter/blob/main/docs/md/function/account.md#GenerateUserID)
+
 ## FindByUserId
 ユーザーIDから取得する。
 - request
