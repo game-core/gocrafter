@@ -2,6 +2,8 @@
 放置ボーナス関連。  
 [protobuf](https://github.com/game-core/gocrafter/tree/main/docs/proto/api/game/idleBonus)  
 
+- [Check](https://github.com/game-core/gocrafter/blob/main/docs/md/function/idleBonus.md#GetUser)
+
 ## GetUser
 放置ボーナスのユーザーステータスを取得する。
 - request
