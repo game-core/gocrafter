@@ -11,7 +11,7 @@ make docker_up
 ```
 make docker_migration
 ```
-- マスターデーターインポート
+- マスターデータインポート
   - 事前に[GASの設定]()を行う
 ```
 make docker_master_import
