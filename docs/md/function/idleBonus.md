@@ -5,6 +5,11 @@
 ## GetUser
 放置ボーナスのユーザーステータスを取得する。
 - request
+
+| Key | Value | Description |
+| :--- | :--- | :--- |
+| Authorization | Bearer eyJhbG... | 認証トークン |
+
 ```json
 {
     "user_id": "0:aP9UvDkOqvP5iW4YRSd6"
@@ -29,6 +34,11 @@
 ## GetMaster
 放置ボーナスのマスターデータを取得する。
 - request
+
+| Key | Value | Description |
+| :--- | :--- | :--- |
+| Authorization | Bearer eyJhbG... | 認証トークン |
+
 ```json
 {
     "master_idle_bonus_id": 1
@@ -161,6 +171,11 @@
 ## Receive
 放置ボーナスを受けとる。
 - request
+
+| Key | Value | Description |
+| :--- | :--- | :--- |
+| Authorization | Bearer eyJhbG... | 認証トークン |
+
 ```json
 {
     "user_id": "0:aP9UvDkOqvP5iW4YRSd6",
