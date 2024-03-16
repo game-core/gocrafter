@@ -6,11 +6,11 @@
 
 ## 機能
 - API
-  - [Account：アカウント](https://github.com/game-core/gocrafter/blob/main/docs/md/function/account.md)
-  - [Profile：プロフィール](https://github.com/game-core/gocrafter/blob/main/docs/md/function/profile.md)
-  - [Friend：フレンド](https://github.com/game-core/gocrafter/blob/main/docs/md/function/friend.md)
-  - [IdleBonus：放置ボーナス](https://github.com/game-core/gocrafter/blob/main/docs/md/function/idleBonus.md)
-  - [LoginBonus：ログインボーナス](https://github.com/game-core/gocrafter/blob/main/docs/md/function/loginBonus.md)
+  - [Account：アカウント](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/account.md)
+  - [Profile：プロフィール](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/profile.md)
+  - [Friend：フレンド](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/friend.md)
+  - [IdleBonus：放置ボーナス](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/idleBonus.md)
+  - [LoginBonus：ログインボーナス](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/loginBonus.md)
 - Service
   - [Account：アカウント](https://github.com/game-core/gocrafter/blob/main/docs/md/function/account.md)
   - [Action：ユーザー行動管理](https://github.com/game-core/gocrafter/blob/main/docs/md/function/action.md)
