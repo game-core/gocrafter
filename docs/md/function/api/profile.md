@@ -1,5 +1,5 @@
 # Profile
-プロフィール関連。
+プロフィール関連。  
 [protobuf](https://github.com/game-core/gocrafter/tree/main/docs/proto/api/game/profile)  
 
 - [Get](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/profile.md#Get)
