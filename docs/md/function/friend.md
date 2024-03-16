@@ -5,6 +5,10 @@
 ## Get
 フレンドを取得する。
 - request
+
+| Key | Value | Description |
+| :--- | :--- | :--- |
+| Authorization | Bearer eyJhbG... | 認証トークン |
 ```json
 {
     "user_id": "0:BAgor1YTA5DdwE3K1UoO"
@@ -32,3 +36,97 @@
     ]
 }
 ```
+
+## Send
+フレンド申請を送る。
+- request
+
+| Key | Value | Description |
+| :--- | :--- | :--- |
+| Authorization | Bearer eyJhbG... | 認証トークン |
+```json
+{
+    "user_id": "0:BAgor1YTA5DdwE3K1UoO",
+    "friend_user_id": "0:BAgor1YTA5DfajK1so1"
+}
+- response
+```json
+{
+    "user_friend": {
+        "user_id":  "0:BAgor1YTA5DdwE3K1UoO",
+        "friend_user_id": "0:BAgor1YTA5DfajK1so1",
+        "friend_type": "FriendType_Applying"
+    }
+}
+```
+
+## Approve
+フレンド申請を承認する。
+- request
+
+| Key | Value | Description |
+| :--- | :--- | :--- |
+| Authorization | Bearer eyJhbG... | 認証トークン |
+```json
+{
+    "user_id": "0:BAgor1YTA5DdwE3K1UoO",
+    "friend_user_id": "0:BAgor1YTA5DfajK1so1"
+}
+- response
+```json
+{
+    "user_friend": {
+        "user_id":  "0:BAgor1YTA5DdwE3K1UoO",
+        "friend_user_id": "0:BAgor1YTA5DfajK1so1",
+        "friend_type": "FriendType_Approved"
+    }
+}
+```
+
+## Disapprove
+フレンド申請を拒否する。
+- request
+
+| Key | Value | Description |
+| :--- | :--- | :--- |
+| Authorization | Bearer eyJhbG... | 認証トークン |
+```json
+{
+    "user_id": "0:BAgor1YTA5DdwE3K1UoO",
+    "friend_user_id": "0:BAgor1YTA5DfajK1so1"
+}
+- response
+```json
+{
+    "user_friend": {
+        "user_id":  "0:BAgor1YTA5DdwE3K1UoO",
+        "friend_user_id": "0:BAgor1YTA5DfajK1so1",
+        "friend_type": "FriendType_Disapproved"
+    }
+}
+```
+
+## Delete
+フレンド申請を削除する。
+- request
+
+| Key | Value | Description |
+| :--- | :--- | :--- |
+| Authorization | Bearer eyJhbG... | 認証トークン |
+```json
+{
+    "user_id": "0:BAgor1YTA5DdwE3K1UoO",
+    "friend_user_id": "0:BAgor1YTA5DfajK1so1"
+}
+- response
+```json
+{
+    "user_friend": {
+        "user_id":  "0:BAgor1YTA5DdwE3K1UoO",
+        "friend_user_id": "0:BAgor1YTA5DfajK1so1",
+        "friend_type": "FriendType_NotFriend"
+    }
+}
+```
+
+
