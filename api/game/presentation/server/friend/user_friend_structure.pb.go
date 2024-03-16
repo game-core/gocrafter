@@ -83,7 +83,7 @@ func (x *UserFriend) GetFriendType() FriendType {
 	if x != nil {
 		return x.FriendType
 	}
-	return FriendType_Applying
+	return FriendType_FriendType_Applying
 }
 
 var File_user_friend_structure_proto protoreflect.FileDescriptor
