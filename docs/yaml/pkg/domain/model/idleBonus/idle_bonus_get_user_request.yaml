@@ -1,0 +1,11 @@
+name: IdleBonusGetMasterRequest
+package: idleBonus
+comment: "放置ボーナスマスター取得リクエスト"
+
+structure:
+  UserId:
+    name: user_id
+    type: string
+    nullable: false
+    number: 1
+    comment: "ユーザーID"

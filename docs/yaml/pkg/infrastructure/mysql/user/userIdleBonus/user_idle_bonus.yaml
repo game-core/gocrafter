@@ -39,4 +39,4 @@ unique:
   - UserId,MasterIdleBonusId
 index:
   - UserId
-  - MasterIdleBonusId,UserId
+  - UserId,MasterIdleBonusId

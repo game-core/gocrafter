@@ -61,7 +61,7 @@ func (s *userIdleBonusDao) FindByUserId(ctx context.Context, userId string) (*us
 	return userIdleBonus.SetUserIdleBonus(t.UserId, t.MasterIdleBonusId, t.ReceivedAt), nil
 }
 
-func (s *userIdleBonusDao) FindByMasterIdleBonusIdAndUserId(ctx context.Context, userId string, masterIdleBonusId int64) (*userIdleBonus.UserIdleBonus, error) {
+func (s *userIdleBonusDao) FindByUserIdAndMasterIdleBonusId(ctx context.Context, userId string, masterIdleBonusId int64) (*userIdleBonus.UserIdleBonus, error) {
 	t := NewUserIdleBonus()
 	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_idle_bonus_id = ?", masterIdleBonusId).Find(t)
 	if err := res.Error; err != nil {
@@ -87,7 +87,7 @@ func (s *userIdleBonusDao) FinOrNilByUserId(ctx context.Context, userId string) 
 	return userIdleBonus.SetUserIdleBonus(t.UserId, t.MasterIdleBonusId, t.ReceivedAt), nil
 }
 
-func (s *userIdleBonusDao) FinOrNilByMasterIdleBonusIdAndUserId(ctx context.Context, userId string, masterIdleBonusId int64) (*userIdleBonus.UserIdleBonus, error) {
+func (s *userIdleBonusDao) FinOrNilByUserIdAndMasterIdleBonusId(ctx context.Context, userId string, masterIdleBonusId int64) (*userIdleBonus.UserIdleBonus, error) {
 	t := NewUserIdleBonus()
 	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_idle_bonus_id = ?", masterIdleBonusId).Find(t)
 	if err := res.Error; err != nil {
@@ -130,7 +130,7 @@ func (s *userIdleBonusDao) FindListByUserId(ctx context.Context, userId string) 
 	return ms, nil
 }
 
-func (s *userIdleBonusDao) FindListByMasterIdleBonusIdAndUserId(ctx context.Context, userId string, masterIdleBonusId int64) (userIdleBonus.UserIdleBonuses, error) {
+func (s *userIdleBonusDao) FindListByUserIdAndMasterIdleBonusId(ctx context.Context, userId string, masterIdleBonusId int64) (userIdleBonus.UserIdleBonuses, error) {
 	ts := NewUserIdleBonuses()
 	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_idle_bonus_id = ?", masterIdleBonusId).Find(&ts)
 	if err := res.Error; err != nil {
