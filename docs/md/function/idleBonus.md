@@ -19,7 +19,7 @@
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| idleBonusGetUserResponse | *IdleBonusGetUserResponse | レスポンス |
+| res | *IdleBonusGetUserResponse | レスポンス |
 | err | error | エラー |
 
 ## GetMaster
@@ -35,7 +35,7 @@
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| idleBonusGetMasterResponse | *IdleBonusGetMasterResponse | レスポンス |
+| res | *IdleBonusGetMasterResponse | レスポンス |
 | err | error | エラー |
 
 ## Receive
@@ -53,5 +53,5 @@
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| idleBonusReceiveResponse | *IdleBonusReceiveResponse | レスポンス |
+| res | *IdleBonusReceiveResponse | レスポンス |
 | err | error | エラー |
