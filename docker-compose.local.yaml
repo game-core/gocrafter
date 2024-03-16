@@ -38,9 +38,6 @@ services:
       - ./docker/redis/redis.conf:/etc/redis.conf
       - redis-local:/data
     tty: true
-    depends_on:
-      mysql:
-        condition: service_healthy
 
   generator:
     container_name: gocrafter-generator
@@ -54,8 +51,8 @@ services:
       - ./:/go/src/app
     tty: true
     depends_on:
-      mysql:
-        condition: service_healthy
+      - mysql
+      - redis
 
   api-game:
     container_name: gocrafter-api-game
@@ -71,5 +68,5 @@ services:
       - ./:/go/src/app
     tty: true
     depends_on:
-      mysql:
-        condition: service_healthy
+      - mysql
+      - redis
