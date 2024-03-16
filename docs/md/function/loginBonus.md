@@ -19,7 +19,7 @@
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| loginBonusGetUserResponse | *LoginBonusGetUserResponse | レスポンス |
+| res | *LoginBonusGetUserResponse | レスポンス |
 | err | error | エラー |
 
 ## GetMaster
@@ -35,7 +35,7 @@
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| loginBonusGetMasterResponse | *LoginBonusGetMasterResponse | レスポンス |
+| res | *LoginBonusGetMasterResponse | レスポンス |
 | err | error | エラー |
 
 ## Receive
@@ -53,5 +53,5 @@
 
 | Name | Type | Description |
 | :--- | :--- | :--- |
-| loginBonusReceiveResponse | *LoginBonusReceiveResponse | レスポンス |
+| res | *LoginBonusReceiveResponse | レスポンス |
 | err | error | エラー |
