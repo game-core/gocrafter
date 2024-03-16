@@ -49,6 +49,7 @@
     "user_id": "0:BAgor1YTA5DdwE3K1UoO",
     "friend_user_id": "0:BAgor1YTA5DfajK1so1"
 }
+```
 - response
 ```json
 {
@@ -72,6 +73,7 @@
     "user_id": "0:BAgor1YTA5DdwE3K1UoO",
     "friend_user_id": "0:BAgor1YTA5DfajK1so1"
 }
+```
 - response
 ```json
 {
@@ -95,6 +97,7 @@
     "user_id": "0:BAgor1YTA5DdwE3K1UoO",
     "friend_user_id": "0:BAgor1YTA5DfajK1so1"
 }
+```
 - response
 ```json
 {
@@ -118,6 +121,7 @@
     "user_id": "0:BAgor1YTA5DdwE3K1UoO",
     "friend_user_id": "0:BAgor1YTA5DfajK1so1"
 }
+```
 - response
 ```json
 {
