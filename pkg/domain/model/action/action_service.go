@@ -5,14 +5,12 @@ import (
 	"context"
 	"time"
 
-	"github.com/game-core/gocrafter/pkg/domain/model/action/masterActionRun"
-
 	"gorm.io/gorm"
-
-	"github.com/game-core/gocrafter/pkg/domain/model/action/masterActionStep"
 
 	"github.com/game-core/gocrafter/internal/errors"
 	"github.com/game-core/gocrafter/pkg/domain/model/action/masterAction"
+	"github.com/game-core/gocrafter/pkg/domain/model/action/masterActionRun"
+	"github.com/game-core/gocrafter/pkg/domain/model/action/masterActionStep"
 	"github.com/game-core/gocrafter/pkg/domain/model/action/userAction"
 )
 
