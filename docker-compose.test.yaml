@@ -2,6 +2,10 @@ version: '3.8'
 
 name: gocrafter-server-test
 
+volumes:
+  mysql-local-test:
+    driver: local
+
 services:
   mysql-test:
     container_name: gocrafter-mysql-test
@@ -39,7 +43,3 @@ services:
     depends_on:
       mysql-test:
         condition: service_healthy
-
-volumes:
-  mysql-local-test:
-    driver: local
