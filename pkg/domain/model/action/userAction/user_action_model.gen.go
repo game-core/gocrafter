@@ -1,12 +1,17 @@
 // Package userAction ユーザーアクション
 package userAction
 
+import (
+	"time"
+)
+
 type UserActions []*UserAction
 
 type UserAction struct {
 	UserId         string
 	Name           string
 	MasterActionId int64
+	StartedAt      time.Time
 }
 
 func NewUserAction() *UserAction {
@@ -17,10 +22,11 @@ func NewUserActions() UserActions {
 	return UserActions{}
 }
 
-func SetUserAction(userId string, name string, masterActionId int64) *UserAction {
+func SetUserAction(userId string, name string, masterActionId int64, startedAt time.Time) *UserAction {
 	return &UserAction{
 		UserId:         userId,
 		Name:           name,
 		MasterActionId: masterActionId,
+		StartedAt:      startedAt,
 	}
 }

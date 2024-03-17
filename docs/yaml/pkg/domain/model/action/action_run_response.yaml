@@ -1,0 +1,26 @@
+name: ActionRunResponse
+package: action
+comment: "アクション実行レスポンス"
+
+structure:
+  UserAction:
+    name: user_action
+    type: structure
+    package: action/userAction
+    nullable: true
+    number: 1
+    comment: "ユーザーアクション"
+  MasterAction:
+    name: master_action
+    type: structure
+    package: action/masterAction
+    nullable: true
+    number: 2
+    comment: "マスターアクション"
+  MasterActionStep:
+    name: master_action_step
+    type: structure
+    package: action/masterActionStep
+    nullable: true
+    number: 3
+    comment: "マスターアクションステップ"

@@ -21,3 +21,9 @@ structure:
     nullable: false
     number: 3
     comment: "マスターアクションID"
+  StartedAt:
+    name: started_at
+    type: time
+    nullable: false
+    number: 4
+    comment: "開始日時"

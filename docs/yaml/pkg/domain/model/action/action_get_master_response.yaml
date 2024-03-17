@@ -1,0 +1,19 @@
+name: ActionGetMasterResponse
+package: action
+comment: "アクションマスター取得レスポンス"
+
+structure:
+  MasterActions:
+    name: master_actions
+    type: structures
+    package: action/masterAction
+    nullable: false
+    number: 1
+    comment: "マスターアクション一覧"
+  MasterActionSteps:
+    name: master_action_steps
+    type: structures
+    package: action/masterAction
+    nullable: false
+    number: 2
+    comment: "マスターアクションステップ一覧"
