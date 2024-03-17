@@ -2,7 +2,7 @@
 アイテム関連関連。  
 [model](https://github.com/game-core/gocrafter/tree/main/pkg/domain/model/item)
 
-- [Create](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/item.md#dcreate)
+- [Create](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/item.md#Create)
 - [Receive](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/item.md#Receive)
 
 ## Create
