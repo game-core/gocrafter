@@ -6,9 +6,9 @@ package proto;
 option go_package = "api/game/presentation/server/friend";
 
 enum FriendType {
-  FriendType_Applying = 0;
-  FriendType_NotApproved = 1;
-  FriendType_Approved = 2;
-  FriendType_Disapproved = 3;
-  FriendType_NotFriend = 4;
+  Applying = 0;
+  NotApproved = 1;
+  Approved = 2;
+  Disapproved = 3;
+  NotFriend = 4;
 }
