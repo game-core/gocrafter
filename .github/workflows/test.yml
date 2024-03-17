@@ -8,11 +8,11 @@ on:
 jobs:
   domain_test:
     name: Run Domain Test
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Build
-        run: docker compose -f docker-compose.test.yaml up -d
+        run: docker compose -f docker-compose.test.yaml up -d --build
 
       - name: Sleep for 10 seconds
         run: sleep 10
