@@ -1,5 +1,10 @@
 # Action
-ユーザー行動管理。
+ユーザー行動管理。  
+[model](https://github.com/game-core/gocrafter/tree/main/pkg/domain/model/action)
+
+- [GetMaster](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/action.md#GetMaster)
+- [Check](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/action.md#Check)
+- [Run](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/action.md#Run)
 
 ## GetMaster
 マスターデータを取得する。
