@@ -3,8 +3,8 @@
 
 [model](https://github.com/game-core/gocrafter/tree/main/pkg/domain/model/resource)
 
-- [Create](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/resource.md#GetAll)
-- [Receive](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/resource.md#GetByResourceType)
+- [GetAll](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/resource.md#GetAll)
+- [GetByResourceType](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/resource.md#GetByResourceType)
 
 ## GetAll
 リソース一覧を取得する。
