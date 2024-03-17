@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build
-        run: docker compose -f docker-compose.test.yaml up -d --build --init
+        run: docker compose -f docker-compose.test.yaml up -d --build
 
       - name: usecase Test
         run: docker compose -f docker-compose.test.yaml exec api-game-test go test -v ./api/game/usecase/...
