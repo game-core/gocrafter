@@ -11,7 +11,3 @@ structure:
     name: PassedTutorial
     number: 1
     comment: "チュートリアル突破"
-  ReleaseIdleBonus:
-    name: ReleaseIdleBonus
-    number: 2
-    comment: "放置ボーナス機能開放"
