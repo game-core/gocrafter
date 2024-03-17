@@ -3,8 +3,8 @@
 
 [model](https://github.com/game-core/gocrafter/tree/main/pkg/domain/model/rarity)
 
-- [Create](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/rarity.md#GetAll)
-- [Receive](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/rarity.md#GetByRarityType)
+- [GetAll](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/rarity.md#GetAll)
+- [GetByRarityType](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/rarity.md#GetByRarityType)
 
 ## GetAll
 レアリティ一覧を取得する。
