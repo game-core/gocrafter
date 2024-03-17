@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func TestNewUserLoginBonus_CheckReceived(t *testing.T) {
+func TestUserLoginBonus_CheckReceived(t *testing.T) {
 	type fields struct {
 		UserLoginBonus *UserLoginBonus
 	}

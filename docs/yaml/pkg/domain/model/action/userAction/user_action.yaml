@@ -1,0 +1,23 @@
+name: UserAction
+package: userAction
+comment: "ユーザーアクション"
+
+structure:
+  UserId:
+    name: user_id
+    type: string
+    nullable: false
+    number: 1
+    comment: "ユーザーID"
+  Name:
+    name: name
+    type: string
+    nullable: false
+    number: 2
+    comment: "ユーザー名"
+  MasterActionId:
+    name: master_action_id
+    type: int64
+    nullable: false
+    number: 3
+    comment: "マスターアクションID"

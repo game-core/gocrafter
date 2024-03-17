@@ -17,6 +17,8 @@ import (
 )
 
 type LoginBonusService interface {
+	GetUser(ctx context.Context, req *LoginBonusGetUserRequest) (*LoginBonusGetUserResponse, error)
+	GetMaster(ctx context.Context, req *LoginBonusGetMasterRequest) (*LoginBonusGetMasterResponse, error)
 	Receive(ctx context.Context, tx *gorm.DB, now time.Time, req *LoginBonusReceiveRequest) (*LoginBonusReceiveResponse, error)
 }
 
@@ -45,6 +47,46 @@ func NewLoginBonusService(
 		masterLoginBonusItemRepository:     masterLoginBonusItemRepository,
 		masterLoginBonusScheduleRepository: masterLoginBonusScheduleRepository,
 	}
+}
+
+// GetUser ユーザーデータを取得する
+func (s *loginBonusService) GetUser(ctx context.Context, req *LoginBonusGetUserRequest) (*LoginBonusGetUserResponse, error) {
+	result, err := s.userLoginBonusRepository.FindListByUserId(ctx, req.UserId)
+	if err != nil {
+		return nil, errors.NewMethodError("s.userLoginBonusRepository.FindListByUserId", err)
+	}
+
+	return SetLoginBonusGetUserResponse(result), nil
+}
+
+// GetMaster マスターデータを取得する
+func (s *loginBonusService) GetMaster(ctx context.Context, req *LoginBonusGetMasterRequest) (*LoginBonusGetMasterResponse, error) {
+	masterLoginBonusModel, err := s.masterLoginBonusRepository.Find(ctx, req.MasterLoginBonusId)
+	if err != nil {
+		return nil, errors.NewMethodError("s.masterLoginBonusRepository.Find", err)
+	}
+
+	masterLoginBonusEventModel, err := s.masterLoginBonusEventRepository.Find(ctx, masterLoginBonusModel.MasterLoginBonusEventId)
+	if err != nil {
+		return nil, errors.NewMethodError("s.masterLoginBonusEventRepository.FindByMasterLoginBonusId", err)
+	}
+
+	masterLoginBonusScheduleModels, err := s.masterLoginBonusScheduleRepository.FindListByMasterLoginBonusId(ctx, masterLoginBonusModel.Id)
+	if err != nil {
+		return nil, errors.NewMethodError("s.masterLoginBonusScheduleRepository.FindListByMasterLoginBonusId", err)
+	}
+
+	masterLoginBonusItemModels, err := s.getItems(ctx, masterLoginBonusScheduleModels)
+	if err != nil {
+		return nil, errors.NewMethodError("s.getItems", err)
+	}
+
+	return SetLoginBonusGetMasterResponse(
+		masterLoginBonusModel,
+		masterLoginBonusEventModel,
+		masterLoginBonusItemModels,
+		masterLoginBonusScheduleModels,
+	), nil
 }
 
 // Receive ログインボーナスを受け取る
@@ -108,6 +150,20 @@ func (s *loginBonusService) getEvent(ctx context.Context, now time.Time, masterL
 	}
 
 	return masterLoginBonusEvent, nil
+}
+
+// getSchedules アイテム一覧を取得する
+func (s *loginBonusService) getItems(ctx context.Context, masterLoginBonusScheduleModels masterLoginBonusSchedule.MasterLoginBonusSchedules) (masterLoginBonusItem.MasterLoginBonusItems, error) {
+	masterLoginBonusItemModels := masterLoginBonusItem.NewMasterLoginBonusItems()
+	for _, schedule := range masterLoginBonusScheduleModels {
+		items, err := s.masterLoginBonusItemRepository.FindListByMasterLoginBonusScheduleId(ctx, schedule.Id)
+		if err != nil {
+			return nil, errors.NewMethodError("s.masterLoginBonusItemRepository.FindListByMasterLoginBonusScheduleId", err)
+		}
+		masterLoginBonusItemModels = append(masterLoginBonusItemModels, items...)
+	}
+
+	return masterLoginBonusItemModels, nil
 }
 
 // getSchedule スケジュールを取得する

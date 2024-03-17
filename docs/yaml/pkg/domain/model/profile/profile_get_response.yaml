@@ -1,0 +1,12 @@
+name: ProfileGetResponse
+package: profile
+comment: "プロフィール作成レスポンス"
+
+structure:
+  UserProfile:
+    name: user_profile
+    type: structure
+    package: profile/userProfile
+    nullable: true
+    number: 1
+    comment: "ユーザープロフィール"

@@ -1,0 +1,11 @@
+name: ProfileGetRequest
+package: profile
+comment: "プロフィール取得リクエスト"
+
+structure:
+  UserId:
+    name: user_id
+    type: string
+    nullable: false
+    number: 1
+    comment: "ユーザーID"

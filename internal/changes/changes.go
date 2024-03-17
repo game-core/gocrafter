@@ -1,6 +1,7 @@
 package changes
 
 import (
+	"regexp"
 	"strings"
 	"unicode"
 )
@@ -26,6 +27,19 @@ func SnakeToCamel(s string) string {
 	result = strings.ToLower(string(result[0])) + result[1:]
 
 	return result
+}
+
+// CamelToSnake キャメルケースからスネークケースに変換
+func CamelToSnake(s string) string {
+	return strings.ToLower(regexp.MustCompile(`([a-z0-9])([A-Z])`).ReplaceAllString(s, "${1}_${2}"))
+}
+
+// CamelToUpperCamel アッパーキャメルケースからアッパーキャメルケースに変換
+func CamelToUpperCamel(s string) string {
+	if s == "" {
+		return s
+	}
+	return string(s[0]-'a'+'A') + s[1:]
 }
 
 // UpperCamelToSnake アッパーキャメルケースからスネークケースに変換
@@ -66,21 +80,12 @@ func SingularToPlural(s string) string {
 	words := splitWords(s)
 	words[len(words)-1] = convertSingularToPlural(words[len(words)-1])
 
-	return strings.Join(words, "")
+	return returnToOriginalCase(s, strings.Join(words, "_"))
 }
 
 // splitWords 文字列を単語に分割
 func splitWords(s string) []string {
-	var result []string
-	start := 0
-	for i, c := range s {
-		if i > 0 && (unicode.IsUpper(c) || (unicode.IsLower(c) && i+1 < len(s) && unicode.IsUpper(rune(s[i+1])))) {
-			result = append(result, s[start:i])
-			start = i
-		}
-	}
-
-	return append(result, s[start:])
+	return strings.Split(s, "_")
 }
 
 // convertSingularToPlural 単語ごとに単数形から複数形に変換
@@ -159,4 +164,9 @@ func IsCamelCase(s string) bool {
 // IsSnakeCase スネークケースかどうかを判定
 func IsSnakeCase(s string) bool {
 	return strings.Contains(s, "_")
+}
+
+// Extraction 抽出する
+func Extraction(s, es string, p int32) string {
+	return strings.Split(s, es)[p]
 }

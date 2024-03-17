@@ -1,0 +1,11 @@
+name: IdleBonusGetUserResponse
+package: idleBonus
+comment: "放置ボーナスユーザー取得レスポンス"
+
+structure:
+  UserIdleBonuses:
+    name: user_idle_bonuses
+    type: structures
+    nullable: false
+    number: 1
+    comment: "放置ボーナス一覧"

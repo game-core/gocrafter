@@ -49,14 +49,17 @@ func main() {
 		}
 
 		if !info.IsDir() && strings.HasSuffix(info.Name(), ".yaml") {
+			// proto
 			if err := NewProto().generate(path, "../../../../docs/proto/api/game"); err != nil {
 				log.Printf("failed to NewProto().generate: %s", err)
 			}
 
+			// setter
 			if err := NewSetter().generate(path, "../../../../api/game/presentation/server"); err != nil {
 				log.Printf("failed to NewSetter().generate: %s", err)
 			}
 
+			// handler
 			if err := NewHandler().generate(path, "../../../../api/game/presentation/handler"); err != nil {
 				log.Printf("failed to NewHandler().generate: %s", err)
 			}
@@ -65,5 +68,9 @@ func main() {
 		return nil
 	}); err != nil {
 		log.Fatalf("failed to filepath.Walk: %s", err)
+	}
+
+	if err := NewDi().generate(); err != nil {
+		log.Printf("failed to NewDi().generate: %s", err)
 	}
 }

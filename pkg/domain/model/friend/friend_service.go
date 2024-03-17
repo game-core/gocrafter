@@ -42,7 +42,7 @@ func (s *friendService) Get(ctx context.Context, req *FriendGetRequest) (*Friend
 		return nil, errors.NewMethodError("s.userFriendRepository.FindList", err)
 	}
 
-	return SetFriendGetResponse(userFriendModels.GetFriends()), nil
+	return SetFriendGetResponse(userFriendModels), nil
 }
 
 // Send フレンド申請を送信する
@@ -110,7 +110,7 @@ func (s *friendService) Disapprove(ctx context.Context, txs map[string]*gorm.DB,
 		return nil, errors.NewMethodError("s.userFriendRepository.Delete", err)
 	}
 
-	if err := s.userFriendRepository.Delete(ctx, txs[req.UserId], userFriend.SetUserFriend(req.UserId, req.FriendUserId, enum.FriendType_Applying)); err != nil {
+	if err := s.userFriendRepository.Delete(ctx, txs[req.UserId], userFriend.SetUserFriend(req.UserId, req.FriendUserId, enum.FriendType_NotApproved)); err != nil {
 		return nil, errors.NewMethodError("s.userFriendRepository.Delete", err)
 	}
 

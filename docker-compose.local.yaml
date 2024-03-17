@@ -2,6 +2,12 @@ version: '3.8'
 
 name: gocrafter-server
 
+volumes:
+  mysql-local:
+    driver: local
+  redis-local:
+    driver: local
+
 services:
   mysql:
     container_name: gocrafter-mysql
@@ -23,6 +29,16 @@ services:
       timeout: 20s
       retries: 10
 
+  redis:
+    container_name: gocrafter-redis
+    image: redis:7.2.4
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./docker/redis/redis.conf:/etc/redis.conf
+      - redis-local:/data
+    tty: true
+
   generator:
     container_name: gocrafter-generator
     env_file:
@@ -35,8 +51,8 @@ services:
       - ./:/go/src/app
     tty: true
     depends_on:
-      mysql:
-        condition: service_healthy
+      - mysql
+      - redis
 
   api-game:
     container_name: gocrafter-api-game
@@ -52,9 +68,5 @@ services:
       - ./:/go/src/app
     tty: true
     depends_on:
-      mysql:
-        condition: service_healthy
-
-volumes:
-  mysql-local:
-    driver: local
+      - mysql
+      - redis

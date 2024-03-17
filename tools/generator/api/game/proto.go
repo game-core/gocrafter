@@ -251,7 +251,7 @@ func (s *Proto) createEnum(yamlStruct *YamlStruct) string {
 	var fields []string
 
 	for _, field := range s.getStructure(yamlStruct.Structures) {
-		fields = append(fields, fmt.Sprintf(`  %s = %v;`, field.Name, field.Number))
+		fields = append(fields, fmt.Sprintf(`  %s_%s = %v;`, yamlStruct.Name, field.Name, field.Number))
 	}
 
 	return fmt.Sprintf(`enum %s {

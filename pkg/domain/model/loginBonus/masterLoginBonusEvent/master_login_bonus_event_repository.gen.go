@@ -4,7 +4,7 @@
 package masterLoginBonusEvent
 
 import (
-	context "context"
+	"context"
 
 	"gorm.io/gorm"
 )

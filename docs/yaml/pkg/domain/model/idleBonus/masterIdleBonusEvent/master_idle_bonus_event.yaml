@@ -1,0 +1,47 @@
+name: MasterIdleBonusEvent
+package: masterIdleBonusEvent
+comment: "放置ボーナスイベント"
+
+structure:
+  Id:
+    name: id
+    type: int64
+    nullable: false
+    number: 1
+    comment: "ID"
+  Name:
+    name: name
+    type: string
+    nullable: false
+    number: 2
+    comment: "イベント名"
+  ResetHour:
+    name: reset_hour
+    type: int32
+    nullable: false
+    number: 3
+    comment: "リセット時間"
+  IntervalHour:
+    name: interval_hour
+    type: int32
+    nullable: false
+    number: 4
+    comment: "間隔時間"
+  RepeatSetting:
+    name: repeat_setting
+    type: bool
+    nullable: false
+    number: 5
+    comment: "繰り返し設定"
+  StartAt:
+    name: start_at
+    type: time
+    nullable: false
+    number: 6
+    comment: "開始日時"
+  EndAt:
+    name: end_at
+    type: time
+    nullable: true
+    number: 7
+    comment: "終了日時"

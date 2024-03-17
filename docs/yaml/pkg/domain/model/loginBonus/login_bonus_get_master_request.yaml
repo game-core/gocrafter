@@ -1,0 +1,11 @@
+name: LoginBonusGetMasterRequest
+package: loginBonus
+comment: "ログインボーナスマスター取得リクエスト"
+
+structure:
+  MasterLoginBonusId:
+    name: master_login_bonus_id
+    type: int64
+    nullable: false
+    number: 1
+    comment: "ログインボーナスID"

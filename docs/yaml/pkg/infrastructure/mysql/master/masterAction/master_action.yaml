@@ -1,0 +1,48 @@
+name: MasterAction
+package: masterAction
+comment: "アクション"
+
+structure:
+  Id:
+    name: id
+    type: int64
+    nullable: false
+    number: 1
+    comment: "ID"
+  Name:
+    name: name
+    type: string
+    nullable: false
+    number: 2
+    comment: "アクション名"
+  ActionType:
+    name: action_type
+    type: string
+    nullable: false
+    number: 3
+    comment: "アクションタイプ"
+  AnyId:
+    name: any_id
+    type: int64
+    nullable: false
+    number: 4
+    comment: "対象のID"
+  TriggerActionId:
+    name: trigger_action_id
+    type: int64
+    nullable: true
+    number: 5
+    comment: "トリガーになるアクションのID"
+  NextActionId:
+    name: next_action_id
+    type: int64
+    nullable: true
+    number: 6
+    comment: "発火するアクションのID"
+primary:
+  - Id
+unique:
+  - Id
+index:
+  - Name
+  - AnyId

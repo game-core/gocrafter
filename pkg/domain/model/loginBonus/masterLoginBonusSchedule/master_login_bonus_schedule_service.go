@@ -19,6 +19,9 @@ func (s *MasterLoginBonusSchedules) GetScheduleByStep(step int32) *MasterLoginBo
 func (s *MasterLoginBonusSchedules) GetStep(intervalHour int32, startAt, now time.Time) int32 {
 	maxStep := int32(len(*s) - 1)
 	intervalStep := int32(now.Sub(startAt).Hours() / float64(intervalHour))
+	if intervalStep <= maxStep {
+		return intervalStep
+	}
 
-	return intervalStep % maxStep
+	return intervalStep % (maxStep + 1)
 }

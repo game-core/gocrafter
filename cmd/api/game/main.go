@@ -7,16 +7,16 @@ import (
 
 	"github.com/game-core/gocrafter/api/game/presentation/router"
 	apiConfig "github.com/game-core/gocrafter/configs/api"
+	"github.com/game-core/gocrafter/configs/database"
 )
 
 func main() {
-	setting, err := apiConfig.GetAppConfig()
-	if err != nil {
-		log.Fatalf("failed to net.Listen: %v", err)
-		return
+	if _, err := database.InitDB(); err != nil {
+		log.Fatalf("failed to database.InitDB: %v", err)
 	}
 
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%v", setting.APIConfig.Port.GrpcPort))
+	apiConfig := apiConfig.GetAppConfig()
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%v", apiConfig.Port.GrpcPort))
 	if err != nil {
 		log.Fatalf("failed to net.Listen: %v", err)
 	}

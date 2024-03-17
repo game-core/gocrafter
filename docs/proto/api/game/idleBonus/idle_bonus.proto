@@ -1,0 +1,19 @@
+// 放置ボーナス
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/idleBonus";
+
+import "idle_bonus_get_user_request.proto";
+import "idle_bonus_get_user_response.proto";
+import "idle_bonus_get_master_request.proto";
+import "idle_bonus_get_master_response.proto";
+import "idle_bonus_receive_request.proto";
+import "idle_bonus_receive_response.proto";
+
+service IdleBonus {
+  rpc GetUser (IdleBonusGetUserRequest) returns (IdleBonusGetUserResponse);
+  rpc GetMaster (IdleBonusGetMasterRequest) returns (IdleBonusGetMasterResponse);
+  rpc Receive (IdleBonusReceiveRequest) returns (IdleBonusReceiveResponse);
+}

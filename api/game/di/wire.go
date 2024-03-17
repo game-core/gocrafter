@@ -10,29 +10,48 @@ import (
 
 	accountHandler "github.com/game-core/gocrafter/api/game/presentation/handler/account"
 	friendHandler "github.com/game-core/gocrafter/api/game/presentation/handler/friend"
+	idleBonusHandler "github.com/game-core/gocrafter/api/game/presentation/handler/idleBonus"
 	loginBonusHandler "github.com/game-core/gocrafter/api/game/presentation/handler/loginBonus"
+	profileHandler "github.com/game-core/gocrafter/api/game/presentation/handler/profile"
 	authInterceptor "github.com/game-core/gocrafter/api/game/presentation/interceptor/auth"
 	accountUsecase "github.com/game-core/gocrafter/api/game/usecase/account"
 	friendUsecase "github.com/game-core/gocrafter/api/game/usecase/friend"
+	idleBonusUsecase "github.com/game-core/gocrafter/api/game/usecase/idleBonus"
 	loginBonusUsecase "github.com/game-core/gocrafter/api/game/usecase/loginBonus"
+	profileUsecase "github.com/game-core/gocrafter/api/game/usecase/profile"
 	accountService "github.com/game-core/gocrafter/pkg/domain/model/account"
+	actionService "github.com/game-core/gocrafter/pkg/domain/model/action"
 	friendService "github.com/game-core/gocrafter/pkg/domain/model/friend"
+	idleBonusService "github.com/game-core/gocrafter/pkg/domain/model/idleBonus"
 	itemService "github.com/game-core/gocrafter/pkg/domain/model/item"
 	loginBonusService "github.com/game-core/gocrafter/pkg/domain/model/loginBonus"
+	profileService "github.com/game-core/gocrafter/pkg/domain/model/profile"
+	rarityService "github.com/game-core/gocrafter/pkg/domain/model/rarity"
+	resourceService "github.com/game-core/gocrafter/pkg/domain/model/resource"
 	shardService "github.com/game-core/gocrafter/pkg/domain/model/shard"
 	transactionService "github.com/game-core/gocrafter/pkg/domain/model/transaction"
 	commonShardDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonShard"
 	commonTransactionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonTransaction"
+	masterActionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterAction"
+	masterIdleBonusDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonus"
+	masterIdleBonusEventDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusEvent"
+	masterIdleBonusItemDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusItem"
+	masterIdleBonusScheduleDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusSchedule"
 	masterItemDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterItem"
 	masterLoginBonusDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonus"
 	masterLoginBonusEventDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusEvent"
 	masterLoginBonusItemDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusItem"
 	masterLoginBonusScheduleDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusSchedule"
+	masterRarityDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterRarity"
+	masterResourceDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterResource"
 	masterTransactionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterTransaction"
 	userAccountDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userAccount"
+	userActionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userAction"
 	userFriendDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userFriend"
+	userIdleBonusDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userIdleBonus"
 	userItemBoxDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userItemBox"
 	userLoginBonusDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userLoginBonus"
+	userProfileDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userProfile"
 	userTransactionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userTransaction"
 )
 
@@ -59,10 +78,26 @@ func InitializeFriendHandler() friendHandler.FriendHandler {
 	return nil
 }
 
+func InitializeIdleBonusHandler() idleBonusHandler.IdleBonusHandler {
+	wire.Build(
+		idleBonusHandler.NewIdleBonusHandler,
+		InitializeIdleBonusUsecase,
+	)
+	return nil
+}
+
 func InitializeLoginBonusHandler() loginBonusHandler.LoginBonusHandler {
 	wire.Build(
 		loginBonusHandler.NewLoginBonusHandler,
 		InitializeLoginBonusUsecase,
+	)
+	return nil
+}
+
+func InitializeProfileHandler() profileHandler.ProfileHandler {
+	wire.Build(
+		profileHandler.NewProfileHandler,
+		InitializeProfileUsecase,
 	)
 	return nil
 }
@@ -85,6 +120,15 @@ func InitializeFriendUsecase() friendUsecase.FriendUsecase {
 	return nil
 }
 
+func InitializeIdleBonusUsecase() idleBonusUsecase.IdleBonusUsecase {
+	wire.Build(
+		idleBonusUsecase.NewIdleBonusUsecase,
+		InitializeIdleBonusService,
+		InitializeTransactionService,
+	)
+	return nil
+}
+
 func InitializeLoginBonusUsecase() loginBonusUsecase.LoginBonusUsecase {
 	wire.Build(
 		loginBonusUsecase.NewLoginBonusUsecase,
@@ -94,54 +138,114 @@ func InitializeLoginBonusUsecase() loginBonusUsecase.LoginBonusUsecase {
 	return nil
 }
 
+func InitializeProfileUsecase() profileUsecase.ProfileUsecase {
+	wire.Build(
+		profileUsecase.NewProfileUsecase,
+		InitializeProfileService,
+		InitializeTransactionService,
+	)
+	return nil
+}
+
 func InitializeAccountService() accountService.AccountService {
 	wire.Build(
+		database.NewDB,
 		accountService.NewAccountService,
 		InitializeShardService,
-		database.NewDB,
 		userAccountDao.NewUserAccountDao,
+	)
+	return nil
+}
+
+func InitializeActionService() actionService.ActionService {
+	wire.Build(
+		database.NewDB,
+		actionService.NewActionService,
+		masterActionDao.NewMasterActionDao,
+		userActionDao.NewUserActionDao,
 	)
 	return nil
 }
 
 func InitializeFriendService() friendService.FriendService {
 	wire.Build(
+		database.NewDB,
 		friendService.NewFriendService,
 		InitializeAccountService,
-		database.NewDB,
 		userFriendDao.NewUserFriendDao,
 	)
 	return nil
 }
 
-func InitializeLoginBonusService() loginBonusService.LoginBonusService {
+func InitializeIdleBonusService() idleBonusService.IdleBonusService {
 	wire.Build(
-		loginBonusService.NewLoginBonusService,
-		InitializeItemService,
 		database.NewDB,
-		userLoginBonusDao.NewUserLoginBonusDao,
-		masterLoginBonusDao.NewMasterLoginBonusDao,
-		masterLoginBonusItemDao.NewMasterLoginBonusItemDao,
-		masterLoginBonusEventDao.NewMasterLoginBonusEventDao,
-		masterLoginBonusScheduleDao.NewMasterLoginBonusScheduleDao,
+		idleBonusService.NewIdleBonusService,
+		InitializeItemService,
+		userIdleBonusDao.NewUserIdleBonusDao,
+		masterIdleBonusDao.NewMasterIdleBonusDao,
+		masterIdleBonusEventDao.NewMasterIdleBonusEventDao,
+		masterIdleBonusItemDao.NewMasterIdleBonusItemDao,
+		masterIdleBonusScheduleDao.NewMasterIdleBonusScheduleDao,
 	)
 	return nil
 }
 
 func InitializeItemService() itemService.ItemService {
 	wire.Build(
-		itemService.NewItemService,
 		database.NewDB,
+		itemService.NewItemService,
 		userItemBoxDao.NewUserItemBoxDao,
 		masterItemDao.NewMasterItemDao,
 	)
 	return nil
 }
 
+func InitializeLoginBonusService() loginBonusService.LoginBonusService {
+	wire.Build(
+		database.NewDB,
+		loginBonusService.NewLoginBonusService,
+		InitializeItemService,
+		userLoginBonusDao.NewUserLoginBonusDao,
+		masterLoginBonusDao.NewMasterLoginBonusDao,
+		masterLoginBonusEventDao.NewMasterLoginBonusEventDao,
+		masterLoginBonusItemDao.NewMasterLoginBonusItemDao,
+		masterLoginBonusScheduleDao.NewMasterLoginBonusScheduleDao,
+	)
+	return nil
+}
+
+func InitializeProfileService() profileService.ProfileService {
+	wire.Build(
+		database.NewDB,
+		profileService.NewProfileService,
+		userProfileDao.NewUserProfileDao,
+	)
+	return nil
+}
+
+func InitializeRarityService() rarityService.RarityService {
+	wire.Build(
+		database.NewDB,
+		rarityService.NewRarityService,
+		masterRarityDao.NewMasterRarityDao,
+	)
+	return nil
+}
+
+func InitializeResourceService() resourceService.ResourceService {
+	wire.Build(
+		database.NewDB,
+		resourceService.NewResourceService,
+		masterResourceDao.NewMasterResourceDao,
+	)
+	return nil
+}
+
 func InitializeShardService() shardService.ShardService {
 	wire.Build(
-		shardService.NewShardService,
 		database.NewDB,
+		shardService.NewShardService,
 		commonShardDao.NewCommonShardDao,
 	)
 	return nil
@@ -149,8 +253,8 @@ func InitializeShardService() shardService.ShardService {
 
 func InitializeTransactionService() transactionService.TransactionService {
 	wire.Build(
-		transactionService.NewTransactionService,
 		database.NewDB,
+		transactionService.NewTransactionService,
 		commonTransactionDao.NewCommonTransactionDao,
 		masterTransactionDao.NewMasterTransactionDao,
 		userTransactionDao.NewUserTransactionDao,

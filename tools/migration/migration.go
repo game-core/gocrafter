@@ -18,7 +18,7 @@ func main() {
 		return
 	}
 
-	if err := migrateMasterDB("./docs/sql/rarity/ddl"); err != nil {
+	if err := migrateMasterDB("./docs/sql/master/ddl"); err != nil {
 		fmt.Println("error migrating the database:", err)
 		return
 	}

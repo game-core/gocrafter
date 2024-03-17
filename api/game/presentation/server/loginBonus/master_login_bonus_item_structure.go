@@ -1,7 +1,7 @@
 package loginBonus
 
 import (
-	masterLoginBonusItem "github.com/game-core/gocrafter/pkg/domain/model/loginBonus/masterLoginBonusItem"
+	"github.com/game-core/gocrafter/pkg/domain/model/loginBonus/masterLoginBonusItem"
 )
 
 func SetMasterLoginBonusItems(masterLoginBonusItemModels masterLoginBonusItem.MasterLoginBonusItems) []*MasterLoginBonusItem {

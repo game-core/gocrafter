@@ -608,7 +608,7 @@ func TestAccountService_GenerateUserID(t *testing.T) {
 				shardService: func(ctrl *gomock.Controller) shard.ShardService {
 					m := shard.NewMockShardService(ctrl)
 					m.EXPECT().
-						GetShardKeyAndUpdate(
+						GetShardKey(
 							nil,
 							nil,
 						).
@@ -626,7 +626,7 @@ func TestAccountService_GenerateUserID(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.shardService.GetShardKeyAndUpdate",
+			name: "異常：s.shardService.GetShardKey",
 			fields: fields{
 				userAccountRepository: func(ctrl *gomock.Controller) userAccount.UserAccountRepository {
 					m := userAccount.NewMockUserAccountRepository(ctrl)
@@ -635,7 +635,7 @@ func TestAccountService_GenerateUserID(t *testing.T) {
 				shardService: func(ctrl *gomock.Controller) shard.ShardService {
 					m := shard.NewMockShardService(ctrl)
 					m.EXPECT().
-						GetShardKeyAndUpdate(
+						GetShardKey(
 							nil,
 							nil,
 						).
@@ -650,7 +650,7 @@ func TestAccountService_GenerateUserID(t *testing.T) {
 				ctx: nil,
 			},
 			want:    "",
-			wantErr: errors.NewMethodError("s.shardService.GetShardKeyAndUpdate", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.shardService.GetShardKey", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {

@@ -72,6 +72,730 @@ func TestNewItemService_NewItemService(t *testing.T) {
 	}
 }
 
+func TestNewItemService_GetUser(t *testing.T) {
+	type fields struct {
+		itemService                        func(ctrl *gomock.Controller) item.ItemService
+		userLoginBonusRepository           func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository
+		masterLoginBonusRepository         func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository
+		masterLoginBonusEventRepository    func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository
+		masterLoginBonusItemRepository     func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository
+		masterLoginBonusScheduleRepository func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository
+	}
+	type args struct {
+		ctx context.Context
+		req *LoginBonusGetUserRequest
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *LoginBonusGetUserResponse
+		wantErr error
+	}{
+		{
+			name: "正常：取得できる場合",
+			fields: fields{
+				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+					return m
+				},
+				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+					return m
+				},
+				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+					return m
+				},
+				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+					return m
+				},
+				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
+					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+					m.EXPECT().
+						FindListByUserId(
+							gomock.Any(),
+							"0:test",
+						).
+						Return(
+							userLoginBonus.UserLoginBonuses{
+								{
+									UserId:             "0:test",
+									MasterLoginBonusId: 1,
+									ReceivedAt:         time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+								},
+								{
+									UserId:             "0:test",
+									MasterLoginBonusId: 2,
+									ReceivedAt:         time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+								},
+								{
+									UserId:             "0:test",
+									MasterLoginBonusId: 3,
+									ReceivedAt:         time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+								},
+							},
+							nil,
+						)
+					return m
+				},
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &LoginBonusGetUserRequest{
+					UserId: "0:test",
+				},
+			},
+			want: &LoginBonusGetUserResponse{
+				UserLoginBonuses: userLoginBonus.UserLoginBonuses{
+					{
+						UserId:             "0:test",
+						MasterLoginBonusId: 1,
+						ReceivedAt:         time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+					},
+					{
+						UserId:             "0:test",
+						MasterLoginBonusId: 2,
+						ReceivedAt:         time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+					},
+					{
+						UserId:             "0:test",
+						MasterLoginBonusId: 3,
+						ReceivedAt:         time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+					},
+				},
+			},
+			wantErr: nil,
+		},
+		{
+			name: "異常：s.userLoginBonusRepository.FindListByUserId",
+			fields: fields{
+				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+					return m
+				},
+				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+					return m
+				},
+				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+					return m
+				},
+				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+					return m
+				},
+				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
+					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+					m.EXPECT().
+						FindListByUserId(
+							gomock.Any(),
+							"0:test",
+						).
+						Return(
+							nil,
+							errors.NewTestError(),
+						)
+					return m
+				},
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &LoginBonusGetUserRequest{
+					UserId: "0:test",
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.userLoginBonusRepository.FindListByUserId", errors.NewTestError()),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctrl := gomock.NewController(t)
+
+			s := &loginBonusService{
+				itemService:                        tt.fields.itemService(ctrl),
+				userLoginBonusRepository:           tt.fields.userLoginBonusRepository(ctrl),
+				masterLoginBonusRepository:         tt.fields.masterLoginBonusRepository(ctrl),
+				masterLoginBonusEventRepository:    tt.fields.masterLoginBonusEventRepository(ctrl),
+				masterLoginBonusItemRepository:     tt.fields.masterLoginBonusItemRepository(ctrl),
+				masterLoginBonusScheduleRepository: tt.fields.masterLoginBonusScheduleRepository(ctrl),
+			}
+
+			got, err := s.GetUser(tt.args.ctx, tt.args.req)
+			if !reflect.DeepEqual(err, tt.wantErr) {
+				t.Errorf("GetUser() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GetUser() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestNewItemService_GetMaster(t *testing.T) {
+	type fields struct {
+		itemService                        func(ctrl *gomock.Controller) item.ItemService
+		userLoginBonusRepository           func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository
+		masterLoginBonusRepository         func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository
+		masterLoginBonusEventRepository    func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository
+		masterLoginBonusItemRepository     func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository
+		masterLoginBonusScheduleRepository func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository
+	}
+	type args struct {
+		ctx context.Context
+		req *LoginBonusGetMasterRequest
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *LoginBonusGetMasterResponse
+		wantErr error
+	}{
+		{
+			name: "正常：取得できる場合",
+			fields: fields{
+				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							int64(1),
+						).
+						Return(
+							&masterLoginBonus.MasterLoginBonus{
+								Id:                      1,
+								MasterLoginBonusEventId: 1,
+								Name:                    "テストログインボーナス",
+							},
+							nil,
+						)
+					return m
+				},
+				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							int64(1),
+						).
+						Return(
+							&masterLoginBonusEvent.MasterLoginBonusEvent{
+								Id:            1,
+								Name:          "テストログインボーナスイベント",
+								ResetHour:     9,
+								IntervalHour:  24,
+								RepeatSetting: true,
+								StartAt:       time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+								EndAt:         nil,
+							},
+							nil,
+						)
+					return m
+				},
+				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+					m.EXPECT().
+						FindListByMasterLoginBonusId(
+							nil,
+							int64(1),
+						).
+						Return(
+							masterLoginBonusSchedule.MasterLoginBonusSchedules{
+								{
+									Id:                 1,
+									MasterLoginBonusId: 1,
+									Step:               0,
+									Name:               "ステップ0",
+								},
+								{
+									Id:                 2,
+									MasterLoginBonusId: 1,
+									Step:               1,
+									Name:               "ステップ1",
+								},
+								{
+									Id:                 3,
+									MasterLoginBonusId: 1,
+									Step:               2,
+									Name:               "ステップ2",
+								},
+							},
+							nil,
+						)
+					return m
+				},
+				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+					m.EXPECT().
+						FindListByMasterLoginBonusScheduleId(
+							nil,
+							int64(1),
+						).
+						Return(
+							masterLoginBonusItem.MasterLoginBonusItems{
+								{
+									Id:                         1,
+									MasterLoginBonusScheduleId: 1,
+									MasterItemId:               1,
+									Name:                       "テストログインボーナスアイテム1",
+									Count:                      1,
+								},
+							},
+							nil,
+						)
+					m.EXPECT().
+						FindListByMasterLoginBonusScheduleId(
+							nil,
+							int64(2),
+						).
+						Return(
+							masterLoginBonusItem.MasterLoginBonusItems{
+								{
+									Id:                         2,
+									MasterLoginBonusScheduleId: 2,
+									MasterItemId:               1,
+									Name:                       "テストログインボーナスアイテム2",
+									Count:                      1,
+								},
+							},
+							nil,
+						)
+					m.EXPECT().
+						FindListByMasterLoginBonusScheduleId(
+							nil,
+							int64(3),
+						).
+						Return(
+							masterLoginBonusItem.MasterLoginBonusItems{
+								{
+									Id:                         3,
+									MasterLoginBonusScheduleId: 3,
+									MasterItemId:               1,
+									Name:                       "テストログインボーナスアイテム3",
+									Count:                      1,
+								},
+							},
+							nil,
+						)
+					return m
+				},
+				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
+					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+					return m
+				},
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &LoginBonusGetMasterRequest{
+					MasterLoginBonusId: 1,
+				},
+			},
+			want: &LoginBonusGetMasterResponse{
+				MasterLoginBonus: &masterLoginBonus.MasterLoginBonus{
+					Id:                      1,
+					MasterLoginBonusEventId: 1,
+					Name:                    "テストログインボーナス",
+				},
+				MasterLoginBonusEvent: &masterLoginBonusEvent.MasterLoginBonusEvent{
+					Id:            1,
+					Name:          "テストログインボーナスイベント",
+					ResetHour:     9,
+					IntervalHour:  24,
+					RepeatSetting: true,
+					StartAt:       time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+					EndAt:         nil,
+				},
+				MasterLoginBonusItems: masterLoginBonusItem.MasterLoginBonusItems{
+					{
+						Id:                         1,
+						MasterLoginBonusScheduleId: 1,
+						MasterItemId:               1,
+						Name:                       "テストログインボーナスアイテム1",
+						Count:                      1,
+					},
+					{
+						Id:                         2,
+						MasterLoginBonusScheduleId: 2,
+						MasterItemId:               1,
+						Name:                       "テストログインボーナスアイテム2",
+						Count:                      1,
+					},
+					{
+						Id:                         3,
+						MasterLoginBonusScheduleId: 3,
+						MasterItemId:               1,
+						Name:                       "テストログインボーナスアイテム3",
+						Count:                      1,
+					},
+				},
+				MasterLoginBonusSchedules: masterLoginBonusSchedule.MasterLoginBonusSchedules{
+					{
+						Id:                 1,
+						MasterLoginBonusId: 1,
+						Step:               0,
+						Name:               "ステップ0",
+					},
+					{
+						Id:                 2,
+						MasterLoginBonusId: 1,
+						Step:               1,
+						Name:               "ステップ1",
+					},
+					{
+						Id:                 3,
+						MasterLoginBonusId: 1,
+						Step:               2,
+						Name:               "ステップ2",
+					},
+				},
+			},
+			wantErr: nil,
+		},
+		{
+			name: "異常：s.masterLoginBonusRepository.Find",
+			fields: fields{
+				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							int64(1),
+						).
+						Return(
+							nil,
+							errors.NewTestError(),
+						)
+					return m
+				},
+				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+					return m
+				},
+				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+					return m
+				},
+				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+					return m
+				},
+				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
+					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+					return m
+				},
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &LoginBonusGetMasterRequest{
+					MasterLoginBonusId: 1,
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.masterLoginBonusRepository.Find", errors.NewTestError()),
+		},
+		{
+			name: "異常：s.masterLoginBonusEventRepository.FindByMasterLoginBonusId",
+			fields: fields{
+				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							int64(1),
+						).
+						Return(
+							&masterLoginBonus.MasterLoginBonus{
+								Id:                      1,
+								MasterLoginBonusEventId: 1,
+								Name:                    "テストログインボーナス",
+							},
+							nil,
+						)
+					return m
+				},
+				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							int64(1),
+						).
+						Return(
+							nil,
+							errors.NewTestError(),
+						)
+					return m
+				},
+				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+					return m
+				},
+				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+					return m
+				},
+				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
+					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+					return m
+				},
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &LoginBonusGetMasterRequest{
+					MasterLoginBonusId: 1,
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.masterLoginBonusEventRepository.FindByMasterLoginBonusId", errors.NewTestError()),
+		},
+		{
+			name: "異常：s.masterLoginBonusScheduleRepository.FindListByMasterLoginBonusId",
+			fields: fields{
+				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							int64(1),
+						).
+						Return(
+							&masterLoginBonus.MasterLoginBonus{
+								Id:                      1,
+								MasterLoginBonusEventId: 1,
+								Name:                    "テストログインボーナス",
+							},
+							nil,
+						)
+					return m
+				},
+				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							int64(1),
+						).
+						Return(
+							&masterLoginBonusEvent.MasterLoginBonusEvent{
+								Id:            1,
+								Name:          "テストログインボーナスイベント",
+								ResetHour:     9,
+								IntervalHour:  24,
+								RepeatSetting: true,
+								StartAt:       time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+								EndAt:         nil,
+							},
+							nil,
+						)
+					return m
+				},
+				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+					m.EXPECT().
+						FindListByMasterLoginBonusId(
+							nil,
+							int64(1),
+						).
+						Return(
+							nil,
+							errors.NewTestError(),
+						)
+					return m
+				},
+				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+					return m
+				},
+				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
+					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+					return m
+				},
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &LoginBonusGetMasterRequest{
+					MasterLoginBonusId: 1,
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.masterLoginBonusScheduleRepository.FindListByMasterLoginBonusId", errors.NewTestError()),
+		},
+		{
+			name: "異常：s.getItems",
+			fields: fields{
+				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							int64(1),
+						).
+						Return(
+							&masterLoginBonus.MasterLoginBonus{
+								Id:                      1,
+								MasterLoginBonusEventId: 1,
+								Name:                    "テストログインボーナス",
+							},
+							nil,
+						)
+					return m
+				},
+				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							int64(1),
+						).
+						Return(
+							&masterLoginBonusEvent.MasterLoginBonusEvent{
+								Id:            1,
+								Name:          "テストログインボーナスイベント",
+								ResetHour:     9,
+								IntervalHour:  24,
+								RepeatSetting: true,
+								StartAt:       time.Date(2023, 1, 1, 9, 0, 0, 0, time.UTC),
+								EndAt:         nil,
+							},
+							nil,
+						)
+					return m
+				},
+				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+					m.EXPECT().
+						FindListByMasterLoginBonusId(
+							nil,
+							int64(1),
+						).
+						Return(
+							masterLoginBonusSchedule.MasterLoginBonusSchedules{
+								{
+									Id:                 1,
+									MasterLoginBonusId: 1,
+									Step:               0,
+									Name:               "ステップ0",
+								},
+								{
+									Id:                 2,
+									MasterLoginBonusId: 1,
+									Step:               1,
+									Name:               "ステップ1",
+								},
+								{
+									Id:                 3,
+									MasterLoginBonusId: 1,
+									Step:               2,
+									Name:               "ステップ2",
+								},
+							},
+							nil,
+						)
+					return m
+				},
+				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+					m.EXPECT().
+						FindListByMasterLoginBonusScheduleId(
+							nil,
+							int64(1),
+						).
+						Return(
+							masterLoginBonusItem.MasterLoginBonusItems{
+								{
+									Id:                         1,
+									MasterLoginBonusScheduleId: 1,
+									MasterItemId:               1,
+									Name:                       "テストログインボーナスアイテム1",
+									Count:                      1,
+								},
+							},
+							nil,
+						)
+					m.EXPECT().
+						FindListByMasterLoginBonusScheduleId(
+							nil,
+							int64(2),
+						).
+						Return(
+							nil,
+							errors.NewTestError(),
+						)
+					return m
+				},
+				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
+					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+					return m
+				},
+				itemService: func(ctrl *gomock.Controller) item.ItemService {
+					m := item.NewMockItemService(ctrl)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &LoginBonusGetMasterRequest{
+					MasterLoginBonusId: 1,
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.getItems: failed to s.masterLoginBonusItemRepository.FindListByMasterLoginBonusScheduleId", errors.NewTestError()),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctrl := gomock.NewController(t)
+
+			s := &loginBonusService{
+				itemService:                        tt.fields.itemService(ctrl),
+				userLoginBonusRepository:           tt.fields.userLoginBonusRepository(ctrl),
+				masterLoginBonusRepository:         tt.fields.masterLoginBonusRepository(ctrl),
+				masterLoginBonusEventRepository:    tt.fields.masterLoginBonusEventRepository(ctrl),
+				masterLoginBonusItemRepository:     tt.fields.masterLoginBonusItemRepository(ctrl),
+				masterLoginBonusScheduleRepository: tt.fields.masterLoginBonusScheduleRepository(ctrl),
+			}
+
+			got, err := s.GetMaster(tt.args.ctx, tt.args.req)
+			if !reflect.DeepEqual(err, tt.wantErr) {
+				t.Errorf("GetMaster() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GetMaster() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestNewItemService_Receive(t *testing.T) {
 	type fields struct {
 		itemService                        func(ctrl *gomock.Controller) item.ItemService
@@ -95,7 +819,7 @@ func TestNewItemService_Receive(t *testing.T) {
 		wantErr error
 	}{
 		{
-			name: "正常：作成できる場合（既に取得したことがあるアイテム）",
+			name: "正常：受け取りできる場合（既に取得したことがあるアイテム）",
 			fields: fields{
 				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
 					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
