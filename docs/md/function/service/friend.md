@@ -2,11 +2,11 @@
 フレンド関連。  
 [protobuf](https://github.com/game-core/gocrafter/tree/main/docs/proto/api/game/friend)  
 
-- [Get](https://github.com/game-core/gocrafter/blob/main/docs/md/function/friend.md#get)
-- [Send](https://github.com/game-core/gocrafter/blob/main/docs/md/function/friend.md#send)
-- [Approve](https://github.com/game-core/gocrafter/blob/main/docs/md/function/friend.md#approve)
-- [Disapprove](https://github.com/game-core/gocrafter/blob/main/docs/md/function/friend.md#disapprove)
-- [Delete](https://github.com/game-core/gocrafter/blob/main/docs/md/function/friend.md#delete)
+- [Get](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/friend.md#get)
+- [Send](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/friend.md#send)
+- [Approve](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/friend.md#approve)
+- [Disapprove](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/friend.md#disapprove)
+- [Delete](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/friend.md#delete)
 
 ## Get
 フレンドを取得する。

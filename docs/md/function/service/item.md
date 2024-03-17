@@ -2,8 +2,8 @@
 アイテム関連関連。  
 [model](https://github.com/game-core/gocrafter/tree/main/pkg/domain/model/item)
 
-- [Create](https://github.com/game-core/gocrafter/blob/main/docs/md/function/item.md#dcreate)
-- [Receive](https://github.com/game-core/gocrafter/blob/main/docs/md/function/item.md#Receive)
+- [Create](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/item.md#dcreate)
+- [Receive](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/item.md#Receive)
 
 ## Create
 アイテムを作成する。

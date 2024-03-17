@@ -2,8 +2,8 @@
 プロフィール関連。
 [protobuf](https://github.com/game-core/gocrafter/tree/main/docs/proto/api/game/profile)  
 
-- [Create](https://github.com/game-core/gocrafter/blob/main/docs/md/function/profile.md#create)
-- [Update](https://github.com/game-core/gocrafter/blob/main/docs/md/function/profile.md#update)
+- [Create](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/profile.md#create)
+- [Update](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/profile.md#update)
 
 ## Get
 プロフィールを取得する。
