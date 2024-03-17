@@ -5,7 +5,12 @@
 package action
 
 import (
+	context "context"
+	reflect "reflect"
+	time "time"
+
 	gomock "github.com/golang/mock/gomock"
+	gorm "gorm.io/gorm"
 )
 
 // MockActionService is a mock of ActionService interface.
@@ -29,4 +34,49 @@ func NewMockActionService(ctrl *gomock.Controller) *MockActionService {
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockActionService) EXPECT() *MockActionServiceMockRecorder {
 	return m.recorder
+}
+
+// Check mocks base method.
+func (m *MockActionService) Check(ctx context.Context, now time.Time, req *ActionCheckRequest) (*ActionCheckResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Check", ctx, now, req)
+	ret0, _ := ret[0].(*ActionCheckResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Check indicates an expected call of Check.
+func (mr *MockActionServiceMockRecorder) Check(ctx, now, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Check", reflect.TypeOf((*MockActionService)(nil).Check), ctx, now, req)
+}
+
+// GetMaster mocks base method.
+func (m *MockActionService) GetMaster(ctx context.Context) (*ActionGetMasterResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetMaster", ctx)
+	ret0, _ := ret[0].(*ActionGetMasterResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetMaster indicates an expected call of GetMaster.
+func (mr *MockActionServiceMockRecorder) GetMaster(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMaster", reflect.TypeOf((*MockActionService)(nil).GetMaster), ctx)
+}
+
+// Run mocks base method.
+func (m *MockActionService) Run(ctx context.Context, tx *gorm.DB, now time.Time, req *ActionRunRequest) (*ActionRunResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Run", ctx, tx, now, req)
+	ret0, _ := ret[0].(*ActionRunResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Run indicates an expected call of Run.
+func (mr *MockActionServiceMockRecorder) Run(ctx, tx, now, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Run", reflect.TypeOf((*MockActionService)(nil).Run), ctx, tx, now, req)
 }

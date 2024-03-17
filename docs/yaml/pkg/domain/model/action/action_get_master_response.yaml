@@ -13,7 +13,7 @@ structure:
   MasterActionSteps:
     name: master_action_steps
     type: structures
-    package: action/masterAction
+    package: action/masterActionStep
     nullable: false
     number: 2
     comment: "マスターアクションステップ一覧"

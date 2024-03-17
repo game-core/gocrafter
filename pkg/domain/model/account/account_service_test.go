@@ -610,7 +610,6 @@ func TestAccountService_GenerateUserID(t *testing.T) {
 					m.EXPECT().
 						GetShardKey(
 							nil,
-							nil,
 						).
 						Return(
 							"0",
@@ -636,7 +635,6 @@ func TestAccountService_GenerateUserID(t *testing.T) {
 					m := shard.NewMockShardService(ctrl)
 					m.EXPECT().
 						GetShardKey(
-							nil,
 							nil,
 						).
 						Return(

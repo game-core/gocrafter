@@ -5,6 +5,11 @@
 package resource
 
 import (
+	context "context"
+	reflect "reflect"
+
+	enum "github.com/game-core/gocrafter/pkg/domain/enum"
+	masterResource "github.com/game-core/gocrafter/pkg/domain/model/resource/masterResource"
 	gomock "github.com/golang/mock/gomock"
 )
 
@@ -29,4 +34,34 @@ func NewMockResourceService(ctrl *gomock.Controller) *MockResourceService {
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockResourceService) EXPECT() *MockResourceServiceMockRecorder {
 	return m.recorder
+}
+
+// GetAll mocks base method.
+func (m *MockResourceService) GetAll(cxt context.Context) (masterResource.MasterResources, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAll", cxt)
+	ret0, _ := ret[0].(masterResource.MasterResources)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAll indicates an expected call of GetAll.
+func (mr *MockResourceServiceMockRecorder) GetAll(cxt interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAll", reflect.TypeOf((*MockResourceService)(nil).GetAll), cxt)
+}
+
+// GetByResourceType mocks base method.
+func (m *MockResourceService) GetByResourceType(cxt context.Context, resourceType enum.ResourceType) (*masterResource.MasterResource, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetByResourceType", cxt, resourceType)
+	ret0, _ := ret[0].(*masterResource.MasterResource)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetByResourceType indicates an expected call of GetByResourceType.
+func (mr *MockResourceServiceMockRecorder) GetByResourceType(cxt, resourceType interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByResourceType", reflect.TypeOf((*MockResourceService)(nil).GetByResourceType), cxt, resourceType)
 }

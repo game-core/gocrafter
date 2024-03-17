@@ -9,7 +9,6 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
-	gorm "gorm.io/gorm"
 )
 
 // MockShardService is a mock of ShardService interface.
@@ -36,16 +35,16 @@ func (m *MockShardService) EXPECT() *MockShardServiceMockRecorder {
 }
 
 // GetShardKey mocks base method.
-func (m *MockShardService) GetShardKey(ctx context.Context, tx *gorm.DB) (string, error) {
+func (m *MockShardService) GetShardKey(ctx context.Context) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetShardKey", ctx, tx)
+	ret := m.ctrl.Call(m, "GetShardKey", ctx)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetShardKey indicates an expected call of GetShardKey.
-func (mr *MockShardServiceMockRecorder) GetShardKey(ctx, tx interface{}) *gomock.Call {
+func (mr *MockShardServiceMockRecorder) GetShardKey(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetShardKey", reflect.TypeOf((*MockShardService)(nil).GetShardKey), ctx, tx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetShardKey", reflect.TypeOf((*MockShardService)(nil).GetShardKey), ctx)
 }

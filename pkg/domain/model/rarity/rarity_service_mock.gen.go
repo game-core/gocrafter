@@ -5,6 +5,11 @@
 package rarity
 
 import (
+	context "context"
+	reflect "reflect"
+
+	enum "github.com/game-core/gocrafter/pkg/domain/enum"
+	masterRarity "github.com/game-core/gocrafter/pkg/domain/model/rarity/masterRarity"
 	gomock "github.com/golang/mock/gomock"
 )
 
@@ -29,4 +34,34 @@ func NewMockRarityService(ctrl *gomock.Controller) *MockRarityService {
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockRarityService) EXPECT() *MockRarityServiceMockRecorder {
 	return m.recorder
+}
+
+// GetAll mocks base method.
+func (m *MockRarityService) GetAll(cxt context.Context) (masterRarity.MasterRarities, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetAll", cxt)
+	ret0, _ := ret[0].(masterRarity.MasterRarities)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetAll indicates an expected call of GetAll.
+func (mr *MockRarityServiceMockRecorder) GetAll(cxt interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAll", reflect.TypeOf((*MockRarityService)(nil).GetAll), cxt)
+}
+
+// GetByRarityType mocks base method.
+func (m *MockRarityService) GetByRarityType(cxt context.Context, rarityType enum.RarityType) (*masterRarity.MasterRarity, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetByRarityType", cxt, rarityType)
+	ret0, _ := ret[0].(*masterRarity.MasterRarity)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetByRarityType indicates an expected call of GetByRarityType.
+func (mr *MockRarityServiceMockRecorder) GetByRarityType(cxt, rarityType interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByRarityType", reflect.TypeOf((*MockRarityService)(nil).GetByRarityType), cxt, rarityType)
 }

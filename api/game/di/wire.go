@@ -33,6 +33,8 @@ import (
 	commonShardDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonShard"
 	commonTransactionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonTransaction"
 	masterActionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterAction"
+	masterActionRunDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionRun"
+	masterActionStepDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionStep"
 	masterIdleBonusDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonus"
 	masterIdleBonusEventDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusEvent"
 	masterIdleBonusItemDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusItem"
@@ -162,6 +164,8 @@ func InitializeActionService() actionService.ActionService {
 		database.NewDB,
 		actionService.NewActionService,
 		masterActionDao.NewMasterActionDao,
+		masterActionRunDao.NewMasterActionRunDao,
+		masterActionStepDao.NewMasterActionStepDao,
 		userActionDao.NewUserActionDao,
 	)
 	return nil

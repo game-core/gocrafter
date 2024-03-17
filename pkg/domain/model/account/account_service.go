@@ -106,7 +106,7 @@ func (s *accountService) Check(ctx context.Context, req *AccountCheckRequest) (*
 
 // GenerateUserID ユーザーIDを生成する
 func (s *accountService) GenerateUserID(ctx context.Context) (string, error) {
-	shardKey, err := s.shardService.GetShardKey(ctx, nil)
+	shardKey, err := s.shardService.GetShardKey(ctx)
 	if err != nil {
 		return "", errors.NewMethodError("s.shardService.GetShardKey", err)
 	}
