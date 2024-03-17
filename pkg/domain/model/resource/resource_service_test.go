@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
-	
+
 	"github.com/game-core/gocrafter/internal/errors"
 	"github.com/game-core/gocrafter/pkg/domain/enum"
 	"github.com/game-core/gocrafter/pkg/domain/model/resource/masterResource"
