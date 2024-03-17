@@ -8,9 +8,13 @@ on:
 jobs:
   domain_test:
     name: Run Domain Test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: 1.21
+
       - name: Build
         run: docker compose -f docker-compose.test.yaml up -d --build
 
@@ -18,7 +22,7 @@ jobs:
         run: sleep 10
 
       - name: Usecase Test
-        run: docker compose -f docker-compose.test.yaml exec api-game-test go test -v ./api/game/usecase/...
+        run: go test -v ./api/game/usecase/...
 
       - name: Domain Test
-        run: docker compose -f docker-compose.test.yaml exec api-game-test go test -v ./pkg/domain/...
+        run: go test -v ./pkg/domain/...
