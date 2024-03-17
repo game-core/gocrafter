@@ -4,14 +4,12 @@ package shard
 import (
 	"context"
 
-	"gorm.io/gorm"
-
 	"github.com/game-core/gocrafter/internal/errors"
 	"github.com/game-core/gocrafter/pkg/domain/model/shard/commonShard"
 )
 
 type ShardService interface {
-	GetShardKey(ctx context.Context, tx *gorm.DB) (string, error)
+	GetShardKey(ctx context.Context) (string, error)
 }
 
 type shardService struct {
@@ -27,7 +25,7 @@ func NewShardService(
 }
 
 // GetShardKey シャードキーを取得して更新する
-func (s *shardService) GetShardKey(ctx context.Context, tx *gorm.DB) (string, error) {
+func (s *shardService) GetShardKey(ctx context.Context) (string, error) {
 	commonShards := commonShard.NewCommonShards()
 	shardKey, err := commonShards.GetShardKey(ctx, s.commonShardRepository)
 	if err != nil {

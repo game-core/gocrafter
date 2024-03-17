@@ -5,8 +5,6 @@ import (
 	"reflect"
 	"testing"
 
-	"gorm.io/gorm"
-
 	"github.com/golang/mock/gomock"
 
 	"github.com/game-core/gocrafter/internal/errors"
@@ -50,7 +48,6 @@ func TestShardService_GetShardKey(t *testing.T) {
 	}
 	type args struct {
 		ctx context.Context
-		tx  *gorm.DB
 	}
 	tests := []struct {
 		name    string
@@ -90,7 +87,6 @@ func TestShardService_GetShardKey(t *testing.T) {
 			},
 			args: args{
 				ctx: nil,
-				tx:  nil,
 			},
 			want:    "SHARD_1",
 			wantErr: nil,
@@ -113,7 +109,6 @@ func TestShardService_GetShardKey(t *testing.T) {
 			},
 			args: args{
 				ctx: nil,
-				tx:  nil,
 			},
 			want:    "",
 			wantErr: errors.NewMethodError("shards.GetShardKey: failed to s.commonShardRepository.FindList", errors.NewTestError()),
@@ -136,7 +131,6 @@ func TestShardService_GetShardKey(t *testing.T) {
 			},
 			args: args{
 				ctx: nil,
-				tx:  nil,
 			},
 			want:    "",
 			wantErr: errors.NewError("failed to shards.GetShardKey: common_shard does not exist"),
@@ -151,7 +145,7 @@ func TestShardService_GetShardKey(t *testing.T) {
 				commonShardRepository: tt.fields.commonShardRepository(ctrl),
 			}
 
-			got, err := s.GetShardKey(tt.args.ctx, tt.args.tx)
+			got, err := s.GetShardKey(tt.args.ctx)
 			if !reflect.DeepEqual(err, tt.wantErr) {
 				t.Errorf("GetShardKey() error = %v, wantErr %v", err, tt.wantErr)
 				return
