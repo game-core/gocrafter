@@ -37,12 +37,11 @@ func (m *MockActionService) EXPECT() *MockActionServiceMockRecorder {
 }
 
 // Check mocks base method.
-func (m *MockActionService) Check(ctx context.Context, now time.Time, req *ActionCheckRequest) (*ActionCheckResponse, error) {
+func (m *MockActionService) Check(ctx context.Context, now time.Time, req *ActionCheckRequest) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Check", ctx, now, req)
-	ret0, _ := ret[0].(*ActionCheckResponse)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
+	ret0, _ := ret[0].(error)
+	return ret0
 }
 
 // Check indicates an expected call of Check.
@@ -67,12 +66,11 @@ func (mr *MockActionServiceMockRecorder) GetMaster(ctx interface{}) *gomock.Call
 }
 
 // Run mocks base method.
-func (m *MockActionService) Run(ctx context.Context, tx *gorm.DB, now time.Time, req *ActionRunRequest) (*ActionRunResponse, error) {
+func (m *MockActionService) Run(ctx context.Context, tx *gorm.DB, now time.Time, req *ActionRunRequest) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Run", ctx, tx, now, req)
-	ret0, _ := ret[0].(*ActionRunResponse)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
+	ret0, _ := ret[0].(error)
+	return ret0
 }
 
 // Run indicates an expected call of Run.
