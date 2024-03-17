@@ -24,7 +24,7 @@ structure:
   AnyId:
     name: any_id
     type: int64
-    nullable: false
+    nullable: true
     number: 4
     comment: "対象のID"
   TriggerActionId:
@@ -46,4 +46,3 @@ unique:
 index:
   - Name
   - ActionStepType
-  - AnyId

@@ -11,7 +11,7 @@ type MasterAction struct {
 	Id              int64
 	Name            string
 	ActionStepType  enum.ActionStepType
-	AnyId           int64
+	AnyId           *int64
 	TriggerActionId *int64
 	Expiration      *int32
 }
@@ -24,7 +24,7 @@ func NewMasterActions() MasterActions {
 	return MasterActions{}
 }
 
-func SetMasterAction(id int64, name string, actionStepType enum.ActionStepType, anyId int64, triggerActionId *int64, expiration *int32) *MasterAction {
+func SetMasterAction(id int64, name string, actionStepType enum.ActionStepType, anyId *int64, triggerActionId *int64, expiration *int32) *MasterAction {
 	return &MasterAction{
 		Id:              id,
 		Name:            name,

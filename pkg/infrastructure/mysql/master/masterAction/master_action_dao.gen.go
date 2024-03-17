@@ -117,28 +117,6 @@ func (s *masterActionDao) FindByActionStepType(ctx context.Context, actionStepTy
 	return m, nil
 }
 
-func (s *masterActionDao) FindByAnyId(ctx context.Context, anyId int64) (*masterAction.MasterAction, error) {
-	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_action", "FindByAnyId", fmt.Sprintf("%d_", anyId)))
-	if found {
-		if cachedEntity, ok := cachedResult.(*masterAction.MasterAction); ok {
-			return cachedEntity, nil
-		}
-	}
-
-	t := NewMasterAction()
-	res := s.ReadConn.WithContext(ctx).Where("any_id = ?", anyId).Find(t)
-	if err := res.Error; err != nil {
-		return nil, err
-	}
-	if res.RowsAffected == 0 {
-		return nil, errors.NewError("record does not exist")
-	}
-
-	m := masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.AnyId, t.TriggerActionId, t.Expiration)
-	s.Cache.Set(cashes.CreateCacheKey("master_action", "FindByAnyId", fmt.Sprintf("%d_", anyId)), m, cache.DefaultExpiration)
-	return m, nil
-}
-
 func (s *masterActionDao) FinOrNilByName(ctx context.Context, name string) (*masterAction.MasterAction, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_action", "FindOrNilByName", fmt.Sprintf("%s_", name)))
 	if found {
@@ -180,28 +158,6 @@ func (s *masterActionDao) FinOrNilByActionStepType(ctx context.Context, actionSt
 
 	m := masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.AnyId, t.TriggerActionId, t.Expiration)
 	s.Cache.Set(cashes.CreateCacheKey("master_action", "FindOrNilByActionStepType", fmt.Sprintf("%d_", actionStepType)), m, cache.DefaultExpiration)
-	return m, nil
-}
-
-func (s *masterActionDao) FinOrNilByAnyId(ctx context.Context, anyId int64) (*masterAction.MasterAction, error) {
-	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_action", "FindOrNilByAnyId", fmt.Sprintf("%d_", anyId)))
-	if found {
-		if cachedEntity, ok := cachedResult.(*masterAction.MasterAction); ok {
-			return cachedEntity, nil
-		}
-	}
-
-	t := NewMasterAction()
-	res := s.ReadConn.WithContext(ctx).Where("any_id = ?", anyId).Find(t)
-	if err := res.Error; err != nil {
-		return nil, err
-	}
-	if res.RowsAffected == 0 {
-		return nil, nil
-	}
-
-	m := masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.AnyId, t.TriggerActionId, t.Expiration)
-	s.Cache.Set(cashes.CreateCacheKey("master_action", "FindOrNilByAnyId", fmt.Sprintf("%d_", anyId)), m, cache.DefaultExpiration)
 	return m, nil
 }
 
@@ -271,29 +227,6 @@ func (s *masterActionDao) FindListByActionStepType(ctx context.Context, actionSt
 	}
 
 	s.Cache.Set(cashes.CreateCacheKey("master_action", "FindListByActionStepType", fmt.Sprintf("%d_", actionStepType)), ms, cache.DefaultExpiration)
-	return ms, nil
-}
-
-func (s *masterActionDao) FindListByAnyId(ctx context.Context, anyId int64) (masterAction.MasterActions, error) {
-	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_action", "FindListByAnyId", fmt.Sprintf("%d_", anyId)))
-	if found {
-		if cachedEntity, ok := cachedResult.(masterAction.MasterActions); ok {
-			return cachedEntity, nil
-		}
-	}
-
-	ts := NewMasterActions()
-	res := s.ReadConn.WithContext(ctx).Where("any_id = ?", anyId).Find(&ts)
-	if err := res.Error; err != nil {
-		return nil, err
-	}
-
-	ms := masterAction.NewMasterActions()
-	for _, t := range ts {
-		ms = append(ms, masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.AnyId, t.TriggerActionId, t.Expiration))
-	}
-
-	s.Cache.Set(cashes.CreateCacheKey("master_action", "FindListByAnyId", fmt.Sprintf("%d_", anyId)), ms, cache.DefaultExpiration)
 	return ms, nil
 }
 

@@ -1,4 +1,4 @@
-// Package masterActionRun 発火するアクション
+// Package masterActionRun 実行されるアクション
 //
 //go:generate mockgen -source=./master_action_run_repository.gen.go -destination=./master_action_run_repository_mock.gen.go -package=masterActionRun
 package masterActionRun

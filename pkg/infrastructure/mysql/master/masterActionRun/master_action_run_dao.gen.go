@@ -1,4 +1,4 @@
-// Package masterActionRun 発火するアクション
+// Package masterActionRun 実行されるアクション
 package masterActionRun
 
 import (
