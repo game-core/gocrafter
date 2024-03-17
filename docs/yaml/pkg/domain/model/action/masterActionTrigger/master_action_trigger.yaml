@@ -1,0 +1,29 @@
+name: MasterActionTrigger
+package: masterActionTrigger
+comment: "アクショントリガー"
+
+structure:
+  Id:
+    name: id
+    type: int64
+    nullable: false
+    number: 1
+    comment: "ID"
+  Name:
+    name: name
+    type: string
+    nullable: false
+    number: 2
+    comment: "アクショントリガー名"
+  ActionTriggerType:
+    name: action_trigger_type
+    type: enum
+    nullable: false
+    number: 3
+    comment: "アクショントリガータイプ"
+primary:
+  - Id
+unique:
+  - Id
+index:
+  - ActionTriggerType

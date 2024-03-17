@@ -21,23 +21,29 @@ structure:
     nullable: false
     number: 3
     comment: "アクションステップタイプ"
+  ActionTriggerType:
+    name: action_trigger_type
+    type: enum
+    nullable: false
+    number: 4
+    comment: "アクショントリガータイプ"
   AnyId:
     name: any_id
     type: int64
     nullable: true
-    number: 4
+    number: 5
     comment: "対象のID"
   TriggerActionId:
     name: trigger_action_id
     type: int64
     nullable: true
-    number: 5
+    number: 6
     comment: "トリガーになるアクションのID"
   Expiration:
     name: expiration
     type: int32
     nullable: true
-    number: 6
+    number: 7
     comment: "有効期限"
 primary:
   - Id

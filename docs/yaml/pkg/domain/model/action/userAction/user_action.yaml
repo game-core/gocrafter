@@ -9,21 +9,15 @@ structure:
     nullable: false
     number: 1
     comment: "ユーザーID"
-  Name:
-    name: name
-    type: string
-    nullable: false
-    number: 2
-    comment: "ユーザー名"
   MasterActionId:
     name: master_action_id
     type: int64
     nullable: false
-    number: 3
+    number: 2
     comment: "マスターアクションID"
   StartedAt:
     name: started_at
     type: time
     nullable: false
-    number: 4
+    number: 3
     comment: "開始日時"

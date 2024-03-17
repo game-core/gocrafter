@@ -8,12 +8,13 @@ import (
 type MasterActions []*MasterAction
 
 type MasterAction struct {
-	Id              int64
-	Name            string
-	ActionStepType  enum.ActionStepType
-	AnyId           *int64
-	TriggerActionId *int64
-	Expiration      *int32
+	Id                int64
+	Name              string
+	ActionStepType    enum.ActionStepType
+	ActionTriggerType enum.ActionTriggerType
+	AnyId             *int64
+	TriggerActionId   *int64
+	Expiration        *int32
 }
 
 func NewMasterAction() *MasterAction {
@@ -24,14 +25,15 @@ func NewMasterActions() MasterActions {
 	return MasterActions{}
 }
 
-func SetMasterAction(id int64, name string, actionStepType enum.ActionStepType, anyId *int64, triggerActionId *int64, expiration *int32) *MasterAction {
+func SetMasterAction(id int64, name string, actionStepType enum.ActionStepType, actionTriggerType enum.ActionTriggerType, anyId *int64, triggerActionId *int64, expiration *int32) *MasterAction {
 	return &MasterAction{
-		Id:              id,
-		Name:            name,
-		ActionStepType:  actionStepType,
-		AnyId:           anyId,
-		TriggerActionId: triggerActionId,
-		Expiration:      expiration,
+		Id:                id,
+		Name:              name,
+		ActionStepType:    actionStepType,
+		ActionTriggerType: actionTriggerType,
+		AnyId:             anyId,
+		TriggerActionId:   triggerActionId,
+		Expiration:        expiration,
 	}
 }
 

@@ -32,7 +32,7 @@ func (s *userActionDao) Find(ctx context.Context, userId string, masterActionId 
 		return nil, errors.NewError("record does not exist")
 	}
 
-	return userAction.SetUserAction(t.UserId, t.Name, t.MasterActionId, t.StartedAt), nil
+	return userAction.SetUserAction(t.UserId, t.MasterActionId, t.StartedAt), nil
 }
 
 func (s *userActionDao) FindOrNil(ctx context.Context, userId string, masterActionId int64) (*userAction.UserAction, error) {
@@ -45,7 +45,7 @@ func (s *userActionDao) FindOrNil(ctx context.Context, userId string, masterActi
 		return nil, nil
 	}
 
-	return userAction.SetUserAction(t.UserId, t.Name, t.MasterActionId, t.StartedAt), nil
+	return userAction.SetUserAction(t.UserId, t.MasterActionId, t.StartedAt), nil
 }
 
 func (s *userActionDao) FindList(ctx context.Context, userId string) (userAction.UserActions, error) {
@@ -57,7 +57,7 @@ func (s *userActionDao) FindList(ctx context.Context, userId string) (userAction
 
 	ms := userAction.NewUserActions()
 	for _, t := range ts {
-		ms = append(ms, userAction.SetUserAction(t.UserId, t.Name, t.MasterActionId, t.StartedAt))
+		ms = append(ms, userAction.SetUserAction(t.UserId, t.MasterActionId, t.StartedAt))
 	}
 
 	return ms, nil
@@ -73,7 +73,6 @@ func (s *userActionDao) Create(ctx context.Context, tx *gorm.DB, m *userAction.U
 
 	t := &UserAction{
 		UserId:         m.UserId,
-		Name:           m.Name,
 		MasterActionId: m.MasterActionId,
 		StartedAt:      m.StartedAt,
 	}
@@ -82,7 +81,7 @@ func (s *userActionDao) Create(ctx context.Context, tx *gorm.DB, m *userAction.U
 		return nil, err
 	}
 
-	return userAction.SetUserAction(t.UserId, t.Name, t.MasterActionId, t.StartedAt), nil
+	return userAction.SetUserAction(t.UserId, t.MasterActionId, t.StartedAt), nil
 }
 
 func (s *userActionDao) CreateList(ctx context.Context, tx *gorm.DB, ms userAction.UserActions) (userAction.UserActions, error) {
@@ -108,7 +107,6 @@ func (s *userActionDao) CreateList(ctx context.Context, tx *gorm.DB, ms userActi
 	for _, m := range ms {
 		t := &UserAction{
 			UserId:         m.UserId,
-			Name:           m.Name,
 			MasterActionId: m.MasterActionId,
 			StartedAt:      m.StartedAt,
 		}
@@ -133,7 +131,6 @@ func (s *userActionDao) Update(ctx context.Context, tx *gorm.DB, m *userAction.U
 
 	t := &UserAction{
 		UserId:         m.UserId,
-		Name:           m.Name,
 		MasterActionId: m.MasterActionId,
 		StartedAt:      m.StartedAt,
 	}
@@ -142,7 +139,7 @@ func (s *userActionDao) Update(ctx context.Context, tx *gorm.DB, m *userAction.U
 		return nil, err
 	}
 
-	return userAction.SetUserAction(t.UserId, t.Name, t.MasterActionId, t.StartedAt), nil
+	return userAction.SetUserAction(t.UserId, t.MasterActionId, t.StartedAt), nil
 }
 
 func (s *userActionDao) Delete(ctx context.Context, tx *gorm.DB, m *userAction.UserAction) error {

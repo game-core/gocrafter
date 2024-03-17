@@ -1,7 +1,6 @@
 CREATE TABLE user_action
 (
     user_id VARCHAR(255) NOT NULL COMMENT "ユーザーID",
-	name VARCHAR(255) NOT NULL COMMENT "ユーザー名",
 	master_action_id BIGINT NOT NULL COMMENT "マスターアクションID",
 	started_at TIMESTAMP NOT NULL COMMENT "開始日時",
 	created_at TIMESTAMP NOT NULL COMMENT "作成日時",

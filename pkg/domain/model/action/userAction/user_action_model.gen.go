@@ -9,7 +9,6 @@ type UserActions []*UserAction
 
 type UserAction struct {
 	UserId         string
-	Name           string
 	MasterActionId int64
 	StartedAt      time.Time
 }
@@ -22,10 +21,9 @@ func NewUserActions() UserActions {
 	return UserActions{}
 }
 
-func SetUserAction(userId string, name string, masterActionId int64, startedAt time.Time) *UserAction {
+func SetUserAction(userId string, masterActionId int64, startedAt time.Time) *UserAction {
 	return &UserAction{
 		UserId:         userId,
-		Name:           name,
 		MasterActionId: masterActionId,
 		StartedAt:      startedAt,
 	}

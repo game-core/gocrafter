@@ -3,6 +3,7 @@ package action
 
 import (
 	"context"
+	"github.com/game-core/gocrafter/pkg/domain/enum"
 	"time"
 
 	"gorm.io/gorm"
@@ -63,8 +64,8 @@ func (s *actionService) Check(ctx context.Context, now time.Time, req *ActionChe
 		return errors.NewMethodError("s.masterActionRepository.FindByActionStepType", err)
 	}
 
-	if _, err := s.checkTriggerAction(ctx, now, req.UserId, masterActionModel); err != nil {
-		return errors.NewMethodError("s.checkTriggerAction", err)
+	if _, err := s.getAction(ctx, now, req.UserId, masterActionModel); err != nil {
+		return errors.NewMethodError("s.getAction", err)
 	}
 
 	return nil
@@ -77,44 +78,76 @@ func (s *actionService) Run(ctx context.Context, tx *gorm.DB, now time.Time, req
 		return errors.NewMethodError("s.masterActionRepository.FindByActionStepType", err)
 	}
 
-	triggerUserActionModel, err := s.checkTriggerAction(ctx, now, req.UserId, masterActionModel)
+	triggerUserActionModel, triggerMasterActionModel, err := s.getTriggerAction(ctx, now, req.UserId, masterActionModel.TriggerActionId)
 	if err != nil {
 		return errors.NewMethodError("s.checkTriggerAction", err)
 	}
 
-	if err := s.run(ctx, tx, now, req.UserId, masterActionModel, triggerUserActionModel); err != nil {
+	if err := s.deleteTriggerAction(ctx, tx, triggerUserActionModel, triggerMasterActionModel); err != nil {
+		return errors.NewMethodError("s.deleteTriggerAction", err)
+	}
+
+	if err := s.run(ctx, tx, now, req.UserId, masterActionModel); err != nil {
 		return errors.NewMethodError("s.run", err)
 	}
 
 	return nil
 }
 
-// checkTriggerAction トリガーになるアクションを確認する
-func (s *actionService) checkTriggerAction(ctx context.Context, now time.Time, userId string, masterActionModel *masterAction.MasterAction) (*userAction.UserAction, error) {
-	if masterActionModel.TriggerActionId == nil {
-		return nil, nil
-	}
-
-	triggerMasterActionModel, err := s.masterActionRepository.Find(ctx, *masterActionModel.TriggerActionId)
-	if err != nil {
-		return nil, errors.NewMethodError("s.masterActionRepository.Find", err)
-	}
-
-	triggerUserActionModel, err := s.userActionRepository.Find(ctx, userId, triggerMasterActionModel.Id)
+// getAction アクションを取得する
+func (s *actionService) getAction(ctx context.Context, now time.Time, userId string, masterActionModel *masterAction.MasterAction) (*userAction.UserAction, error) {
+	userActionModel, err := s.userActionRepository.Find(ctx, userId, masterActionModel.Id)
 	if err != nil {
 		return nil, errors.NewMethodError("s.userActionRepository.Find", err)
 	}
 
-	if triggerMasterActionModel.Expiration != nil && triggerUserActionModel.CheckExpiration(triggerMasterActionModel.Expiration, now) {
+	if masterActionModel.Expiration != nil && !userActionModel.CheckExpiration(masterActionModel.Expiration, now) {
 		return nil, errors.NewError("expiration date has expired")
 	}
 
-	return triggerUserActionModel, nil
+	return userActionModel, nil
+}
+
+// getTriggerAction トリガーになるアクションを取得する
+func (s *actionService) getTriggerAction(ctx context.Context, now time.Time, userId string, triggerActionId *int64) (*userAction.UserAction, *masterAction.MasterAction, error) {
+	if triggerActionId == nil {
+		return nil, nil, nil
+	}
+
+	triggerMasterActionModel, err := s.masterActionRepository.Find(ctx, *triggerActionId)
+	if err != nil {
+		return nil, nil, errors.NewMethodError("s.masterActionRepository.Find", err)
+	}
+
+	triggerUserActionModel, err := s.getAction(ctx, now, userId, triggerMasterActionModel)
+	if err != nil {
+		return nil, nil, errors.NewMethodError("s.getAction", err)
+	}
+
+	return triggerUserActionModel, triggerMasterActionModel, nil
+}
+
+// deleteTriggerAction トリガーアクションを削除する
+func (s *actionService) deleteTriggerAction(ctx context.Context, tx *gorm.DB, triggerUserActionModel *userAction.UserAction, triggerMasterActionModel *masterAction.MasterAction) error {
+	if triggerUserActionModel != nil {
+		switch triggerMasterActionModel.ActionTriggerType {
+		case enum.ActionTriggerType_Continuation:
+			return nil
+		case enum.ActionTriggerType_Discontinuation:
+			if err := s.userActionRepository.Delete(ctx, tx, triggerUserActionModel); err != nil {
+				return errors.NewMethodError("s.userActionRepository.Delete", err)
+			}
+		default:
+			return nil
+		}
+	}
+
+	return nil
 }
 
 // run 実行する
-func (s *actionService) run(ctx context.Context, tx *gorm.DB, now time.Time, userId string, masterActionModel *masterAction.MasterAction, triggerUserActionModel *userAction.UserAction) error {
-	if err := s.update(ctx, tx, userAction.SetUserAction(userId, masterActionModel.Name, masterActionModel.Id, now), triggerUserActionModel); err != nil {
+func (s *actionService) run(ctx context.Context, tx *gorm.DB, now time.Time, userId string, masterActionModel *masterAction.MasterAction) error {
+	if err := s.update(ctx, tx, userAction.SetUserAction(userId, masterActionModel.Id, now)); err != nil {
 		return errors.NewMethodError("s.update", err)
 	}
 
@@ -125,7 +158,7 @@ func (s *actionService) run(ctx context.Context, tx *gorm.DB, now time.Time, use
 	}
 
 	for _, model := range masterActionRunModels {
-		if err := s.update(ctx, tx, userAction.SetUserAction(userId, model.Name, model.ActionId, now), nil); err != nil {
+		if err := s.update(ctx, tx, userAction.SetUserAction(userId, model.ActionId, now)); err != nil {
 			return errors.NewMethodError("s.userActionRepository.Create", err)
 		}
 	}
@@ -134,13 +167,7 @@ func (s *actionService) run(ctx context.Context, tx *gorm.DB, now time.Time, use
 }
 
 // update 更新する
-func (s *actionService) update(ctx context.Context, tx *gorm.DB, model, trigger *userAction.UserAction) error {
-	if trigger != nil {
-		if err := s.userActionRepository.Delete(ctx, tx, trigger); err != nil {
-			return errors.NewMethodError("s.userActionRepository.Delete", err)
-		}
-	}
-
+func (s *actionService) update(ctx context.Context, tx *gorm.DB, model *userAction.UserAction) error {
 	userActionModel, err := s.userActionRepository.FindOrNil(ctx, model.UserId, model.MasterActionId)
 	if err != nil {
 		return errors.NewMethodError("s.userActionRepository.FindOrNil", err)

@@ -1,0 +1,17 @@
+name: ActionStepType
+package: enum
+comment: "アクションステップタイプ"
+
+structure:
+  None:
+    name: None
+    number: 0
+    comment: "無"
+  PassedTutorial:
+    name: PassedTutorial
+    number: 1
+    comment: "チュートリアル突破"
+  ReleaseIdleBonus:
+    name: ReleaseIdleBonus
+    number: 2
+    comment: "放置ボーナス機能開放"

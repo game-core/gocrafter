@@ -1,0 +1,13 @@
+name: ActionTriggerType
+package: enum
+comment: "アクショントリガータイプ"
+
+structure:
+  Continuation:
+    name: Continuation
+    number: 0
+    comment: "持続する"
+  Discontinuation:
+    name: Discontinuation
+    number: 1
+    comment: "持続しない"

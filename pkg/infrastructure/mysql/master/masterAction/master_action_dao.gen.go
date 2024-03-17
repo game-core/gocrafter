@@ -46,7 +46,7 @@ func (s *masterActionDao) Find(ctx context.Context, id int64) (*masterAction.Mas
 		return nil, errors.NewError("record does not exist")
 	}
 
-	m := masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.AnyId, t.TriggerActionId, t.Expiration)
+	m := masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.ActionTriggerType, t.AnyId, t.TriggerActionId, t.Expiration)
 	s.Cache.Set(cashes.CreateCacheKey("master_action", "Find", fmt.Sprintf("%d_", id)), m, cache.DefaultExpiration)
 	return m, nil
 }
@@ -68,7 +68,7 @@ func (s *masterActionDao) FindOrNil(ctx context.Context, id int64) (*masterActio
 		return nil, nil
 	}
 
-	m := masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.AnyId, t.TriggerActionId, t.Expiration)
+	m := masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.ActionTriggerType, t.AnyId, t.TriggerActionId, t.Expiration)
 	s.Cache.Set(cashes.CreateCacheKey("master_action", "FindOrNil", fmt.Sprintf("%d_", id)), m, cache.DefaultExpiration)
 	return m, nil
 }
@@ -90,7 +90,7 @@ func (s *masterActionDao) FindByName(ctx context.Context, name string) (*masterA
 		return nil, errors.NewError("record does not exist")
 	}
 
-	m := masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.AnyId, t.TriggerActionId, t.Expiration)
+	m := masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.ActionTriggerType, t.AnyId, t.TriggerActionId, t.Expiration)
 	s.Cache.Set(cashes.CreateCacheKey("master_action", "FindByName", fmt.Sprintf("%s_", name)), m, cache.DefaultExpiration)
 	return m, nil
 }
@@ -112,7 +112,7 @@ func (s *masterActionDao) FindByActionStepType(ctx context.Context, actionStepTy
 		return nil, errors.NewError("record does not exist")
 	}
 
-	m := masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.AnyId, t.TriggerActionId, t.Expiration)
+	m := masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.ActionTriggerType, t.AnyId, t.TriggerActionId, t.Expiration)
 	s.Cache.Set(cashes.CreateCacheKey("master_action", "FindByActionStepType", fmt.Sprintf("%d_", actionStepType)), m, cache.DefaultExpiration)
 	return m, nil
 }
@@ -134,7 +134,7 @@ func (s *masterActionDao) FinOrNilByName(ctx context.Context, name string) (*mas
 		return nil, nil
 	}
 
-	m := masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.AnyId, t.TriggerActionId, t.Expiration)
+	m := masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.ActionTriggerType, t.AnyId, t.TriggerActionId, t.Expiration)
 	s.Cache.Set(cashes.CreateCacheKey("master_action", "FindOrNilByName", fmt.Sprintf("%s_", name)), m, cache.DefaultExpiration)
 	return m, nil
 }
@@ -156,7 +156,7 @@ func (s *masterActionDao) FinOrNilByActionStepType(ctx context.Context, actionSt
 		return nil, nil
 	}
 
-	m := masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.AnyId, t.TriggerActionId, t.Expiration)
+	m := masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.ActionTriggerType, t.AnyId, t.TriggerActionId, t.Expiration)
 	s.Cache.Set(cashes.CreateCacheKey("master_action", "FindOrNilByActionStepType", fmt.Sprintf("%d_", actionStepType)), m, cache.DefaultExpiration)
 	return m, nil
 }
@@ -177,7 +177,7 @@ func (s *masterActionDao) FindList(ctx context.Context) (masterAction.MasterActi
 
 	ms := masterAction.NewMasterActions()
 	for _, t := range ts {
-		ms = append(ms, masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.AnyId, t.TriggerActionId, t.Expiration))
+		ms = append(ms, masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.ActionTriggerType, t.AnyId, t.TriggerActionId, t.Expiration))
 	}
 
 	s.Cache.Set(cashes.CreateCacheKey("master_action", "FindList", ""), ms, cache.DefaultExpiration)
@@ -200,7 +200,7 @@ func (s *masterActionDao) FindListByName(ctx context.Context, name string) (mast
 
 	ms := masterAction.NewMasterActions()
 	for _, t := range ts {
-		ms = append(ms, masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.AnyId, t.TriggerActionId, t.Expiration))
+		ms = append(ms, masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.ActionTriggerType, t.AnyId, t.TriggerActionId, t.Expiration))
 	}
 
 	s.Cache.Set(cashes.CreateCacheKey("master_action", "FindListByName", fmt.Sprintf("%s_", name)), ms, cache.DefaultExpiration)
@@ -223,7 +223,7 @@ func (s *masterActionDao) FindListByActionStepType(ctx context.Context, actionSt
 
 	ms := masterAction.NewMasterActions()
 	for _, t := range ts {
-		ms = append(ms, masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.AnyId, t.TriggerActionId, t.Expiration))
+		ms = append(ms, masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.ActionTriggerType, t.AnyId, t.TriggerActionId, t.Expiration))
 	}
 
 	s.Cache.Set(cashes.CreateCacheKey("master_action", "FindListByActionStepType", fmt.Sprintf("%d_", actionStepType)), ms, cache.DefaultExpiration)
@@ -239,19 +239,20 @@ func (s *masterActionDao) Create(ctx context.Context, tx *gorm.DB, m *masterActi
 	}
 
 	t := &MasterAction{
-		Id:              m.Id,
-		Name:            m.Name,
-		ActionStepType:  m.ActionStepType,
-		AnyId:           m.AnyId,
-		TriggerActionId: m.TriggerActionId,
-		Expiration:      m.Expiration,
+		Id:                m.Id,
+		Name:              m.Name,
+		ActionStepType:    m.ActionStepType,
+		ActionTriggerType: m.ActionTriggerType,
+		AnyId:             m.AnyId,
+		TriggerActionId:   m.TriggerActionId,
+		Expiration:        m.Expiration,
 	}
 	res := conn.Model(NewMasterAction()).WithContext(ctx).Create(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
 
-	return masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.AnyId, t.TriggerActionId, t.Expiration), nil
+	return masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.ActionTriggerType, t.AnyId, t.TriggerActionId, t.Expiration), nil
 }
 
 func (s *masterActionDao) CreateList(ctx context.Context, tx *gorm.DB, ms masterAction.MasterActions) (masterAction.MasterActions, error) {
@@ -265,12 +266,13 @@ func (s *masterActionDao) CreateList(ctx context.Context, tx *gorm.DB, ms master
 	ts := NewMasterActions()
 	for _, m := range ms {
 		t := &MasterAction{
-			Id:              m.Id,
-			Name:            m.Name,
-			ActionStepType:  m.ActionStepType,
-			AnyId:           m.AnyId,
-			TriggerActionId: m.TriggerActionId,
-			Expiration:      m.Expiration,
+			Id:                m.Id,
+			Name:              m.Name,
+			ActionStepType:    m.ActionStepType,
+			ActionTriggerType: m.ActionTriggerType,
+			AnyId:             m.AnyId,
+			TriggerActionId:   m.TriggerActionId,
+			Expiration:        m.Expiration,
 		}
 		ts = append(ts, t)
 	}
@@ -292,19 +294,20 @@ func (s *masterActionDao) Update(ctx context.Context, tx *gorm.DB, m *masterActi
 	}
 
 	t := &MasterAction{
-		Id:              m.Id,
-		Name:            m.Name,
-		ActionStepType:  m.ActionStepType,
-		AnyId:           m.AnyId,
-		TriggerActionId: m.TriggerActionId,
-		Expiration:      m.Expiration,
+		Id:                m.Id,
+		Name:              m.Name,
+		ActionStepType:    m.ActionStepType,
+		ActionTriggerType: m.ActionTriggerType,
+		AnyId:             m.AnyId,
+		TriggerActionId:   m.TriggerActionId,
+		Expiration:        m.Expiration,
 	}
 	res := conn.Model(NewMasterAction()).WithContext(ctx).Where("id = ?", m.Id).Updates(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
 
-	return masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.AnyId, t.TriggerActionId, t.Expiration), nil
+	return masterAction.SetMasterAction(t.Id, t.Name, t.ActionStepType, t.ActionTriggerType, t.AnyId, t.TriggerActionId, t.Expiration), nil
 }
 
 func (s *masterActionDao) Delete(ctx context.Context, tx *gorm.DB, m *masterAction.MasterAction) error {
