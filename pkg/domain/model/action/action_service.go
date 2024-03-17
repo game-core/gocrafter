@@ -5,14 +5,14 @@ import (
 	"context"
 	"time"
 
-	"github.com/game-core/gocrafter/pkg/domain/enum"
-
 	"gorm.io/gorm"
 
 	"github.com/game-core/gocrafter/internal/errors"
+	"github.com/game-core/gocrafter/pkg/domain/enum"
 	"github.com/game-core/gocrafter/pkg/domain/model/action/masterAction"
 	"github.com/game-core/gocrafter/pkg/domain/model/action/masterActionRun"
 	"github.com/game-core/gocrafter/pkg/domain/model/action/masterActionStep"
+	"github.com/game-core/gocrafter/pkg/domain/model/action/masterActionTrigger"
 	"github.com/game-core/gocrafter/pkg/domain/model/action/userAction"
 )
 
@@ -23,23 +23,26 @@ type ActionService interface {
 }
 
 type actionService struct {
-	masterActionRepository     masterAction.MasterActionRepository
-	masterActionRunRepository  masterActionRun.MasterActionRunRepository
-	masterActionStepRepository masterActionStep.MasterActionStepRepository
-	userActionRepository       userAction.UserActionRepository
+	masterActionRepository        masterAction.MasterActionRepository
+	masterActionRunRepository     masterActionRun.MasterActionRunRepository
+	masterActionStepRepository    masterActionStep.MasterActionStepRepository
+	masterActionTriggerRepository masterActionTrigger.MasterActionTriggerRepository
+	userActionRepository          userAction.UserActionRepository
 }
 
 func NewActionService(
 	masterActionRepository masterAction.MasterActionRepository,
 	masterActionRunRepository masterActionRun.MasterActionRunRepository,
 	masterActionStepRepository masterActionStep.MasterActionStepRepository,
+	masterActionTriggerRepository masterActionTrigger.MasterActionTriggerRepository,
 	userActionRepository userAction.UserActionRepository,
 ) ActionService {
 	return &actionService{
-		masterActionRepository:     masterActionRepository,
-		masterActionRunRepository:  masterActionRunRepository,
-		masterActionStepRepository: masterActionStepRepository,
-		userActionRepository:       userActionRepository,
+		masterActionRepository:        masterActionRepository,
+		masterActionRunRepository:     masterActionRunRepository,
+		masterActionStepRepository:    masterActionStepRepository,
+		masterActionTriggerRepository: masterActionTriggerRepository,
+		userActionRepository:          userActionRepository,
 	}
 }
 
@@ -50,15 +53,25 @@ func (s *actionService) GetMaster(ctx context.Context) (*ActionGetMasterResponse
 		return nil, errors.NewMethodError("s.masterActionRepository.FindList", err)
 	}
 
+	masterActionRunModels, err := s.masterActionRunRepository.FindList(ctx)
+	if err != nil {
+		return nil, errors.NewMethodError("s.masterActionRunRepository.FindList", err)
+	}
+
 	masterActionStepModels, err := s.masterActionStepRepository.FindList(ctx)
 	if err != nil {
 		return nil, errors.NewMethodError("s.masterActionStepRepository.FindList", err)
 	}
 
-	return SetActionGetMasterResponse(masterActionModels, masterActionStepModels), nil
+	masterActionTriggerModels, err := s.masterActionTriggerRepository.FindList(ctx)
+	if err != nil {
+		return nil, errors.NewMethodError("s.masterActionTriggerRepository.FindList", err)
+	}
+
+	return SetActionGetMasterResponse(masterActionModels, masterActionRunModels, masterActionStepModels, masterActionTriggerModels), nil
 }
 
-// Check アクションが実行可能か確認する
+// Check アクションが実行済か確認する
 func (s *actionService) Check(ctx context.Context, now time.Time, req *ActionCheckRequest) error {
 	masterActionModel, err := s.masterActionRepository.FindByActionStepType(ctx, req.ActionStepType)
 	if err != nil {

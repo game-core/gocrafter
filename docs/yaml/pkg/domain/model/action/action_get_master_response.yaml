@@ -10,10 +10,24 @@ structure:
     nullable: false
     number: 1
     comment: "マスターアクション一覧"
+  MasterActionRuns:
+    name: master_action_runs
+    type: structures
+    package: action/masterActionRun
+    nullable: false
+    number: 2
+    comment: "マスターアクションラン一覧"
   MasterActionSteps:
     name: master_action_steps
     type: structures
     package: action/masterActionStep
     nullable: false
-    number: 2
+    number: 3
     comment: "マスターアクションステップ一覧"
+  MasterActionTriggers:
+    name: master_action_triggers
+    type: structures
+    package: action/masterActionTrigger
+    nullable: false
+    number: 4
+    comment: "マスターアクショントリガー一覧"
