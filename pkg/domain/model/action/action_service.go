@@ -63,7 +63,7 @@ func (s *actionService) Check(ctx context.Context, now time.Time, req *ActionChe
 		return errors.NewMethodError("s.masterActionRepository.FindByActionStepType", err)
 	}
 
-	if err := s.checkTriggerAction(ctx, now, req.UserId, masterActionModel); err != nil {
+	if _, err := s.checkTriggerAction(ctx, now, req.UserId, masterActionModel); err != nil {
 		return errors.NewMethodError("s.checkTriggerAction", err)
 	}
 
@@ -77,11 +77,12 @@ func (s *actionService) Run(ctx context.Context, tx *gorm.DB, now time.Time, req
 		return errors.NewMethodError("s.masterActionRepository.FindByActionStepType", err)
 	}
 
-	if err := s.checkTriggerAction(ctx, now, req.UserId, masterActionModel); err != nil {
+	triggerUserActionModel, err := s.checkTriggerAction(ctx, now, req.UserId, masterActionModel)
+	if err != nil {
 		return errors.NewMethodError("s.checkTriggerAction", err)
 	}
 
-	if err := s.run(ctx, tx, now, req.UserId, masterActionModel); err != nil {
+	if err := s.run(ctx, tx, now, req.UserId, masterActionModel, triggerUserActionModel); err != nil {
 		return errors.NewMethodError("s.run", err)
 	}
 
@@ -89,31 +90,31 @@ func (s *actionService) Run(ctx context.Context, tx *gorm.DB, now time.Time, req
 }
 
 // checkTriggerAction トリガーになるアクションを確認する
-func (s *actionService) checkTriggerAction(ctx context.Context, now time.Time, userId string, masterActionModel *masterAction.MasterAction) error {
+func (s *actionService) checkTriggerAction(ctx context.Context, now time.Time, userId string, masterActionModel *masterAction.MasterAction) (*userAction.UserAction, error) {
 	if masterActionModel.TriggerActionId == nil {
-		return nil
+		return nil, nil
 	}
 
 	triggerMasterActionModel, err := s.masterActionRepository.Find(ctx, *masterActionModel.TriggerActionId)
 	if err != nil {
-		return errors.NewMethodError("s.masterActionRepository.Find", err)
+		return nil, errors.NewMethodError("s.masterActionRepository.Find", err)
 	}
 
 	triggerUserActionModel, err := s.userActionRepository.Find(ctx, userId, triggerMasterActionModel.Id)
 	if err != nil {
-		return errors.NewMethodError("s.userActionRepository.Find", err)
+		return nil, errors.NewMethodError("s.userActionRepository.Find", err)
 	}
 
 	if triggerMasterActionModel.Expiration != nil && triggerUserActionModel.CheckExpiration(triggerMasterActionModel.Expiration, now) {
-		return errors.NewError("expiration date has expired")
+		return nil, errors.NewError("expiration date has expired")
 	}
 
-	return nil
+	return triggerUserActionModel, nil
 }
 
 // run 実行する
-func (s *actionService) run(ctx context.Context, tx *gorm.DB, now time.Time, userId string, masterActionModel *masterAction.MasterAction) error {
-	if err := s.update(ctx, tx, userAction.SetUserAction(userId, masterActionModel.Name, masterActionModel.Id, now)); err != nil {
+func (s *actionService) run(ctx context.Context, tx *gorm.DB, now time.Time, userId string, masterActionModel *masterAction.MasterAction, triggerUserActionModel *userAction.UserAction) error {
+	if err := s.update(ctx, tx, userAction.SetUserAction(userId, masterActionModel.Name, masterActionModel.Id, now), triggerUserActionModel); err != nil {
 		return errors.NewMethodError("s.update", err)
 	}
 
@@ -124,7 +125,7 @@ func (s *actionService) run(ctx context.Context, tx *gorm.DB, now time.Time, use
 	}
 
 	for _, model := range masterActionRunModels {
-		if err := s.update(ctx, tx, userAction.SetUserAction(userId, model.Name, model.ActionId, now)); err != nil {
+		if err := s.update(ctx, tx, userAction.SetUserAction(userId, model.Name, model.ActionId, now), nil); err != nil {
 			return errors.NewMethodError("s.userActionRepository.Create", err)
 		}
 	}
@@ -133,7 +134,13 @@ func (s *actionService) run(ctx context.Context, tx *gorm.DB, now time.Time, use
 }
 
 // update 更新する
-func (s *actionService) update(ctx context.Context, tx *gorm.DB, model *userAction.UserAction) error {
+func (s *actionService) update(ctx context.Context, tx *gorm.DB, model, trigger *userAction.UserAction) error {
+	if trigger != nil {
+		if err := s.userActionRepository.Delete(ctx, tx, trigger); err != nil {
+			return errors.NewMethodError("s.userActionRepository.Delete", err)
+		}
+	}
+
 	userActionModel, err := s.userActionRepository.FindOrNil(ctx, model.UserId, model.MasterActionId)
 	if err != nil {
 		return errors.NewMethodError("s.userActionRepository.FindOrNil", err)
