@@ -35,6 +35,7 @@ import (
 	masterActionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterAction"
 	masterActionRunDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionRun"
 	masterActionStepDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionStep"
+	masterActionTriggerDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionTrigger"
 	masterIdleBonusDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonus"
 	masterIdleBonusEventDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusEvent"
 	masterIdleBonusItemDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusItem"
@@ -166,6 +167,7 @@ func InitializeActionService() actionService.ActionService {
 		masterActionDao.NewMasterActionDao,
 		masterActionRunDao.NewMasterActionRunDao,
 		masterActionStepDao.NewMasterActionStepDao,
+		masterActionTriggerDao.NewMasterActionTriggerDao,
 		userActionDao.NewUserActionDao,
 	)
 	return nil

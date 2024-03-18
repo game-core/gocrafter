@@ -35,6 +35,7 @@ import (
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterAction"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionRun"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionStep"
+	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionTrigger"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonus"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusEvent"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusItem"
@@ -142,8 +143,9 @@ func InitializeActionService() action.ActionService {
 	masterActionRepository := masterAction.NewMasterActionDao(sqlHandler)
 	masterActionRunRepository := masterActionRun.NewMasterActionRunDao(sqlHandler)
 	masterActionStepRepository := masterActionStep.NewMasterActionStepDao(sqlHandler)
+	masterActionTriggerRepository := masterActionTrigger.NewMasterActionTriggerDao(sqlHandler)
 	userActionRepository := userAction.NewUserActionDao(sqlHandler)
-	actionService := action.NewActionService(masterActionRepository, masterActionRunRepository, masterActionStepRepository, userActionRepository)
+	actionService := action.NewActionService(masterActionRepository, masterActionRunRepository, masterActionStepRepository, masterActionTriggerRepository, userActionRepository)
 	return actionService
 }
 

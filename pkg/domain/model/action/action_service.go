@@ -115,7 +115,7 @@ func (s *actionService) getAction(ctx context.Context, now time.Time, userId str
 		return nil, errors.NewMethodError("s.userActionRepository.Find", err)
 	}
 
-	if masterActionModel.Expiration != nil && !userActionModel.CheckExpiration(masterActionModel.Expiration, now) {
+	if !userActionModel.CheckExpiration(masterActionModel.Expiration, now) {
 		return nil, errors.NewError("expiration date has expired")
 	}
 
