@@ -179,7 +179,7 @@ func (s *actionService) deleteTriggerAction(ctx context.Context, tx *gorm.DB, tr
 				return errors.NewMethodError("s.userActionRepository.Delete", err)
 			}
 		default:
-			return nil
+			return errors.NewError("ActionTriggerType does not exist")
 		}
 	}
 
@@ -192,10 +192,10 @@ func (s *actionService) run(ctx context.Context, tx *gorm.DB, now time.Time, use
 		return errors.NewMethodError("s.update", err)
 	}
 
-	// 実行されるアクションがある場合は更新する
-	masterActionRunModels, err := s.masterActionRunRepository.FindList(ctx)
+	// 実行されるアクションがある場合
+	masterActionRunModels, err := s.masterActionRunRepository.FindListByActionId(ctx, masterActionModel.Id)
 	if err != nil {
-		return errors.NewMethodError("s.masterActionRunRepository.FindList", err)
+		return errors.NewMethodError("s.masterActionRunRepository.FindListByActionId", err)
 	}
 
 	for _, model := range masterActionRunModels {
