@@ -8,7 +8,7 @@ import (
 	"github.com/game-core/gocrafter/internal/pointers"
 )
 
-func TestNewUserAction_CheckExpiration(t *testing.T) {
+func TestUserAction_CheckExpiration(t *testing.T) {
 	type fields struct {
 		UserAction *UserAction
 	}
