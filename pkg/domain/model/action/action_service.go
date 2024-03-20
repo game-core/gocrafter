@@ -75,7 +75,7 @@ func (s *actionService) GetMaster(ctx context.Context) (*ActionGetMasterResponse
 func (s *actionService) Check(ctx context.Context, now time.Time, req *ActionCheckRequest) error {
 	masterActionModel, err := s.masterActionRepository.FindOrNilByActionStepTypeAndAnyId(ctx, req.ActionStepType, req.AnyId)
 	if err != nil {
-		return errors.NewMethodError("s.masterActionRepository.FindByActionStepType", err)
+		return errors.NewMethodError("s.masterActionRepository.FindOrNilByActionStepTypeAndAnyId", err)
 	}
 
 	if masterActionModel != nil {
@@ -91,9 +91,9 @@ func (s *actionService) Check(ctx context.Context, now time.Time, req *ActionChe
 
 // Run アクションを実行する
 func (s *actionService) Run(ctx context.Context, tx *gorm.DB, now time.Time, req *ActionRunRequest) error {
-	masterActionModel, err := s.masterActionRepository.FindByActionStepType(ctx, req.ActionStepType)
+	masterActionModel, err := s.masterActionRepository.FindOrNilByActionStepTypeAndAnyId(ctx, req.ActionStepType, req.AnyId)
 	if err != nil {
-		return errors.NewMethodError("s.masterActionRepository.FindByActionStepType", err)
+		return errors.NewMethodError("s.masterActionRepository.FindOrNilByActionStepTypeAndAnyId", err)
 	}
 
 	if masterActionModel != nil {
