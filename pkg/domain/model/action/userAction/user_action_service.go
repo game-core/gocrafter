@@ -5,7 +5,7 @@ import (
 )
 
 // CheckExpiration 有効期限を確認する
-func (s *UserAction) CheckExpiration(expiration *int32, now time.Time) bool {
+func (s *UserAction) CheckExpiration(now time.Time, expiration *int32) bool {
 	if expiration == nil {
 		return true
 	}
