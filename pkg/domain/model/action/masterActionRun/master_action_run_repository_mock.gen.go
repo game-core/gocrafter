@@ -79,36 +79,6 @@ func (mr *MockMasterActionRunRepositoryMockRecorder) Delete(ctx, tx, m interface
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockMasterActionRunRepository)(nil).Delete), ctx, tx, m)
 }
 
-// FindOrNilByActionId mocks base method.
-func (m *MockMasterActionRunRepository) FindOrNilByActionId(ctx context.Context, actionId int64) (*MasterActionRun, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindOrNilByActionId", ctx, actionId)
-	ret0, _ := ret[0].(*MasterActionRun)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindOrNilByActionId indicates an expected call of FindOrNilByActionId.
-func (mr *MockMasterActionRunRepositoryMockRecorder) FindOrNilByActionId(ctx, actionId interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByActionId", reflect.TypeOf((*MockMasterActionRunRepository)(nil).FindOrNilByActionId), ctx, actionId)
-}
-
-// FindOrNilByName mocks base method.
-func (m *MockMasterActionRunRepository) FindOrNilByName(ctx context.Context, name string) (*MasterActionRun, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindOrNilByName", ctx, name)
-	ret0, _ := ret[0].(*MasterActionRun)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindOrNilByName indicates an expected call of FindOrNilByName.
-func (mr *MockMasterActionRunRepositoryMockRecorder) FindOrNilByName(ctx, name interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByName", reflect.TypeOf((*MockMasterActionRunRepository)(nil).FindOrNilByName), ctx, name)
-}
-
 // Find mocks base method.
 func (m *MockMasterActionRunRepository) Find(ctx context.Context, id int64) (*MasterActionRun, error) {
 	m.ctrl.T.Helper()
@@ -212,6 +182,36 @@ func (m *MockMasterActionRunRepository) FindOrNil(ctx context.Context, id int64)
 func (mr *MockMasterActionRunRepositoryMockRecorder) FindOrNil(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNil", reflect.TypeOf((*MockMasterActionRunRepository)(nil).FindOrNil), ctx, id)
+}
+
+// FindOrNilByActionId mocks base method.
+func (m *MockMasterActionRunRepository) FindOrNilByActionId(ctx context.Context, actionId int64) (*MasterActionRun, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindOrNilByActionId", ctx, actionId)
+	ret0, _ := ret[0].(*MasterActionRun)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindOrNilByActionId indicates an expected call of FindOrNilByActionId.
+func (mr *MockMasterActionRunRepositoryMockRecorder) FindOrNilByActionId(ctx, actionId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByActionId", reflect.TypeOf((*MockMasterActionRunRepository)(nil).FindOrNilByActionId), ctx, actionId)
+}
+
+// FindOrNilByName mocks base method.
+func (m *MockMasterActionRunRepository) FindOrNilByName(ctx context.Context, name string) (*MasterActionRun, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindOrNilByName", ctx, name)
+	ret0, _ := ret[0].(*MasterActionRun)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindOrNilByName indicates an expected call of FindOrNilByName.
+func (mr *MockMasterActionRunRepositoryMockRecorder) FindOrNilByName(ctx, name interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByName", reflect.TypeOf((*MockMasterActionRunRepository)(nil).FindOrNilByName), ctx, name)
 }
 
 // Update mocks base method.

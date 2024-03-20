@@ -79,21 +79,6 @@ func (mr *MockMasterItemRepositoryMockRecorder) Delete(ctx, tx, m interface{}) *
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockMasterItemRepository)(nil).Delete), ctx, tx, m)
 }
 
-// FindOrNilByName mocks base method.
-func (m *MockMasterItemRepository) FindOrNilByName(ctx context.Context, name string) (*MasterItem, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindOrNilByName", ctx, name)
-	ret0, _ := ret[0].(*MasterItem)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindOrNilByName indicates an expected call of FindOrNilByName.
-func (mr *MockMasterItemRepositoryMockRecorder) FindOrNilByName(ctx, name interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByName", reflect.TypeOf((*MockMasterItemRepository)(nil).FindOrNilByName), ctx, name)
-}
-
 // Find mocks base method.
 func (m *MockMasterItemRepository) Find(ctx context.Context, id int64) (*MasterItem, error) {
 	m.ctrl.T.Helper()
@@ -167,6 +152,21 @@ func (m *MockMasterItemRepository) FindOrNil(ctx context.Context, id int64) (*Ma
 func (mr *MockMasterItemRepositoryMockRecorder) FindOrNil(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNil", reflect.TypeOf((*MockMasterItemRepository)(nil).FindOrNil), ctx, id)
+}
+
+// FindOrNilByName mocks base method.
+func (m *MockMasterItemRepository) FindOrNilByName(ctx context.Context, name string) (*MasterItem, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindOrNilByName", ctx, name)
+	ret0, _ := ret[0].(*MasterItem)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindOrNilByName indicates an expected call of FindOrNilByName.
+func (mr *MockMasterItemRepositoryMockRecorder) FindOrNilByName(ctx, name interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByName", reflect.TypeOf((*MockMasterItemRepository)(nil).FindOrNilByName), ctx, name)
 }
 
 // Update mocks base method.

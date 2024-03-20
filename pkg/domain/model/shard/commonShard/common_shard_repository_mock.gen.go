@@ -79,21 +79,6 @@ func (mr *MockCommonShardRepositoryMockRecorder) Delete(ctx, tx, m interface{}) 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockCommonShardRepository)(nil).Delete), ctx, tx, m)
 }
 
-// FindOrNilByShardKey mocks base method.
-func (m *MockCommonShardRepository) FindOrNilByShardKey(ctx context.Context, shardKey string) (*CommonShard, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindOrNilByShardKey", ctx, shardKey)
-	ret0, _ := ret[0].(*CommonShard)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindOrNilByShardKey indicates an expected call of FindOrNilByShardKey.
-func (mr *MockCommonShardRepositoryMockRecorder) FindOrNilByShardKey(ctx, shardKey interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByShardKey", reflect.TypeOf((*MockCommonShardRepository)(nil).FindOrNilByShardKey), ctx, shardKey)
-}
-
 // Find mocks base method.
 func (m *MockCommonShardRepository) Find(ctx context.Context, id int64) (*CommonShard, error) {
 	m.ctrl.T.Helper()
@@ -167,6 +152,21 @@ func (m *MockCommonShardRepository) FindOrNil(ctx context.Context, id int64) (*C
 func (mr *MockCommonShardRepositoryMockRecorder) FindOrNil(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNil", reflect.TypeOf((*MockCommonShardRepository)(nil).FindOrNil), ctx, id)
+}
+
+// FindOrNilByShardKey mocks base method.
+func (m *MockCommonShardRepository) FindOrNilByShardKey(ctx context.Context, shardKey string) (*CommonShard, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindOrNilByShardKey", ctx, shardKey)
+	ret0, _ := ret[0].(*CommonShard)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindOrNilByShardKey indicates an expected call of FindOrNilByShardKey.
+func (mr *MockCommonShardRepositoryMockRecorder) FindOrNilByShardKey(ctx, shardKey interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByShardKey", reflect.TypeOf((*MockCommonShardRepository)(nil).FindOrNilByShardKey), ctx, shardKey)
 }
 
 // Update mocks base method.

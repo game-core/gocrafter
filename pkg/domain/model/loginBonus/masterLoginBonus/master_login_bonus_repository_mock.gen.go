@@ -79,21 +79,6 @@ func (mr *MockMasterLoginBonusRepositoryMockRecorder) Delete(ctx, tx, m interfac
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockMasterLoginBonusRepository)(nil).Delete), ctx, tx, m)
 }
 
-// FindOrNilByMasterLoginBonusEventId mocks base method.
-func (m *MockMasterLoginBonusRepository) FindOrNilByMasterLoginBonusEventId(ctx context.Context, masterLoginBonusEventId int64) (*MasterLoginBonus, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindOrNilByMasterLoginBonusEventId", ctx, masterLoginBonusEventId)
-	ret0, _ := ret[0].(*MasterLoginBonus)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindOrNilByMasterLoginBonusEventId indicates an expected call of FindOrNilByMasterLoginBonusEventId.
-func (mr *MockMasterLoginBonusRepositoryMockRecorder) FindOrNilByMasterLoginBonusEventId(ctx, masterLoginBonusEventId interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByMasterLoginBonusEventId", reflect.TypeOf((*MockMasterLoginBonusRepository)(nil).FindOrNilByMasterLoginBonusEventId), ctx, masterLoginBonusEventId)
-}
-
 // Find mocks base method.
 func (m *MockMasterLoginBonusRepository) Find(ctx context.Context, id int64) (*MasterLoginBonus, error) {
 	m.ctrl.T.Helper()
@@ -167,6 +152,21 @@ func (m *MockMasterLoginBonusRepository) FindOrNil(ctx context.Context, id int64
 func (mr *MockMasterLoginBonusRepositoryMockRecorder) FindOrNil(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNil", reflect.TypeOf((*MockMasterLoginBonusRepository)(nil).FindOrNil), ctx, id)
+}
+
+// FindOrNilByMasterLoginBonusEventId mocks base method.
+func (m *MockMasterLoginBonusRepository) FindOrNilByMasterLoginBonusEventId(ctx context.Context, masterLoginBonusEventId int64) (*MasterLoginBonus, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindOrNilByMasterLoginBonusEventId", ctx, masterLoginBonusEventId)
+	ret0, _ := ret[0].(*MasterLoginBonus)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindOrNilByMasterLoginBonusEventId indicates an expected call of FindOrNilByMasterLoginBonusEventId.
+func (mr *MockMasterLoginBonusRepositoryMockRecorder) FindOrNilByMasterLoginBonusEventId(ctx, masterLoginBonusEventId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByMasterLoginBonusEventId", reflect.TypeOf((*MockMasterLoginBonusRepository)(nil).FindOrNilByMasterLoginBonusEventId), ctx, masterLoginBonusEventId)
 }
 
 // Update mocks base method.

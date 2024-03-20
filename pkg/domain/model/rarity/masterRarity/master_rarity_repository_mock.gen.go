@@ -80,21 +80,6 @@ func (mr *MockMasterRarityRepositoryMockRecorder) Delete(ctx, tx, m interface{})
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockMasterRarityRepository)(nil).Delete), ctx, tx, m)
 }
 
-// FindOrNilByRarityType mocks base method.
-func (m *MockMasterRarityRepository) FindOrNilByRarityType(ctx context.Context, rarityType enum.RarityType) (*MasterRarity, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindOrNilByRarityType", ctx, rarityType)
-	ret0, _ := ret[0].(*MasterRarity)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindOrNilByRarityType indicates an expected call of FindOrNilByRarityType.
-func (mr *MockMasterRarityRepositoryMockRecorder) FindOrNilByRarityType(ctx, rarityType interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByRarityType", reflect.TypeOf((*MockMasterRarityRepository)(nil).FindOrNilByRarityType), ctx, rarityType)
-}
-
 // Find mocks base method.
 func (m *MockMasterRarityRepository) Find(ctx context.Context, id int64) (*MasterRarity, error) {
 	m.ctrl.T.Helper()
@@ -168,6 +153,21 @@ func (m *MockMasterRarityRepository) FindOrNil(ctx context.Context, id int64) (*
 func (mr *MockMasterRarityRepositoryMockRecorder) FindOrNil(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNil", reflect.TypeOf((*MockMasterRarityRepository)(nil).FindOrNil), ctx, id)
+}
+
+// FindOrNilByRarityType mocks base method.
+func (m *MockMasterRarityRepository) FindOrNilByRarityType(ctx context.Context, rarityType enum.RarityType) (*MasterRarity, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindOrNilByRarityType", ctx, rarityType)
+	ret0, _ := ret[0].(*MasterRarity)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindOrNilByRarityType indicates an expected call of FindOrNilByRarityType.
+func (mr *MockMasterRarityRepositoryMockRecorder) FindOrNilByRarityType(ctx, rarityType interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByRarityType", reflect.TypeOf((*MockMasterRarityRepository)(nil).FindOrNilByRarityType), ctx, rarityType)
 }
 
 // Update mocks base method.

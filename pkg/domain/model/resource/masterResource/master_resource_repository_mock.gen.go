@@ -80,21 +80,6 @@ func (mr *MockMasterResourceRepositoryMockRecorder) Delete(ctx, tx, m interface{
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockMasterResourceRepository)(nil).Delete), ctx, tx, m)
 }
 
-// FindOrNilByResourceType mocks base method.
-func (m *MockMasterResourceRepository) FindOrNilByResourceType(ctx context.Context, resourceType enum.ResourceType) (*MasterResource, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindOrNilByResourceType", ctx, resourceType)
-	ret0, _ := ret[0].(*MasterResource)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindOrNilByResourceType indicates an expected call of FindOrNilByResourceType.
-func (mr *MockMasterResourceRepositoryMockRecorder) FindOrNilByResourceType(ctx, resourceType interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByResourceType", reflect.TypeOf((*MockMasterResourceRepository)(nil).FindOrNilByResourceType), ctx, resourceType)
-}
-
 // Find mocks base method.
 func (m *MockMasterResourceRepository) Find(ctx context.Context, id int64) (*MasterResource, error) {
 	m.ctrl.T.Helper()
@@ -168,6 +153,21 @@ func (m *MockMasterResourceRepository) FindOrNil(ctx context.Context, id int64) 
 func (mr *MockMasterResourceRepositoryMockRecorder) FindOrNil(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNil", reflect.TypeOf((*MockMasterResourceRepository)(nil).FindOrNil), ctx, id)
+}
+
+// FindOrNilByResourceType mocks base method.
+func (m *MockMasterResourceRepository) FindOrNilByResourceType(ctx context.Context, resourceType enum.ResourceType) (*MasterResource, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindOrNilByResourceType", ctx, resourceType)
+	ret0, _ := ret[0].(*MasterResource)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindOrNilByResourceType indicates an expected call of FindOrNilByResourceType.
+func (mr *MockMasterResourceRepositoryMockRecorder) FindOrNilByResourceType(ctx, resourceType interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByResourceType", reflect.TypeOf((*MockMasterResourceRepository)(nil).FindOrNilByResourceType), ctx, resourceType)
 }
 
 // Update mocks base method.

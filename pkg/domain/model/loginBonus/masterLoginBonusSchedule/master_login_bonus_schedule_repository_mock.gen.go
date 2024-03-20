@@ -79,51 +79,6 @@ func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) Delete(ctx, tx, m 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).Delete), ctx, tx, m)
 }
 
-// FindOrNilByMasterLoginBonusId mocks base method.
-func (m *MockMasterLoginBonusScheduleRepository) FindOrNilByMasterLoginBonusId(ctx context.Context, masterLoginBonusId int64) (*MasterLoginBonusSchedule, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindOrNilByMasterLoginBonusId", ctx, masterLoginBonusId)
-	ret0, _ := ret[0].(*MasterLoginBonusSchedule)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindOrNilByMasterLoginBonusId indicates an expected call of FindOrNilByMasterLoginBonusId.
-func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) FindOrNilByMasterLoginBonusId(ctx, masterLoginBonusId interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByMasterLoginBonusId", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).FindOrNilByMasterLoginBonusId), ctx, masterLoginBonusId)
-}
-
-// FindOrNilByMasterLoginBonusIdAndStep mocks base method.
-func (m *MockMasterLoginBonusScheduleRepository) FindOrNilByMasterLoginBonusIdAndStep(ctx context.Context, masterLoginBonusId int64, step int32) (*MasterLoginBonusSchedule, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindOrNilByMasterLoginBonusIdAndStep", ctx, masterLoginBonusId, step)
-	ret0, _ := ret[0].(*MasterLoginBonusSchedule)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindOrNilByMasterLoginBonusIdAndStep indicates an expected call of FindOrNilByMasterLoginBonusIdAndStep.
-func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) FindOrNilByMasterLoginBonusIdAndStep(ctx, masterLoginBonusId, step interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByMasterLoginBonusIdAndStep", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).FindOrNilByMasterLoginBonusIdAndStep), ctx, masterLoginBonusId, step)
-}
-
-// FindOrNilByStep mocks base method.
-func (m *MockMasterLoginBonusScheduleRepository) FindOrNilByStep(ctx context.Context, step int32) (*MasterLoginBonusSchedule, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindOrNilByStep", ctx, step)
-	ret0, _ := ret[0].(*MasterLoginBonusSchedule)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// FindOrNilByStep indicates an expected call of FindOrNilByStep.
-func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) FindOrNilByStep(ctx, step interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByStep", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).FindOrNilByStep), ctx, step)
-}
-
 // Find mocks base method.
 func (m *MockMasterLoginBonusScheduleRepository) Find(ctx context.Context, id int64) (*MasterLoginBonusSchedule, error) {
 	m.ctrl.T.Helper()
@@ -257,6 +212,51 @@ func (m *MockMasterLoginBonusScheduleRepository) FindOrNil(ctx context.Context, 
 func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) FindOrNil(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNil", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).FindOrNil), ctx, id)
+}
+
+// FindOrNilByMasterLoginBonusId mocks base method.
+func (m *MockMasterLoginBonusScheduleRepository) FindOrNilByMasterLoginBonusId(ctx context.Context, masterLoginBonusId int64) (*MasterLoginBonusSchedule, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindOrNilByMasterLoginBonusId", ctx, masterLoginBonusId)
+	ret0, _ := ret[0].(*MasterLoginBonusSchedule)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindOrNilByMasterLoginBonusId indicates an expected call of FindOrNilByMasterLoginBonusId.
+func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) FindOrNilByMasterLoginBonusId(ctx, masterLoginBonusId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByMasterLoginBonusId", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).FindOrNilByMasterLoginBonusId), ctx, masterLoginBonusId)
+}
+
+// FindOrNilByMasterLoginBonusIdAndStep mocks base method.
+func (m *MockMasterLoginBonusScheduleRepository) FindOrNilByMasterLoginBonusIdAndStep(ctx context.Context, masterLoginBonusId int64, step int32) (*MasterLoginBonusSchedule, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindOrNilByMasterLoginBonusIdAndStep", ctx, masterLoginBonusId, step)
+	ret0, _ := ret[0].(*MasterLoginBonusSchedule)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindOrNilByMasterLoginBonusIdAndStep indicates an expected call of FindOrNilByMasterLoginBonusIdAndStep.
+func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) FindOrNilByMasterLoginBonusIdAndStep(ctx, masterLoginBonusId, step interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByMasterLoginBonusIdAndStep", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).FindOrNilByMasterLoginBonusIdAndStep), ctx, masterLoginBonusId, step)
+}
+
+// FindOrNilByStep mocks base method.
+func (m *MockMasterLoginBonusScheduleRepository) FindOrNilByStep(ctx context.Context, step int32) (*MasterLoginBonusSchedule, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindOrNilByStep", ctx, step)
+	ret0, _ := ret[0].(*MasterLoginBonusSchedule)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindOrNilByStep indicates an expected call of FindOrNilByStep.
+func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) FindOrNilByStep(ctx, step interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByStep", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).FindOrNilByStep), ctx, step)
 }
 
 // Update mocks base method.
