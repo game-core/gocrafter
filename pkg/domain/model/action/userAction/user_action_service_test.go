@@ -76,7 +76,7 @@ func TestUserAction_CheckExpiration(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := tt.fields.UserAction.CheckExpiration(tt.args.now, tt.args.expiration)
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetFriends() = %v, want %v", got, tt.want)
+				t.Errorf("CheckExpiration() = %v, want %v", got, tt.want)
 			}
 		})
 	}
