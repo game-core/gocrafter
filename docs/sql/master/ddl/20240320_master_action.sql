@@ -10,5 +10,7 @@ CREATE TABLE master_action
 	PRIMARY KEY(id),
 	UNIQUE KEY(id),
 	INDEX(name),
-	INDEX(action_step_type)
+	INDEX(action_step_type),
+	INDEX(any_id),
+	INDEX(action_step_type,any_id)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

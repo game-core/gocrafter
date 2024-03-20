@@ -73,7 +73,7 @@ func (s *actionService) GetMaster(ctx context.Context) (*ActionGetMasterResponse
 
 // Check アクションが実行済か確認する
 func (s *actionService) Check(ctx context.Context, now time.Time, req *ActionCheckRequest) error {
-	masterActionModel, err := s.masterActionRepository.FindByActionStepType(ctx, req.ActionStepType)
+	masterActionModel, err := s.masterActionRepository.FindByActionStepTypeAndAnyId(ctx, req.ActionStepType, req.AnyId)
 	if err != nil {
 		return errors.NewMethodError("s.masterActionRepository.FindByActionStepType", err)
 	}

@@ -10,6 +10,7 @@ type ActionRunRequests []*ActionRunRequest
 type ActionRunRequest struct {
 	UserId         string
 	ActionStepType enum.ActionStepType
+	AnyId          *int64
 }
 
 func NewActionRunRequest() *ActionRunRequest {
@@ -20,9 +21,10 @@ func NewActionRunRequests() ActionRunRequests {
 	return ActionRunRequests{}
 }
 
-func SetActionRunRequest(userId string, actionStepType enum.ActionStepType) *ActionRunRequest {
+func SetActionRunRequest(userId string, actionStepType enum.ActionStepType, anyId *int64) *ActionRunRequest {
 	return &ActionRunRequest{
 		UserId:         userId,
 		ActionStepType: actionStepType,
+		AnyId:          anyId,
 	}
 }

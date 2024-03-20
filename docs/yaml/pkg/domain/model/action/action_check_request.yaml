@@ -15,3 +15,9 @@ structure:
     nullable: false
     number: 2
     comment: "アクションステップタイプ"
+  AnyId:
+    name: any_id
+    type: int64
+    nullable: true
+    number: 3
+    comment: "対象のID"
