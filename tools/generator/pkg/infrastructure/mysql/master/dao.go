@@ -400,7 +400,7 @@ func (s *Dao) createFindOrNilByIndex(yamlStruct *YamlStruct, indexFields []strin
 	sprints, sprintParams := s.createSprints(keys)
 
 	return fmt.Sprintf(
-		`func (s *%sDao) FinOrNilBy%s(ctx context.Context, %s) (*%s.%s, error) {
+		`func (s *%sDao) FindOrNilBy%s(ctx context.Context, %s) (*%s.%s, error) {
 			cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("%s", "FindOrNilBy%s", %s))
 			if found {
 				if cachedEntity, ok := cachedResult.(*%s.%s); ok {

@@ -340,7 +340,7 @@ func (s *Dao) createFindOrNilByIndex(yamlStruct *YamlStruct, indexFields []strin
 	}
 
 	return fmt.Sprintf(
-		`func (s *%sDao) FinOrNilBy%s(ctx context.Context, %s) (*%s.%s, error) {
+		`func (s *%sDao) FindOrNilBy%s(ctx context.Context, %s) (*%s.%s, error) {
 			t := New%s()
 			res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).%s.Find(t)
 			if err := res.Error; err != nil {

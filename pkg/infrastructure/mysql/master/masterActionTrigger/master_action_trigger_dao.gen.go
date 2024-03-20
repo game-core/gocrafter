@@ -95,7 +95,7 @@ func (s *masterActionTriggerDao) FindByActionTriggerType(ctx context.Context, ac
 	return m, nil
 }
 
-func (s *masterActionTriggerDao) FinOrNilByActionTriggerType(ctx context.Context, actionTriggerType enum.ActionTriggerType) (*masterActionTrigger.MasterActionTrigger, error) {
+func (s *masterActionTriggerDao) FindOrNilByActionTriggerType(ctx context.Context, actionTriggerType enum.ActionTriggerType) (*masterActionTrigger.MasterActionTrigger, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_action_trigger", "FindOrNilByActionTriggerType", fmt.Sprintf("%d_", actionTriggerType)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterActionTrigger.MasterActionTrigger); ok {

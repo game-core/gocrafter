@@ -94,7 +94,7 @@ func (s *masterIdleBonusDao) FindByMasterIdleBonusEventId(ctx context.Context, m
 	return m, nil
 }
 
-func (s *masterIdleBonusDao) FinOrNilByMasterIdleBonusEventId(ctx context.Context, masterIdleBonusEventId int64) (*masterIdleBonus.MasterIdleBonus, error) {
+func (s *masterIdleBonusDao) FindOrNilByMasterIdleBonusEventId(ctx context.Context, masterIdleBonusEventId int64) (*masterIdleBonus.MasterIdleBonus, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_idle_bonus", "FindOrNilByMasterIdleBonusEventId", fmt.Sprintf("%d_", masterIdleBonusEventId)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterIdleBonus.MasterIdleBonus); ok {

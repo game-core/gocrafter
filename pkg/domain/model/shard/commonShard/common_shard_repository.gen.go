@@ -13,7 +13,7 @@ type CommonShardRepository interface {
 	Find(ctx context.Context, id int64) (*CommonShard, error)
 	FindOrNil(ctx context.Context, id int64) (*CommonShard, error)
 	FindByShardKey(ctx context.Context, shardKey string) (*CommonShard, error)
-	FinOrNilByShardKey(ctx context.Context, shardKey string) (*CommonShard, error)
+	FindOrNilByShardKey(ctx context.Context, shardKey string) (*CommonShard, error)
 	FindList(ctx context.Context) (CommonShards, error)
 	FindListByShardKey(ctx context.Context, shardKey string) (CommonShards, error)
 	Create(ctx context.Context, tx *gorm.DB, m *CommonShard) (*CommonShard, error)

@@ -15,7 +15,7 @@ type MasterResourceRepository interface {
 	Find(ctx context.Context, id int64) (*MasterResource, error)
 	FindOrNil(ctx context.Context, id int64) (*MasterResource, error)
 	FindByResourceType(ctx context.Context, resourceType enum.ResourceType) (*MasterResource, error)
-	FinOrNilByResourceType(ctx context.Context, resourceType enum.ResourceType) (*MasterResource, error)
+	FindOrNilByResourceType(ctx context.Context, resourceType enum.ResourceType) (*MasterResource, error)
 	FindList(ctx context.Context) (MasterResources, error)
 	FindListByResourceType(ctx context.Context, resourceType enum.ResourceType) (MasterResources, error)
 	Create(ctx context.Context, tx *gorm.DB, m *MasterResource) (*MasterResource, error)

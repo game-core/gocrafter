@@ -79,19 +79,19 @@ func (mr *MockMasterIdleBonusRepositoryMockRecorder) Delete(ctx, tx, m interface
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockMasterIdleBonusRepository)(nil).Delete), ctx, tx, m)
 }
 
-// FinOrNilByMasterIdleBonusEventId mocks base method.
-func (m *MockMasterIdleBonusRepository) FinOrNilByMasterIdleBonusEventId(ctx context.Context, masterIdleBonusEventId int64) (*MasterIdleBonus, error) {
+// FindOrNilByMasterIdleBonusEventId mocks base method.
+func (m *MockMasterIdleBonusRepository) FindOrNilByMasterIdleBonusEventId(ctx context.Context, masterIdleBonusEventId int64) (*MasterIdleBonus, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FinOrNilByMasterIdleBonusEventId", ctx, masterIdleBonusEventId)
+	ret := m.ctrl.Call(m, "FindOrNilByMasterIdleBonusEventId", ctx, masterIdleBonusEventId)
 	ret0, _ := ret[0].(*MasterIdleBonus)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FinOrNilByMasterIdleBonusEventId indicates an expected call of FinOrNilByMasterIdleBonusEventId.
-func (mr *MockMasterIdleBonusRepositoryMockRecorder) FinOrNilByMasterIdleBonusEventId(ctx, masterIdleBonusEventId interface{}) *gomock.Call {
+// FindOrNilByMasterIdleBonusEventId indicates an expected call of FindOrNilByMasterIdleBonusEventId.
+func (mr *MockMasterIdleBonusRepositoryMockRecorder) FindOrNilByMasterIdleBonusEventId(ctx, masterIdleBonusEventId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FinOrNilByMasterIdleBonusEventId", reflect.TypeOf((*MockMasterIdleBonusRepository)(nil).FinOrNilByMasterIdleBonusEventId), ctx, masterIdleBonusEventId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByMasterIdleBonusEventId", reflect.TypeOf((*MockMasterIdleBonusRepository)(nil).FindOrNilByMasterIdleBonusEventId), ctx, masterIdleBonusEventId)
 }
 
 // Find mocks base method.

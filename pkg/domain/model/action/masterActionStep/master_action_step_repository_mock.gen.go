@@ -80,19 +80,19 @@ func (mr *MockMasterActionStepRepositoryMockRecorder) Delete(ctx, tx, m interfac
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockMasterActionStepRepository)(nil).Delete), ctx, tx, m)
 }
 
-// FinOrNilByActionStepType mocks base method.
-func (m *MockMasterActionStepRepository) FinOrNilByActionStepType(ctx context.Context, actionStepType enum.ActionStepType) (*MasterActionStep, error) {
+// FindOrNilByActionStepType mocks base method.
+func (m *MockMasterActionStepRepository) FindOrNilByActionStepType(ctx context.Context, actionStepType enum.ActionStepType) (*MasterActionStep, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FinOrNilByActionStepType", ctx, actionStepType)
+	ret := m.ctrl.Call(m, "FindOrNilByActionStepType", ctx, actionStepType)
 	ret0, _ := ret[0].(*MasterActionStep)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FinOrNilByActionStepType indicates an expected call of FinOrNilByActionStepType.
-func (mr *MockMasterActionStepRepositoryMockRecorder) FinOrNilByActionStepType(ctx, actionStepType interface{}) *gomock.Call {
+// FindOrNilByActionStepType indicates an expected call of FindOrNilByActionStepType.
+func (mr *MockMasterActionStepRepositoryMockRecorder) FindOrNilByActionStepType(ctx, actionStepType interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FinOrNilByActionStepType", reflect.TypeOf((*MockMasterActionStepRepository)(nil).FinOrNilByActionStepType), ctx, actionStepType)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByActionStepType", reflect.TypeOf((*MockMasterActionStepRepository)(nil).FindOrNilByActionStepType), ctx, actionStepType)
 }
 
 // Find mocks base method.

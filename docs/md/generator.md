@@ -289,7 +289,7 @@ type MasterLoginBonusRepository interface {
 	Find(ctx context.Context, id int64) (*MasterLoginBonus, error)
 	FindOrNil(ctx context.Context, id int64) (*MasterLoginBonus, error)
 	FindByMasterLoginBonusEventId(ctx context.Context, masterLoginBonusEventId int64) (*MasterLoginBonus, error)
-	FinOrNilByMasterLoginBonusEventId(ctx context.Context, masterLoginBonusEventId int64) (*MasterLoginBonus, error)
+	FindOrNilByMasterLoginBonusEventId(ctx context.Context, masterLoginBonusEventId int64) (*MasterLoginBonus, error)
 	FindList(ctx context.Context) (MasterLoginBonuses, error)
 	FindListByMasterLoginBonusEventId(ctx context.Context, masterLoginBonusEventId int64) (MasterLoginBonuses, error)
 	Create(ctx context.Context, tx *gorm.DB, m *MasterLoginBonus) (*MasterLoginBonus, error)
@@ -470,7 +470,7 @@ func (s *masterLoginBonusDao) FindByMasterLoginBonusEventId(ctx context.Context,
 	return m, nil
 }
 
-func (s *masterLoginBonusDao) FinOrNilByMasterLoginBonusEventId(ctx context.Context, masterLoginBonusEventId int64) (*masterLoginBonus.MasterLoginBonus, error) {
+func (s *masterLoginBonusDao) FindOrNilByMasterLoginBonusEventId(ctx context.Context, masterLoginBonusEventId int64) (*masterLoginBonus.MasterLoginBonus, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_login_bonus", "FindOrNilByMasterLoginBonusEventId", fmt.Sprintf("%d_", masterLoginBonusEventId)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterLoginBonus.MasterLoginBonus); ok {

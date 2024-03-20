@@ -138,7 +138,7 @@ func (s *masterLoginBonusItemDao) FindByMasterLoginBonusScheduleIdAndMasterItemI
 	return m, nil
 }
 
-func (s *masterLoginBonusItemDao) FinOrNilByMasterLoginBonusScheduleId(ctx context.Context, masterLoginBonusScheduleId int64) (*masterLoginBonusItem.MasterLoginBonusItem, error) {
+func (s *masterLoginBonusItemDao) FindOrNilByMasterLoginBonusScheduleId(ctx context.Context, masterLoginBonusScheduleId int64) (*masterLoginBonusItem.MasterLoginBonusItem, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_login_bonus_item", "FindOrNilByMasterLoginBonusScheduleId", fmt.Sprintf("%d_", masterLoginBonusScheduleId)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterLoginBonusItem.MasterLoginBonusItem); ok {
@@ -160,7 +160,7 @@ func (s *masterLoginBonusItemDao) FinOrNilByMasterLoginBonusScheduleId(ctx conte
 	return m, nil
 }
 
-func (s *masterLoginBonusItemDao) FinOrNilByMasterItemId(ctx context.Context, masterItemId int64) (*masterLoginBonusItem.MasterLoginBonusItem, error) {
+func (s *masterLoginBonusItemDao) FindOrNilByMasterItemId(ctx context.Context, masterItemId int64) (*masterLoginBonusItem.MasterLoginBonusItem, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_login_bonus_item", "FindOrNilByMasterItemId", fmt.Sprintf("%d_", masterItemId)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterLoginBonusItem.MasterLoginBonusItem); ok {
@@ -182,7 +182,7 @@ func (s *masterLoginBonusItemDao) FinOrNilByMasterItemId(ctx context.Context, ma
 	return m, nil
 }
 
-func (s *masterLoginBonusItemDao) FinOrNilByMasterLoginBonusScheduleIdAndMasterItemId(ctx context.Context, masterLoginBonusScheduleId int64, masterItemId int64) (*masterLoginBonusItem.MasterLoginBonusItem, error) {
+func (s *masterLoginBonusItemDao) FindOrNilByMasterLoginBonusScheduleIdAndMasterItemId(ctx context.Context, masterLoginBonusScheduleId int64, masterItemId int64) (*masterLoginBonusItem.MasterLoginBonusItem, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_login_bonus_item", "FindOrNilByMasterLoginBonusScheduleIdAndMasterItemId", fmt.Sprintf("%d_%d_", masterLoginBonusScheduleId, masterItemId)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterLoginBonusItem.MasterLoginBonusItem); ok {

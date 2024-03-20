@@ -15,7 +15,7 @@ type MasterActionStepRepository interface {
 	Find(ctx context.Context, id int64) (*MasterActionStep, error)
 	FindOrNil(ctx context.Context, id int64) (*MasterActionStep, error)
 	FindByActionStepType(ctx context.Context, actionStepType enum.ActionStepType) (*MasterActionStep, error)
-	FinOrNilByActionStepType(ctx context.Context, actionStepType enum.ActionStepType) (*MasterActionStep, error)
+	FindOrNilByActionStepType(ctx context.Context, actionStepType enum.ActionStepType) (*MasterActionStep, error)
 	FindList(ctx context.Context) (MasterActionSteps, error)
 	FindListByActionStepType(ctx context.Context, actionStepType enum.ActionStepType) (MasterActionSteps, error)
 	Create(ctx context.Context, tx *gorm.DB, m *MasterActionStep) (*MasterActionStep, error)

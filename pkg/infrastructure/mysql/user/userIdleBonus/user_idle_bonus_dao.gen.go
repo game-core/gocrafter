@@ -74,7 +74,7 @@ func (s *userIdleBonusDao) FindByUserIdAndMasterIdleBonusId(ctx context.Context,
 	return userIdleBonus.SetUserIdleBonus(t.UserId, t.MasterIdleBonusId, t.ReceivedAt), nil
 }
 
-func (s *userIdleBonusDao) FinOrNilByUserId(ctx context.Context, userId string) (*userIdleBonus.UserIdleBonus, error) {
+func (s *userIdleBonusDao) FindOrNilByUserId(ctx context.Context, userId string) (*userIdleBonus.UserIdleBonus, error) {
 	t := NewUserIdleBonus()
 	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(t)
 	if err := res.Error; err != nil {
@@ -87,7 +87,7 @@ func (s *userIdleBonusDao) FinOrNilByUserId(ctx context.Context, userId string) 
 	return userIdleBonus.SetUserIdleBonus(t.UserId, t.MasterIdleBonusId, t.ReceivedAt), nil
 }
 
-func (s *userIdleBonusDao) FinOrNilByUserIdAndMasterIdleBonusId(ctx context.Context, userId string, masterIdleBonusId int64) (*userIdleBonus.UserIdleBonus, error) {
+func (s *userIdleBonusDao) FindOrNilByUserIdAndMasterIdleBonusId(ctx context.Context, userId string, masterIdleBonusId int64) (*userIdleBonus.UserIdleBonus, error) {
 	t := NewUserIdleBonus()
 	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_idle_bonus_id = ?", masterIdleBonusId).Find(t)
 	if err := res.Error; err != nil {

@@ -94,7 +94,7 @@ func (s *masterItemDao) FindByName(ctx context.Context, name string) (*masterIte
 	return m, nil
 }
 
-func (s *masterItemDao) FinOrNilByName(ctx context.Context, name string) (*masterItem.MasterItem, error) {
+func (s *masterItemDao) FindOrNilByName(ctx context.Context, name string) (*masterItem.MasterItem, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_item", "FindOrNilByName", fmt.Sprintf("%s_", name)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterItem.MasterItem); ok {

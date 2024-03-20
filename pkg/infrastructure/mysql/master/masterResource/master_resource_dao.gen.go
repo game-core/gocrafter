@@ -95,7 +95,7 @@ func (s *masterResourceDao) FindByResourceType(ctx context.Context, resourceType
 	return m, nil
 }
 
-func (s *masterResourceDao) FinOrNilByResourceType(ctx context.Context, resourceType enum.ResourceType) (*masterResource.MasterResource, error) {
+func (s *masterResourceDao) FindOrNilByResourceType(ctx context.Context, resourceType enum.ResourceType) (*masterResource.MasterResource, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_resource", "FindOrNilByResourceType", fmt.Sprintf("%d_", resourceType)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterResource.MasterResource); ok {

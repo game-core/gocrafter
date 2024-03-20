@@ -95,7 +95,7 @@ func (s *masterRarityDao) FindByRarityType(ctx context.Context, rarityType enum.
 	return m, nil
 }
 
-func (s *masterRarityDao) FinOrNilByRarityType(ctx context.Context, rarityType enum.RarityType) (*masterRarity.MasterRarity, error) {
+func (s *masterRarityDao) FindOrNilByRarityType(ctx context.Context, rarityType enum.RarityType) (*masterRarity.MasterRarity, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_rarity", "FindOrNilByRarityType", fmt.Sprintf("%d_", rarityType)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterRarity.MasterRarity); ok {

@@ -13,7 +13,7 @@ type MasterItemRepository interface {
 	Find(ctx context.Context, id int64) (*MasterItem, error)
 	FindOrNil(ctx context.Context, id int64) (*MasterItem, error)
 	FindByName(ctx context.Context, name string) (*MasterItem, error)
-	FinOrNilByName(ctx context.Context, name string) (*MasterItem, error)
+	FindOrNilByName(ctx context.Context, name string) (*MasterItem, error)
 	FindList(ctx context.Context) (MasterItems, error)
 	FindListByName(ctx context.Context, name string) (MasterItems, error)
 	Create(ctx context.Context, tx *gorm.DB, m *MasterItem) (*MasterItem, error)

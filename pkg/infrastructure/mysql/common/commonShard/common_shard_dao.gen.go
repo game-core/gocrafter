@@ -62,7 +62,7 @@ func (s *commonShardDao) FindByShardKey(ctx context.Context, shardKey string) (*
 	return commonShard.SetCommonShard(t.Id, t.ShardKey, t.Name, t.Count), nil
 }
 
-func (s *commonShardDao) FinOrNilByShardKey(ctx context.Context, shardKey string) (*commonShard.CommonShard, error) {
+func (s *commonShardDao) FindOrNilByShardKey(ctx context.Context, shardKey string) (*commonShard.CommonShard, error) {
 	t := NewCommonShard()
 	res := s.ReadConn.WithContext(ctx).Where("shard_key = ?", shardKey).Find(t)
 	if err := res.Error; err != nil {

@@ -15,7 +15,7 @@ type MasterActionTriggerRepository interface {
 	Find(ctx context.Context, id int64) (*MasterActionTrigger, error)
 	FindOrNil(ctx context.Context, id int64) (*MasterActionTrigger, error)
 	FindByActionTriggerType(ctx context.Context, actionTriggerType enum.ActionTriggerType) (*MasterActionTrigger, error)
-	FinOrNilByActionTriggerType(ctx context.Context, actionTriggerType enum.ActionTriggerType) (*MasterActionTrigger, error)
+	FindOrNilByActionTriggerType(ctx context.Context, actionTriggerType enum.ActionTriggerType) (*MasterActionTrigger, error)
 	FindList(ctx context.Context) (MasterActionTriggers, error)
 	FindListByActionTriggerType(ctx context.Context, actionTriggerType enum.ActionTriggerType) (MasterActionTriggers, error)
 	Create(ctx context.Context, tx *gorm.DB, m *MasterActionTrigger) (*MasterActionTrigger, error)

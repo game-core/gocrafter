@@ -138,7 +138,7 @@ func (s *masterLoginBonusScheduleDao) FindByMasterLoginBonusIdAndStep(ctx contex
 	return m, nil
 }
 
-func (s *masterLoginBonusScheduleDao) FinOrNilByMasterLoginBonusId(ctx context.Context, masterLoginBonusId int64) (*masterLoginBonusSchedule.MasterLoginBonusSchedule, error) {
+func (s *masterLoginBonusScheduleDao) FindOrNilByMasterLoginBonusId(ctx context.Context, masterLoginBonusId int64) (*masterLoginBonusSchedule.MasterLoginBonusSchedule, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_login_bonus_schedule", "FindOrNilByMasterLoginBonusId", fmt.Sprintf("%d_", masterLoginBonusId)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterLoginBonusSchedule.MasterLoginBonusSchedule); ok {
@@ -160,7 +160,7 @@ func (s *masterLoginBonusScheduleDao) FinOrNilByMasterLoginBonusId(ctx context.C
 	return m, nil
 }
 
-func (s *masterLoginBonusScheduleDao) FinOrNilByStep(ctx context.Context, step int32) (*masterLoginBonusSchedule.MasterLoginBonusSchedule, error) {
+func (s *masterLoginBonusScheduleDao) FindOrNilByStep(ctx context.Context, step int32) (*masterLoginBonusSchedule.MasterLoginBonusSchedule, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_login_bonus_schedule", "FindOrNilByStep", fmt.Sprintf("%d_", step)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterLoginBonusSchedule.MasterLoginBonusSchedule); ok {
@@ -182,7 +182,7 @@ func (s *masterLoginBonusScheduleDao) FinOrNilByStep(ctx context.Context, step i
 	return m, nil
 }
 
-func (s *masterLoginBonusScheduleDao) FinOrNilByMasterLoginBonusIdAndStep(ctx context.Context, masterLoginBonusId int64, step int32) (*masterLoginBonusSchedule.MasterLoginBonusSchedule, error) {
+func (s *masterLoginBonusScheduleDao) FindOrNilByMasterLoginBonusIdAndStep(ctx context.Context, masterLoginBonusId int64, step int32) (*masterLoginBonusSchedule.MasterLoginBonusSchedule, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_login_bonus_schedule", "FindOrNilByMasterLoginBonusIdAndStep", fmt.Sprintf("%d_%d_", masterLoginBonusId, step)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterLoginBonusSchedule.MasterLoginBonusSchedule); ok {

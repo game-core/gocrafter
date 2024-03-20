@@ -239,7 +239,7 @@ func (s *Repository) createFindOrNilByIndex(yamlStruct *YamlStruct, indexFields 
 	}
 
 	return fmt.Sprintf(
-		`FinOrNilBy%s(ctx context.Context, %s) (*%s, error)`,
+		`FindOrNilBy%s(ctx context.Context, %s) (*%s, error)`,
 		strings.Join(indexFields, "And"),
 		s.createParam(keys),
 		yamlStruct.Name,

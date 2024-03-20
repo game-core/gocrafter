@@ -13,7 +13,7 @@ type MasterLoginBonusRepository interface {
 	Find(ctx context.Context, id int64) (*MasterLoginBonus, error)
 	FindOrNil(ctx context.Context, id int64) (*MasterLoginBonus, error)
 	FindByMasterLoginBonusEventId(ctx context.Context, masterLoginBonusEventId int64) (*MasterLoginBonus, error)
-	FinOrNilByMasterLoginBonusEventId(ctx context.Context, masterLoginBonusEventId int64) (*MasterLoginBonus, error)
+	FindOrNilByMasterLoginBonusEventId(ctx context.Context, masterLoginBonusEventId int64) (*MasterLoginBonus, error)
 	FindList(ctx context.Context) (MasterLoginBonuses, error)
 	FindListByMasterLoginBonusEventId(ctx context.Context, masterLoginBonusEventId int64) (MasterLoginBonuses, error)
 	Create(ctx context.Context, tx *gorm.DB, m *MasterLoginBonus) (*MasterLoginBonus, error)

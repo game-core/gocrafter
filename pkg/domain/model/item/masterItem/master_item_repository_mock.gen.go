@@ -79,19 +79,19 @@ func (mr *MockMasterItemRepositoryMockRecorder) Delete(ctx, tx, m interface{}) *
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockMasterItemRepository)(nil).Delete), ctx, tx, m)
 }
 
-// FinOrNilByName mocks base method.
-func (m *MockMasterItemRepository) FinOrNilByName(ctx context.Context, name string) (*MasterItem, error) {
+// FindOrNilByName mocks base method.
+func (m *MockMasterItemRepository) FindOrNilByName(ctx context.Context, name string) (*MasterItem, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FinOrNilByName", ctx, name)
+	ret := m.ctrl.Call(m, "FindOrNilByName", ctx, name)
 	ret0, _ := ret[0].(*MasterItem)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FinOrNilByName indicates an expected call of FinOrNilByName.
-func (mr *MockMasterItemRepositoryMockRecorder) FinOrNilByName(ctx, name interface{}) *gomock.Call {
+// FindOrNilByName indicates an expected call of FindOrNilByName.
+func (mr *MockMasterItemRepositoryMockRecorder) FindOrNilByName(ctx, name interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FinOrNilByName", reflect.TypeOf((*MockMasterItemRepository)(nil).FinOrNilByName), ctx, name)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByName", reflect.TypeOf((*MockMasterItemRepository)(nil).FindOrNilByName), ctx, name)
 }
 
 // Find mocks base method.

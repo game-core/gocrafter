@@ -138,7 +138,7 @@ func (s *masterIdleBonusScheduleDao) FindByMasterIdleBonusIdAndStep(ctx context.
 	return m, nil
 }
 
-func (s *masterIdleBonusScheduleDao) FinOrNilByMasterIdleBonusId(ctx context.Context, masterIdleBonusId int64) (*masterIdleBonusSchedule.MasterIdleBonusSchedule, error) {
+func (s *masterIdleBonusScheduleDao) FindOrNilByMasterIdleBonusId(ctx context.Context, masterIdleBonusId int64) (*masterIdleBonusSchedule.MasterIdleBonusSchedule, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_idle_bonus_schedule", "FindOrNilByMasterIdleBonusId", fmt.Sprintf("%d_", masterIdleBonusId)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterIdleBonusSchedule.MasterIdleBonusSchedule); ok {
@@ -160,7 +160,7 @@ func (s *masterIdleBonusScheduleDao) FinOrNilByMasterIdleBonusId(ctx context.Con
 	return m, nil
 }
 
-func (s *masterIdleBonusScheduleDao) FinOrNilByStep(ctx context.Context, step int32) (*masterIdleBonusSchedule.MasterIdleBonusSchedule, error) {
+func (s *masterIdleBonusScheduleDao) FindOrNilByStep(ctx context.Context, step int32) (*masterIdleBonusSchedule.MasterIdleBonusSchedule, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_idle_bonus_schedule", "FindOrNilByStep", fmt.Sprintf("%d_", step)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterIdleBonusSchedule.MasterIdleBonusSchedule); ok {
@@ -182,7 +182,7 @@ func (s *masterIdleBonusScheduleDao) FinOrNilByStep(ctx context.Context, step in
 	return m, nil
 }
 
-func (s *masterIdleBonusScheduleDao) FinOrNilByMasterIdleBonusIdAndStep(ctx context.Context, masterIdleBonusId int64, step int32) (*masterIdleBonusSchedule.MasterIdleBonusSchedule, error) {
+func (s *masterIdleBonusScheduleDao) FindOrNilByMasterIdleBonusIdAndStep(ctx context.Context, masterIdleBonusId int64, step int32) (*masterIdleBonusSchedule.MasterIdleBonusSchedule, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_idle_bonus_schedule", "FindOrNilByMasterIdleBonusIdAndStep", fmt.Sprintf("%d_%d_", masterIdleBonusId, step)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterIdleBonusSchedule.MasterIdleBonusSchedule); ok {

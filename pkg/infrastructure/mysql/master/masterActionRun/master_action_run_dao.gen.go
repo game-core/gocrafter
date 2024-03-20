@@ -116,7 +116,7 @@ func (s *masterActionRunDao) FindByActionId(ctx context.Context, actionId int64)
 	return m, nil
 }
 
-func (s *masterActionRunDao) FinOrNilByName(ctx context.Context, name string) (*masterActionRun.MasterActionRun, error) {
+func (s *masterActionRunDao) FindOrNilByName(ctx context.Context, name string) (*masterActionRun.MasterActionRun, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_action_run", "FindOrNilByName", fmt.Sprintf("%s_", name)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterActionRun.MasterActionRun); ok {
@@ -138,7 +138,7 @@ func (s *masterActionRunDao) FinOrNilByName(ctx context.Context, name string) (*
 	return m, nil
 }
 
-func (s *masterActionRunDao) FinOrNilByActionId(ctx context.Context, actionId int64) (*masterActionRun.MasterActionRun, error) {
+func (s *masterActionRunDao) FindOrNilByActionId(ctx context.Context, actionId int64) (*masterActionRun.MasterActionRun, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_action_run", "FindOrNilByActionId", fmt.Sprintf("%d_", actionId)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterActionRun.MasterActionRun); ok {

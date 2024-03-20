@@ -80,49 +80,49 @@ func (mr *MockMasterActionRepositoryMockRecorder) Delete(ctx, tx, m interface{})
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockMasterActionRepository)(nil).Delete), ctx, tx, m)
 }
 
-// FinOrNilByActionStepType mocks base method.
-func (m *MockMasterActionRepository) FinOrNilByActionStepType(ctx context.Context, actionStepType enum.ActionStepType) (*MasterAction, error) {
+// FindOrNilByActionStepType mocks base method.
+func (m *MockMasterActionRepository) FindOrNilByActionStepType(ctx context.Context, actionStepType enum.ActionStepType) (*MasterAction, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FinOrNilByActionStepType", ctx, actionStepType)
+	ret := m.ctrl.Call(m, "FindOrNilByActionStepType", ctx, actionStepType)
 	ret0, _ := ret[0].(*MasterAction)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FinOrNilByActionStepType indicates an expected call of FinOrNilByActionStepType.
-func (mr *MockMasterActionRepositoryMockRecorder) FinOrNilByActionStepType(ctx, actionStepType interface{}) *gomock.Call {
+// FindOrNilByActionStepType indicates an expected call of FindOrNilByActionStepType.
+func (mr *MockMasterActionRepositoryMockRecorder) FindOrNilByActionStepType(ctx, actionStepType interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FinOrNilByActionStepType", reflect.TypeOf((*MockMasterActionRepository)(nil).FinOrNilByActionStepType), ctx, actionStepType)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByActionStepType", reflect.TypeOf((*MockMasterActionRepository)(nil).FindOrNilByActionStepType), ctx, actionStepType)
 }
 
-// FinOrNilByAnyId mocks base method.
-func (m *MockMasterActionRepository) FinOrNilByAnyId(ctx context.Context, anyId int64) (*MasterAction, error) {
+// FindOrNilByAnyId mocks base method.
+func (m *MockMasterActionRepository) FindOrNilByAnyId(ctx context.Context, anyId int64) (*MasterAction, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FinOrNilByAnyId", ctx, anyId)
+	ret := m.ctrl.Call(m, "FindOrNilByAnyId", ctx, anyId)
 	ret0, _ := ret[0].(*MasterAction)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FinOrNilByAnyId indicates an expected call of FinOrNilByAnyId.
-func (mr *MockMasterActionRepositoryMockRecorder) FinOrNilByAnyId(ctx, anyId interface{}) *gomock.Call {
+// FindOrNilByAnyId indicates an expected call of FindOrNilByAnyId.
+func (mr *MockMasterActionRepositoryMockRecorder) FindOrNilByAnyId(ctx, anyId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FinOrNilByAnyId", reflect.TypeOf((*MockMasterActionRepository)(nil).FinOrNilByAnyId), ctx, anyId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByAnyId", reflect.TypeOf((*MockMasterActionRepository)(nil).FindOrNilByAnyId), ctx, anyId)
 }
 
-// FinOrNilByName mocks base method.
-func (m *MockMasterActionRepository) FinOrNilByName(ctx context.Context, name string) (*MasterAction, error) {
+// FindOrNilByName mocks base method.
+func (m *MockMasterActionRepository) FindOrNilByName(ctx context.Context, name string) (*MasterAction, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FinOrNilByName", ctx, name)
+	ret := m.ctrl.Call(m, "FindOrNilByName", ctx, name)
 	ret0, _ := ret[0].(*MasterAction)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FinOrNilByName indicates an expected call of FinOrNilByName.
-func (mr *MockMasterActionRepositoryMockRecorder) FinOrNilByName(ctx, name interface{}) *gomock.Call {
+// FindOrNilByName indicates an expected call of FindOrNilByName.
+func (mr *MockMasterActionRepositoryMockRecorder) FindOrNilByName(ctx, name interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FinOrNilByName", reflect.TypeOf((*MockMasterActionRepository)(nil).FinOrNilByName), ctx, name)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByName", reflect.TypeOf((*MockMasterActionRepository)(nil).FindOrNilByName), ctx, name)
 }
 
 // Find mocks base method.

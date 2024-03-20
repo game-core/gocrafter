@@ -138,7 +138,7 @@ func (s *masterIdleBonusItemDao) FindByMasterIdleBonusScheduleIdAndMasterItemId(
 	return m, nil
 }
 
-func (s *masterIdleBonusItemDao) FinOrNilByMasterIdleBonusScheduleId(ctx context.Context, masterIdleBonusScheduleId int64) (*masterIdleBonusItem.MasterIdleBonusItem, error) {
+func (s *masterIdleBonusItemDao) FindOrNilByMasterIdleBonusScheduleId(ctx context.Context, masterIdleBonusScheduleId int64) (*masterIdleBonusItem.MasterIdleBonusItem, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_idle_bonus_item", "FindOrNilByMasterIdleBonusScheduleId", fmt.Sprintf("%d_", masterIdleBonusScheduleId)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterIdleBonusItem.MasterIdleBonusItem); ok {
@@ -160,7 +160,7 @@ func (s *masterIdleBonusItemDao) FinOrNilByMasterIdleBonusScheduleId(ctx context
 	return m, nil
 }
 
-func (s *masterIdleBonusItemDao) FinOrNilByMasterItemId(ctx context.Context, masterItemId int64) (*masterIdleBonusItem.MasterIdleBonusItem, error) {
+func (s *masterIdleBonusItemDao) FindOrNilByMasterItemId(ctx context.Context, masterItemId int64) (*masterIdleBonusItem.MasterIdleBonusItem, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_idle_bonus_item", "FindOrNilByMasterItemId", fmt.Sprintf("%d_", masterItemId)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterIdleBonusItem.MasterIdleBonusItem); ok {
@@ -182,7 +182,7 @@ func (s *masterIdleBonusItemDao) FinOrNilByMasterItemId(ctx context.Context, mas
 	return m, nil
 }
 
-func (s *masterIdleBonusItemDao) FinOrNilByMasterIdleBonusScheduleIdAndMasterItemId(ctx context.Context, masterIdleBonusScheduleId int64, masterItemId int64) (*masterIdleBonusItem.MasterIdleBonusItem, error) {
+func (s *masterIdleBonusItemDao) FindOrNilByMasterIdleBonusScheduleIdAndMasterItemId(ctx context.Context, masterIdleBonusScheduleId int64, masterItemId int64) (*masterIdleBonusItem.MasterIdleBonusItem, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_idle_bonus_item", "FindOrNilByMasterIdleBonusScheduleIdAndMasterItemId", fmt.Sprintf("%d_%d_", masterIdleBonusScheduleId, masterItemId)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterIdleBonusItem.MasterIdleBonusItem); ok {

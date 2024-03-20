@@ -94,7 +94,7 @@ func (s *masterLoginBonusDao) FindByMasterLoginBonusEventId(ctx context.Context,
 	return m, nil
 }
 
-func (s *masterLoginBonusDao) FinOrNilByMasterLoginBonusEventId(ctx context.Context, masterLoginBonusEventId int64) (*masterLoginBonus.MasterLoginBonus, error) {
+func (s *masterLoginBonusDao) FindOrNilByMasterLoginBonusEventId(ctx context.Context, masterLoginBonusEventId int64) (*masterLoginBonus.MasterLoginBonus, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_login_bonus", "FindOrNilByMasterLoginBonusEventId", fmt.Sprintf("%d_", masterLoginBonusEventId)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterLoginBonus.MasterLoginBonus); ok {

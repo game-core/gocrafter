@@ -15,7 +15,7 @@ type MasterRarityRepository interface {
 	Find(ctx context.Context, id int64) (*MasterRarity, error)
 	FindOrNil(ctx context.Context, id int64) (*MasterRarity, error)
 	FindByRarityType(ctx context.Context, rarityType enum.RarityType) (*MasterRarity, error)
-	FinOrNilByRarityType(ctx context.Context, rarityType enum.RarityType) (*MasterRarity, error)
+	FindOrNilByRarityType(ctx context.Context, rarityType enum.RarityType) (*MasterRarity, error)
 	FindList(ctx context.Context) (MasterRarities, error)
 	FindListByRarityType(ctx context.Context, rarityType enum.RarityType) (MasterRarities, error)
 	Create(ctx context.Context, tx *gorm.DB, m *MasterRarity) (*MasterRarity, error)

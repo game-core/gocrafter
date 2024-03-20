@@ -161,7 +161,7 @@ func (s *masterActionDao) FindByActionStepTypeAndAnyId(ctx context.Context, acti
 	return m, nil
 }
 
-func (s *masterActionDao) FinOrNilByName(ctx context.Context, name string) (*masterAction.MasterAction, error) {
+func (s *masterActionDao) FindOrNilByName(ctx context.Context, name string) (*masterAction.MasterAction, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_action", "FindOrNilByName", fmt.Sprintf("%s_", name)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterAction.MasterAction); ok {
@@ -183,7 +183,7 @@ func (s *masterActionDao) FinOrNilByName(ctx context.Context, name string) (*mas
 	return m, nil
 }
 
-func (s *masterActionDao) FinOrNilByActionStepType(ctx context.Context, actionStepType enum.ActionStepType) (*masterAction.MasterAction, error) {
+func (s *masterActionDao) FindOrNilByActionStepType(ctx context.Context, actionStepType enum.ActionStepType) (*masterAction.MasterAction, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_action", "FindOrNilByActionStepType", fmt.Sprintf("%d_", actionStepType)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterAction.MasterAction); ok {
@@ -205,7 +205,7 @@ func (s *masterActionDao) FinOrNilByActionStepType(ctx context.Context, actionSt
 	return m, nil
 }
 
-func (s *masterActionDao) FinOrNilByAnyId(ctx context.Context, anyId *int64) (*masterAction.MasterAction, error) {
+func (s *masterActionDao) FindOrNilByAnyId(ctx context.Context, anyId *int64) (*masterAction.MasterAction, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_action", "FindOrNilByAnyId", fmt.Sprintf("%d_", anyId)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterAction.MasterAction); ok {
@@ -227,7 +227,7 @@ func (s *masterActionDao) FinOrNilByAnyId(ctx context.Context, anyId *int64) (*m
 	return m, nil
 }
 
-func (s *masterActionDao) FinOrNilByActionStepTypeAndAnyId(ctx context.Context, actionStepType enum.ActionStepType, anyId *int64) (*masterAction.MasterAction, error) {
+func (s *masterActionDao) FindOrNilByActionStepTypeAndAnyId(ctx context.Context, actionStepType enum.ActionStepType, anyId *int64) (*masterAction.MasterAction, error) {
 	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_action", "FindOrNilByActionStepTypeAndAnyId", fmt.Sprintf("%d_%d_", actionStepType, anyId)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterAction.MasterAction); ok {

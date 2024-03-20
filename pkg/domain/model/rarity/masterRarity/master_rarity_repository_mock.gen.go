@@ -80,19 +80,19 @@ func (mr *MockMasterRarityRepositoryMockRecorder) Delete(ctx, tx, m interface{})
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockMasterRarityRepository)(nil).Delete), ctx, tx, m)
 }
 
-// FinOrNilByRarityType mocks base method.
-func (m *MockMasterRarityRepository) FinOrNilByRarityType(ctx context.Context, rarityType enum.RarityType) (*MasterRarity, error) {
+// FindOrNilByRarityType mocks base method.
+func (m *MockMasterRarityRepository) FindOrNilByRarityType(ctx context.Context, rarityType enum.RarityType) (*MasterRarity, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FinOrNilByRarityType", ctx, rarityType)
+	ret := m.ctrl.Call(m, "FindOrNilByRarityType", ctx, rarityType)
 	ret0, _ := ret[0].(*MasterRarity)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FinOrNilByRarityType indicates an expected call of FinOrNilByRarityType.
-func (mr *MockMasterRarityRepositoryMockRecorder) FinOrNilByRarityType(ctx, rarityType interface{}) *gomock.Call {
+// FindOrNilByRarityType indicates an expected call of FindOrNilByRarityType.
+func (mr *MockMasterRarityRepositoryMockRecorder) FindOrNilByRarityType(ctx, rarityType interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FinOrNilByRarityType", reflect.TypeOf((*MockMasterRarityRepository)(nil).FinOrNilByRarityType), ctx, rarityType)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByRarityType", reflect.TypeOf((*MockMasterRarityRepository)(nil).FindOrNilByRarityType), ctx, rarityType)
 }
 
 // Find mocks base method.
