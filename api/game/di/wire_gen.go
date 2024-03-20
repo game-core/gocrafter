@@ -124,9 +124,10 @@ func InitializeLoginBonusUsecase() loginBonus2.LoginBonusUsecase {
 }
 
 func InitializeProfileUsecase() profile2.ProfileUsecase {
+	actionService := InitializeActionService()
 	profileService := InitializeProfileService()
 	transactionService := InitializeTransactionService()
-	profileUsecase := profile2.NewProfileUsecase(profileService, transactionService)
+	profileUsecase := profile2.NewProfileUsecase(actionService, profileService, transactionService)
 	return profileUsecase
 }
 

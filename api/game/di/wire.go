@@ -144,6 +144,7 @@ func InitializeLoginBonusUsecase() loginBonusUsecase.LoginBonusUsecase {
 func InitializeProfileUsecase() profileUsecase.ProfileUsecase {
 	wire.Build(
 		profileUsecase.NewProfileUsecase,
+		InitializeActionService,
 		InitializeProfileService,
 		InitializeTransactionService,
 	)

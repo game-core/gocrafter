@@ -73,17 +73,17 @@ func (s *actionService) GetMaster(ctx context.Context) (*ActionGetMasterResponse
 
 // Check アクションが実行済か確認する
 func (s *actionService) Check(ctx context.Context, now time.Time, req *ActionCheckRequest) error {
-	masterActionModel, err := s.masterActionRepository.FindOrNilByActionStepTypeAndAnyId(ctx, req.ActionStepType, req.AnyId)
+	masterActionModel, err := s.getMasterAction(ctx, req.ActionStepType, req.AnyId)
 	if err != nil {
-		return errors.NewMethodError("s.masterActionRepository.FindOrNilByActionStepTypeAndAnyId", err)
+		return errors.NewMethodError("s.getMasterAction", err)
 	}
 
-	if masterActionModel != nil {
+	if masterActionModel == nil {
 		return nil
 	}
 
-	if _, err := s.getAction(ctx, now, req.UserId, masterActionModel); err != nil {
-		return errors.NewMethodError("s.getAction", err)
+	if _, err := s.getUserAction(ctx, now, req.UserId, masterActionModel); err != nil {
+		return errors.NewMethodError("s.getUserAction", err)
 	}
 
 	return nil
@@ -91,18 +91,18 @@ func (s *actionService) Check(ctx context.Context, now time.Time, req *ActionChe
 
 // Run アクションを実行する
 func (s *actionService) Run(ctx context.Context, tx *gorm.DB, now time.Time, req *ActionRunRequest) error {
-	masterActionModel, err := s.masterActionRepository.FindOrNilByActionStepTypeAndAnyId(ctx, req.ActionStepType, req.AnyId)
+	masterActionModel, err := s.getMasterAction(ctx, req.ActionStepType, req.AnyId)
 	if err != nil {
-		return errors.NewMethodError("s.masterActionRepository.FindOrNilByActionStepTypeAndAnyId", err)
+		return errors.NewMethodError("s.getMasterAction", err)
 	}
 
-	if masterActionModel != nil {
+	if masterActionModel == nil {
 		return nil
 	}
 
-	triggerUserActionModel, triggerMasterActionModel, err := s.getTriggerAction(ctx, now, req.UserId, masterActionModel.TriggerActionId)
+	triggerUserActionModel, triggerMasterActionModel, err := s.getTriggerUserAction(ctx, now, req.UserId, masterActionModel.TriggerActionId)
 	if err != nil {
-		return errors.NewMethodError("s.checkTriggerAction", err)
+		return errors.NewMethodError("s.checkTriggerUserAction", err)
 	}
 
 	if err := s.deleteTriggerAction(ctx, tx, triggerUserActionModel, triggerMasterActionModel); err != nil {
@@ -116,8 +116,27 @@ func (s *actionService) Run(ctx context.Context, tx *gorm.DB, now time.Time, req
 	return nil
 }
 
-// getAction アクションを取得する
-func (s *actionService) getAction(ctx context.Context, now time.Time, userId string, masterActionModel *masterAction.MasterAction) (*userAction.UserAction, error) {
+// getMasterAction マスターアクションを取得する
+func (s *actionService) getMasterAction(ctx context.Context, actionStepType enum.ActionStepType, anyId *int64) (*masterAction.MasterAction, error) {
+	if anyId != nil {
+		masterActionModel, err := s.masterActionRepository.FindOrNilByActionStepTypeAndAnyId(ctx, actionStepType, anyId)
+		if err != nil {
+			return nil, errors.NewMethodError("s.masterActionRepository.FindOrNilByActionStepTypeAndAnyId", err)
+		}
+
+		return masterActionModel, nil
+	}
+
+	masterActionModel, err := s.masterActionRepository.FindOrNilByActionStepType(ctx, actionStepType)
+	if err != nil {
+		return nil, errors.NewMethodError("s.masterActionRepository.FindOrNilByActionStepType", err)
+	}
+
+	return masterActionModel, nil
+}
+
+// getUserAction アクションを取得する
+func (s *actionService) getUserAction(ctx context.Context, now time.Time, userId string, masterActionModel *masterAction.MasterAction) (*userAction.UserAction, error) {
 	userActionModel, err := s.userActionRepository.Find(ctx, userId, masterActionModel.Id)
 	if err != nil {
 		return nil, errors.NewMethodError("s.userActionRepository.Find", err)
@@ -130,8 +149,8 @@ func (s *actionService) getAction(ctx context.Context, now time.Time, userId str
 	return userActionModel, nil
 }
 
-// getTriggerAction トリガーになるアクションを取得する
-func (s *actionService) getTriggerAction(ctx context.Context, now time.Time, userId string, triggerActionId *int64) (*userAction.UserAction, *masterAction.MasterAction, error) {
+// getTriggerUserAction トリガーになるアクションを取得する
+func (s *actionService) getTriggerUserAction(ctx context.Context, now time.Time, userId string, triggerActionId *int64) (*userAction.UserAction, *masterAction.MasterAction, error) {
 	if triggerActionId == nil {
 		return nil, nil, nil
 	}
@@ -141,9 +160,9 @@ func (s *actionService) getTriggerAction(ctx context.Context, now time.Time, use
 		return nil, nil, errors.NewMethodError("s.masterActionRepository.Find", err)
 	}
 
-	triggerUserActionModel, err := s.getAction(ctx, now, userId, triggerMasterActionModel)
+	triggerUserActionModel, err := s.getUserAction(ctx, now, userId, triggerMasterActionModel)
 	if err != nil {
-		return nil, nil, errors.NewMethodError("s.getAction", err)
+		return nil, nil, errors.NewMethodError("s.getUserAction", err)
 	}
 
 	return triggerUserActionModel, triggerMasterActionModel, nil
