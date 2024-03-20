@@ -78,6 +78,10 @@ func (s *actionService) Check(ctx context.Context, now time.Time, req *ActionChe
 		return errors.NewMethodError("s.masterActionRepository.FindByActionStepType", err)
 	}
 
+	if masterActionModel != nil {
+		return nil
+	}
+
 	if _, err := s.getAction(ctx, now, req.UserId, masterActionModel); err != nil {
 		return errors.NewMethodError("s.getAction", err)
 	}
@@ -90,6 +94,10 @@ func (s *actionService) Run(ctx context.Context, tx *gorm.DB, now time.Time, req
 	masterActionModel, err := s.masterActionRepository.FindByActionStepType(ctx, req.ActionStepType)
 	if err != nil {
 		return errors.NewMethodError("s.masterActionRepository.FindByActionStepType", err)
+	}
+
+	if masterActionModel != nil {
+		return nil
 	}
 
 	triggerUserActionModel, triggerMasterActionModel, err := s.getTriggerAction(ctx, now, req.UserId, masterActionModel.TriggerActionId)
