@@ -15,6 +15,10 @@ func main() {
 		log.Fatalf("failed to database.InitMysql: %v", err)
 	}
 
+	if _, err := database.InitRedis(); err != nil {
+		log.Fatalf("failed to database.InitRedis: %v", err)
+	}
+
 	apiConfig := apiConfig.GetAppConfig()
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%v", apiConfig.Port.GrpcPort))
 	if err != nil {
