@@ -29,7 +29,7 @@ const (
 
 // IdleBonusClient is the client API for IdleBonus service.
 //
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientMysqlConn.NewStream.
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type IdleBonusClient interface {
 	GetUser(ctx context.Context, in *IdleBonusGetUserRequest, opts ...grpc.CallOption) (*IdleBonusGetUserResponse, error)
 	GetMaster(ctx context.Context, in *IdleBonusGetMasterRequest, opts ...grpc.CallOption) (*IdleBonusGetMasterResponse, error)
@@ -37,10 +37,10 @@ type IdleBonusClient interface {
 }
 
 type idleBonusClient struct {
-	cc grpc.ClientMysqlConnInterface
+	cc grpc.ClientConnInterface
 }
 
-func NewIdleBonusClient(cc grpc.ClientMysqlConnInterface) IdleBonusClient {
+func NewIdleBonusClient(cc grpc.ClientConnInterface) IdleBonusClient {
 	return &idleBonusClient{cc}
 }
 

@@ -29,7 +29,7 @@ const (
 
 // AccountClient is the client API for Account service.
 //
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientMysqlConn.NewStream.
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AccountClient interface {
 	Create(ctx context.Context, in *AccountCreateRequest, opts ...grpc.CallOption) (*AccountCreateResponse, error)
 	Login(ctx context.Context, in *AccountLoginRequest, opts ...grpc.CallOption) (*AccountLoginResponse, error)
@@ -37,10 +37,10 @@ type AccountClient interface {
 }
 
 type accountClient struct {
-	cc grpc.ClientMysqlConnInterface
+	cc grpc.ClientConnInterface
 }
 
-func NewAccountClient(cc grpc.ClientMysqlConnInterface) AccountClient {
+func NewAccountClient(cc grpc.ClientConnInterface) AccountClient {
 	return &accountClient{cc}
 }
 

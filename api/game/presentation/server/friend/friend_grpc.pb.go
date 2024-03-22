@@ -31,7 +31,7 @@ const (
 
 // FriendClient is the client API for Friend service.
 //
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientMysqlConn.NewStream.
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type FriendClient interface {
 	Get(ctx context.Context, in *FriendGetRequest, opts ...grpc.CallOption) (*FriendGetResponse, error)
 	Send(ctx context.Context, in *FriendSendRequest, opts ...grpc.CallOption) (*FriendSendResponse, error)
@@ -41,10 +41,10 @@ type FriendClient interface {
 }
 
 type friendClient struct {
-	cc grpc.ClientMysqlConnInterface
+	cc grpc.ClientConnInterface
 }
 
-func NewFriendClient(cc grpc.ClientMysqlConnInterface) FriendClient {
+func NewFriendClient(cc grpc.ClientConnInterface) FriendClient {
 	return &friendClient{cc}
 }
 
