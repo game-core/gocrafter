@@ -48,7 +48,7 @@ func InitMysql() (*MysqlHandler, error) {
 	}
 
 	MysqlHandlerInstance = db
-	
+
 	return MysqlHandlerInstance, nil
 }
 
@@ -134,7 +134,7 @@ func (s *MysqlHandler) masterDB() error {
 
 // shardUserDB コネクションを作成する
 func (s *MysqlHandler) shardUserDB() error {
-	shardCountStr := os.Getenv("SHARD_COUNT")
+	shardCountStr := os.Getenv("MYSQL_SHARD_COUNT")
 	shardCount, err := strconv.Atoi(shardCountStr)
 	if err != nil {
 		return err

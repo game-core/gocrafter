@@ -132,7 +132,7 @@ func migrateMasterDB(migrationsDir string) error {
 }
 
 func migrateUserDB(migrationsDir string) error {
-	shardCountStr := os.Getenv("SHARD_COUNT")
+	shardCountStr := os.Getenv("MYSQL_SHARD_COUNT")
 	shardCount, err := strconv.Atoi(shardCountStr)
 	if err != nil {
 		return err
