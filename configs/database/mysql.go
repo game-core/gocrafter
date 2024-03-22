@@ -48,6 +48,7 @@ func InitMysql() (*MysqlHandler, error) {
 	}
 
 	MysqlHandlerInstance = db
+	
 	return MysqlHandlerInstance, nil
 }
 
