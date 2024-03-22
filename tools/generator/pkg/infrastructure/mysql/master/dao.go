@@ -33,15 +33,15 @@ import (
 )
 
 type {{.CamelName}}Dao struct {
-	ReadConn  *gorm.DB
-	WriteConn *gorm.DB
+	ReadMysqlConn  *gorm.DB
+	WriteMysqlConn *gorm.DB
 	Cache     *cache.Cache
 }
 
 func New{{.Name}}Dao(conn *database.MysqlHandler) {{.Package}}.{{.Name}}Repository {
 	return &{{.CamelName}}Dao{
-		ReadConn:  conn.Master.ReadConn,
-		WriteConn: conn.Master.WriteConn,
+		ReadMysqlConn:  conn.Master.ReadMysqlConn,
+		WriteMysqlConn: conn.Master.WriteMysqlConn,
 		Cache:     cache.New(cache.NoExpiration, cache.NoExpiration),
 	}
 }
@@ -262,7 +262,7 @@ func (s *Dao) createFind(yamlStruct *YamlStruct, primaryFields []string) string 
 			}
 
 			t := New%s()
-			res := s.ReadConn.WithContext(ctx).%s.Find(t)
+			res := s.ReadMysqlConn.WithContext(ctx).%s.Find(t)
 			if err := res.Error; err != nil {
 				return nil, err
 			}
@@ -310,7 +310,7 @@ func (s *Dao) createFindOrNil(yamlStruct *YamlStruct, primaryFields []string) st
 			}
 
 			t := New%s()
-			res := s.ReadConn.WithContext(ctx).%s.Find(t)
+			res := s.ReadMysqlConn.WithContext(ctx).%s.Find(t)
 			if err := res.Error; err != nil {
 				return nil, err
 			}
@@ -358,7 +358,7 @@ func (s *Dao) createFindByIndex(yamlStruct *YamlStruct, indexFields []string) st
 			}
 
 			t := New%s()
-			res := s.ReadConn.WithContext(ctx).%s.Find(t)
+			res := s.ReadMysqlConn.WithContext(ctx).%s.Find(t)
 			if err := res.Error; err != nil {
 				return nil, err
 			}
@@ -409,7 +409,7 @@ func (s *Dao) createFindOrNilByIndex(yamlStruct *YamlStruct, indexFields []strin
 			}
 
 			t := New%s()
-			res := s.ReadConn.WithContext(ctx).%s.Find(t)
+			res := s.ReadMysqlConn.WithContext(ctx).%s.Find(t)
 			if err := res.Error; err != nil {
 				return nil, err
 			}
@@ -453,7 +453,7 @@ func (s *Dao) createFindList(yamlStruct *YamlStruct) string {
 			}
 
 			ts := New%s()
-			res := s.ReadConn.WithContext(ctx).Find(&ts)
+			res := s.ReadMysqlConn.WithContext(ctx).Find(&ts)
 			if err := res.Error; err != nil {
 				return nil, err
 			}
@@ -495,7 +495,7 @@ func (s *Dao) createFindListByIndex(yamlStruct *YamlStruct, indexFields []string
 			}
 
 			ts := New%s()
-			res := s.ReadConn.WithContext(ctx).%s.Find(&ts)
+			res := s.ReadMysqlConn.WithContext(ctx).%s.Find(&ts)
 			if err := res.Error; err != nil {
 				return nil, err
 			}
@@ -533,7 +533,7 @@ func (s *Dao) createCreate(yamlStruct *YamlStruct) string {
 			if tx != nil {
 				conn = tx
 			} else {
-				conn = s.WriteConn
+				conn = s.WriteMysqlConn
 			}
 
 			t := %s
@@ -563,7 +563,7 @@ func (s *Dao) createCreateList(yamlStruct *YamlStruct) string {
 			if tx != nil {
 				conn = tx
 			} else {
-				conn = s.WriteConn
+				conn = s.WriteMysqlConn
 			}
 
 			ts := New%s()
@@ -603,7 +603,7 @@ func (s *Dao) createUpdate(yamlStruct *YamlStruct, primaryFields []string) strin
 			if tx != nil {
 				conn = tx
 			} else {
-				conn = s.WriteConn
+				conn = s.WriteMysqlConn
 			}
 
 			t := %s
@@ -639,7 +639,7 @@ func (s *Dao) createDelete(yamlStruct *YamlStruct, primaryFields []string) strin
 			if tx != nil {
 				conn = tx
 			} else {
-				conn = s.WriteConn
+				conn = s.WriteMysqlConn
 			}
 		
 			res := conn.Model(New%s()).WithContext(ctx).%s.Delete(New%s())

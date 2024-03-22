@@ -15,16 +15,16 @@ import (
 )
 
 type masterIdleBonusScheduleDao struct {
-	ReadConn  *gorm.DB
-	WriteConn *gorm.DB
-	Cache     *cache.Cache
+	ReadMysqlConn  *gorm.DB
+	WriteMysqlConn *gorm.DB
+	Cache          *cache.Cache
 }
 
 func NewMasterIdleBonusScheduleDao(conn *database.MysqlHandler) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
 	return &masterIdleBonusScheduleDao{
-		ReadConn:  conn.Master.ReadConn,
-		WriteConn: conn.Master.WriteConn,
-		Cache:     cache.New(cache.NoExpiration, cache.NoExpiration),
+		ReadMysqlConn:  conn.Master.ReadMysqlConn,
+		WriteMysqlConn: conn.Master.WriteMysqlConn,
+		Cache:          cache.New(cache.NoExpiration, cache.NoExpiration),
 	}
 }
 
@@ -37,7 +37,7 @@ func (s *masterIdleBonusScheduleDao) Find(ctx context.Context, id int64) (*maste
 	}
 
 	t := NewMasterIdleBonusSchedule()
-	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("id = ?", id).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -59,7 +59,7 @@ func (s *masterIdleBonusScheduleDao) FindOrNil(ctx context.Context, id int64) (*
 	}
 
 	t := NewMasterIdleBonusSchedule()
-	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("id = ?", id).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -81,7 +81,7 @@ func (s *masterIdleBonusScheduleDao) FindByMasterIdleBonusId(ctx context.Context
 	}
 
 	t := NewMasterIdleBonusSchedule()
-	res := s.ReadConn.WithContext(ctx).Where("master_idle_bonus_id = ?", masterIdleBonusId).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("master_idle_bonus_id = ?", masterIdleBonusId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -103,7 +103,7 @@ func (s *masterIdleBonusScheduleDao) FindByStep(ctx context.Context, step int32)
 	}
 
 	t := NewMasterIdleBonusSchedule()
-	res := s.ReadConn.WithContext(ctx).Where("step = ?", step).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("step = ?", step).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -125,7 +125,7 @@ func (s *masterIdleBonusScheduleDao) FindByMasterIdleBonusIdAndStep(ctx context.
 	}
 
 	t := NewMasterIdleBonusSchedule()
-	res := s.ReadConn.WithContext(ctx).Where("master_idle_bonus_id = ?", masterIdleBonusId).Where("step = ?", step).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("master_idle_bonus_id = ?", masterIdleBonusId).Where("step = ?", step).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -147,7 +147,7 @@ func (s *masterIdleBonusScheduleDao) FindOrNilByMasterIdleBonusId(ctx context.Co
 	}
 
 	t := NewMasterIdleBonusSchedule()
-	res := s.ReadConn.WithContext(ctx).Where("master_idle_bonus_id = ?", masterIdleBonusId).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("master_idle_bonus_id = ?", masterIdleBonusId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -169,7 +169,7 @@ func (s *masterIdleBonusScheduleDao) FindOrNilByStep(ctx context.Context, step i
 	}
 
 	t := NewMasterIdleBonusSchedule()
-	res := s.ReadConn.WithContext(ctx).Where("step = ?", step).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("step = ?", step).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -191,7 +191,7 @@ func (s *masterIdleBonusScheduleDao) FindOrNilByMasterIdleBonusIdAndStep(ctx con
 	}
 
 	t := NewMasterIdleBonusSchedule()
-	res := s.ReadConn.WithContext(ctx).Where("master_idle_bonus_id = ?", masterIdleBonusId).Where("step = ?", step).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("master_idle_bonus_id = ?", masterIdleBonusId).Where("step = ?", step).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -213,7 +213,7 @@ func (s *masterIdleBonusScheduleDao) FindList(ctx context.Context) (masterIdleBo
 	}
 
 	ts := NewMasterIdleBonusSchedules()
-	res := s.ReadConn.WithContext(ctx).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -236,7 +236,7 @@ func (s *masterIdleBonusScheduleDao) FindListByMasterIdleBonusId(ctx context.Con
 	}
 
 	ts := NewMasterIdleBonusSchedules()
-	res := s.ReadConn.WithContext(ctx).Where("master_idle_bonus_id = ?", masterIdleBonusId).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("master_idle_bonus_id = ?", masterIdleBonusId).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -259,7 +259,7 @@ func (s *masterIdleBonusScheduleDao) FindListByStep(ctx context.Context, step in
 	}
 
 	ts := NewMasterIdleBonusSchedules()
-	res := s.ReadConn.WithContext(ctx).Where("step = ?", step).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("step = ?", step).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -282,7 +282,7 @@ func (s *masterIdleBonusScheduleDao) FindListByMasterIdleBonusIdAndStep(ctx cont
 	}
 
 	ts := NewMasterIdleBonusSchedules()
-	res := s.ReadConn.WithContext(ctx).Where("master_idle_bonus_id = ?", masterIdleBonusId).Where("step = ?", step).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("master_idle_bonus_id = ?", masterIdleBonusId).Where("step = ?", step).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -301,7 +301,7 @@ func (s *masterIdleBonusScheduleDao) Create(ctx context.Context, tx *gorm.DB, m 
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	t := &MasterIdleBonusSchedule{
@@ -323,7 +323,7 @@ func (s *masterIdleBonusScheduleDao) CreateList(ctx context.Context, tx *gorm.DB
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	ts := NewMasterIdleBonusSchedules()
@@ -350,7 +350,7 @@ func (s *masterIdleBonusScheduleDao) Update(ctx context.Context, tx *gorm.DB, m 
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	t := &MasterIdleBonusSchedule{
@@ -372,7 +372,7 @@ func (s *masterIdleBonusScheduleDao) Delete(ctx context.Context, tx *gorm.DB, m 
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	res := conn.Model(NewMasterIdleBonusSchedule()).WithContext(ctx).Where("id = ?", m.Id).Delete(NewMasterIdleBonusSchedule())

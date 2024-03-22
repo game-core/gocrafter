@@ -13,18 +13,18 @@ import (
 )
 
 type userActionDao struct {
-	ShardConn *database.ShardConn
+	ShardMysqlConn *database.ShardMysqlConn
 }
 
 func NewUserActionDao(conn *database.MysqlHandler) userAction.UserActionRepository {
 	return &userActionDao{
-		ShardConn: conn.User,
+		ShardMysqlConn: conn.User,
 	}
 }
 
 func (s *userActionDao) Find(ctx context.Context, userId string, masterActionId int64) (*userAction.UserAction, error) {
 	t := NewUserAction()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_action_id = ?", masterActionId).Find(t)
+	res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_action_id = ?", masterActionId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -37,7 +37,7 @@ func (s *userActionDao) Find(ctx context.Context, userId string, masterActionId 
 
 func (s *userActionDao) FindOrNil(ctx context.Context, userId string, masterActionId int64) (*userAction.UserAction, error) {
 	t := NewUserAction()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_action_id = ?", masterActionId).Find(t)
+	res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_action_id = ?", masterActionId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (s *userActionDao) FindOrNil(ctx context.Context, userId string, masterActi
 
 func (s *userActionDao) FindList(ctx context.Context, userId string) (userAction.UserActions, error) {
 	ts := NewUserActions()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(&ts)
+	res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).Where("user_id = ?", userId).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -68,7 +68,7 @@ func (s *userActionDao) Create(ctx context.Context, tx *gorm.DB, m *userAction.U
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
+		conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteMysqlConn
 	}
 
 	t := &UserAction{
@@ -100,7 +100,7 @@ func (s *userActionDao) CreateList(ctx context.Context, tx *gorm.DB, ms userActi
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(fms.UserId)].WriteConn
+		conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(fms.UserId)].WriteMysqlConn
 	}
 
 	ts := NewUserActions()
@@ -126,7 +126,7 @@ func (s *userActionDao) Update(ctx context.Context, tx *gorm.DB, m *userAction.U
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
+		conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteMysqlConn
 	}
 
 	t := &UserAction{
@@ -147,7 +147,7 @@ func (s *userActionDao) Delete(ctx context.Context, tx *gorm.DB, m *userAction.U
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
+		conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteMysqlConn
 	}
 
 	res := conn.Model(NewUserAction()).WithContext(ctx).Where("user_id = ?", m.UserId).Where("master_action_id = ?", m.MasterActionId).Delete(NewUserAction())

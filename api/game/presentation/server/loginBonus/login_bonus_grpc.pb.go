@@ -29,7 +29,7 @@ const (
 
 // LoginBonusClient is the client API for LoginBonus service.
 //
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientMysqlConn.NewStream.
 type LoginBonusClient interface {
 	GetUser(ctx context.Context, in *LoginBonusGetUserRequest, opts ...grpc.CallOption) (*LoginBonusGetUserResponse, error)
 	GetMaster(ctx context.Context, in *LoginBonusGetMasterRequest, opts ...grpc.CallOption) (*LoginBonusGetMasterResponse, error)
@@ -37,10 +37,10 @@ type LoginBonusClient interface {
 }
 
 type loginBonusClient struct {
-	cc grpc.ClientConnInterface
+	cc grpc.ClientMysqlConnInterface
 }
 
-func NewLoginBonusClient(cc grpc.ClientConnInterface) LoginBonusClient {
+func NewLoginBonusClient(cc grpc.ClientMysqlConnInterface) LoginBonusClient {
 	return &loginBonusClient{cc}
 }
 

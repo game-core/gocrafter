@@ -16,16 +16,16 @@ import (
 )
 
 type masterActionDao struct {
-	ReadConn  *gorm.DB
-	WriteConn *gorm.DB
-	Cache     *cache.Cache
+	ReadMysqlConn  *gorm.DB
+	WriteMysqlConn *gorm.DB
+	Cache          *cache.Cache
 }
 
 func NewMasterActionDao(conn *database.MysqlHandler) masterAction.MasterActionRepository {
 	return &masterActionDao{
-		ReadConn:  conn.Master.ReadConn,
-		WriteConn: conn.Master.WriteConn,
-		Cache:     cache.New(cache.NoExpiration, cache.NoExpiration),
+		ReadMysqlConn:  conn.Master.ReadMysqlConn,
+		WriteMysqlConn: conn.Master.WriteMysqlConn,
+		Cache:          cache.New(cache.NoExpiration, cache.NoExpiration),
 	}
 }
 
@@ -38,7 +38,7 @@ func (s *masterActionDao) Find(ctx context.Context, id int64) (*masterAction.Mas
 	}
 
 	t := NewMasterAction()
-	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("id = ?", id).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -60,7 +60,7 @@ func (s *masterActionDao) FindOrNil(ctx context.Context, id int64) (*masterActio
 	}
 
 	t := NewMasterAction()
-	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("id = ?", id).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -82,7 +82,7 @@ func (s *masterActionDao) FindByName(ctx context.Context, name string) (*masterA
 	}
 
 	t := NewMasterAction()
-	res := s.ReadConn.WithContext(ctx).Where("name = ?", name).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("name = ?", name).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -104,7 +104,7 @@ func (s *masterActionDao) FindByActionStepType(ctx context.Context, actionStepTy
 	}
 
 	t := NewMasterAction()
-	res := s.ReadConn.WithContext(ctx).Where("action_step_type = ?", actionStepType).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("action_step_type = ?", actionStepType).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -126,7 +126,7 @@ func (s *masterActionDao) FindByAnyId(ctx context.Context, anyId *int64) (*maste
 	}
 
 	t := NewMasterAction()
-	res := s.ReadConn.WithContext(ctx).Where("any_id = ?", anyId).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("any_id = ?", anyId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -148,7 +148,7 @@ func (s *masterActionDao) FindByActionStepTypeAndAnyId(ctx context.Context, acti
 	}
 
 	t := NewMasterAction()
-	res := s.ReadConn.WithContext(ctx).Where("action_step_type = ?", actionStepType).Where("any_id = ?", anyId).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("action_step_type = ?", actionStepType).Where("any_id = ?", anyId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -170,7 +170,7 @@ func (s *masterActionDao) FindOrNilByName(ctx context.Context, name string) (*ma
 	}
 
 	t := NewMasterAction()
-	res := s.ReadConn.WithContext(ctx).Where("name = ?", name).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("name = ?", name).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -192,7 +192,7 @@ func (s *masterActionDao) FindOrNilByActionStepType(ctx context.Context, actionS
 	}
 
 	t := NewMasterAction()
-	res := s.ReadConn.WithContext(ctx).Where("action_step_type = ?", actionStepType).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("action_step_type = ?", actionStepType).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -214,7 +214,7 @@ func (s *masterActionDao) FindOrNilByAnyId(ctx context.Context, anyId *int64) (*
 	}
 
 	t := NewMasterAction()
-	res := s.ReadConn.WithContext(ctx).Where("any_id = ?", anyId).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("any_id = ?", anyId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -236,7 +236,7 @@ func (s *masterActionDao) FindOrNilByActionStepTypeAndAnyId(ctx context.Context,
 	}
 
 	t := NewMasterAction()
-	res := s.ReadConn.WithContext(ctx).Where("action_step_type = ?", actionStepType).Where("any_id = ?", anyId).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("action_step_type = ?", actionStepType).Where("any_id = ?", anyId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -258,7 +258,7 @@ func (s *masterActionDao) FindList(ctx context.Context) (masterAction.MasterActi
 	}
 
 	ts := NewMasterActions()
-	res := s.ReadConn.WithContext(ctx).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -281,7 +281,7 @@ func (s *masterActionDao) FindListByName(ctx context.Context, name string) (mast
 	}
 
 	ts := NewMasterActions()
-	res := s.ReadConn.WithContext(ctx).Where("name = ?", name).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("name = ?", name).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -304,7 +304,7 @@ func (s *masterActionDao) FindListByActionStepType(ctx context.Context, actionSt
 	}
 
 	ts := NewMasterActions()
-	res := s.ReadConn.WithContext(ctx).Where("action_step_type = ?", actionStepType).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("action_step_type = ?", actionStepType).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -327,7 +327,7 @@ func (s *masterActionDao) FindListByAnyId(ctx context.Context, anyId *int64) (ma
 	}
 
 	ts := NewMasterActions()
-	res := s.ReadConn.WithContext(ctx).Where("any_id = ?", anyId).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("any_id = ?", anyId).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -350,7 +350,7 @@ func (s *masterActionDao) FindListByActionStepTypeAndAnyId(ctx context.Context, 
 	}
 
 	ts := NewMasterActions()
-	res := s.ReadConn.WithContext(ctx).Where("action_step_type = ?", actionStepType).Where("any_id = ?", anyId).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("action_step_type = ?", actionStepType).Where("any_id = ?", anyId).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -369,7 +369,7 @@ func (s *masterActionDao) Create(ctx context.Context, tx *gorm.DB, m *masterActi
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	t := &MasterAction{
@@ -394,7 +394,7 @@ func (s *masterActionDao) CreateList(ctx context.Context, tx *gorm.DB, ms master
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	ts := NewMasterActions()
@@ -424,7 +424,7 @@ func (s *masterActionDao) Update(ctx context.Context, tx *gorm.DB, m *masterActi
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	t := &MasterAction{
@@ -449,7 +449,7 @@ func (s *masterActionDao) Delete(ctx context.Context, tx *gorm.DB, m *masterActi
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	res := conn.Model(NewMasterAction()).WithContext(ctx).Where("id = ?", m.Id).Delete(NewMasterAction())

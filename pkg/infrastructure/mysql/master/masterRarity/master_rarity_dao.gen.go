@@ -16,16 +16,16 @@ import (
 )
 
 type masterRarityDao struct {
-	ReadConn  *gorm.DB
-	WriteConn *gorm.DB
-	Cache     *cache.Cache
+	ReadMysqlConn  *gorm.DB
+	WriteMysqlConn *gorm.DB
+	Cache          *cache.Cache
 }
 
 func NewMasterRarityDao(conn *database.MysqlHandler) masterRarity.MasterRarityRepository {
 	return &masterRarityDao{
-		ReadConn:  conn.Master.ReadConn,
-		WriteConn: conn.Master.WriteConn,
-		Cache:     cache.New(cache.NoExpiration, cache.NoExpiration),
+		ReadMysqlConn:  conn.Master.ReadMysqlConn,
+		WriteMysqlConn: conn.Master.WriteMysqlConn,
+		Cache:          cache.New(cache.NoExpiration, cache.NoExpiration),
 	}
 }
 
@@ -38,7 +38,7 @@ func (s *masterRarityDao) Find(ctx context.Context, id int64) (*masterRarity.Mas
 	}
 
 	t := NewMasterRarity()
-	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("id = ?", id).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -60,7 +60,7 @@ func (s *masterRarityDao) FindOrNil(ctx context.Context, id int64) (*masterRarit
 	}
 
 	t := NewMasterRarity()
-	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("id = ?", id).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -82,7 +82,7 @@ func (s *masterRarityDao) FindByRarityType(ctx context.Context, rarityType enum.
 	}
 
 	t := NewMasterRarity()
-	res := s.ReadConn.WithContext(ctx).Where("rarity_type = ?", rarityType).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("rarity_type = ?", rarityType).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -104,7 +104,7 @@ func (s *masterRarityDao) FindOrNilByRarityType(ctx context.Context, rarityType 
 	}
 
 	t := NewMasterRarity()
-	res := s.ReadConn.WithContext(ctx).Where("rarity_type = ?", rarityType).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("rarity_type = ?", rarityType).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -126,7 +126,7 @@ func (s *masterRarityDao) FindList(ctx context.Context) (masterRarity.MasterRari
 	}
 
 	ts := NewMasterRarities()
-	res := s.ReadConn.WithContext(ctx).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -149,7 +149,7 @@ func (s *masterRarityDao) FindListByRarityType(ctx context.Context, rarityType e
 	}
 
 	ts := NewMasterRarities()
-	res := s.ReadConn.WithContext(ctx).Where("rarity_type = ?", rarityType).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("rarity_type = ?", rarityType).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -168,7 +168,7 @@ func (s *masterRarityDao) Create(ctx context.Context, tx *gorm.DB, m *masterRari
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	t := &MasterRarity{
@@ -189,7 +189,7 @@ func (s *masterRarityDao) CreateList(ctx context.Context, tx *gorm.DB, ms master
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	ts := NewMasterRarities()
@@ -215,7 +215,7 @@ func (s *masterRarityDao) Update(ctx context.Context, tx *gorm.DB, m *masterRari
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	t := &MasterRarity{
@@ -236,7 +236,7 @@ func (s *masterRarityDao) Delete(ctx context.Context, tx *gorm.DB, m *masterRari
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	res := conn.Model(NewMasterRarity()).WithContext(ctx).Where("id = ?", m.Id).Delete(NewMasterRarity())

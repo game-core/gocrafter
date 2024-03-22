@@ -16,16 +16,16 @@ import (
 )
 
 type masterActionTriggerDao struct {
-	ReadConn  *gorm.DB
-	WriteConn *gorm.DB
-	Cache     *cache.Cache
+	ReadMysqlConn  *gorm.DB
+	WriteMysqlConn *gorm.DB
+	Cache          *cache.Cache
 }
 
 func NewMasterActionTriggerDao(conn *database.MysqlHandler) masterActionTrigger.MasterActionTriggerRepository {
 	return &masterActionTriggerDao{
-		ReadConn:  conn.Master.ReadConn,
-		WriteConn: conn.Master.WriteConn,
-		Cache:     cache.New(cache.NoExpiration, cache.NoExpiration),
+		ReadMysqlConn:  conn.Master.ReadMysqlConn,
+		WriteMysqlConn: conn.Master.WriteMysqlConn,
+		Cache:          cache.New(cache.NoExpiration, cache.NoExpiration),
 	}
 }
 
@@ -38,7 +38,7 @@ func (s *masterActionTriggerDao) Find(ctx context.Context, id int64) (*masterAct
 	}
 
 	t := NewMasterActionTrigger()
-	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("id = ?", id).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -60,7 +60,7 @@ func (s *masterActionTriggerDao) FindOrNil(ctx context.Context, id int64) (*mast
 	}
 
 	t := NewMasterActionTrigger()
-	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("id = ?", id).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -82,7 +82,7 @@ func (s *masterActionTriggerDao) FindByActionTriggerType(ctx context.Context, ac
 	}
 
 	t := NewMasterActionTrigger()
-	res := s.ReadConn.WithContext(ctx).Where("action_trigger_type = ?", actionTriggerType).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("action_trigger_type = ?", actionTriggerType).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -104,7 +104,7 @@ func (s *masterActionTriggerDao) FindOrNilByActionTriggerType(ctx context.Contex
 	}
 
 	t := NewMasterActionTrigger()
-	res := s.ReadConn.WithContext(ctx).Where("action_trigger_type = ?", actionTriggerType).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("action_trigger_type = ?", actionTriggerType).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -126,7 +126,7 @@ func (s *masterActionTriggerDao) FindList(ctx context.Context) (masterActionTrig
 	}
 
 	ts := NewMasterActionTriggers()
-	res := s.ReadConn.WithContext(ctx).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -149,7 +149,7 @@ func (s *masterActionTriggerDao) FindListByActionTriggerType(ctx context.Context
 	}
 
 	ts := NewMasterActionTriggers()
-	res := s.ReadConn.WithContext(ctx).Where("action_trigger_type = ?", actionTriggerType).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("action_trigger_type = ?", actionTriggerType).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -168,7 +168,7 @@ func (s *masterActionTriggerDao) Create(ctx context.Context, tx *gorm.DB, m *mas
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	t := &MasterActionTrigger{
@@ -189,7 +189,7 @@ func (s *masterActionTriggerDao) CreateList(ctx context.Context, tx *gorm.DB, ms
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	ts := NewMasterActionTriggers()
@@ -215,7 +215,7 @@ func (s *masterActionTriggerDao) Update(ctx context.Context, tx *gorm.DB, m *mas
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	t := &MasterActionTrigger{
@@ -236,7 +236,7 @@ func (s *masterActionTriggerDao) Delete(ctx context.Context, tx *gorm.DB, m *mas
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	res := conn.Model(NewMasterActionTrigger()).WithContext(ctx).Where("id = ?", m.Id).Delete(NewMasterActionTrigger())

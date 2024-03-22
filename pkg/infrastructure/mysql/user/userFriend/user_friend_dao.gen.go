@@ -13,18 +13,18 @@ import (
 )
 
 type userFriendDao struct {
-	ShardConn *database.ShardConn
+	ShardMysqlConn *database.ShardMysqlConn
 }
 
 func NewUserFriendDao(conn *database.MysqlHandler) userFriend.UserFriendRepository {
 	return &userFriendDao{
-		ShardConn: conn.User,
+		ShardMysqlConn: conn.User,
 	}
 }
 
 func (s *userFriendDao) Find(ctx context.Context, userId string, friendUserId string) (*userFriend.UserFriend, error) {
 	t := NewUserFriend()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("friend_user_id = ?", friendUserId).Find(t)
+	res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).Where("user_id = ?", userId).Where("friend_user_id = ?", friendUserId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -37,7 +37,7 @@ func (s *userFriendDao) Find(ctx context.Context, userId string, friendUserId st
 
 func (s *userFriendDao) FindOrNil(ctx context.Context, userId string, friendUserId string) (*userFriend.UserFriend, error) {
 	t := NewUserFriend()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("friend_user_id = ?", friendUserId).Find(t)
+	res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).Where("user_id = ?", userId).Where("friend_user_id = ?", friendUserId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (s *userFriendDao) FindOrNil(ctx context.Context, userId string, friendUser
 
 func (s *userFriendDao) FindList(ctx context.Context, userId string) (userFriend.UserFriends, error) {
 	ts := NewUserFriends()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(&ts)
+	res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).Where("user_id = ?", userId).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -68,7 +68,7 @@ func (s *userFriendDao) Create(ctx context.Context, tx *gorm.DB, m *userFriend.U
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
+		conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteMysqlConn
 	}
 
 	t := &UserFriend{
@@ -100,7 +100,7 @@ func (s *userFriendDao) CreateList(ctx context.Context, tx *gorm.DB, ms userFrie
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(fms.UserId)].WriteConn
+		conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(fms.UserId)].WriteMysqlConn
 	}
 
 	ts := NewUserFriends()
@@ -126,7 +126,7 @@ func (s *userFriendDao) Update(ctx context.Context, tx *gorm.DB, m *userFriend.U
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
+		conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteMysqlConn
 	}
 
 	t := &UserFriend{
@@ -147,7 +147,7 @@ func (s *userFriendDao) Delete(ctx context.Context, tx *gorm.DB, m *userFriend.U
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
+		conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteMysqlConn
 	}
 
 	res := conn.Model(NewUserFriend()).WithContext(ctx).Where("user_id = ?", m.UserId).Where("friend_user_id = ?", m.FriendUserId).Delete(NewUserFriend())

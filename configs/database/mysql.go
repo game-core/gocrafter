@@ -12,18 +12,18 @@ import (
 var MysqlHandlerInstance *MysqlHandler
 
 type MysqlHandler struct {
-	Common *Conn
-	Master *Conn
-	User   *ShardConn
+	Common *MysqlConn
+	Master *MysqlConn
+	User   *ShardMysqlConn
 }
 
-type ShardConn struct {
-	Shards map[string]*Conn
+type ShardMysqlConn struct {
+	Shards map[string]*MysqlConn
 }
 
-type Conn struct {
-	ReadConn  *gorm.DB
-	WriteConn *gorm.DB
+type MysqlConn struct {
+	ReadMysqlConn  *gorm.DB
+	WriteMysqlConn *gorm.DB
 }
 
 // NewMysql インスタンスを作成する
@@ -53,7 +53,7 @@ func InitMysql() (*MysqlHandler, error) {
 
 // commonDB コネクションを作成する
 func (s *MysqlHandler) commonDB() error {
-	readConn := fmt.Sprintf(
+	readMysqlConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		os.Getenv("COMMON_MYSQL_READ_USER"),
 		os.Getenv("COMMON_MYSQL_READ_PASSWORD"),
@@ -61,7 +61,7 @@ func (s *MysqlHandler) commonDB() error {
 		os.Getenv("COMMON_MYSQL_DATABASE"),
 	)
 
-	writeConn := fmt.Sprintf(
+	writeMysqlConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		os.Getenv("COMMON_MYSQL_WRITE_USER"),
 		os.Getenv("COMMON_MYSQL_WRITE_PASSWORD"),
@@ -70,22 +70,22 @@ func (s *MysqlHandler) commonDB() error {
 	)
 
 	readDB, err := gorm.Open(mysql.New(mysql.Config{
-		DSN: readConn,
+		DSN: readMysqlConn,
 	}), &gorm.Config{})
 	if err != nil {
 		return err
 	}
 
 	writeDB, err := gorm.Open(mysql.New(mysql.Config{
-		DSN: writeConn,
+		DSN: writeMysqlConn,
 	}), &gorm.Config{})
 	if err != nil {
 		return err
 	}
 
-	s.Common = &Conn{
-		ReadConn:  readDB,
-		WriteConn: writeDB,
+	s.Common = &MysqlConn{
+		ReadMysqlConn:  readDB,
+		WriteMysqlConn: writeDB,
 	}
 
 	return nil
@@ -93,7 +93,7 @@ func (s *MysqlHandler) commonDB() error {
 
 // masterDB コネクションを作成する
 func (s *MysqlHandler) masterDB() error {
-	readConn := fmt.Sprintf(
+	readMysqlConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		os.Getenv("MASTER_MYSQL_READ_USER"),
 		os.Getenv("MASTER_MYSQL_READ_PASSWORD"),
@@ -101,7 +101,7 @@ func (s *MysqlHandler) masterDB() error {
 		os.Getenv("MASTER_MYSQL_DATABASE"),
 	)
 
-	writeConn := fmt.Sprintf(
+	writeMysqlConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		os.Getenv("MASTER_MYSQL_WRITE_USER"),
 		os.Getenv("MASTER_MYSQL_WRITE_PASSWORD"),
@@ -110,22 +110,22 @@ func (s *MysqlHandler) masterDB() error {
 	)
 
 	readDB, err := gorm.Open(mysql.New(mysql.Config{
-		DSN: readConn,
+		DSN: readMysqlConn,
 	}), &gorm.Config{})
 	if err != nil {
 		return err
 	}
 
 	writeDB, err := gorm.Open(mysql.New(mysql.Config{
-		DSN: writeConn,
+		DSN: writeMysqlConn,
 	}), &gorm.Config{})
 	if err != nil {
 		return err
 	}
 
-	s.Master = &Conn{
-		ReadConn:  readDB,
-		WriteConn: writeDB,
+	s.Master = &MysqlConn{
+		ReadMysqlConn:  readDB,
+		WriteMysqlConn: writeDB,
 	}
 
 	return nil
@@ -139,16 +139,16 @@ func (s *MysqlHandler) shardUserDB() error {
 		return err
 	}
 
-	shards := make(map[string]*Conn)
+	shards := make(map[string]*MysqlConn)
 	for i := 0; i <= shardCount; i++ {
-		userConn, err := s.userDB(fmt.Sprintf("_%v", i))
+		userMysqlConn, err := s.userDB(fmt.Sprintf("_%v", i))
 		if err != nil {
 			return err
 		}
-		shards[os.Getenv(fmt.Sprintf("USER_MYSQL_SHARD_KEY_%v", i))] = userConn
+		shards[os.Getenv(fmt.Sprintf("USER_MYSQL_SHARD_KEY_%v", i))] = userMysqlConn
 	}
 
-	s.User = &ShardConn{
+	s.User = &ShardMysqlConn{
 		Shards: shards,
 	}
 
@@ -156,8 +156,8 @@ func (s *MysqlHandler) shardUserDB() error {
 }
 
 // userDB コネクションを作成する
-func (s *MysqlHandler) userDB(shard string) (*Conn, error) {
-	readConn := fmt.Sprintf(
+func (s *MysqlHandler) userDB(shard string) (*MysqlConn, error) {
+	readMysqlConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		os.Getenv(fmt.Sprintf("USER_MYSQL_READ_USER%s", shard)),
 		os.Getenv(fmt.Sprintf("USER_MYSQL_READ_PASSWORD%s", shard)),
@@ -165,7 +165,7 @@ func (s *MysqlHandler) userDB(shard string) (*Conn, error) {
 		os.Getenv(fmt.Sprintf("USER_MYSQL_DATABASE%s", shard)),
 	)
 
-	writeConn := fmt.Sprintf(
+	writeMysqlConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		os.Getenv(fmt.Sprintf("USER_MYSQL_WRITE_USER%s", shard)),
 		os.Getenv(fmt.Sprintf("USER_MYSQL_WRITE_PASSWORD%s", shard)),
@@ -174,21 +174,21 @@ func (s *MysqlHandler) userDB(shard string) (*Conn, error) {
 	)
 
 	readDB, err := gorm.Open(mysql.New(mysql.Config{
-		DSN: readConn,
+		DSN: readMysqlConn,
 	}), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}
 
 	writeDB, err := gorm.Open(mysql.New(mysql.Config{
-		DSN: writeConn,
+		DSN: writeMysqlConn,
 	}), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}
 
-	return &Conn{
-		ReadConn:  readDB,
-		WriteConn: writeDB,
+	return &MysqlConn{
+		ReadMysqlConn:  readDB,
+		WriteMysqlConn: writeDB,
 	}, nil
 }

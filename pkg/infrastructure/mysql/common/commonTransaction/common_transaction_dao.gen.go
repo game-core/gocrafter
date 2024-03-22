@@ -10,19 +10,19 @@ import (
 )
 
 type commonTransactionDao struct {
-	ReadConn  *gorm.DB
-	WriteConn *gorm.DB
+	ReadMysqlConn  *gorm.DB
+	WriteMysqlConn *gorm.DB
 }
 
 func NewCommonTransactionDao(conn *database.MysqlHandler) commonTransaction.CommonTransactionRepository {
 	return &commonTransactionDao{
-		ReadConn:  conn.Common.ReadConn,
-		WriteConn: conn.Common.WriteConn,
+		ReadMysqlConn:  conn.Common.ReadMysqlConn,
+		WriteMysqlConn: conn.Common.WriteMysqlConn,
 	}
 }
 
 func (d *commonTransactionDao) Begin(ctx context.Context) (*gorm.DB, error) {
-	tx := d.WriteConn.WithContext(ctx).Begin()
+	tx := d.WriteMysqlConn.WithContext(ctx).Begin()
 	if err := tx.Error; err != nil {
 		return nil, err
 	}

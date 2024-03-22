@@ -15,16 +15,16 @@ import (
 )
 
 type masterActionRunDao struct {
-	ReadConn  *gorm.DB
-	WriteConn *gorm.DB
-	Cache     *cache.Cache
+	ReadMysqlConn  *gorm.DB
+	WriteMysqlConn *gorm.DB
+	Cache          *cache.Cache
 }
 
 func NewMasterActionRunDao(conn *database.MysqlHandler) masterActionRun.MasterActionRunRepository {
 	return &masterActionRunDao{
-		ReadConn:  conn.Master.ReadConn,
-		WriteConn: conn.Master.WriteConn,
-		Cache:     cache.New(cache.NoExpiration, cache.NoExpiration),
+		ReadMysqlConn:  conn.Master.ReadMysqlConn,
+		WriteMysqlConn: conn.Master.WriteMysqlConn,
+		Cache:          cache.New(cache.NoExpiration, cache.NoExpiration),
 	}
 }
 
@@ -37,7 +37,7 @@ func (s *masterActionRunDao) Find(ctx context.Context, id int64) (*masterActionR
 	}
 
 	t := NewMasterActionRun()
-	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("id = ?", id).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -59,7 +59,7 @@ func (s *masterActionRunDao) FindOrNil(ctx context.Context, id int64) (*masterAc
 	}
 
 	t := NewMasterActionRun()
-	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("id = ?", id).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -81,7 +81,7 @@ func (s *masterActionRunDao) FindByName(ctx context.Context, name string) (*mast
 	}
 
 	t := NewMasterActionRun()
-	res := s.ReadConn.WithContext(ctx).Where("name = ?", name).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("name = ?", name).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -103,7 +103,7 @@ func (s *masterActionRunDao) FindByActionId(ctx context.Context, actionId int64)
 	}
 
 	t := NewMasterActionRun()
-	res := s.ReadConn.WithContext(ctx).Where("action_id = ?", actionId).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("action_id = ?", actionId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -125,7 +125,7 @@ func (s *masterActionRunDao) FindOrNilByName(ctx context.Context, name string) (
 	}
 
 	t := NewMasterActionRun()
-	res := s.ReadConn.WithContext(ctx).Where("name = ?", name).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("name = ?", name).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -147,7 +147,7 @@ func (s *masterActionRunDao) FindOrNilByActionId(ctx context.Context, actionId i
 	}
 
 	t := NewMasterActionRun()
-	res := s.ReadConn.WithContext(ctx).Where("action_id = ?", actionId).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("action_id = ?", actionId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -169,7 +169,7 @@ func (s *masterActionRunDao) FindList(ctx context.Context) (masterActionRun.Mast
 	}
 
 	ts := NewMasterActionRuns()
-	res := s.ReadConn.WithContext(ctx).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -192,7 +192,7 @@ func (s *masterActionRunDao) FindListByName(ctx context.Context, name string) (m
 	}
 
 	ts := NewMasterActionRuns()
-	res := s.ReadConn.WithContext(ctx).Where("name = ?", name).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("name = ?", name).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -215,7 +215,7 @@ func (s *masterActionRunDao) FindListByActionId(ctx context.Context, actionId in
 	}
 
 	ts := NewMasterActionRuns()
-	res := s.ReadConn.WithContext(ctx).Where("action_id = ?", actionId).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("action_id = ?", actionId).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -234,7 +234,7 @@ func (s *masterActionRunDao) Create(ctx context.Context, tx *gorm.DB, m *masterA
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	t := &MasterActionRun{
@@ -255,7 +255,7 @@ func (s *masterActionRunDao) CreateList(ctx context.Context, tx *gorm.DB, ms mas
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	ts := NewMasterActionRuns()
@@ -281,7 +281,7 @@ func (s *masterActionRunDao) Update(ctx context.Context, tx *gorm.DB, m *masterA
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	t := &MasterActionRun{
@@ -302,7 +302,7 @@ func (s *masterActionRunDao) Delete(ctx context.Context, tx *gorm.DB, m *masterA
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	res := conn.Model(NewMasterActionRun()).WithContext(ctx).Where("id = ?", m.Id).Delete(NewMasterActionRun())

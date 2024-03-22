@@ -12,20 +12,20 @@ import (
 )
 
 type commonShardDao struct {
-	ReadConn  *gorm.DB
-	WriteConn *gorm.DB
+	ReadMysqlConn  *gorm.DB
+	WriteMysqlConn *gorm.DB
 }
 
 func NewCommonShardDao(conn *database.MysqlHandler) commonShard.CommonShardRepository {
 	return &commonShardDao{
-		ReadConn:  conn.Common.ReadConn,
-		WriteConn: conn.Common.WriteConn,
+		ReadMysqlConn:  conn.Common.ReadMysqlConn,
+		WriteMysqlConn: conn.Common.WriteMysqlConn,
 	}
 }
 
 func (s *commonShardDao) Find(ctx context.Context, id int64) (*commonShard.CommonShard, error) {
 	t := NewCommonShard()
-	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("id = ?", id).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -38,7 +38,7 @@ func (s *commonShardDao) Find(ctx context.Context, id int64) (*commonShard.Commo
 
 func (s *commonShardDao) FindOrNil(ctx context.Context, id int64) (*commonShard.CommonShard, error) {
 	t := NewCommonShard()
-	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("id = ?", id).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func (s *commonShardDao) FindOrNil(ctx context.Context, id int64) (*commonShard.
 
 func (s *commonShardDao) FindByShardKey(ctx context.Context, shardKey string) (*commonShard.CommonShard, error) {
 	t := NewCommonShard()
-	res := s.ReadConn.WithContext(ctx).Where("shard_key = ?", shardKey).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("shard_key = ?", shardKey).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func (s *commonShardDao) FindByShardKey(ctx context.Context, shardKey string) (*
 
 func (s *commonShardDao) FindOrNilByShardKey(ctx context.Context, shardKey string) (*commonShard.CommonShard, error) {
 	t := NewCommonShard()
-	res := s.ReadConn.WithContext(ctx).Where("shard_key = ?", shardKey).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("shard_key = ?", shardKey).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -77,7 +77,7 @@ func (s *commonShardDao) FindOrNilByShardKey(ctx context.Context, shardKey strin
 
 func (s *commonShardDao) FindList(ctx context.Context) (commonShard.CommonShards, error) {
 	ts := NewCommonShards()
-	res := s.ReadConn.WithContext(ctx).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -92,7 +92,7 @@ func (s *commonShardDao) FindList(ctx context.Context) (commonShard.CommonShards
 
 func (s *commonShardDao) FindListByShardKey(ctx context.Context, shardKey string) (commonShard.CommonShards, error) {
 	ts := NewCommonShards()
-	res := s.ReadConn.WithContext(ctx).Where("shard_key = ?", shardKey).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("shard_key = ?", shardKey).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -110,7 +110,7 @@ func (s *commonShardDao) Create(ctx context.Context, tx *gorm.DB, m *commonShard
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	t := &CommonShard{
@@ -132,7 +132,7 @@ func (s *commonShardDao) CreateList(ctx context.Context, tx *gorm.DB, ms commonS
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	ts := NewCommonShards()
@@ -159,7 +159,7 @@ func (s *commonShardDao) Update(ctx context.Context, tx *gorm.DB, m *commonShard
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	t := &CommonShard{
@@ -181,7 +181,7 @@ func (s *commonShardDao) Delete(ctx context.Context, tx *gorm.DB, m *commonShard
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	res := conn.Model(NewCommonShard()).WithContext(ctx).Where("id = ?", m.Id).Delete(NewCommonShard())

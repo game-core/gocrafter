@@ -15,16 +15,16 @@ import (
 )
 
 type masterIdleBonusItemDao struct {
-	ReadConn  *gorm.DB
-	WriteConn *gorm.DB
-	Cache     *cache.Cache
+	ReadMysqlConn  *gorm.DB
+	WriteMysqlConn *gorm.DB
+	Cache          *cache.Cache
 }
 
 func NewMasterIdleBonusItemDao(conn *database.MysqlHandler) masterIdleBonusItem.MasterIdleBonusItemRepository {
 	return &masterIdleBonusItemDao{
-		ReadConn:  conn.Master.ReadConn,
-		WriteConn: conn.Master.WriteConn,
-		Cache:     cache.New(cache.NoExpiration, cache.NoExpiration),
+		ReadMysqlConn:  conn.Master.ReadMysqlConn,
+		WriteMysqlConn: conn.Master.WriteMysqlConn,
+		Cache:          cache.New(cache.NoExpiration, cache.NoExpiration),
 	}
 }
 
@@ -37,7 +37,7 @@ func (s *masterIdleBonusItemDao) Find(ctx context.Context, id int64) (*masterIdl
 	}
 
 	t := NewMasterIdleBonusItem()
-	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("id = ?", id).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -59,7 +59,7 @@ func (s *masterIdleBonusItemDao) FindOrNil(ctx context.Context, id int64) (*mast
 	}
 
 	t := NewMasterIdleBonusItem()
-	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("id = ?", id).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -81,7 +81,7 @@ func (s *masterIdleBonusItemDao) FindByMasterIdleBonusScheduleId(ctx context.Con
 	}
 
 	t := NewMasterIdleBonusItem()
-	res := s.ReadConn.WithContext(ctx).Where("master_idle_bonus_schedule_id = ?", masterIdleBonusScheduleId).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("master_idle_bonus_schedule_id = ?", masterIdleBonusScheduleId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -103,7 +103,7 @@ func (s *masterIdleBonusItemDao) FindByMasterItemId(ctx context.Context, masterI
 	}
 
 	t := NewMasterIdleBonusItem()
-	res := s.ReadConn.WithContext(ctx).Where("master_item_id = ?", masterItemId).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("master_item_id = ?", masterItemId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -125,7 +125,7 @@ func (s *masterIdleBonusItemDao) FindByMasterIdleBonusScheduleIdAndMasterItemId(
 	}
 
 	t := NewMasterIdleBonusItem()
-	res := s.ReadConn.WithContext(ctx).Where("master_idle_bonus_schedule_id = ?", masterIdleBonusScheduleId).Where("master_item_id = ?", masterItemId).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("master_idle_bonus_schedule_id = ?", masterIdleBonusScheduleId).Where("master_item_id = ?", masterItemId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -147,7 +147,7 @@ func (s *masterIdleBonusItemDao) FindOrNilByMasterIdleBonusScheduleId(ctx contex
 	}
 
 	t := NewMasterIdleBonusItem()
-	res := s.ReadConn.WithContext(ctx).Where("master_idle_bonus_schedule_id = ?", masterIdleBonusScheduleId).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("master_idle_bonus_schedule_id = ?", masterIdleBonusScheduleId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -169,7 +169,7 @@ func (s *masterIdleBonusItemDao) FindOrNilByMasterItemId(ctx context.Context, ma
 	}
 
 	t := NewMasterIdleBonusItem()
-	res := s.ReadConn.WithContext(ctx).Where("master_item_id = ?", masterItemId).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("master_item_id = ?", masterItemId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -191,7 +191,7 @@ func (s *masterIdleBonusItemDao) FindOrNilByMasterIdleBonusScheduleIdAndMasterIt
 	}
 
 	t := NewMasterIdleBonusItem()
-	res := s.ReadConn.WithContext(ctx).Where("master_idle_bonus_schedule_id = ?", masterIdleBonusScheduleId).Where("master_item_id = ?", masterItemId).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("master_idle_bonus_schedule_id = ?", masterIdleBonusScheduleId).Where("master_item_id = ?", masterItemId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -213,7 +213,7 @@ func (s *masterIdleBonusItemDao) FindList(ctx context.Context) (masterIdleBonusI
 	}
 
 	ts := NewMasterIdleBonusItems()
-	res := s.ReadConn.WithContext(ctx).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -236,7 +236,7 @@ func (s *masterIdleBonusItemDao) FindListByMasterIdleBonusScheduleId(ctx context
 	}
 
 	ts := NewMasterIdleBonusItems()
-	res := s.ReadConn.WithContext(ctx).Where("master_idle_bonus_schedule_id = ?", masterIdleBonusScheduleId).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("master_idle_bonus_schedule_id = ?", masterIdleBonusScheduleId).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -259,7 +259,7 @@ func (s *masterIdleBonusItemDao) FindListByMasterItemId(ctx context.Context, mas
 	}
 
 	ts := NewMasterIdleBonusItems()
-	res := s.ReadConn.WithContext(ctx).Where("master_item_id = ?", masterItemId).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("master_item_id = ?", masterItemId).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -282,7 +282,7 @@ func (s *masterIdleBonusItemDao) FindListByMasterIdleBonusScheduleIdAndMasterIte
 	}
 
 	ts := NewMasterIdleBonusItems()
-	res := s.ReadConn.WithContext(ctx).Where("master_idle_bonus_schedule_id = ?", masterIdleBonusScheduleId).Where("master_item_id = ?", masterItemId).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("master_idle_bonus_schedule_id = ?", masterIdleBonusScheduleId).Where("master_item_id = ?", masterItemId).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -301,7 +301,7 @@ func (s *masterIdleBonusItemDao) Create(ctx context.Context, tx *gorm.DB, m *mas
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	t := &MasterIdleBonusItem{
@@ -324,7 +324,7 @@ func (s *masterIdleBonusItemDao) CreateList(ctx context.Context, tx *gorm.DB, ms
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	ts := NewMasterIdleBonusItems()
@@ -352,7 +352,7 @@ func (s *masterIdleBonusItemDao) Update(ctx context.Context, tx *gorm.DB, m *mas
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	t := &MasterIdleBonusItem{
@@ -375,7 +375,7 @@ func (s *masterIdleBonusItemDao) Delete(ctx context.Context, tx *gorm.DB, m *mas
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	res := conn.Model(NewMasterIdleBonusItem()).WithContext(ctx).Where("id = ?", m.Id).Delete(NewMasterIdleBonusItem())

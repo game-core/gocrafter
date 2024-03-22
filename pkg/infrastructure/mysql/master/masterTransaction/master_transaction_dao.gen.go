@@ -10,19 +10,19 @@ import (
 )
 
 type masterTransactionDao struct {
-	ReadConn  *gorm.DB
-	WriteConn *gorm.DB
+	ReadMysqlConn  *gorm.DB
+	WriteMysqlConn *gorm.DB
 }
 
 func NewMasterTransactionDao(conn *database.MysqlHandler) masterTransaction.MasterTransactionRepository {
 	return &masterTransactionDao{
-		ReadConn:  conn.Master.ReadConn,
-		WriteConn: conn.Master.WriteConn,
+		ReadMysqlConn:  conn.Master.ReadMysqlConn,
+		WriteMysqlConn: conn.Master.WriteMysqlConn,
 	}
 }
 
 func (d *masterTransactionDao) Begin(ctx context.Context) (*gorm.DB, error) {
-	tx := d.WriteConn.WithContext(ctx).Begin()
+	tx := d.WriteMysqlConn.WithContext(ctx).Begin()
 	if err := tx.Error; err != nil {
 		return nil, err
 	}

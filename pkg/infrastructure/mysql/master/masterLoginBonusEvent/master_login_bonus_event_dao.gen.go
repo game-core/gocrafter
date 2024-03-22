@@ -15,16 +15,16 @@ import (
 )
 
 type masterLoginBonusEventDao struct {
-	ReadConn  *gorm.DB
-	WriteConn *gorm.DB
-	Cache     *cache.Cache
+	ReadMysqlConn  *gorm.DB
+	WriteMysqlConn *gorm.DB
+	Cache          *cache.Cache
 }
 
 func NewMasterLoginBonusEventDao(conn *database.MysqlHandler) masterLoginBonusEvent.MasterLoginBonusEventRepository {
 	return &masterLoginBonusEventDao{
-		ReadConn:  conn.Master.ReadConn,
-		WriteConn: conn.Master.WriteConn,
-		Cache:     cache.New(cache.NoExpiration, cache.NoExpiration),
+		ReadMysqlConn:  conn.Master.ReadMysqlConn,
+		WriteMysqlConn: conn.Master.WriteMysqlConn,
+		Cache:          cache.New(cache.NoExpiration, cache.NoExpiration),
 	}
 }
 
@@ -37,7 +37,7 @@ func (s *masterLoginBonusEventDao) Find(ctx context.Context, id int64) (*masterL
 	}
 
 	t := NewMasterLoginBonusEvent()
-	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("id = ?", id).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -59,7 +59,7 @@ func (s *masterLoginBonusEventDao) FindOrNil(ctx context.Context, id int64) (*ma
 	}
 
 	t := NewMasterLoginBonusEvent()
-	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("id = ?", id).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -81,7 +81,7 @@ func (s *masterLoginBonusEventDao) FindList(ctx context.Context) (masterLoginBon
 	}
 
 	ts := NewMasterLoginBonusEvents()
-	res := s.ReadConn.WithContext(ctx).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -100,7 +100,7 @@ func (s *masterLoginBonusEventDao) Create(ctx context.Context, tx *gorm.DB, m *m
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	t := &MasterLoginBonusEvent{
@@ -125,7 +125,7 @@ func (s *masterLoginBonusEventDao) CreateList(ctx context.Context, tx *gorm.DB, 
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	ts := NewMasterLoginBonusEvents()
@@ -155,7 +155,7 @@ func (s *masterLoginBonusEventDao) Update(ctx context.Context, tx *gorm.DB, m *m
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	t := &MasterLoginBonusEvent{
@@ -180,7 +180,7 @@ func (s *masterLoginBonusEventDao) Delete(ctx context.Context, tx *gorm.DB, m *m
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	res := conn.Model(NewMasterLoginBonusEvent()).WithContext(ctx).Where("id = ?", m.Id).Delete(NewMasterLoginBonusEvent())

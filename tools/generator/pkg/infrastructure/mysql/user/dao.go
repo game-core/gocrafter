@@ -32,12 +32,12 @@ import (
 )
 
 type {{.CamelName}}Dao struct {
-	ShardConn *database.ShardConn
+	ShardMysqlConn *database.ShardMysqlConn
 }
 
 func New{{.Name}}Dao(conn *database.MysqlHandler) {{.Package}}.{{.Name}}Repository {
 	return &{{.CamelName}}Dao{
-		ShardConn: conn.User,
+		ShardMysqlConn: conn.User,
 	}
 }
 
@@ -248,7 +248,7 @@ func (s *Dao) createFind(yamlStruct *YamlStruct, primaryFields []string) string 
 	return fmt.Sprintf(
 		`func (s *%sDao) Find(ctx context.Context, %s) (*%s.%s, error) {
 			t := New%s()
-			res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).%s.Find(t)
+			res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).%s.Find(t)
 			if err := res.Error; err != nil {
 				return nil, err
 			}
@@ -279,7 +279,7 @@ func (s *Dao) createFindOrNil(yamlStruct *YamlStruct, primaryFields []string) st
 	return fmt.Sprintf(
 		`func (s *%sDao) FindOrNil(ctx context.Context, %s) (*%s.%s, error) {
 			t := New%s()
-			res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).%s.Find(t)
+			res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).%s.Find(t)
 			if err := res.Error; err != nil {
 				return nil, err
 			}
@@ -310,7 +310,7 @@ func (s *Dao) createFindByIndex(yamlStruct *YamlStruct, indexFields []string) st
 	return fmt.Sprintf(
 		`func (s *%sDao) FindBy%s(ctx context.Context, %s) (*%s.%s, error) {
 			t := New%s()
-			res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).%s.Find(t)
+			res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).%s.Find(t)
 			if err := res.Error; err != nil {
 				return nil, err
 			}
@@ -342,7 +342,7 @@ func (s *Dao) createFindOrNilByIndex(yamlStruct *YamlStruct, indexFields []strin
 	return fmt.Sprintf(
 		`func (s *%sDao) FindOrNilBy%s(ctx context.Context, %s) (*%s.%s, error) {
 			t := New%s()
-			res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).%s.Find(t)
+			res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).%s.Find(t)
 			if err := res.Error; err != nil {
 				return nil, err
 			}
@@ -369,7 +369,7 @@ func (s *Dao) createFindList(yamlStruct *YamlStruct) string {
 	return fmt.Sprintf(
 		`func (s *%sDao) FindList(ctx context.Context, userId string) (%s.%s, error) {
 			ts := New%s()
-			res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(&ts)
+			res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).Where("user_id = ?", userId).Find(&ts)
 			if err := res.Error; err != nil {
 				return nil, err
 			}
@@ -397,7 +397,7 @@ func (s *Dao) createFindListByIndex(yamlStruct *YamlStruct, indexFields []string
 	return fmt.Sprintf(
 		`func (s *%sDao) FindListBy%s(ctx context.Context, %s) (%s.%s, error) {
 			ts := New%s()
-			res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).%s.Find(&ts)
+			res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).%s.Find(&ts)
 			if err := res.Error; err != nil {
 				return nil, err
 			}
@@ -426,7 +426,7 @@ func (s *Dao) createCreate(yamlStruct *YamlStruct) string {
 			if tx != nil {
 				conn = tx
 			} else {
-				conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
+				conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteMysqlConn
 			}
 
 			t := %s
@@ -467,7 +467,7 @@ func (s *Dao) createCreateList(yamlStruct *YamlStruct) string {
 			if tx != nil {
 				conn = tx
 			} else {
-				conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(fms.UserId)].WriteConn
+				conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(fms.UserId)].WriteMysqlConn
 			}
 
 			ts := New%s()
@@ -507,7 +507,7 @@ func (s *Dao) createUpdate(yamlStruct *YamlStruct, primaryFields []string) strin
 			if tx != nil {
 				conn = tx
 			} else {
-				conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
+				conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteMysqlConn
 			}
 
 			t := %s
@@ -543,7 +543,7 @@ func (s *Dao) createDelete(yamlStruct *YamlStruct, primaryFields []string) strin
 			if tx != nil {
 				conn = tx
 			} else {
-				conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
+				conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteMysqlConn
 			}
 		
 			res := conn.Model(New%s()).WithContext(ctx).%s.Delete(New%s())

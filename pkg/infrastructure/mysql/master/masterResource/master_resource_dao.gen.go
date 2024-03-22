@@ -16,16 +16,16 @@ import (
 )
 
 type masterResourceDao struct {
-	ReadConn  *gorm.DB
-	WriteConn *gorm.DB
-	Cache     *cache.Cache
+	ReadMysqlConn  *gorm.DB
+	WriteMysqlConn *gorm.DB
+	Cache          *cache.Cache
 }
 
 func NewMasterResourceDao(conn *database.MysqlHandler) masterResource.MasterResourceRepository {
 	return &masterResourceDao{
-		ReadConn:  conn.Master.ReadConn,
-		WriteConn: conn.Master.WriteConn,
-		Cache:     cache.New(cache.NoExpiration, cache.NoExpiration),
+		ReadMysqlConn:  conn.Master.ReadMysqlConn,
+		WriteMysqlConn: conn.Master.WriteMysqlConn,
+		Cache:          cache.New(cache.NoExpiration, cache.NoExpiration),
 	}
 }
 
@@ -38,7 +38,7 @@ func (s *masterResourceDao) Find(ctx context.Context, id int64) (*masterResource
 	}
 
 	t := NewMasterResource()
-	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("id = ?", id).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -60,7 +60,7 @@ func (s *masterResourceDao) FindOrNil(ctx context.Context, id int64) (*masterRes
 	}
 
 	t := NewMasterResource()
-	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("id = ?", id).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -82,7 +82,7 @@ func (s *masterResourceDao) FindByResourceType(ctx context.Context, resourceType
 	}
 
 	t := NewMasterResource()
-	res := s.ReadConn.WithContext(ctx).Where("resource_type = ?", resourceType).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("resource_type = ?", resourceType).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -104,7 +104,7 @@ func (s *masterResourceDao) FindOrNilByResourceType(ctx context.Context, resourc
 	}
 
 	t := NewMasterResource()
-	res := s.ReadConn.WithContext(ctx).Where("resource_type = ?", resourceType).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("resource_type = ?", resourceType).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -126,7 +126,7 @@ func (s *masterResourceDao) FindList(ctx context.Context) (masterResource.Master
 	}
 
 	ts := NewMasterResources()
-	res := s.ReadConn.WithContext(ctx).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -149,7 +149,7 @@ func (s *masterResourceDao) FindListByResourceType(ctx context.Context, resource
 	}
 
 	ts := NewMasterResources()
-	res := s.ReadConn.WithContext(ctx).Where("resource_type = ?", resourceType).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("resource_type = ?", resourceType).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -168,7 +168,7 @@ func (s *masterResourceDao) Create(ctx context.Context, tx *gorm.DB, m *masterRe
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	t := &MasterResource{
@@ -189,7 +189,7 @@ func (s *masterResourceDao) CreateList(ctx context.Context, tx *gorm.DB, ms mast
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	ts := NewMasterResources()
@@ -215,7 +215,7 @@ func (s *masterResourceDao) Update(ctx context.Context, tx *gorm.DB, m *masterRe
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	t := &MasterResource{
@@ -236,7 +236,7 @@ func (s *masterResourceDao) Delete(ctx context.Context, tx *gorm.DB, m *masterRe
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	res := conn.Model(NewMasterResource()).WithContext(ctx).Where("id = ?", m.Id).Delete(NewMasterResource())

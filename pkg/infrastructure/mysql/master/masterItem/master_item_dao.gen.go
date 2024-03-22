@@ -15,16 +15,16 @@ import (
 )
 
 type masterItemDao struct {
-	ReadConn  *gorm.DB
-	WriteConn *gorm.DB
-	Cache     *cache.Cache
+	ReadMysqlConn  *gorm.DB
+	WriteMysqlConn *gorm.DB
+	Cache          *cache.Cache
 }
 
 func NewMasterItemDao(conn *database.MysqlHandler) masterItem.MasterItemRepository {
 	return &masterItemDao{
-		ReadConn:  conn.Master.ReadConn,
-		WriteConn: conn.Master.WriteConn,
-		Cache:     cache.New(cache.NoExpiration, cache.NoExpiration),
+		ReadMysqlConn:  conn.Master.ReadMysqlConn,
+		WriteMysqlConn: conn.Master.WriteMysqlConn,
+		Cache:          cache.New(cache.NoExpiration, cache.NoExpiration),
 	}
 }
 
@@ -37,7 +37,7 @@ func (s *masterItemDao) Find(ctx context.Context, id int64) (*masterItem.MasterI
 	}
 
 	t := NewMasterItem()
-	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("id = ?", id).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -59,7 +59,7 @@ func (s *masterItemDao) FindOrNil(ctx context.Context, id int64) (*masterItem.Ma
 	}
 
 	t := NewMasterItem()
-	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("id = ?", id).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -81,7 +81,7 @@ func (s *masterItemDao) FindByName(ctx context.Context, name string) (*masterIte
 	}
 
 	t := NewMasterItem()
-	res := s.ReadConn.WithContext(ctx).Where("name = ?", name).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("name = ?", name).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -103,7 +103,7 @@ func (s *masterItemDao) FindOrNilByName(ctx context.Context, name string) (*mast
 	}
 
 	t := NewMasterItem()
-	res := s.ReadConn.WithContext(ctx).Where("name = ?", name).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("name = ?", name).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -125,7 +125,7 @@ func (s *masterItemDao) FindList(ctx context.Context) (masterItem.MasterItems, e
 	}
 
 	ts := NewMasterItems()
-	res := s.ReadConn.WithContext(ctx).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -148,7 +148,7 @@ func (s *masterItemDao) FindListByName(ctx context.Context, name string) (master
 	}
 
 	ts := NewMasterItems()
-	res := s.ReadConn.WithContext(ctx).Where("name = ?", name).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("name = ?", name).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -167,7 +167,7 @@ func (s *masterItemDao) Create(ctx context.Context, tx *gorm.DB, m *masterItem.M
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	t := &MasterItem{
@@ -190,7 +190,7 @@ func (s *masterItemDao) CreateList(ctx context.Context, tx *gorm.DB, ms masterIt
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	ts := NewMasterItems()
@@ -218,7 +218,7 @@ func (s *masterItemDao) Update(ctx context.Context, tx *gorm.DB, m *masterItem.M
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	t := &MasterItem{
@@ -241,7 +241,7 @@ func (s *masterItemDao) Delete(ctx context.Context, tx *gorm.DB, m *masterItem.M
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	res := conn.Model(NewMasterItem()).WithContext(ctx).Where("id = ?", m.Id).Delete(NewMasterItem())

@@ -15,16 +15,16 @@ import (
 )
 
 type masterIdleBonusDao struct {
-	ReadConn  *gorm.DB
-	WriteConn *gorm.DB
-	Cache     *cache.Cache
+	ReadMysqlConn  *gorm.DB
+	WriteMysqlConn *gorm.DB
+	Cache          *cache.Cache
 }
 
 func NewMasterIdleBonusDao(conn *database.MysqlHandler) masterIdleBonus.MasterIdleBonusRepository {
 	return &masterIdleBonusDao{
-		ReadConn:  conn.Master.ReadConn,
-		WriteConn: conn.Master.WriteConn,
-		Cache:     cache.New(cache.NoExpiration, cache.NoExpiration),
+		ReadMysqlConn:  conn.Master.ReadMysqlConn,
+		WriteMysqlConn: conn.Master.WriteMysqlConn,
+		Cache:          cache.New(cache.NoExpiration, cache.NoExpiration),
 	}
 }
 
@@ -37,7 +37,7 @@ func (s *masterIdleBonusDao) Find(ctx context.Context, id int64) (*masterIdleBon
 	}
 
 	t := NewMasterIdleBonus()
-	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("id = ?", id).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -59,7 +59,7 @@ func (s *masterIdleBonusDao) FindOrNil(ctx context.Context, id int64) (*masterId
 	}
 
 	t := NewMasterIdleBonus()
-	res := s.ReadConn.WithContext(ctx).Where("id = ?", id).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("id = ?", id).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -81,7 +81,7 @@ func (s *masterIdleBonusDao) FindByMasterIdleBonusEventId(ctx context.Context, m
 	}
 
 	t := NewMasterIdleBonus()
-	res := s.ReadConn.WithContext(ctx).Where("master_idle_bonus_event_id = ?", masterIdleBonusEventId).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("master_idle_bonus_event_id = ?", masterIdleBonusEventId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -103,7 +103,7 @@ func (s *masterIdleBonusDao) FindOrNilByMasterIdleBonusEventId(ctx context.Conte
 	}
 
 	t := NewMasterIdleBonus()
-	res := s.ReadConn.WithContext(ctx).Where("master_idle_bonus_event_id = ?", masterIdleBonusEventId).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("master_idle_bonus_event_id = ?", masterIdleBonusEventId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -125,7 +125,7 @@ func (s *masterIdleBonusDao) FindList(ctx context.Context) (masterIdleBonus.Mast
 	}
 
 	ts := NewMasterIdleBonuses()
-	res := s.ReadConn.WithContext(ctx).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -148,7 +148,7 @@ func (s *masterIdleBonusDao) FindListByMasterIdleBonusEventId(ctx context.Contex
 	}
 
 	ts := NewMasterIdleBonuses()
-	res := s.ReadConn.WithContext(ctx).Where("master_idle_bonus_event_id = ?", masterIdleBonusEventId).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("master_idle_bonus_event_id = ?", masterIdleBonusEventId).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -167,7 +167,7 @@ func (s *masterIdleBonusDao) Create(ctx context.Context, tx *gorm.DB, m *masterI
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	t := &MasterIdleBonus{
@@ -188,7 +188,7 @@ func (s *masterIdleBonusDao) CreateList(ctx context.Context, tx *gorm.DB, ms mas
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	ts := NewMasterIdleBonuses()
@@ -214,7 +214,7 @@ func (s *masterIdleBonusDao) Update(ctx context.Context, tx *gorm.DB, m *masterI
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	t := &MasterIdleBonus{
@@ -235,7 +235,7 @@ func (s *masterIdleBonusDao) Delete(ctx context.Context, tx *gorm.DB, m *masterI
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.WriteConn
+		conn = s.WriteMysqlConn
 	}
 
 	res := conn.Model(NewMasterIdleBonus()).WithContext(ctx).Where("id = ?", m.Id).Delete(NewMasterIdleBonus())

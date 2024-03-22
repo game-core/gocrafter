@@ -13,18 +13,18 @@ import (
 )
 
 type userIdleBonusDao struct {
-	ShardConn *database.ShardConn
+	ShardMysqlConn *database.ShardMysqlConn
 }
 
 func NewUserIdleBonusDao(conn *database.MysqlHandler) userIdleBonus.UserIdleBonusRepository {
 	return &userIdleBonusDao{
-		ShardConn: conn.User,
+		ShardMysqlConn: conn.User,
 	}
 }
 
 func (s *userIdleBonusDao) Find(ctx context.Context, userId string, masterIdleBonusId int64) (*userIdleBonus.UserIdleBonus, error) {
 	t := NewUserIdleBonus()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_idle_bonus_id = ?", masterIdleBonusId).Find(t)
+	res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_idle_bonus_id = ?", masterIdleBonusId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -37,7 +37,7 @@ func (s *userIdleBonusDao) Find(ctx context.Context, userId string, masterIdleBo
 
 func (s *userIdleBonusDao) FindOrNil(ctx context.Context, userId string, masterIdleBonusId int64) (*userIdleBonus.UserIdleBonus, error) {
 	t := NewUserIdleBonus()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_idle_bonus_id = ?", masterIdleBonusId).Find(t)
+	res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_idle_bonus_id = ?", masterIdleBonusId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (s *userIdleBonusDao) FindOrNil(ctx context.Context, userId string, masterI
 
 func (s *userIdleBonusDao) FindByUserId(ctx context.Context, userId string) (*userIdleBonus.UserIdleBonus, error) {
 	t := NewUserIdleBonus()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(t)
+	res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).Where("user_id = ?", userId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -63,7 +63,7 @@ func (s *userIdleBonusDao) FindByUserId(ctx context.Context, userId string) (*us
 
 func (s *userIdleBonusDao) FindByUserIdAndMasterIdleBonusId(ctx context.Context, userId string, masterIdleBonusId int64) (*userIdleBonus.UserIdleBonus, error) {
 	t := NewUserIdleBonus()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_idle_bonus_id = ?", masterIdleBonusId).Find(t)
+	res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_idle_bonus_id = ?", masterIdleBonusId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -76,7 +76,7 @@ func (s *userIdleBonusDao) FindByUserIdAndMasterIdleBonusId(ctx context.Context,
 
 func (s *userIdleBonusDao) FindOrNilByUserId(ctx context.Context, userId string) (*userIdleBonus.UserIdleBonus, error) {
 	t := NewUserIdleBonus()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(t)
+	res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).Where("user_id = ?", userId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -89,7 +89,7 @@ func (s *userIdleBonusDao) FindOrNilByUserId(ctx context.Context, userId string)
 
 func (s *userIdleBonusDao) FindOrNilByUserIdAndMasterIdleBonusId(ctx context.Context, userId string, masterIdleBonusId int64) (*userIdleBonus.UserIdleBonus, error) {
 	t := NewUserIdleBonus()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_idle_bonus_id = ?", masterIdleBonusId).Find(t)
+	res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_idle_bonus_id = ?", masterIdleBonusId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -102,7 +102,7 @@ func (s *userIdleBonusDao) FindOrNilByUserIdAndMasterIdleBonusId(ctx context.Con
 
 func (s *userIdleBonusDao) FindList(ctx context.Context, userId string) (userIdleBonus.UserIdleBonuses, error) {
 	ts := NewUserIdleBonuses()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(&ts)
+	res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).Where("user_id = ?", userId).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -117,7 +117,7 @@ func (s *userIdleBonusDao) FindList(ctx context.Context, userId string) (userIdl
 
 func (s *userIdleBonusDao) FindListByUserId(ctx context.Context, userId string) (userIdleBonus.UserIdleBonuses, error) {
 	ts := NewUserIdleBonuses()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(&ts)
+	res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).Where("user_id = ?", userId).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -132,7 +132,7 @@ func (s *userIdleBonusDao) FindListByUserId(ctx context.Context, userId string) 
 
 func (s *userIdleBonusDao) FindListByUserIdAndMasterIdleBonusId(ctx context.Context, userId string, masterIdleBonusId int64) (userIdleBonus.UserIdleBonuses, error) {
 	ts := NewUserIdleBonuses()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_idle_bonus_id = ?", masterIdleBonusId).Find(&ts)
+	res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_idle_bonus_id = ?", masterIdleBonusId).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -150,7 +150,7 @@ func (s *userIdleBonusDao) Create(ctx context.Context, tx *gorm.DB, m *userIdleB
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
+		conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteMysqlConn
 	}
 
 	t := &UserIdleBonus{
@@ -182,7 +182,7 @@ func (s *userIdleBonusDao) CreateList(ctx context.Context, tx *gorm.DB, ms userI
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(fms.UserId)].WriteConn
+		conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(fms.UserId)].WriteMysqlConn
 	}
 
 	ts := NewUserIdleBonuses()
@@ -208,7 +208,7 @@ func (s *userIdleBonusDao) Update(ctx context.Context, tx *gorm.DB, m *userIdleB
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
+		conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteMysqlConn
 	}
 
 	t := &UserIdleBonus{
@@ -229,7 +229,7 @@ func (s *userIdleBonusDao) Delete(ctx context.Context, tx *gorm.DB, m *userIdleB
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
+		conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteMysqlConn
 	}
 
 	res := conn.Model(NewUserIdleBonus()).WithContext(ctx).Where("user_id = ?", m.UserId).Where("master_idle_bonus_id = ?", m.MasterIdleBonusId).Delete(NewUserIdleBonus())

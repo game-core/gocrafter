@@ -13,18 +13,18 @@ import (
 )
 
 type userItemBoxDao struct {
-	ShardConn *database.ShardConn
+	ShardMysqlConn *database.ShardMysqlConn
 }
 
 func NewUserItemBoxDao(conn *database.MysqlHandler) userItemBox.UserItemBoxRepository {
 	return &userItemBoxDao{
-		ShardConn: conn.User,
+		ShardMysqlConn: conn.User,
 	}
 }
 
 func (s *userItemBoxDao) Find(ctx context.Context, userId string, masterItemId int64) (*userItemBox.UserItemBox, error) {
 	t := NewUserItemBox()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_item_id = ?", masterItemId).Find(t)
+	res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_item_id = ?", masterItemId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -37,7 +37,7 @@ func (s *userItemBoxDao) Find(ctx context.Context, userId string, masterItemId i
 
 func (s *userItemBoxDao) FindOrNil(ctx context.Context, userId string, masterItemId int64) (*userItemBox.UserItemBox, error) {
 	t := NewUserItemBox()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_item_id = ?", masterItemId).Find(t)
+	res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).Where("user_id = ?", userId).Where("master_item_id = ?", masterItemId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (s *userItemBoxDao) FindOrNil(ctx context.Context, userId string, masterIte
 
 func (s *userItemBoxDao) FindList(ctx context.Context, userId string) (userItemBox.UserItemBoxes, error) {
 	ts := NewUserItemBoxes()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(&ts)
+	res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).Where("user_id = ?", userId).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -68,7 +68,7 @@ func (s *userItemBoxDao) Create(ctx context.Context, tx *gorm.DB, m *userItemBox
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
+		conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteMysqlConn
 	}
 
 	t := &UserItemBox{
@@ -100,7 +100,7 @@ func (s *userItemBoxDao) CreateList(ctx context.Context, tx *gorm.DB, ms userIte
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(fms.UserId)].WriteConn
+		conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(fms.UserId)].WriteMysqlConn
 	}
 
 	ts := NewUserItemBoxes()
@@ -126,7 +126,7 @@ func (s *userItemBoxDao) Update(ctx context.Context, tx *gorm.DB, m *userItemBox
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
+		conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteMysqlConn
 	}
 
 	t := &UserItemBox{
@@ -147,7 +147,7 @@ func (s *userItemBoxDao) Delete(ctx context.Context, tx *gorm.DB, m *userItemBox
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
+		conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteMysqlConn
 	}
 
 	res := conn.Model(NewUserItemBox()).WithContext(ctx).Where("user_id = ?", m.UserId).Where("master_item_id = ?", m.MasterItemId).Delete(NewUserItemBox())

@@ -13,18 +13,18 @@ import (
 )
 
 type userProfileDao struct {
-	ShardConn *database.ShardConn
+	ShardMysqlConn *database.ShardMysqlConn
 }
 
 func NewUserProfileDao(conn *database.MysqlHandler) userProfile.UserProfileRepository {
 	return &userProfileDao{
-		ShardConn: conn.User,
+		ShardMysqlConn: conn.User,
 	}
 }
 
 func (s *userProfileDao) Find(ctx context.Context, userId string) (*userProfile.UserProfile, error) {
 	t := NewUserProfile()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(t)
+	res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).Where("user_id = ?", userId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -37,7 +37,7 @@ func (s *userProfileDao) Find(ctx context.Context, userId string) (*userProfile.
 
 func (s *userProfileDao) FindOrNil(ctx context.Context, userId string) (*userProfile.UserProfile, error) {
 	t := NewUserProfile()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(t)
+	res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).Where("user_id = ?", userId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -50,7 +50,7 @@ func (s *userProfileDao) FindOrNil(ctx context.Context, userId string) (*userPro
 
 func (s *userProfileDao) FindList(ctx context.Context, userId string) (userProfile.UserProfiles, error) {
 	ts := NewUserProfiles()
-	res := s.ShardConn.Shards[keys.GetShardKeyByUserId(userId)].ReadConn.WithContext(ctx).Where("user_id = ?", userId).Find(&ts)
+	res := s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(userId)].ReadMysqlConn.WithContext(ctx).Where("user_id = ?", userId).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -68,7 +68,7 @@ func (s *userProfileDao) Create(ctx context.Context, tx *gorm.DB, m *userProfile
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
+		conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteMysqlConn
 	}
 
 	t := &UserProfile{
@@ -100,7 +100,7 @@ func (s *userProfileDao) CreateList(ctx context.Context, tx *gorm.DB, ms userPro
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(fms.UserId)].WriteConn
+		conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(fms.UserId)].WriteMysqlConn
 	}
 
 	ts := NewUserProfiles()
@@ -126,7 +126,7 @@ func (s *userProfileDao) Update(ctx context.Context, tx *gorm.DB, m *userProfile
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
+		conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteMysqlConn
 	}
 
 	t := &UserProfile{
@@ -147,7 +147,7 @@ func (s *userProfileDao) Delete(ctx context.Context, tx *gorm.DB, m *userProfile
 	if tx != nil {
 		conn = tx
 	} else {
-		conn = s.ShardConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteConn
+		conn = s.ShardMysqlConn.Shards[keys.GetShardKeyByUserId(m.UserId)].WriteMysqlConn
 	}
 
 	res := conn.Model(NewUserProfile()).WithContext(ctx).Where("user_id = ?", m.UserId).Delete(NewUserProfile())

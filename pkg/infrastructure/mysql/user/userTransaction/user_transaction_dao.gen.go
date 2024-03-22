@@ -10,17 +10,17 @@ import (
 )
 
 type userTransactionDao struct {
-	ShardConn *database.ShardConn
+	ShardMysqlConn *database.ShardMysqlConn
 }
 
 func NewUserTransactionDao(conn *database.MysqlHandler) userTransaction.UserTransactionRepository {
 	return &userTransactionDao{
-		ShardConn: conn.User,
+		ShardMysqlConn: conn.User,
 	}
 }
 
 func (d *userTransactionDao) Begin(ctx context.Context, shardKey string) (*gorm.DB, error) {
-	tx := d.ShardConn.Shards[shardKey].WriteConn.WithContext(ctx).Begin()
+	tx := d.ShardMysqlConn.Shards[shardKey].WriteMysqlConn.WithContext(ctx).Begin()
 	if err := tx.Error; err != nil {
 		return nil, err
 	}
