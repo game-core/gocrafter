@@ -35,7 +35,7 @@ type {{.CamelName}}Dao struct {
 	ShardConn *database.ShardConn
 }
 
-func New{{.Name}}Dao(conn *database.SqlHandler) {{.Package}}.{{.Name}}Repository {
+func New{{.Name}}Dao(conn *database.MysqlHandler) {{.Package}}.{{.Name}}Repository {
 	return &{{.CamelName}}Dao{
 		ShardConn: conn.User,
 	}

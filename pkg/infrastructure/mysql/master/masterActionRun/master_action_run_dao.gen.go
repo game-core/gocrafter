@@ -20,7 +20,7 @@ type masterActionRunDao struct {
 	Cache     *cache.Cache
 }
 
-func NewMasterActionRunDao(conn *database.SqlHandler) masterActionRun.MasterActionRunRepository {
+func NewMasterActionRunDao(conn *database.MysqlHandler) masterActionRun.MasterActionRunRepository {
 	return &masterActionRunDao{
 		ReadConn:  conn.Master.ReadConn,
 		WriteConn: conn.Master.WriteConn,

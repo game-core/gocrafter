@@ -16,7 +16,7 @@ type userItemBoxDao struct {
 	ShardConn *database.ShardConn
 }
 
-func NewUserItemBoxDao(conn *database.SqlHandler) userItemBox.UserItemBoxRepository {
+func NewUserItemBoxDao(conn *database.MysqlHandler) userItemBox.UserItemBoxRepository {
 	return &userItemBoxDao{
 		ShardConn: conn.User,
 	}

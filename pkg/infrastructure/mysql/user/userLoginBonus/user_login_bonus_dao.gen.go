@@ -16,7 +16,7 @@ type userLoginBonusDao struct {
 	ShardConn *database.ShardConn
 }
 
-func NewUserLoginBonusDao(conn *database.SqlHandler) userLoginBonus.UserLoginBonusRepository {
+func NewUserLoginBonusDao(conn *database.MysqlHandler) userLoginBonus.UserLoginBonusRepository {
 	return &userLoginBonusDao{
 		ShardConn: conn.User,
 	}

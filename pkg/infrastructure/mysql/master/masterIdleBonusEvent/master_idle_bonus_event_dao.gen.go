@@ -20,7 +20,7 @@ type masterIdleBonusEventDao struct {
 	Cache     *cache.Cache
 }
 
-func NewMasterIdleBonusEventDao(conn *database.SqlHandler) masterIdleBonusEvent.MasterIdleBonusEventRepository {
+func NewMasterIdleBonusEventDao(conn *database.MysqlHandler) masterIdleBonusEvent.MasterIdleBonusEventRepository {
 	return &masterIdleBonusEventDao{
 		ReadConn:  conn.Master.ReadConn,
 		WriteConn: conn.Master.WriteConn,

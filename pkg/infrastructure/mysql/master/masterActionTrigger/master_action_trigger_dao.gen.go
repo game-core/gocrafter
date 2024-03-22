@@ -21,7 +21,7 @@ type masterActionTriggerDao struct {
 	Cache     *cache.Cache
 }
 
-func NewMasterActionTriggerDao(conn *database.SqlHandler) masterActionTrigger.MasterActionTriggerRepository {
+func NewMasterActionTriggerDao(conn *database.MysqlHandler) masterActionTrigger.MasterActionTriggerRepository {
 	return &masterActionTriggerDao{
 		ReadConn:  conn.Master.ReadConn,
 		WriteConn: conn.Master.WriteConn,

@@ -132,14 +132,14 @@ func InitializeProfileUsecase() profile2.ProfileUsecase {
 
 func InitializeAccountService() account3.AccountService {
 	shardService := InitializeShardService()
-	sqlHandler := database.NewDB()
+	sqlHandler := database.NewMysql()
 	userAccountRepository := userAccount.NewUserAccountDao(sqlHandler)
 	accountService := account3.NewAccountService(shardService, userAccountRepository)
 	return accountService
 }
 
 func InitializeActionService() action.ActionService {
-	sqlHandler := database.NewDB()
+	sqlHandler := database.NewMysql()
 	masterActionRepository := masterAction.NewMasterActionDao(sqlHandler)
 	masterActionRunRepository := masterActionRun.NewMasterActionRunDao(sqlHandler)
 	masterActionStepRepository := masterActionStep.NewMasterActionStepDao(sqlHandler)
@@ -151,7 +151,7 @@ func InitializeActionService() action.ActionService {
 
 func InitializeFriendService() friend3.FriendService {
 	accountService := InitializeAccountService()
-	sqlHandler := database.NewDB()
+	sqlHandler := database.NewMysql()
 	userFriendRepository := userFriend.NewUserFriendDao(sqlHandler)
 	friendService := friend3.NewFriendService(accountService, userFriendRepository)
 	return friendService
@@ -159,7 +159,7 @@ func InitializeFriendService() friend3.FriendService {
 
 func InitializeIdleBonusService() idleBonus3.IdleBonusService {
 	itemService := InitializeItemService()
-	sqlHandler := database.NewDB()
+	sqlHandler := database.NewMysql()
 	userIdleBonusRepository := userIdleBonus.NewUserIdleBonusDao(sqlHandler)
 	masterIdleBonusRepository := masterIdleBonus.NewMasterIdleBonusDao(sqlHandler)
 	masterIdleBonusEventRepository := masterIdleBonusEvent.NewMasterIdleBonusEventDao(sqlHandler)
@@ -170,7 +170,7 @@ func InitializeIdleBonusService() idleBonus3.IdleBonusService {
 }
 
 func InitializeItemService() item.ItemService {
-	sqlHandler := database.NewDB()
+	sqlHandler := database.NewMysql()
 	userItemBoxRepository := userItemBox.NewUserItemBoxDao(sqlHandler)
 	masterItemRepository := masterItem.NewMasterItemDao(sqlHandler)
 	itemService := item.NewItemService(userItemBoxRepository, masterItemRepository)
@@ -179,7 +179,7 @@ func InitializeItemService() item.ItemService {
 
 func InitializeLoginBonusService() loginBonus3.LoginBonusService {
 	itemService := InitializeItemService()
-	sqlHandler := database.NewDB()
+	sqlHandler := database.NewMysql()
 	userLoginBonusRepository := userLoginBonus.NewUserLoginBonusDao(sqlHandler)
 	masterLoginBonusRepository := masterLoginBonus.NewMasterLoginBonusDao(sqlHandler)
 	masterLoginBonusEventRepository := masterLoginBonusEvent.NewMasterLoginBonusEventDao(sqlHandler)
@@ -190,35 +190,35 @@ func InitializeLoginBonusService() loginBonus3.LoginBonusService {
 }
 
 func InitializeProfileService() profile3.ProfileService {
-	sqlHandler := database.NewDB()
+	sqlHandler := database.NewMysql()
 	userProfileRepository := userProfile.NewUserProfileDao(sqlHandler)
 	profileService := profile3.NewProfileService(userProfileRepository)
 	return profileService
 }
 
 func InitializeRarityService() rarity.RarityService {
-	sqlHandler := database.NewDB()
+	sqlHandler := database.NewMysql()
 	masterRarityRepository := masterRarity.NewMasterRarityDao(sqlHandler)
 	rarityService := rarity.NewRarityService(masterRarityRepository)
 	return rarityService
 }
 
 func InitializeResourceService() resource.ResourceService {
-	sqlHandler := database.NewDB()
+	sqlHandler := database.NewMysql()
 	masterResourceRepository := masterResource.NewMasterResourceDao(sqlHandler)
 	resourceService := resource.NewResourceService(masterResourceRepository)
 	return resourceService
 }
 
 func InitializeShardService() shard.ShardService {
-	sqlHandler := database.NewDB()
+	sqlHandler := database.NewMysql()
 	commonShardRepository := commonShard.NewCommonShardDao(sqlHandler)
 	shardService := shard.NewShardService(commonShardRepository)
 	return shardService
 }
 
 func InitializeTransactionService() transaction.TransactionService {
-	sqlHandler := database.NewDB()
+	sqlHandler := database.NewMysql()
 	commonTransactionRepository := commonTransaction.NewCommonTransactionDao(sqlHandler)
 	masterTransactionRepository := masterTransaction.NewMasterTransactionDao(sqlHandler)
 	userTransactionRepository := masterTransaction2.NewUserTransactionDao(sqlHandler)

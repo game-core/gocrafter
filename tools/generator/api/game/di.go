@@ -309,7 +309,7 @@ func (s *Di) serviceScript(structName string, fields []*ast.Field) string {
 	return fmt.Sprintf(
 		`func Initialize%s() %s.%s {
 			wire.Build(
-				database.NewDB,
+				database.NewMysql,
 				%s.New%s,
 				%s
 			)

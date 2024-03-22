@@ -20,7 +20,7 @@ type masterLoginBonusEventDao struct {
 	Cache     *cache.Cache
 }
 
-func NewMasterLoginBonusEventDao(conn *database.SqlHandler) masterLoginBonusEvent.MasterLoginBonusEventRepository {
+func NewMasterLoginBonusEventDao(conn *database.MysqlHandler) masterLoginBonusEvent.MasterLoginBonusEventRepository {
 	return &masterLoginBonusEventDao{
 		ReadConn:  conn.Master.ReadConn,
 		WriteConn: conn.Master.WriteConn,

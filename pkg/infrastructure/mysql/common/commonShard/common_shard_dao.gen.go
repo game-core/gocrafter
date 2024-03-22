@@ -16,7 +16,7 @@ type commonShardDao struct {
 	WriteConn *gorm.DB
 }
 
-func NewCommonShardDao(conn *database.SqlHandler) commonShard.CommonShardRepository {
+func NewCommonShardDao(conn *database.MysqlHandler) commonShard.CommonShardRepository {
 	return &commonShardDao{
 		ReadConn:  conn.Common.ReadConn,
 		WriteConn: conn.Common.WriteConn,

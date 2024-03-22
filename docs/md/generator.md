@@ -194,7 +194,7 @@ func NewLoginBonusService(
 ```go
 func InitializeLoginBonusService() loginBonusService.LoginBonusService {
 	wire.Build(
-		database.NewDB,
+		database.NewMysql,
 		loginBonusService.NewLoginBonusService,
 		InitializeItemService,
 		userLoginBonusDao.NewUserLoginBonusDao,
@@ -396,7 +396,7 @@ type masterLoginBonusDao struct {
 	Cache     *cache.Cache
 }
 
-func NewMasterLoginBonusDao(conn *database.SqlHandler) masterLoginBonus.MasterLoginBonusRepository {
+func NewMasterLoginBonusDao(conn *database.MysqlHandler) masterLoginBonus.MasterLoginBonusRepository {
 	return &masterLoginBonusDao{
 		ReadConn:  conn.Master.ReadConn,
 		WriteConn: conn.Master.WriteConn,

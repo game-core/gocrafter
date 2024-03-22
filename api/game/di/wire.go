@@ -152,7 +152,7 @@ func InitializeProfileUsecase() profileUsecase.ProfileUsecase {
 
 func InitializeAccountService() accountService.AccountService {
 	wire.Build(
-		database.NewDB,
+		database.NewMysql,
 		accountService.NewAccountService,
 		InitializeShardService,
 		userAccountDao.NewUserAccountDao,
@@ -162,7 +162,7 @@ func InitializeAccountService() accountService.AccountService {
 
 func InitializeActionService() actionService.ActionService {
 	wire.Build(
-		database.NewDB,
+		database.NewMysql,
 		actionService.NewActionService,
 		masterActionDao.NewMasterActionDao,
 		masterActionRunDao.NewMasterActionRunDao,
@@ -175,7 +175,7 @@ func InitializeActionService() actionService.ActionService {
 
 func InitializeFriendService() friendService.FriendService {
 	wire.Build(
-		database.NewDB,
+		database.NewMysql,
 		friendService.NewFriendService,
 		InitializeAccountService,
 		userFriendDao.NewUserFriendDao,
@@ -185,7 +185,7 @@ func InitializeFriendService() friendService.FriendService {
 
 func InitializeIdleBonusService() idleBonusService.IdleBonusService {
 	wire.Build(
-		database.NewDB,
+		database.NewMysql,
 		idleBonusService.NewIdleBonusService,
 		InitializeItemService,
 		userIdleBonusDao.NewUserIdleBonusDao,
@@ -199,7 +199,7 @@ func InitializeIdleBonusService() idleBonusService.IdleBonusService {
 
 func InitializeItemService() itemService.ItemService {
 	wire.Build(
-		database.NewDB,
+		database.NewMysql,
 		itemService.NewItemService,
 		userItemBoxDao.NewUserItemBoxDao,
 		masterItemDao.NewMasterItemDao,
@@ -209,7 +209,7 @@ func InitializeItemService() itemService.ItemService {
 
 func InitializeLoginBonusService() loginBonusService.LoginBonusService {
 	wire.Build(
-		database.NewDB,
+		database.NewMysql,
 		loginBonusService.NewLoginBonusService,
 		InitializeItemService,
 		userLoginBonusDao.NewUserLoginBonusDao,
@@ -223,7 +223,7 @@ func InitializeLoginBonusService() loginBonusService.LoginBonusService {
 
 func InitializeProfileService() profileService.ProfileService {
 	wire.Build(
-		database.NewDB,
+		database.NewMysql,
 		profileService.NewProfileService,
 		userProfileDao.NewUserProfileDao,
 	)
@@ -232,7 +232,7 @@ func InitializeProfileService() profileService.ProfileService {
 
 func InitializeRarityService() rarityService.RarityService {
 	wire.Build(
-		database.NewDB,
+		database.NewMysql,
 		rarityService.NewRarityService,
 		masterRarityDao.NewMasterRarityDao,
 	)
@@ -241,7 +241,7 @@ func InitializeRarityService() rarityService.RarityService {
 
 func InitializeResourceService() resourceService.ResourceService {
 	wire.Build(
-		database.NewDB,
+		database.NewMysql,
 		resourceService.NewResourceService,
 		masterResourceDao.NewMasterResourceDao,
 	)
@@ -250,7 +250,7 @@ func InitializeResourceService() resourceService.ResourceService {
 
 func InitializeShardService() shardService.ShardService {
 	wire.Build(
-		database.NewDB,
+		database.NewMysql,
 		shardService.NewShardService,
 		commonShardDao.NewCommonShardDao,
 	)
@@ -259,7 +259,7 @@ func InitializeShardService() shardService.ShardService {
 
 func InitializeTransactionService() transactionService.TransactionService {
 	wire.Build(
-		database.NewDB,
+		database.NewMysql,
 		transactionService.NewTransactionService,
 		commonTransactionDao.NewCommonTransactionDao,
 		masterTransactionDao.NewMasterTransactionDao,

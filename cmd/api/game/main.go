@@ -11,8 +11,8 @@ import (
 )
 
 func main() {
-	if _, err := database.InitDB(); err != nil {
-		log.Fatalf("failed to database.InitDB: %v", err)
+	if _, err := database.InitMysql(); err != nil {
+		log.Fatalf("failed to database.InitMysql: %v", err)
 	}
 
 	apiConfig := apiConfig.GetAppConfig()

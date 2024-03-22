@@ -21,7 +21,7 @@ type masterRarityDao struct {
 	Cache     *cache.Cache
 }
 
-func NewMasterRarityDao(conn *database.SqlHandler) masterRarity.MasterRarityRepository {
+func NewMasterRarityDao(conn *database.MysqlHandler) masterRarity.MasterRarityRepository {
 	return &masterRarityDao{
 		ReadConn:  conn.Master.ReadConn,
 		WriteConn: conn.Master.WriteConn,

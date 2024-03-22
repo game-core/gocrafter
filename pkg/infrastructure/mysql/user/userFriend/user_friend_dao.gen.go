@@ -16,7 +16,7 @@ type userFriendDao struct {
 	ShardConn *database.ShardConn
 }
 
-func NewUserFriendDao(conn *database.SqlHandler) userFriend.UserFriendRepository {
+func NewUserFriendDao(conn *database.MysqlHandler) userFriend.UserFriendRepository {
 	return &userFriendDao{
 		ShardConn: conn.User,
 	}

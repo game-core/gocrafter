@@ -21,7 +21,7 @@ type masterResourceDao struct {
 	Cache     *cache.Cache
 }
 
-func NewMasterResourceDao(conn *database.SqlHandler) masterResource.MasterResourceRepository {
+func NewMasterResourceDao(conn *database.MysqlHandler) masterResource.MasterResourceRepository {
 	return &masterResourceDao{
 		ReadConn:  conn.Master.ReadConn,
 		WriteConn: conn.Master.WriteConn,

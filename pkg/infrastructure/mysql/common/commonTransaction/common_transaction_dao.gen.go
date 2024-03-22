@@ -14,7 +14,7 @@ type commonTransactionDao struct {
 	WriteConn *gorm.DB
 }
 
-func NewCommonTransactionDao(conn *database.SqlHandler) commonTransaction.CommonTransactionRepository {
+func NewCommonTransactionDao(conn *database.MysqlHandler) commonTransaction.CommonTransactionRepository {
 	return &commonTransactionDao{
 		ReadConn:  conn.Common.ReadConn,
 		WriteConn: conn.Common.WriteConn,

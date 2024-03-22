@@ -38,7 +38,7 @@ type {{.CamelName}}Dao struct {
 	Cache     *cache.Cache
 }
 
-func New{{.Name}}Dao(conn *database.SqlHandler) {{.Package}}.{{.Name}}Repository {
+func New{{.Name}}Dao(conn *database.MysqlHandler) {{.Package}}.{{.Name}}Repository {
 	return &{{.CamelName}}Dao{
 		ReadConn:  conn.Master.ReadConn,
 		WriteConn: conn.Master.WriteConn,

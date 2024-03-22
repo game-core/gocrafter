@@ -36,7 +36,7 @@ type {{.CamelName}}Dao struct {
 	WriteConn *gorm.DB
 }
 
-func New{{.Name}}Dao(conn *database.SqlHandler) {{.Package}}.{{.Name}}Repository {
+func New{{.Name}}Dao(conn *database.MysqlHandler) {{.Package}}.{{.Name}}Repository {
 	return &{{.CamelName}}Dao{
 		ReadConn:  conn.Common.ReadConn,
 		WriteConn: conn.Common.WriteConn,
