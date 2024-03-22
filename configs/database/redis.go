@@ -2,9 +2,10 @@ package database
 
 import (
 	"context"
-	"github.com/redis/go-redis/v9"
 	"os"
 	"strconv"
+
+	"github.com/redis/go-redis/v9"
 )
 
 var RedisHandlerInstance *RedisHandler
