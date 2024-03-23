@@ -3,8 +3,8 @@ package account
 
 import (
 	"context"
-	"github.com/redis/go-redis/v9"
 
+	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 
 	"github.com/game-core/gocrafter/internal/errors"
