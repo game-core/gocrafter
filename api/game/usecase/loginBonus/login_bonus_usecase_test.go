@@ -485,7 +485,7 @@ func TestLoginBonusUsecase_Receive(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						UserBegin(
+						UserMysqlBegin(
 							gomock.Any(),
 							"0:test",
 						).
@@ -494,7 +494,7 @@ func TestLoginBonusUsecase_Receive(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						UserEnd(
+						UserMysqlEnd(
 							gomock.Any(),
 							gomock.Any(),
 							nil,
@@ -548,7 +548,7 @@ func TestLoginBonusUsecase_Receive(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.transactionService.UserBegin",
+			name: "異常：s.transactionService.UserMysqlBegin",
 			fields: fields{
 				loginBonusService: func(ctrl *gomock.Controller) loginBonusService.LoginBonusService {
 					m := loginBonusService.NewMockLoginBonusService(ctrl)
@@ -557,7 +557,7 @@ func TestLoginBonusUsecase_Receive(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						UserBegin(
+						UserMysqlBegin(
 							gomock.Any(),
 							"0:test",
 						).
@@ -576,7 +576,7 @@ func TestLoginBonusUsecase_Receive(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.transactionService.UserBegin", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.transactionService.UserMysqlBegin", errors.NewTestError()),
 		},
 		{
 			name: "異常：s.loginBonusService.Receive",
@@ -602,7 +602,7 @@ func TestLoginBonusUsecase_Receive(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						UserBegin(
+						UserMysqlBegin(
 							gomock.Any(),
 							"0:test",
 						).
@@ -611,7 +611,7 @@ func TestLoginBonusUsecase_Receive(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						UserEnd(
+						UserMysqlEnd(
 							gomock.Any(),
 							gomock.Any(),
 							errors.NewTestError(),

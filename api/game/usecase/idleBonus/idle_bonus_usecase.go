@@ -71,12 +71,12 @@ func (s *idleBonusUsecase) GetMaster(ctx context.Context, req *idleBonusServer.I
 // Receive 放置ボーナス受け取り
 func (s *idleBonusUsecase) Receive(ctx context.Context, req *idleBonusServer.IdleBonusReceiveRequest) (*idleBonusServer.IdleBonusReceiveResponse, error) {
 	// transaction
-	tx, err := s.transactionService.UserBegin(ctx, req.UserId)
+	tx, err := s.transactionService.UserMysqlBegin(ctx, req.UserId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.transactionService.UserBegin", err)
+		return nil, errors.NewMethodError("s.transactionService.UserMysqlBegin", err)
 	}
 	defer func() {
-		s.transactionService.UserEnd(ctx, tx, err)
+		s.transactionService.UserMysqlEnd(ctx, tx, err)
 	}()
 
 	result, err := s.idleBonusService.Receive(ctx, tx, times.Now(), idleBonusService.SetIdleBonusReceiveRequest(req.UserId, req.MasterIdleBonusId))

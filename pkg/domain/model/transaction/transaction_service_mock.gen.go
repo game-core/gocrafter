@@ -35,110 +35,110 @@ func (m *MockTransactionService) EXPECT() *MockTransactionServiceMockRecorder {
 	return m.recorder
 }
 
-// CommonBegin mocks base method.
-func (m *MockTransactionService) CommonBegin(ctx context.Context) (*gorm.DB, error) {
+// CommonMysqlBegin mocks base method.
+func (m *MockTransactionService) CommonMysqlBegin(ctx context.Context) (*gorm.DB, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CommonBegin", ctx)
+	ret := m.ctrl.Call(m, "CommonMysqlBegin", ctx)
 	ret0, _ := ret[0].(*gorm.DB)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// CommonBegin indicates an expected call of CommonBegin.
-func (mr *MockTransactionServiceMockRecorder) CommonBegin(ctx interface{}) *gomock.Call {
+// CommonMysqlBegin indicates an expected call of CommonMysqlBegin.
+func (mr *MockTransactionServiceMockRecorder) CommonMysqlBegin(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CommonBegin", reflect.TypeOf((*MockTransactionService)(nil).CommonBegin), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CommonMysqlBegin", reflect.TypeOf((*MockTransactionService)(nil).CommonMysqlBegin), ctx)
 }
 
-// CommonEnd mocks base method.
-func (m *MockTransactionService) CommonEnd(ctx context.Context, tx *gorm.DB, err error) {
+// CommonMysqlEnd mocks base method.
+func (m *MockTransactionService) CommonMysqlEnd(ctx context.Context, tx *gorm.DB, err error) {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "CommonEnd", ctx, tx, err)
+	m.ctrl.Call(m, "CommonMysqlEnd", ctx, tx, err)
 }
 
-// CommonEnd indicates an expected call of CommonEnd.
-func (mr *MockTransactionServiceMockRecorder) CommonEnd(ctx, tx, err interface{}) *gomock.Call {
+// CommonMysqlEnd indicates an expected call of CommonMysqlEnd.
+func (mr *MockTransactionServiceMockRecorder) CommonMysqlEnd(ctx, tx, err interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CommonEnd", reflect.TypeOf((*MockTransactionService)(nil).CommonEnd), ctx, tx, err)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CommonMysqlEnd", reflect.TypeOf((*MockTransactionService)(nil).CommonMysqlEnd), ctx, tx, err)
 }
 
-// MasterBegin mocks base method.
-func (m *MockTransactionService) MasterBegin(ctx context.Context) (*gorm.DB, error) {
+// MasterMysqlBegin mocks base method.
+func (m *MockTransactionService) MasterMysqlBegin(ctx context.Context) (*gorm.DB, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "MasterBegin", ctx)
+	ret := m.ctrl.Call(m, "MasterMysqlBegin", ctx)
 	ret0, _ := ret[0].(*gorm.DB)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// MasterBegin indicates an expected call of MasterBegin.
-func (mr *MockTransactionServiceMockRecorder) MasterBegin(ctx interface{}) *gomock.Call {
+// MasterMysqlBegin indicates an expected call of MasterMysqlBegin.
+func (mr *MockTransactionServiceMockRecorder) MasterMysqlBegin(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MasterBegin", reflect.TypeOf((*MockTransactionService)(nil).MasterBegin), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MasterMysqlBegin", reflect.TypeOf((*MockTransactionService)(nil).MasterMysqlBegin), ctx)
 }
 
-// MasterEnd mocks base method.
-func (m *MockTransactionService) MasterEnd(ctx context.Context, tx *gorm.DB, err error) {
+// MasterMysqlEnd mocks base method.
+func (m *MockTransactionService) MasterMysqlEnd(ctx context.Context, tx *gorm.DB, err error) {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "MasterEnd", ctx, tx, err)
+	m.ctrl.Call(m, "MasterMysqlEnd", ctx, tx, err)
 }
 
-// MasterEnd indicates an expected call of MasterEnd.
-func (mr *MockTransactionServiceMockRecorder) MasterEnd(ctx, tx, err interface{}) *gomock.Call {
+// MasterMysqlEnd indicates an expected call of MasterMysqlEnd.
+func (mr *MockTransactionServiceMockRecorder) MasterMysqlEnd(ctx, tx, err interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MasterEnd", reflect.TypeOf((*MockTransactionService)(nil).MasterEnd), ctx, tx, err)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MasterMysqlEnd", reflect.TypeOf((*MockTransactionService)(nil).MasterMysqlEnd), ctx, tx, err)
 }
 
-// MultiUserBegin mocks base method.
-func (m *MockTransactionService) MultiUserBegin(ctx context.Context, userIds []string) (map[string]*gorm.DB, error) {
+// MultiUserMysqlBegin mocks base method.
+func (m *MockTransactionService) MultiUserMysqlBegin(ctx context.Context, userIds []string) (map[string]*gorm.DB, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "MultiUserBegin", ctx, userIds)
+	ret := m.ctrl.Call(m, "MultiUserMysqlBegin", ctx, userIds)
 	ret0, _ := ret[0].(map[string]*gorm.DB)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// MultiUserBegin indicates an expected call of MultiUserBegin.
-func (mr *MockTransactionServiceMockRecorder) MultiUserBegin(ctx, userIds interface{}) *gomock.Call {
+// MultiUserMysqlBegin indicates an expected call of MultiUserMysqlBegin.
+func (mr *MockTransactionServiceMockRecorder) MultiUserMysqlBegin(ctx, userIds interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MultiUserBegin", reflect.TypeOf((*MockTransactionService)(nil).MultiUserBegin), ctx, userIds)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MultiUserMysqlBegin", reflect.TypeOf((*MockTransactionService)(nil).MultiUserMysqlBegin), ctx, userIds)
 }
 
-// MultiUserEnd mocks base method.
-func (m *MockTransactionService) MultiUserEnd(ctx context.Context, txs map[string]*gorm.DB, err error) {
+// MultiUserMysqlEnd mocks base method.
+func (m *MockTransactionService) MultiUserMysqlEnd(ctx context.Context, txs map[string]*gorm.DB, err error) {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "MultiUserEnd", ctx, txs, err)
+	m.ctrl.Call(m, "MultiUserMysqlEnd", ctx, txs, err)
 }
 
-// MultiUserEnd indicates an expected call of MultiUserEnd.
-func (mr *MockTransactionServiceMockRecorder) MultiUserEnd(ctx, txs, err interface{}) *gomock.Call {
+// MultiUserMysqlEnd indicates an expected call of MultiUserMysqlEnd.
+func (mr *MockTransactionServiceMockRecorder) MultiUserMysqlEnd(ctx, txs, err interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MultiUserEnd", reflect.TypeOf((*MockTransactionService)(nil).MultiUserEnd), ctx, txs, err)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MultiUserMysqlEnd", reflect.TypeOf((*MockTransactionService)(nil).MultiUserMysqlEnd), ctx, txs, err)
 }
 
-// UserBegin mocks base method.
-func (m *MockTransactionService) UserBegin(ctx context.Context, userId string) (*gorm.DB, error) {
+// UserMysqlBegin mocks base method.
+func (m *MockTransactionService) UserMysqlBegin(ctx context.Context, userId string) (*gorm.DB, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UserBegin", ctx, userId)
+	ret := m.ctrl.Call(m, "UserMysqlBegin", ctx, userId)
 	ret0, _ := ret[0].(*gorm.DB)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// UserBegin indicates an expected call of UserBegin.
-func (mr *MockTransactionServiceMockRecorder) UserBegin(ctx, userId interface{}) *gomock.Call {
+// UserMysqlBegin indicates an expected call of UserMysqlBegin.
+func (mr *MockTransactionServiceMockRecorder) UserMysqlBegin(ctx, userId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UserBegin", reflect.TypeOf((*MockTransactionService)(nil).UserBegin), ctx, userId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UserMysqlBegin", reflect.TypeOf((*MockTransactionService)(nil).UserMysqlBegin), ctx, userId)
 }
 
-// UserEnd mocks base method.
-func (m *MockTransactionService) UserEnd(ctx context.Context, tx *gorm.DB, err error) {
+// UserMysqlEnd mocks base method.
+func (m *MockTransactionService) UserMysqlEnd(ctx context.Context, tx *gorm.DB, err error) {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "UserEnd", ctx, tx, err)
+	m.ctrl.Call(m, "UserMysqlEnd", ctx, tx, err)
 }
 
-// UserEnd indicates an expected call of UserEnd.
-func (mr *MockTransactionServiceMockRecorder) UserEnd(ctx, tx, err interface{}) *gomock.Call {
+// UserMysqlEnd indicates an expected call of UserMysqlEnd.
+func (mr *MockTransactionServiceMockRecorder) UserMysqlEnd(ctx, tx, err interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UserEnd", reflect.TypeOf((*MockTransactionService)(nil).UserEnd), ctx, tx, err)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UserMysqlEnd", reflect.TypeOf((*MockTransactionService)(nil).UserMysqlEnd), ctx, tx, err)
 }

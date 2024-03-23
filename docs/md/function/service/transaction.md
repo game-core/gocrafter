@@ -3,16 +3,16 @@ DBトランザクション関連。
 
 [model](https://github.com/game-core/gocrafter/tree/main/pkg/domain/model/transaction)
 
-- [CommonBegin](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/transaction.md#CommonBegin)
-- [CommonEnd](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/transaction.md#CommonEnd)
-- [MasterBegin](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/transaction.md#MasterBegin)
-- [MasterEnd](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/transaction.md#MasterEnd)
-- [UserBegin](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/transaction.md#UserBegin)
-- [UserEnd](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/transaction.md#UserEnd)
-- [MultiUserBegin](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/transaction.md#MultiUserBegin)
-- [MultiUserEnd](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/transaction.md#MultiUserEnd)
+- [CommonMysqlBegin](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/transaction.md#CommonMysqlBegin)
+- [CommonMysqlEnd](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/transaction.md#CommonMysqlEnd)
+- [MasterMysqlBegin](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/transaction.md#MasterMysqlBegin)
+- [MasterMysqlEnd](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/transaction.md#MasterMysqlEnd)
+- [UserMysqlBegin](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/transaction.md#UserMysqlBegin)
+- [UserMysqlEnd](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/transaction.md#UserMysqlEnd)
+- [MultiUserMysqlBegin](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/transaction.md#MultiUserMysqlBegin)
+- [MultiUserMysqlEnd](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/transaction.md#MultiUserMysqlEnd)
 
-## CommonBegin
+## CommonMysqlBegin
 Common DBのトランザクションを開始する。
 - request
 
@@ -27,7 +27,7 @@ Common DBのトランザクションを開始する。
 | res | *gorm.DB | レスポンス |
 | err | error | エラー |
 
-## CommonEnd
+## CommonMysqlEnd
 Common DBのトランザクションを終了する。
 - request
 
@@ -37,7 +37,7 @@ Common DBのトランザクションを終了する。
 | tx | *gorm.DB | トランザクション |
 | err | error | エラー |
 
-## MasterBegin
+## MasterMysqlBegin
 Master DBのトランザクションを開始する。
 - request
 
@@ -52,7 +52,7 @@ Master DBのトランザクションを開始する。
 | res | *gorm.DB | レスポンス |
 | err | error | エラー |
 
-## MasterEnd
+## MasterMysqlEnd
 Master DBのトランザクションを終了する。
 - request
 
@@ -62,7 +62,7 @@ Master DBのトランザクションを終了する。
 | tx | *gorm.DB | トランザクション |
 | err | error | エラー |
 
-## UserBegin
+## UserMysqlBegin
 User DBのトランザクションを開始する。（単一シャード）
 - request
 
@@ -78,7 +78,7 @@ User DBのトランザクションを開始する。（単一シャード）
 | res | *gorm.DB | レスポンス |
 | err | error | エラー |
 
-## UserEnd
+## UserMysqlEnd
 User DBのトランザクションを終了する。（単一シャード）
 - request
 
@@ -88,7 +88,7 @@ User DBのトランザクションを終了する。（単一シャード）
 | tx | *gorm.DB | トランザクション |
 | err | error | エラー |
 
-## MultiUserBegin
+## MultiUserMysqlBegin
 User DBのトランザクションを開始する。（複数シャード）
 - request
 
@@ -104,7 +104,7 @@ User DBのトランザクションを開始する。（複数シャード）
 | res | map[string]*gorm.DB | レスポンス |
 | err | error | エラー |
 
-## MultiUserEnd
+## MultiUserMysqlEnd
 User DBのトランザクションを終了する。（複数シャード）
 - request
 

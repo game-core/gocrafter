@@ -39,12 +39,12 @@ func (s *accountUsecase) Create(ctx context.Context, req *accountServer.AccountC
 	}
 
 	// transaction
-	tx, err := s.transactionService.UserBegin(ctx, userId)
+	tx, err := s.transactionService.UserMysqlBegin(ctx, userId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.transactionService.UserBegin", err)
+		return nil, errors.NewMethodError("s.transactionService.UserMysqlBegin", err)
 	}
 	defer func() {
-		s.transactionService.UserEnd(ctx, tx, err)
+		s.transactionService.UserMysqlEnd(ctx, tx, err)
 	}()
 
 	result, err := s.accountService.Create(ctx, tx, accountService.SetAccountCreateRequest(userId, req.Name))
@@ -66,12 +66,12 @@ func (s *accountUsecase) Create(ctx context.Context, req *accountServer.AccountC
 // Login アカウントをログインする
 func (s *accountUsecase) Login(ctx context.Context, req *accountServer.AccountLoginRequest) (*accountServer.AccountLoginResponse, error) {
 	// transaction
-	tx, err := s.transactionService.UserBegin(ctx, req.UserId)
+	tx, err := s.transactionService.UserMysqlBegin(ctx, req.UserId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.transactionService.UserBegin", err)
+		return nil, errors.NewMethodError("s.transactionService.UserMysqlBegin", err)
 	}
 	defer func() {
-		s.transactionService.UserEnd(ctx, tx, err)
+		s.transactionService.UserMysqlEnd(ctx, tx, err)
 	}()
 
 	result, err := s.accountService.Login(ctx, tx, accountService.SetAccountLoginRequest(req.UserId, req.Name, req.Password))

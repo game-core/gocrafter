@@ -103,7 +103,7 @@ func TestAccountUsecase_Create(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						UserBegin(
+						UserMysqlBegin(
 							gomock.Any(),
 							"0:test",
 						).
@@ -112,7 +112,7 @@ func TestAccountUsecase_Create(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						UserEnd(
+						UserMysqlEnd(
 							gomock.Any(),
 							gomock.Any(),
 							nil,
@@ -167,7 +167,7 @@ func TestAccountUsecase_Create(t *testing.T) {
 			wantErr: errors.NewMethodError("s.accountService.GenerateUserID", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.transactionService.UserBegin",
+			name: "異常：s.transactionService.UserMysqlBegin",
 			fields: fields{
 				accountService: func(ctrl *gomock.Controller) accountService.AccountService {
 					m := accountService.NewMockAccountService(ctrl)
@@ -184,7 +184,7 @@ func TestAccountUsecase_Create(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						UserBegin(
+						UserMysqlBegin(
 							gomock.Any(),
 							"0:test",
 						).
@@ -202,7 +202,7 @@ func TestAccountUsecase_Create(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.transactionService.UserBegin", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.transactionService.UserMysqlBegin", errors.NewTestError()),
 		},
 		{
 			name: "異常：s.accountService.Create",
@@ -235,7 +235,7 @@ func TestAccountUsecase_Create(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						UserBegin(
+						UserMysqlBegin(
 							gomock.Any(),
 							"0:test",
 						).
@@ -244,7 +244,7 @@ func TestAccountUsecase_Create(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						UserEnd(
+						UserMysqlEnd(
 							gomock.Any(),
 							gomock.Any(),
 							errors.NewTestError(),
@@ -332,7 +332,7 @@ func TestAccountUsecase_Login(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						UserBegin(
+						UserMysqlBegin(
 							gomock.Any(),
 							"0:test",
 						).
@@ -341,7 +341,7 @@ func TestAccountUsecase_Login(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						UserEnd(
+						UserMysqlEnd(
 							gomock.Any(),
 							gomock.Any(),
 							nil,
@@ -370,7 +370,7 @@ func TestAccountUsecase_Login(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.transactionService.UserBegin",
+			name: "異常：s.transactionService.UserMysqlBegin",
 			fields: fields{
 				accountService: func(ctrl *gomock.Controller) accountService.AccountService {
 					m := accountService.NewMockAccountService(ctrl)
@@ -379,7 +379,7 @@ func TestAccountUsecase_Login(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						UserBegin(
+						UserMysqlBegin(
 							gomock.Any(),
 							"0:test",
 						).
@@ -399,7 +399,7 @@ func TestAccountUsecase_Login(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.transactionService.UserBegin", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.transactionService.UserMysqlBegin", errors.NewTestError()),
 		},
 		{
 			name: "異常：s.accountService.Login",
@@ -425,7 +425,7 @@ func TestAccountUsecase_Login(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						UserBegin(
+						UserMysqlBegin(
 							gomock.Any(),
 							"0:test",
 						).
@@ -434,7 +434,7 @@ func TestAccountUsecase_Login(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						UserEnd(
+						UserMysqlEnd(
 							gomock.Any(),
 							gomock.Any(),
 							errors.NewTestError(),

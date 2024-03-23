@@ -206,7 +206,7 @@ func TestProfileUsecase_Create(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						UserBegin(
+						UserMysqlBegin(
 							gomock.Any(),
 							"0:test",
 						).
@@ -215,7 +215,7 @@ func TestProfileUsecase_Create(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						UserEnd(
+						UserMysqlEnd(
 							gomock.Any(),
 							gomock.Any(),
 							nil,
@@ -241,7 +241,7 @@ func TestProfileUsecase_Create(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.transactionService.UserBegin",
+			name: "異常：s.transactionService.UserMysqlBegin",
 			fields: fields{
 				profileService: func(ctrl *gomock.Controller) profileService.ProfileService {
 					m := profileService.NewMockProfileService(ctrl)
@@ -250,7 +250,7 @@ func TestProfileUsecase_Create(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						UserBegin(
+						UserMysqlBegin(
 							gomock.Any(),
 							"0:test",
 						).
@@ -270,7 +270,7 @@ func TestProfileUsecase_Create(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.transactionService.UserBegin", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.transactionService.UserMysqlBegin", errors.NewTestError()),
 		},
 		{
 			name: "異常：s.profileService.Create",
@@ -296,7 +296,7 @@ func TestProfileUsecase_Create(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						UserBegin(
+						UserMysqlBegin(
 							gomock.Any(),
 							"0:test",
 						).
@@ -305,7 +305,7 @@ func TestProfileUsecase_Create(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						UserEnd(
+						UserMysqlEnd(
 							gomock.Any(),
 							gomock.Any(),
 							errors.NewTestError(),
@@ -392,7 +392,7 @@ func TestProfileUsecase_Update(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						UserBegin(
+						UserMysqlBegin(
 							gomock.Any(),
 							"0:test",
 						).
@@ -401,7 +401,7 @@ func TestProfileUsecase_Update(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						UserEnd(
+						UserMysqlEnd(
 							gomock.Any(),
 							gomock.Any(),
 							nil,
@@ -427,7 +427,7 @@ func TestProfileUsecase_Update(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.transactionService.UserBegin",
+			name: "異常：s.transactionService.UserMysqlBegin",
 			fields: fields{
 				profileService: func(ctrl *gomock.Controller) profileService.ProfileService {
 					m := profileService.NewMockProfileService(ctrl)
@@ -436,7 +436,7 @@ func TestProfileUsecase_Update(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						UserBegin(
+						UserMysqlBegin(
 							gomock.Any(),
 							"0:test",
 						).
@@ -456,7 +456,7 @@ func TestProfileUsecase_Update(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.transactionService.UserBegin", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.transactionService.UserMysqlBegin", errors.NewTestError()),
 		},
 		{
 			name: "異常：s.profileService.Update",
@@ -482,7 +482,7 @@ func TestProfileUsecase_Update(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						UserBegin(
+						UserMysqlBegin(
 							gomock.Any(),
 							"0:test",
 						).
@@ -491,7 +491,7 @@ func TestProfileUsecase_Update(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						UserEnd(
+						UserMysqlEnd(
 							gomock.Any(),
 							gomock.Any(),
 							errors.NewTestError(),

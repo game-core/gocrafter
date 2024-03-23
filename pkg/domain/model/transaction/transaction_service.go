@@ -15,14 +15,14 @@ import (
 )
 
 type TransactionService interface {
-	CommonBegin(ctx context.Context) (*gorm.DB, error)
-	CommonEnd(ctx context.Context, tx *gorm.DB, err error)
-	MasterBegin(ctx context.Context) (*gorm.DB, error)
-	MasterEnd(ctx context.Context, tx *gorm.DB, err error)
-	UserBegin(ctx context.Context, userId string) (*gorm.DB, error)
-	UserEnd(ctx context.Context, tx *gorm.DB, err error)
-	MultiUserBegin(ctx context.Context, userIds []string) (map[string]*gorm.DB, error)
-	MultiUserEnd(ctx context.Context, txs map[string]*gorm.DB, err error)
+	CommonMysqlBegin(ctx context.Context) (*gorm.DB, error)
+	CommonMysqlEnd(ctx context.Context, tx *gorm.DB, err error)
+	MasterMysqlBegin(ctx context.Context) (*gorm.DB, error)
+	MasterMysqlEnd(ctx context.Context, tx *gorm.DB, err error)
+	UserMysqlBegin(ctx context.Context, userId string) (*gorm.DB, error)
+	UserMysqlEnd(ctx context.Context, tx *gorm.DB, err error)
+	MultiUserMysqlBegin(ctx context.Context, userIds []string) (map[string]*gorm.DB, error)
+	MultiUserMysqlEnd(ctx context.Context, txs map[string]*gorm.DB, err error)
 }
 
 type transactionService struct {
@@ -43,8 +43,8 @@ func NewTransactionService(
 	}
 }
 
-// CommonBegin トランザクションを開始する
-func (s *transactionService) CommonBegin(ctx context.Context) (*gorm.DB, error) {
+// CommonMysqlBegin トランザクションを開始する
+func (s *transactionService) CommonMysqlBegin(ctx context.Context) (*gorm.DB, error) {
 	tx, err := s.commonTransactionMysqlRepository.Begin(ctx)
 	if err != nil {
 		return nil, err
@@ -53,8 +53,8 @@ func (s *transactionService) CommonBegin(ctx context.Context) (*gorm.DB, error) 
 	return tx, nil
 }
 
-// CommonEnd トランザクションを終了する
-func (s *transactionService) CommonEnd(ctx context.Context, tx *gorm.DB, err error) {
+// CommonMysqlEnd トランザクションを終了する
+func (s *transactionService) CommonMysqlEnd(ctx context.Context, tx *gorm.DB, err error) {
 	if err != nil {
 		if err := s.commonTransactionMysqlRepository.Rollback(ctx, tx); err != nil {
 			log.Panicln(err)
@@ -66,8 +66,8 @@ func (s *transactionService) CommonEnd(ctx context.Context, tx *gorm.DB, err err
 	}
 }
 
-// MasterBegin トランザクションを開始する
-func (s *transactionService) MasterBegin(ctx context.Context) (*gorm.DB, error) {
+// MasterMysqlBegin トランザクションを開始する
+func (s *transactionService) MasterMysqlBegin(ctx context.Context) (*gorm.DB, error) {
 	tx, err := s.masterTransactionMysqlRepository.Begin(ctx)
 	if err != nil {
 		return nil, err
@@ -76,8 +76,8 @@ func (s *transactionService) MasterBegin(ctx context.Context) (*gorm.DB, error) 
 	return tx, nil
 }
 
-// MasterEnd トランザクションを終了する
-func (s *transactionService) MasterEnd(ctx context.Context, tx *gorm.DB, err error) {
+// MasterMysqlEnd トランザクションを終了する
+func (s *transactionService) MasterMysqlEnd(ctx context.Context, tx *gorm.DB, err error) {
 	if err != nil {
 		if err := s.masterTransactionMysqlRepository.Rollback(ctx, tx); err != nil {
 			log.Panicln(err)
@@ -89,8 +89,8 @@ func (s *transactionService) MasterEnd(ctx context.Context, tx *gorm.DB, err err
 	}
 }
 
-// UserBegin トランザクションを開始する
-func (s *transactionService) UserBegin(ctx context.Context, userId string) (*gorm.DB, error) {
+// UserMysqlBegin トランザクションを開始する
+func (s *transactionService) UserMysqlBegin(ctx context.Context, userId string) (*gorm.DB, error) {
 	tx, err := s.userTransactionMysqlRepository.Begin(ctx, keys.GetShardKeyByUserId(userId))
 	if err != nil {
 		return nil, err
@@ -99,8 +99,8 @@ func (s *transactionService) UserBegin(ctx context.Context, userId string) (*gor
 	return tx, nil
 }
 
-// UserEnd トランザクションを終了する
-func (s *transactionService) UserEnd(ctx context.Context, tx *gorm.DB, err error) {
+// UserMysqlEnd トランザクションを終了する
+func (s *transactionService) UserMysqlEnd(ctx context.Context, tx *gorm.DB, err error) {
 	if err != nil {
 		if err := s.userTransactionMysqlRepository.Rollback(ctx, tx); err != nil {
 			log.Panicln(err)
@@ -112,8 +112,8 @@ func (s *transactionService) UserEnd(ctx context.Context, tx *gorm.DB, err error
 	}
 }
 
-// MultiUserBegin マルチトランザクションを開始する
-func (s *transactionService) MultiUserBegin(ctx context.Context, userIds []string) (map[string]*gorm.DB, error) {
+// MultiUserMysqlBegin マルチトランザクションを開始する
+func (s *transactionService) MultiUserMysqlBegin(ctx context.Context, userIds []string) (map[string]*gorm.DB, error) {
 	txs := make(map[string]*gorm.DB)
 	for _, userId := range userIds {
 		tx, err := s.userTransactionMysqlRepository.Begin(ctx, keys.GetShardKeyByUserId(userId))
@@ -127,8 +127,8 @@ func (s *transactionService) MultiUserBegin(ctx context.Context, userIds []strin
 	return txs, nil
 }
 
-// MultiUserEnd マルチトランザクションを終了する
-func (s *transactionService) MultiUserEnd(ctx context.Context, txs map[string]*gorm.DB, err error) {
+// MultiUserMysqlEnd マルチトランザクションを終了する
+func (s *transactionService) MultiUserMysqlEnd(ctx context.Context, txs map[string]*gorm.DB, err error) {
 	if err != nil {
 		for _, tx := range txs {
 			if rollbackErr := s.userTransactionMysqlRepository.Rollback(ctx, tx); rollbackErr != nil {

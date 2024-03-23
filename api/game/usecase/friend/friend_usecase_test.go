@@ -229,7 +229,7 @@ func TestFriendUsecase_Send(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						MultiUserBegin(
+						MultiUserMysqlBegin(
 							gomock.Any(),
 							gomock.Any(),
 						).
@@ -238,7 +238,7 @@ func TestFriendUsecase_Send(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						MultiUserEnd(
+						MultiUserMysqlEnd(
 							gomock.Any(),
 							gomock.Any(),
 							nil,
@@ -263,7 +263,7 @@ func TestFriendUsecase_Send(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.transactionService.MultiUserBegin",
+			name: "異常：s.transactionService.MultiUserMysqlBegin",
 			fields: fields{
 				friendService: func(ctrl *gomock.Controller) friendService.FriendService {
 					m := friendService.NewMockFriendService(ctrl)
@@ -272,7 +272,7 @@ func TestFriendUsecase_Send(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						MultiUserBegin(
+						MultiUserMysqlBegin(
 							gomock.Any(),
 							gomock.Any(),
 						).
@@ -290,7 +290,7 @@ func TestFriendUsecase_Send(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.transactionService.MultiUserBegin", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.transactionService.MultiUserMysqlBegin", errors.NewTestError()),
 		},
 		{
 			name: "異常：s.friendService.Send",
@@ -314,7 +314,7 @@ func TestFriendUsecase_Send(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						MultiUserBegin(
+						MultiUserMysqlBegin(
 							gomock.Any(),
 							gomock.Any(),
 						).
@@ -323,7 +323,7 @@ func TestFriendUsecase_Send(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						MultiUserEnd(
+						MultiUserMysqlEnd(
 							gomock.Any(),
 							gomock.Any(),
 							errors.NewTestError(),
@@ -407,7 +407,7 @@ func TestFriendUsecase_Approve(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						MultiUserBegin(
+						MultiUserMysqlBegin(
 							gomock.Any(),
 							gomock.Any(),
 						).
@@ -416,7 +416,7 @@ func TestFriendUsecase_Approve(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						MultiUserEnd(
+						MultiUserMysqlEnd(
 							gomock.Any(),
 							gomock.Any(),
 							nil,
@@ -441,7 +441,7 @@ func TestFriendUsecase_Approve(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.transactionService.MultiUserBegin",
+			name: "異常：s.transactionService.MultiUserMysqlBegin",
 			fields: fields{
 				friendService: func(ctrl *gomock.Controller) friendService.FriendService {
 					m := friendService.NewMockFriendService(ctrl)
@@ -450,7 +450,7 @@ func TestFriendUsecase_Approve(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						MultiUserBegin(
+						MultiUserMysqlBegin(
 							gomock.Any(),
 							gomock.Any(),
 						).
@@ -468,7 +468,7 @@ func TestFriendUsecase_Approve(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.transactionService.MultiUserBegin", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.transactionService.MultiUserMysqlBegin", errors.NewTestError()),
 		},
 		{
 			name: "異常：s.friendService.Approve",
@@ -492,7 +492,7 @@ func TestFriendUsecase_Approve(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						MultiUserBegin(
+						MultiUserMysqlBegin(
 							gomock.Any(),
 							gomock.Any(),
 						).
@@ -501,7 +501,7 @@ func TestFriendUsecase_Approve(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						MultiUserEnd(
+						MultiUserMysqlEnd(
 							gomock.Any(),
 							gomock.Any(),
 							errors.NewTestError(),
@@ -586,7 +586,7 @@ func TestFriendUsecase_Disapprove(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						MultiUserBegin(
+						MultiUserMysqlBegin(
 							gomock.Any(),
 							gomock.Any(),
 						).
@@ -595,7 +595,7 @@ func TestFriendUsecase_Disapprove(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						MultiUserEnd(
+						MultiUserMysqlEnd(
 							gomock.Any(),
 							gomock.Any(),
 							nil,
@@ -621,7 +621,7 @@ func TestFriendUsecase_Disapprove(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.transactionService.MultiUserBegin",
+			name: "異常：s.transactionService.MultiUserMysqlBegin",
 			fields: fields{
 				friendService: func(ctrl *gomock.Controller) friendService.FriendService {
 					m := friendService.NewMockFriendService(ctrl)
@@ -630,7 +630,7 @@ func TestFriendUsecase_Disapprove(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						MultiUserBegin(
+						MultiUserMysqlBegin(
 							gomock.Any(),
 							gomock.Any(),
 						).
@@ -649,7 +649,7 @@ func TestFriendUsecase_Disapprove(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.transactionService.MultiUserBegin", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.transactionService.MultiUserMysqlBegin", errors.NewTestError()),
 		},
 		{
 			name: "異常：s.friendService.Disapprove",
@@ -674,7 +674,7 @@ func TestFriendUsecase_Disapprove(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						MultiUserBegin(
+						MultiUserMysqlBegin(
 							gomock.Any(),
 							gomock.Any(),
 						).
@@ -683,7 +683,7 @@ func TestFriendUsecase_Disapprove(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						MultiUserEnd(
+						MultiUserMysqlEnd(
 							gomock.Any(),
 							gomock.Any(),
 							errors.NewTestError(),
@@ -769,7 +769,7 @@ func TestFriendUsecase_Delete(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						MultiUserBegin(
+						MultiUserMysqlBegin(
 							gomock.Any(),
 							gomock.Any(),
 						).
@@ -778,7 +778,7 @@ func TestFriendUsecase_Delete(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						MultiUserEnd(
+						MultiUserMysqlEnd(
 							gomock.Any(),
 							gomock.Any(),
 							nil,
@@ -804,7 +804,7 @@ func TestFriendUsecase_Delete(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.transactionService.MultiUserBegin",
+			name: "異常：s.transactionService.MultiUserMysqlBegin",
 			fields: fields{
 				friendService: func(ctrl *gomock.Controller) friendService.FriendService {
 					m := friendService.NewMockFriendService(ctrl)
@@ -813,7 +813,7 @@ func TestFriendUsecase_Delete(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						MultiUserBegin(
+						MultiUserMysqlBegin(
 							gomock.Any(),
 							gomock.Any(),
 						).
@@ -832,7 +832,7 @@ func TestFriendUsecase_Delete(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.transactionService.MultiUserBegin", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.transactionService.MultiUserMysqlBegin", errors.NewTestError()),
 		},
 		{
 			name: "異常：s.friendService.Delete",
@@ -857,7 +857,7 @@ func TestFriendUsecase_Delete(t *testing.T) {
 				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
 					m := transactionService.NewMockTransactionService(ctrl)
 					m.EXPECT().
-						MultiUserBegin(
+						MultiUserMysqlBegin(
 							gomock.Any(),
 							gomock.Any(),
 						).
@@ -866,7 +866,7 @@ func TestFriendUsecase_Delete(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
-						MultiUserEnd(
+						MultiUserMysqlEnd(
 							gomock.Any(),
 							gomock.Any(),
 							errors.NewTestError(),

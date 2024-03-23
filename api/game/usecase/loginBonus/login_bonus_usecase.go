@@ -71,12 +71,12 @@ func (s *loginBonusUsecase) GetMaster(ctx context.Context, req *loginBonusServer
 // Receive ログインボーナス受け取り
 func (s *loginBonusUsecase) Receive(ctx context.Context, req *loginBonusServer.LoginBonusReceiveRequest) (*loginBonusServer.LoginBonusReceiveResponse, error) {
 	// transaction
-	tx, err := s.transactionService.UserBegin(ctx, req.UserId)
+	tx, err := s.transactionService.UserMysqlBegin(ctx, req.UserId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.transactionService.UserBegin", err)
+		return nil, errors.NewMethodError("s.transactionService.UserMysqlBegin", err)
 	}
 	defer func() {
-		s.transactionService.UserEnd(ctx, tx, err)
+		s.transactionService.UserMysqlEnd(ctx, tx, err)
 	}()
 
 	result, err := s.loginBonusService.Receive(ctx, tx, times.Now(), loginBonusService.SetLoginBonusReceiveRequest(req.UserId, req.MasterLoginBonusId))

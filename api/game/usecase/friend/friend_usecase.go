@@ -49,12 +49,12 @@ func (s *friendUsecase) Get(ctx context.Context, req *friendServer.FriendGetRequ
 // Send フレンド申請を送信する
 func (s *friendUsecase) Send(ctx context.Context, req *friendServer.FriendSendRequest) (*friendServer.FriendSendResponse, error) {
 	// transaction
-	txs, err := s.transactionService.MultiUserBegin(ctx, []string{req.UserId, req.FriendUserId})
+	txs, err := s.transactionService.MultiUserMysqlBegin(ctx, []string{req.UserId, req.FriendUserId})
 	if err != nil {
-		return nil, errors.NewMethodError("s.transactionService.MultiUserBegin", err)
+		return nil, errors.NewMethodError("s.transactionService.MultiUserMysqlBegin", err)
 	}
 	defer func() {
-		s.transactionService.MultiUserEnd(ctx, txs, err)
+		s.transactionService.MultiUserMysqlEnd(ctx, txs, err)
 	}()
 
 	result, err := s.friendService.Send(ctx, txs, friendService.SetFriendSendRequest(req.UserId, req.FriendUserId))
@@ -74,12 +74,12 @@ func (s *friendUsecase) Send(ctx context.Context, req *friendServer.FriendSendRe
 // Approve フレンド申請を承諾する
 func (s *friendUsecase) Approve(ctx context.Context, req *friendServer.FriendApproveRequest) (*friendServer.FriendApproveResponse, error) {
 	// transaction
-	txs, err := s.transactionService.MultiUserBegin(ctx, []string{req.UserId, req.FriendUserId})
+	txs, err := s.transactionService.MultiUserMysqlBegin(ctx, []string{req.UserId, req.FriendUserId})
 	if err != nil {
-		return nil, errors.NewMethodError("s.transactionService.MultiUserBegin", err)
+		return nil, errors.NewMethodError("s.transactionService.MultiUserMysqlBegin", err)
 	}
 	defer func() {
-		s.transactionService.MultiUserEnd(ctx, txs, err)
+		s.transactionService.MultiUserMysqlEnd(ctx, txs, err)
 	}()
 
 	result, err := s.friendService.Approve(ctx, txs, friendService.SetFriendApproveRequest(req.UserId, req.FriendUserId))
@@ -99,12 +99,12 @@ func (s *friendUsecase) Approve(ctx context.Context, req *friendServer.FriendApp
 // Disapprove フレンド申請を拒否する
 func (s *friendUsecase) Disapprove(ctx context.Context, req *friendServer.FriendDisapproveRequest) (*friendServer.FriendDisapproveResponse, error) {
 	// transaction
-	txs, err := s.transactionService.MultiUserBegin(ctx, []string{req.UserId, req.FriendUserId})
+	txs, err := s.transactionService.MultiUserMysqlBegin(ctx, []string{req.UserId, req.FriendUserId})
 	if err != nil {
-		return nil, errors.NewMethodError("s.transactionService.MultiUserBegin", err)
+		return nil, errors.NewMethodError("s.transactionService.MultiUserMysqlBegin", err)
 	}
 	defer func() {
-		s.transactionService.MultiUserEnd(ctx, txs, err)
+		s.transactionService.MultiUserMysqlEnd(ctx, txs, err)
 	}()
 
 	result, err := s.friendService.Disapprove(ctx, txs, friendService.SetFriendDisapproveRequest(req.UserId, req.FriendUserId))
@@ -124,12 +124,12 @@ func (s *friendUsecase) Disapprove(ctx context.Context, req *friendServer.Friend
 // Delete フレンドを削除する
 func (s *friendUsecase) Delete(ctx context.Context, req *friendServer.FriendDeleteRequest) (*friendServer.FriendDeleteResponse, error) {
 	// transaction
-	txs, err := s.transactionService.MultiUserBegin(ctx, []string{req.UserId, req.FriendUserId})
+	txs, err := s.transactionService.MultiUserMysqlBegin(ctx, []string{req.UserId, req.FriendUserId})
 	if err != nil {
-		return nil, errors.NewMethodError("s.transactionService.MultiUserBegin", err)
+		return nil, errors.NewMethodError("s.transactionService.MultiUserMysqlBegin", err)
 	}
 	defer func() {
-		s.transactionService.MultiUserEnd(ctx, txs, err)
+		s.transactionService.MultiUserMysqlEnd(ctx, txs, err)
 	}()
 
 	result, err := s.friendService.Delete(ctx, txs, friendService.SetFriendDeleteRequest(req.UserId, req.FriendUserId))

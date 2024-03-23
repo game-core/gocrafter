@@ -49,12 +49,12 @@ func (s *profileUsecase) Get(ctx context.Context, req *profileServer.ProfileGetR
 // Create プロフィールを作成する
 func (s *profileUsecase) Create(ctx context.Context, req *profileServer.ProfileCreateRequest) (*profileServer.ProfileCreateResponse, error) {
 	// transaction
-	tx, err := s.transactionService.UserBegin(ctx, req.UserId)
+	tx, err := s.transactionService.UserMysqlBegin(ctx, req.UserId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.transactionService.UserBegin", err)
+		return nil, errors.NewMethodError("s.transactionService.UserMysqlBegin", err)
 	}
 	defer func() {
-		s.transactionService.UserEnd(ctx, tx, err)
+		s.transactionService.UserMysqlEnd(ctx, tx, err)
 	}()
 
 	result, err := s.profileService.Create(ctx, tx, profileService.SetProfileCreateRequest(req.UserId, req.Name, req.Content))
@@ -74,12 +74,12 @@ func (s *profileUsecase) Create(ctx context.Context, req *profileServer.ProfileC
 // Update プロフィールを更新する
 func (s *profileUsecase) Update(ctx context.Context, req *profileServer.ProfileUpdateRequest) (*profileServer.ProfileUpdateResponse, error) {
 	// transaction
-	tx, err := s.transactionService.UserBegin(ctx, req.UserId)
+	tx, err := s.transactionService.UserMysqlBegin(ctx, req.UserId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.transactionService.UserBegin", err)
+		return nil, errors.NewMethodError("s.transactionService.UserMysqlBegin", err)
 	}
 	defer func() {
-		s.transactionService.UserEnd(ctx, tx, err)
+		s.transactionService.UserMysqlEnd(ctx, tx, err)
 	}()
 
 	result, err := s.profileService.Update(ctx, tx, profileService.SetProfileUpdateRequest(req.UserId, req.Name, req.Content))
