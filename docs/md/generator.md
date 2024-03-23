@@ -276,7 +276,7 @@ func SetMasterLoginBonus(id int64, masterLoginBonusEventId int64, name string) *
 ```go
 // Package masterLoginBonus ログインボーナス
 //
-//go:generate mockgen -source=./master_login_bonus_repository.gen.go -destination=./master_login_bonus_repository_mock.gen.go -package=masterLoginBonus
+//go:generate mockgen -source=./master_login_bonus_mysql_repository.gen.go -destination=./master_login_bonus_mysql_repository_mock.gen.go -package=masterLoginBonus
 package masterLoginBonus
 
 import (

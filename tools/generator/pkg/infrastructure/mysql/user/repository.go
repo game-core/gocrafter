@@ -86,7 +86,7 @@ func (s *MysqlRepository) createOutputFile(yamlStruct *YamlStruct, outputFileNam
 
 // getOutputFileName ファイル名を取得する
 func (s *MysqlRepository) getOutputFileName(dir, name string) string {
-	return filepath.Join(dir, fmt.Sprintf("%s_repository.gen.go", changes.UpperCamelToSnake(name)))
+	return filepath.Join(dir, fmt.Sprintf("%s_mysql_repository.gen.go", changes.UpperCamelToSnake(name)))
 }
 
 // createTemplate テンプレートを作成する
@@ -119,7 +119,7 @@ func (s *MysqlRepository) createTemplate(yamlStruct *YamlStruct, outputFile *os.
 // createMock mockを作成する
 func createMock(yamlStruct *YamlStruct) string {
 	return fmt.Sprintf(
-		"//go:generate mockgen -source=./%s_repository.gen.go -destination=./%s_repository_mock.gen.go -package=%s",
+		"//go:generate mockgen -source=./%s_mysql_repository.gen.go -destination=./%s_mysql_repository_mock.gen.go -package=%s",
 		changes.UpperCamelToSnake(yamlStruct.Name),
 		changes.UpperCamelToSnake(yamlStruct.Name),
 		changes.UpperCamelToCamel(yamlStruct.Package),
