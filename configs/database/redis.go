@@ -59,7 +59,7 @@ func (s *RedisHandler) userDB() error {
 	writeDB := redis.NewClient(&redis.Options{
 		Addr:     host,
 		Password: password,
-		DB:       0,
+		DB:       database,
 	})
 
 	s.User = &RedisConn{
