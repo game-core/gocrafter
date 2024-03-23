@@ -11,7 +11,8 @@ import (
 var RedisHandlerInstance *RedisHandler
 
 type RedisHandler struct {
-	User *RedisConn
+	Common *RedisConn
+	User   *RedisConn
 }
 
 type RedisConn struct {
@@ -28,6 +29,10 @@ func NewRedis() *RedisHandler {
 func InitRedis() (*RedisHandler, error) {
 	db := &RedisHandler{}
 
+	if err := db.commonDB(); err != nil {
+		return nil, err
+	}
+
 	if err := db.userDB(); err != nil {
 		return nil, err
 	}
@@ -35,6 +40,39 @@ func InitRedis() (*RedisHandler, error) {
 	RedisHandlerInstance = db
 
 	return RedisHandlerInstance, nil
+}
+
+// commonDB コネクションを作成する
+func (s *RedisHandler) commonDB() error {
+	host := os.Getenv("COMMON_REDIS_WRITE_HOST")
+	password := os.Getenv("COMMON_REDIS_WRITE_PASSWORD")
+	database, err := strconv.Atoi(os.Getenv("COMMON_REDIS_DATABASE"))
+	if err != nil {
+		return err
+	}
+
+	if err := s.setRedis(database, host, password); err != nil {
+		return err
+	}
+
+	readDB := redis.NewClient(&redis.Options{
+		Addr:     host,
+		Password: password,
+		DB:       database,
+	})
+
+	writeDB := redis.NewClient(&redis.Options{
+		Addr:     host,
+		Password: password,
+		DB:       database,
+	})
+
+	s.Common = &RedisConn{
+		ReadRedisConn:  readDB,
+		WriteRedisConn: writeDB,
+	}
+
+	return nil
 }
 
 // userDB コネクションを作成する
