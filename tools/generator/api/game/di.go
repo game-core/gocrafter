@@ -285,7 +285,7 @@ func (s *Di) usecaseScript(structName string, fields []*ast.Field) string {
 // serviceScript serviceを生成する
 func (s *Di) serviceScript(structName string, fields []*ast.Field) string {
 	importCode = fmt.Sprintf("%s\n%s", importCode, fmt.Sprintf("%s \"github.com/game-core/gocrafter/pkg/domain/model/%s\"", structName, strings.Replace(structName, "Service", "", -1)))
-
+	var databaseCode string
 	var scripts []string
 
 	for _, field := range fields {
@@ -300,16 +300,29 @@ func (s *Di) serviceScript(structName string, fields []*ast.Field) string {
 
 			if strings.Contains(fieldName, "MysqlRepository") {
 				name := strings.Replace(fieldName, "MysqlRepository", "", -1)
-				importCode = fmt.Sprintf("%s\n%s", importCode, fmt.Sprintf("%sDao \"github.com/game-core/gocrafter/pkg/infrastructure/mysql/%s/%s\"", name, s.getDaoDir(name), name))
-				scripts = append(scripts, fmt.Sprintf("%sDao.New%sDao,", name, changes.CamelToUpperCamel(name)))
+				importCode = fmt.Sprintf("%s\n%s", importCode, fmt.Sprintf("%sMysqlDao \"github.com/game-core/gocrafter/pkg/infrastructure/mysql/%s/%s\"", name, s.getDaoDir(name), name))
+				scripts = append(scripts, fmt.Sprintf("%sMysqlDao.New%sDao,", name, changes.CamelToUpperCamel(name)))
+
+				if !strings.Contains(databaseCode, "database.NewMysql") {
+					databaseCode = fmt.Sprintf("%s\n%s", databaseCode, "database.NewMysql,")
+				}
+			}
+
+			if strings.Contains(fieldName, "RedisRepository") {
+				name := strings.Replace(fieldName, "RedisRepository", "", -1)
+				importCode = fmt.Sprintf("%s\n%s", importCode, fmt.Sprintf("%sRedisDao \"github.com/game-core/gocrafter/pkg/infrastructure/redis/%s/%s\"", name, s.getDaoDir(name), name))
+				scripts = append(scripts, fmt.Sprintf("%sRedisDao.New%sDao,", name, changes.CamelToUpperCamel(name)))
+
+				if !strings.Contains(databaseCode, "database.NewRedis") {
+					databaseCode = fmt.Sprintf("%s\n%s", databaseCode, "database.NewRedis,")
+				}
 			}
 		}
 	}
 
 	return fmt.Sprintf(
 		`func Initialize%s() %s.%s {
-			wire.Build(
-				database.NewMysql,
+			wire.Build(%s
 				%s.New%s,
 				%s
 			)
@@ -319,6 +332,7 @@ func (s *Di) serviceScript(structName string, fields []*ast.Field) string {
 		changes.CamelToUpperCamel(structName),
 		structName,
 		changes.CamelToUpperCamel(structName),
+		databaseCode,
 		structName,
 		changes.CamelToUpperCamel(structName),
 		strings.Join(scripts, "\n"),

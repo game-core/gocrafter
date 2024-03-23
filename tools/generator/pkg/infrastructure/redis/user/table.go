@@ -212,14 +212,12 @@ func (s *Table) createTableToJson(name string) string {
 func (s *Table) createJsonToTable(name string) string {
 	return fmt.Sprintf(
 		`func (t *%s) JsonToTable(data string) error {
-			m := New%s()
-			if err := json.Unmarshal([]byte(data), &m); err != nil {
+			if err := json.Unmarshal([]byte(data), &t); err != nil {
 				return err
 			}
 		
 			return nil
 		}`,
-		name,
 		name,
 	)
 }

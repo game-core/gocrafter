@@ -40,27 +40,24 @@ func InitRedis() (*RedisHandler, error) {
 // userDB コネクションを作成する
 func (s *RedisHandler) userDB() error {
 	host := os.Getenv("USER_REDIS_WRITE_HOST")
-	user := os.Getenv("USER_REDIS_WRITE_USER")
 	password := os.Getenv("USER_REDIS_WRITE_PASSWORD")
 	database, err := strconv.Atoi(os.Getenv("USER_REDIS_DATABASE"))
 	if err != nil {
 		return err
 	}
 
-	if err := s.setRedis(database, host, user, password); err != nil {
+	if err := s.setRedis(database, host, password); err != nil {
 		return err
 	}
 
 	readDB := redis.NewClient(&redis.Options{
 		Addr:     host,
-		Username: user,
 		Password: password,
 		DB:       database,
 	})
 
 	writeDB := redis.NewClient(&redis.Options{
 		Addr:     host,
-		Username: user,
 		Password: password,
 		DB:       0,
 	})
@@ -74,22 +71,14 @@ func (s *RedisHandler) userDB() error {
 }
 
 // setRedis コネクションをセットする
-func (s *RedisHandler) setRedis(database int, host, user, password string) error {
+func (s *RedisHandler) setRedis(database int, host, password string) error {
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     host,
-		Password: "",
+		Password: password,
 		DB:       database,
 	})
 
 	if _, err := rdb.Ping(context.Background()).Result(); err != nil {
-		return err
-	}
-
-	if err := rdb.Set(context.Background(), "username", user, 0).Err(); err != nil {
-		return err
-	}
-
-	if err := rdb.Set(context.Background(), "password", password, 0).Err(); err != nil {
 		return err
 	}
 

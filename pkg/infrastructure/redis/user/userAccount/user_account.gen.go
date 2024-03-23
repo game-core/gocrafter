@@ -49,8 +49,7 @@ func (t *UserAccount) TableToJson() ([]byte, error) {
 }
 
 func (t *UserAccount) JsonToTable(data string) error {
-	m := NewUserAccount()
-	if err := json.Unmarshal([]byte(data), &m); err != nil {
+	if err := json.Unmarshal([]byte(data), &t); err != nil {
 		return err
 	}
 

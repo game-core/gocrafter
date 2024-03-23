@@ -30,32 +30,32 @@ import (
 	resourceService "github.com/game-core/gocrafter/pkg/domain/model/resource"
 	shardService "github.com/game-core/gocrafter/pkg/domain/model/shard"
 	transactionService "github.com/game-core/gocrafter/pkg/domain/model/transaction"
-	commonShardDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonShard"
-	commonTransactionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonTransaction"
-	masterActionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterAction"
-	masterActionRunDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionRun"
-	masterActionStepDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionStep"
-	masterActionTriggerDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionTrigger"
-	masterIdleBonusDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonus"
-	masterIdleBonusEventDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusEvent"
-	masterIdleBonusItemDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusItem"
-	masterIdleBonusScheduleDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusSchedule"
-	masterItemDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterItem"
-	masterLoginBonusDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonus"
-	masterLoginBonusEventDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusEvent"
-	masterLoginBonusItemDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusItem"
-	masterLoginBonusScheduleDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusSchedule"
-	masterRarityDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterRarity"
-	masterResourceDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterResource"
-	masterTransactionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterTransaction"
-	userAccountDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userAccount"
-	userActionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userAction"
-	userFriendDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userFriend"
-	userIdleBonusDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userIdleBonus"
-	userItemBoxDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userItemBox"
-	userLoginBonusDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userLoginBonus"
-	userProfileDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userProfile"
-	userTransactionDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userTransaction"
+	commonShardMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonShard"
+	commonTransactionMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonTransaction"
+	masterActionMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterAction"
+	masterActionRunMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionRun"
+	masterActionStepMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionStep"
+	masterActionTriggerMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionTrigger"
+	masterIdleBonusMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonus"
+	masterIdleBonusEventMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusEvent"
+	masterIdleBonusItemMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusItem"
+	masterIdleBonusScheduleMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusSchedule"
+	masterItemMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterItem"
+	masterLoginBonusMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonus"
+	masterLoginBonusEventMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusEvent"
+	masterLoginBonusItemMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusItem"
+	masterLoginBonusScheduleMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusSchedule"
+	masterRarityMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterRarity"
+	masterResourceMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterResource"
+	masterTransactionMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterTransaction"
+	userAccountMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userAccount"
+	userActionMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userAction"
+	userFriendMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userFriend"
+	userIdleBonusMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userIdleBonus"
+	userItemBoxMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userItemBox"
+	userLoginBonusMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userLoginBonus"
+	userProfileMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userProfile"
+	userTransactionMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userTransaction"
 )
 
 func InitializeAuthInterceptor() authInterceptor.AuthInterceptor {
@@ -155,7 +155,7 @@ func InitializeAccountService() accountService.AccountService {
 		database.NewMysql,
 		accountService.NewAccountService,
 		InitializeShardService,
-		userAccountDao.NewUserAccountDao,
+		userAccountMysqlDao.NewUserAccountDao,
 	)
 	return nil
 }
@@ -164,11 +164,11 @@ func InitializeActionService() actionService.ActionService {
 	wire.Build(
 		database.NewMysql,
 		actionService.NewActionService,
-		masterActionDao.NewMasterActionDao,
-		masterActionRunDao.NewMasterActionRunDao,
-		masterActionStepDao.NewMasterActionStepDao,
-		masterActionTriggerDao.NewMasterActionTriggerDao,
-		userActionDao.NewUserActionDao,
+		masterActionMysqlDao.NewMasterActionDao,
+		masterActionRunMysqlDao.NewMasterActionRunDao,
+		masterActionStepMysqlDao.NewMasterActionStepDao,
+		masterActionTriggerMysqlDao.NewMasterActionTriggerDao,
+		userActionMysqlDao.NewUserActionDao,
 	)
 	return nil
 }
@@ -178,7 +178,7 @@ func InitializeFriendService() friendService.FriendService {
 		database.NewMysql,
 		friendService.NewFriendService,
 		InitializeAccountService,
-		userFriendDao.NewUserFriendDao,
+		userFriendMysqlDao.NewUserFriendDao,
 	)
 	return nil
 }
@@ -188,11 +188,11 @@ func InitializeIdleBonusService() idleBonusService.IdleBonusService {
 		database.NewMysql,
 		idleBonusService.NewIdleBonusService,
 		InitializeItemService,
-		userIdleBonusDao.NewUserIdleBonusDao,
-		masterIdleBonusDao.NewMasterIdleBonusDao,
-		masterIdleBonusEventDao.NewMasterIdleBonusEventDao,
-		masterIdleBonusItemDao.NewMasterIdleBonusItemDao,
-		masterIdleBonusScheduleDao.NewMasterIdleBonusScheduleDao,
+		userIdleBonusMysqlDao.NewUserIdleBonusDao,
+		masterIdleBonusMysqlDao.NewMasterIdleBonusDao,
+		masterIdleBonusEventMysqlDao.NewMasterIdleBonusEventDao,
+		masterIdleBonusItemMysqlDao.NewMasterIdleBonusItemDao,
+		masterIdleBonusScheduleMysqlDao.NewMasterIdleBonusScheduleDao,
 	)
 	return nil
 }
@@ -201,8 +201,8 @@ func InitializeItemService() itemService.ItemService {
 	wire.Build(
 		database.NewMysql,
 		itemService.NewItemService,
-		userItemBoxDao.NewUserItemBoxDao,
-		masterItemDao.NewMasterItemDao,
+		userItemBoxMysqlDao.NewUserItemBoxDao,
+		masterItemMysqlDao.NewMasterItemDao,
 	)
 	return nil
 }
@@ -212,11 +212,11 @@ func InitializeLoginBonusService() loginBonusService.LoginBonusService {
 		database.NewMysql,
 		loginBonusService.NewLoginBonusService,
 		InitializeItemService,
-		userLoginBonusDao.NewUserLoginBonusDao,
-		masterLoginBonusDao.NewMasterLoginBonusDao,
-		masterLoginBonusEventDao.NewMasterLoginBonusEventDao,
-		masterLoginBonusItemDao.NewMasterLoginBonusItemDao,
-		masterLoginBonusScheduleDao.NewMasterLoginBonusScheduleDao,
+		userLoginBonusMysqlDao.NewUserLoginBonusDao,
+		masterLoginBonusMysqlDao.NewMasterLoginBonusDao,
+		masterLoginBonusEventMysqlDao.NewMasterLoginBonusEventDao,
+		masterLoginBonusItemMysqlDao.NewMasterLoginBonusItemDao,
+		masterLoginBonusScheduleMysqlDao.NewMasterLoginBonusScheduleDao,
 	)
 	return nil
 }
@@ -225,7 +225,7 @@ func InitializeProfileService() profileService.ProfileService {
 	wire.Build(
 		database.NewMysql,
 		profileService.NewProfileService,
-		userProfileDao.NewUserProfileDao,
+		userProfileMysqlDao.NewUserProfileDao,
 	)
 	return nil
 }
@@ -234,7 +234,7 @@ func InitializeRarityService() rarityService.RarityService {
 	wire.Build(
 		database.NewMysql,
 		rarityService.NewRarityService,
-		masterRarityDao.NewMasterRarityDao,
+		masterRarityMysqlDao.NewMasterRarityDao,
 	)
 	return nil
 }
@@ -243,7 +243,7 @@ func InitializeResourceService() resourceService.ResourceService {
 	wire.Build(
 		database.NewMysql,
 		resourceService.NewResourceService,
-		masterResourceDao.NewMasterResourceDao,
+		masterResourceMysqlDao.NewMasterResourceDao,
 	)
 	return nil
 }
@@ -252,7 +252,7 @@ func InitializeShardService() shardService.ShardService {
 	wire.Build(
 		database.NewMysql,
 		shardService.NewShardService,
-		commonShardDao.NewCommonShardDao,
+		commonShardMysqlDao.NewCommonShardDao,
 	)
 	return nil
 }
@@ -261,9 +261,9 @@ func InitializeTransactionService() transactionService.TransactionService {
 	wire.Build(
 		database.NewMysql,
 		transactionService.NewTransactionService,
-		commonTransactionDao.NewCommonTransactionDao,
-		masterTransactionDao.NewMasterTransactionDao,
-		userTransactionDao.NewUserTransactionDao,
+		commonTransactionMysqlDao.NewCommonTransactionDao,
+		masterTransactionMysqlDao.NewMasterTransactionDao,
+		userTransactionMysqlDao.NewUserTransactionDao,
 	)
 	return nil
 }
