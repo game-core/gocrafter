@@ -39,12 +39,12 @@ func NewAccountService(
 
 // FindByUserId ユーザーIDから取得する
 func (s *accountService) FindByUserId(ctx context.Context, userId string) (*userAccount.UserAccount, error) {
-	userAccount, err := s.userAccountRepository.Find(ctx, userId)
+	userAccountModel, err := s.userAccountRepository.Find(ctx, userId)
 	if err != nil {
 		return nil, errors.NewMethodError("s.userAccountRepository.Find", err)
 	}
 
-	return userAccount, err
+	return userAccountModel, err
 }
 
 // Create アカウントを作成する
@@ -59,34 +59,34 @@ func (s *accountService) Create(ctx context.Context, tx *gorm.DB, req *AccountCr
 		return nil, errors.NewMethodError("keys.GenerateHashPassword", err)
 	}
 
-	userAccount, err := s.userAccountRepository.Create(ctx, tx, userAccount.SetUserAccount(req.UserId, req.Name, hashPassword, times.Now(), times.Now()))
+	userAccountModel, err := s.userAccountRepository.Create(ctx, tx, userAccount.SetUserAccount(req.UserId, req.Name, hashPassword, times.Now(), times.Now()))
 	if err != nil {
 		return nil, errors.NewMethodError("s.userAccountRepository.Create", err)
 	}
 
-	userAccount.Password = password
+	userAccountModel.Password = password
 
-	return SetAccountCreateResponse(userAccount), nil
+	return SetAccountCreateResponse(userAccountModel), nil
 }
 
 // Login ログインする
 func (s *accountService) Login(ctx context.Context, tx *gorm.DB, req *AccountLoginRequest) (*AccountLoginResponse, error) {
-	userAccount, err := s.userAccountRepository.Find(ctx, req.UserId)
+	userAccountModel, err := s.userAccountRepository.Find(ctx, req.UserId)
 	if err != nil {
 		return nil, errors.NewMethodError("s.userAccountRepository.Find", err)
 	}
 
-	if !keys.CheckPassword(req.Password, userAccount.Password) {
+	if !keys.CheckPassword(req.Password, userAccountModel.Password) {
 		return nil, errors.NewError("invalid password")
 	}
 
-	userAccount.LoginAt = times.Now()
-	result, err := s.userAccountRepository.Update(ctx, tx, userAccount)
+	userAccountModel.LoginAt = times.Now()
+	result, err := s.userAccountRepository.Update(ctx, tx, userAccountModel)
 	if err != nil {
 		return nil, errors.NewMethodError("s.userAccountRepository.Update", err)
 	}
 
-	token, err := tokens.GenerateAuthTokenByUserId(userAccount.UserId, userAccount.Name)
+	token, err := tokens.GenerateAuthTokenByUserId(userAccountModel.UserId, userAccountModel.Name)
 	if err != nil {
 		return nil, errors.NewMethodError("tokens.GenerateAuthTokenByUserId", err)
 	}
@@ -96,12 +96,12 @@ func (s *accountService) Login(ctx context.Context, tx *gorm.DB, req *AccountLog
 
 // Check ユーザーを確認する
 func (s *accountService) Check(ctx context.Context, req *AccountCheckRequest) (*AccountCheckResponse, error) {
-	userAccount, err := s.userAccountRepository.Find(ctx, req.UserId)
+	userAccountModel, err := s.userAccountRepository.Find(ctx, req.UserId)
 	if err != nil {
 		return nil, errors.NewMethodError("s.userAccountRepository.Find", err)
 	}
 
-	return SetAccountCheckResponse(userAccount), err
+	return SetAccountCheckResponse(userAccountModel), err
 }
 
 // GenerateUserID ユーザーIDを生成する
