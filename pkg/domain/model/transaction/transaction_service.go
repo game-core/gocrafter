@@ -5,10 +5,10 @@ import (
 	"context"
 	"log"
 
-	"github.com/game-core/gocrafter/internal/keys"
-
+	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 
+	"github.com/game-core/gocrafter/internal/keys"
 	"github.com/game-core/gocrafter/pkg/domain/model/transaction/commonTransaction"
 	"github.com/game-core/gocrafter/pkg/domain/model/transaction/masterTransaction"
 	"github.com/game-core/gocrafter/pkg/domain/model/transaction/userTransaction"
@@ -23,23 +23,28 @@ type TransactionService interface {
 	UserMysqlEnd(ctx context.Context, tx *gorm.DB, err error)
 	MultiUserMysqlBegin(ctx context.Context, userIds []string) (map[string]*gorm.DB, error)
 	MultiUserMysqlEnd(ctx context.Context, txs map[string]*gorm.DB, err error)
+	UserRedisBegin() redis.Pipeliner
+	UserRedisEnd(ctx context.Context, tx redis.Pipeliner, err error)
 }
 
 type transactionService struct {
 	commonTransactionMysqlRepository commonTransaction.CommonTransactionMysqlRepository
 	masterTransactionMysqlRepository masterTransaction.MasterTransactionMysqlRepository
 	userTransactionMysqlRepository   userTransaction.UserTransactionMysqlRepository
+	userTransactionRedisRepository   userTransaction.UserTransactionRedisRepository
 }
 
 func NewTransactionService(
 	commonTransactionMysqlRepository commonTransaction.CommonTransactionMysqlRepository,
 	masterTransactionMysqlRepository masterTransaction.MasterTransactionMysqlRepository,
 	userTransactionMysqlRepository userTransaction.UserTransactionMysqlRepository,
+	userTransactionRedisRepository userTransaction.UserTransactionRedisRepository,
 ) TransactionService {
 	return &transactionService{
 		commonTransactionMysqlRepository: commonTransactionMysqlRepository,
 		masterTransactionMysqlRepository: masterTransactionMysqlRepository,
 		userTransactionMysqlRepository:   userTransactionMysqlRepository,
+		userTransactionRedisRepository:   userTransactionRedisRepository,
 	}
 }
 
@@ -141,6 +146,23 @@ func (s *transactionService) MultiUserMysqlEnd(ctx context.Context, txs map[stri
 	for _, tx := range txs {
 		if commitErr := s.userTransactionMysqlRepository.Commit(ctx, tx); commitErr != nil {
 			log.Panicln(commitErr)
+		}
+	}
+}
+
+// UserRedisBegin トランザクションを開始する
+func (s *transactionService) UserRedisBegin() redis.Pipeliner {
+	return s.userTransactionRedisRepository.Begin()
+}
+
+// UserRedisEnd トランザクションを終了する
+func (s *transactionService) UserRedisEnd(ctx context.Context, tx redis.Pipeliner, err error) {
+	if err != nil {
+		s.userTransactionRedisRepository.Rollback(tx)
+		log.Panicln(err)
+	} else {
+		if err := s.userTransactionRedisRepository.Commit(ctx, tx); err != nil {
+			log.Panicln(err)
 		}
 	}
 }

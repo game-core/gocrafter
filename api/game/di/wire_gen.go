@@ -56,6 +56,7 @@ import (
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userLoginBonus"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userProfile"
 	masterTransaction2 "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userTransaction"
+	masterTransaction3 "github.com/game-core/gocrafter/pkg/infrastructure/redis/user/userTransaction"
 )
 
 // Injectors from wire.go:
@@ -222,6 +223,8 @@ func InitializeTransactionService() transaction.TransactionService {
 	commonTransactionMysqlRepository := commonTransaction.NewCommonTransactionDao(mysqlHandler)
 	masterTransactionMysqlRepository := masterTransaction.NewMasterTransactionDao(mysqlHandler)
 	userTransactionMysqlRepository := masterTransaction2.NewUserTransactionDao(mysqlHandler)
-	transactionService := transaction.NewTransactionService(commonTransactionMysqlRepository, masterTransactionMysqlRepository, userTransactionMysqlRepository)
+	redisHandler := database.NewRedis()
+	userTransactionRedisRepository := masterTransaction3.NewUserTransactionDao(redisHandler)
+	transactionService := transaction.NewTransactionService(commonTransactionMysqlRepository, masterTransactionMysqlRepository, userTransactionMysqlRepository, userTransactionRedisRepository)
 	return transactionService
 }

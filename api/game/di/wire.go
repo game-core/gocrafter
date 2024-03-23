@@ -56,6 +56,7 @@ import (
 	userLoginBonusMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userLoginBonus"
 	userProfileMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userProfile"
 	userTransactionMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userTransaction"
+	userTransactionRedisDao "github.com/game-core/gocrafter/pkg/infrastructure/redis/user/userTransaction"
 )
 
 func InitializeAuthInterceptor() authInterceptor.AuthInterceptor {
@@ -260,10 +261,12 @@ func InitializeShardService() shardService.ShardService {
 func InitializeTransactionService() transactionService.TransactionService {
 	wire.Build(
 		database.NewMysql,
+		database.NewRedis,
 		transactionService.NewTransactionService,
 		commonTransactionMysqlDao.NewCommonTransactionDao,
 		masterTransactionMysqlDao.NewMasterTransactionDao,
 		userTransactionMysqlDao.NewUserTransactionDao,
+		userTransactionRedisDao.NewUserTransactionDao,
 	)
 	return nil
 }

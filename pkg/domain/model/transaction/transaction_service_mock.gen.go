@@ -9,6 +9,7 @@ import (
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
+	redis "github.com/redis/go-redis/v9"
 	gorm "gorm.io/gorm"
 )
 
@@ -141,4 +142,30 @@ func (m *MockTransactionService) UserMysqlEnd(ctx context.Context, tx *gorm.DB, 
 func (mr *MockTransactionServiceMockRecorder) UserMysqlEnd(ctx, tx, err interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UserMysqlEnd", reflect.TypeOf((*MockTransactionService)(nil).UserMysqlEnd), ctx, tx, err)
+}
+
+// UserRedisBegin mocks base method.
+func (m *MockTransactionService) UserRedisBegin() redis.Pipeliner {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UserRedisBegin")
+	ret0, _ := ret[0].(redis.Pipeliner)
+	return ret0
+}
+
+// UserRedisBegin indicates an expected call of UserRedisBegin.
+func (mr *MockTransactionServiceMockRecorder) UserRedisBegin() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UserRedisBegin", reflect.TypeOf((*MockTransactionService)(nil).UserRedisBegin))
+}
+
+// UserRedisEnd mocks base method.
+func (m *MockTransactionService) UserRedisEnd(ctx context.Context, tx redis.Pipeliner, err error) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "UserRedisEnd", ctx, tx, err)
+}
+
+// UserRedisEnd indicates an expected call of UserRedisEnd.
+func (mr *MockTransactionServiceMockRecorder) UserRedisEnd(ctx, tx, err interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UserRedisEnd", reflect.TypeOf((*MockTransactionService)(nil).UserRedisEnd), ctx, tx, err)
 }
