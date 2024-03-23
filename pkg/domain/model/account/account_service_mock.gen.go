@@ -10,6 +10,7 @@ import (
 
 	userAccount "github.com/game-core/gocrafter/pkg/domain/model/account/userAccount"
 	gomock "github.com/golang/mock/gomock"
+	v9 "github.com/redis/go-redis/v9"
 	gorm "gorm.io/gorm"
 )
 
@@ -97,16 +98,16 @@ func (mr *MockAccountServiceMockRecorder) GenerateUserID(ctx interface{}) *gomoc
 }
 
 // Login mocks base method.
-func (m *MockAccountService) Login(ctx context.Context, tx *gorm.DB, req *AccountLoginRequest) (*AccountLoginResponse, error) {
+func (m *MockAccountService) Login(ctx context.Context, mtx *gorm.DB, rtx v9.Pipeliner, req *AccountLoginRequest) (*AccountLoginResponse, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Login", ctx, tx, req)
+	ret := m.ctrl.Call(m, "Login", ctx, mtx, rtx, req)
 	ret0, _ := ret[0].(*AccountLoginResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Login indicates an expected call of Login.
-func (mr *MockAccountServiceMockRecorder) Login(ctx, tx, req interface{}) *gomock.Call {
+func (mr *MockAccountServiceMockRecorder) Login(ctx, mtx, rtx, req interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Login", reflect.TypeOf((*MockAccountService)(nil).Login), ctx, tx, req)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Login", reflect.TypeOf((*MockAccountService)(nil).Login), ctx, mtx, rtx, req)
 }

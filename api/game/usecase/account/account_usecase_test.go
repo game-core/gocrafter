@@ -308,6 +308,7 @@ func TestAccountUsecase_Login(t *testing.T) {
 						Login(
 							gomock.Any(),
 							gomock.Any(),
+							gomock.Any(),
 							&accountService.AccountLoginRequest{
 								UserId:   "0:test",
 								Name:     "test_user_account",
@@ -341,7 +342,18 @@ func TestAccountUsecase_Login(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
+						UserRedisBegin().
+						Return(
+							nil,
+						)
+					m.EXPECT().
 						UserMysqlEnd(
+							gomock.Any(),
+							gomock.Any(),
+							nil,
+						)
+					m.EXPECT().
+						UserRedisEnd(
 							gomock.Any(),
 							gomock.Any(),
 							nil,
@@ -410,6 +422,7 @@ func TestAccountUsecase_Login(t *testing.T) {
 						Login(
 							gomock.Any(),
 							gomock.Any(),
+							gomock.Any(),
 							&accountService.AccountLoginRequest{
 								UserId:   "0:test",
 								Name:     "test_user_account",
@@ -434,7 +447,18 @@ func TestAccountUsecase_Login(t *testing.T) {
 							nil,
 						)
 					m.EXPECT().
+						UserRedisBegin().
+						Return(
+							nil,
+						)
+					m.EXPECT().
 						UserMysqlEnd(
+							gomock.Any(),
+							gomock.Any(),
+							errors.NewTestError(),
+						)
+					m.EXPECT().
+						UserRedisEnd(
 							gomock.Any(),
 							gomock.Any(),
 							errors.NewTestError(),

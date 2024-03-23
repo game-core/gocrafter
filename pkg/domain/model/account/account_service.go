@@ -3,6 +3,7 @@ package account
 
 import (
 	"context"
+	"github.com/redis/go-redis/v9"
 
 	"gorm.io/gorm"
 
@@ -17,7 +18,7 @@ import (
 type AccountService interface {
 	FindByUserId(ctx context.Context, userId string) (*userAccount.UserAccount, error)
 	Create(ctx context.Context, tx *gorm.DB, req *AccountCreateRequest) (*AccountCreateResponse, error)
-	Login(ctx context.Context, tx *gorm.DB, req *AccountLoginRequest) (*AccountLoginResponse, error)
+	Login(ctx context.Context, mtx *gorm.DB, rtx redis.Pipeliner, req *AccountLoginRequest) (*AccountLoginResponse, error)
 	Check(ctx context.Context, req *AccountCheckRequest) (*AccountCheckResponse, error)
 	GenerateUserID(ctx context.Context) (string, error)
 }
@@ -25,15 +26,18 @@ type AccountService interface {
 type accountService struct {
 	shardService               shard.ShardService
 	userAccountMysqlRepository userAccount.UserAccountMysqlRepository
+	userAccountRedisRepository userAccount.UserAccountRedisRepository
 }
 
 func NewAccountService(
 	shardService shard.ShardService,
 	userAccountMysqlRepository userAccount.UserAccountMysqlRepository,
+	userAccountRedisRepository userAccount.UserAccountRedisRepository,
 ) AccountService {
 	return &accountService{
 		shardService:               shardService,
 		userAccountMysqlRepository: userAccountMysqlRepository,
+		userAccountRedisRepository: userAccountRedisRepository,
 	}
 }
 
@@ -70,7 +74,7 @@ func (s *accountService) Create(ctx context.Context, tx *gorm.DB, req *AccountCr
 }
 
 // Login ログインする
-func (s *accountService) Login(ctx context.Context, tx *gorm.DB, req *AccountLoginRequest) (*AccountLoginResponse, error) {
+func (s *accountService) Login(ctx context.Context, mtx *gorm.DB, rtx redis.Pipeliner, req *AccountLoginRequest) (*AccountLoginResponse, error) {
 	userAccountModel, err := s.userAccountMysqlRepository.Find(ctx, req.UserId)
 	if err != nil {
 		return nil, errors.NewMethodError("s.userAccountMysqlRepository.Find", err)
@@ -81,7 +85,7 @@ func (s *accountService) Login(ctx context.Context, tx *gorm.DB, req *AccountLog
 	}
 
 	userAccountModel.LoginAt = times.Now()
-	result, err := s.userAccountMysqlRepository.Update(ctx, tx, userAccountModel)
+	result, err := s.userAccountMysqlRepository.Update(ctx, mtx, userAccountModel)
 	if err != nil {
 		return nil, errors.NewMethodError("s.userAccountMysqlRepository.Update", err)
 	}
@@ -91,14 +95,18 @@ func (s *accountService) Login(ctx context.Context, tx *gorm.DB, req *AccountLog
 		return nil, errors.NewMethodError("tokens.GenerateAuthTokenByUserId", err)
 	}
 
+	if _, err := s.userAccountRedisRepository.Set(ctx, rtx, userAccountModel); err != nil {
+		return nil, errors.NewMethodError("s.userAccountRedisRepository.Set", err)
+	}
+
 	return SetAccountLoginResponse(token, result), nil
 }
 
 // Check ユーザーを確認する
 func (s *accountService) Check(ctx context.Context, req *AccountCheckRequest) (*AccountCheckResponse, error) {
-	userAccountModel, err := s.userAccountMysqlRepository.Find(ctx, req.UserId)
+	userAccountModel, err := s.userAccountRedisRepository.Find(ctx, req.UserId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.userAccountMysqlRepository.Find", err)
+		return nil, errors.NewMethodError("s.userAccountRedisRepository.Find", err)
 	}
 
 	return SetAccountCheckResponse(userAccountModel), err

@@ -66,15 +66,17 @@ func (s *accountUsecase) Create(ctx context.Context, req *accountServer.AccountC
 // Login アカウントをログインする
 func (s *accountUsecase) Login(ctx context.Context, req *accountServer.AccountLoginRequest) (*accountServer.AccountLoginResponse, error) {
 	// transaction
-	tx, err := s.transactionService.UserMysqlBegin(ctx, req.UserId)
+	mtx, err := s.transactionService.UserMysqlBegin(ctx, req.UserId)
 	if err != nil {
 		return nil, errors.NewMethodError("s.transactionService.UserMysqlBegin", err)
 	}
+	rtx := s.transactionService.UserRedisBegin()
 	defer func() {
-		s.transactionService.UserMysqlEnd(ctx, tx, err)
+		s.transactionService.UserMysqlEnd(ctx, mtx, err)
+		s.transactionService.UserRedisEnd(ctx, rtx, err)
 	}()
 
-	result, err := s.accountService.Login(ctx, tx, accountService.SetAccountLoginRequest(req.UserId, req.Name, req.Password))
+	result, err := s.accountService.Login(ctx, mtx, rtx, accountService.SetAccountLoginRequest(req.UserId, req.Name, req.Password))
 	if err != nil {
 		return nil, errors.NewMethodError("s.accountService.Login", err)
 	}

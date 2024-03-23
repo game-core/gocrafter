@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"gorm.io/gorm"
-
 	"github.com/golang/mock/gomock"
+	"github.com/redis/go-redis/v9"
+	"gorm.io/gorm"
 
 	"github.com/game-core/gocrafter/internal/errors"
 	"github.com/game-core/gocrafter/pkg/domain/model/account/userAccount"
@@ -19,6 +19,7 @@ func TestNewAccountService_NewAccountService(t *testing.T) {
 	type args struct {
 		shardService               shard.ShardService
 		userAccountMysqlRepository userAccount.UserAccountMysqlRepository
+		userAccountRedisRepository userAccount.UserAccountRedisRepository
 	}
 	tests := []struct {
 		name string
@@ -30,10 +31,12 @@ func TestNewAccountService_NewAccountService(t *testing.T) {
 			args: args{
 				shardService:               nil,
 				userAccountMysqlRepository: nil,
+				userAccountRedisRepository: nil,
 			},
 			want: &accountService{
 				shardService:               nil,
 				userAccountMysqlRepository: nil,
+				userAccountRedisRepository: nil,
 			},
 		},
 	}
@@ -42,6 +45,7 @@ func TestNewAccountService_NewAccountService(t *testing.T) {
 			got := NewAccountService(
 				tt.args.shardService,
 				tt.args.userAccountMysqlRepository,
+				tt.args.userAccountRedisRepository,
 			)
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewAccountService() = %v, want %v", got, tt.want)
@@ -283,11 +287,13 @@ func TestAccountService_Create(t *testing.T) {
 func TestAccountService_Login(t *testing.T) {
 	type fields struct {
 		userAccountMysqlRepository func(ctrl *gomock.Controller) userAccount.UserAccountMysqlRepository
+		userAccountRedisRepository func(ctrl *gomock.Controller) userAccount.UserAccountRedisRepository
 		shardService               func(ctrl *gomock.Controller) shard.ShardService
 	}
 	type args struct {
 		ctx context.Context
 		tx  *gorm.DB
+		rtx redis.Pipeliner
 		req *AccountLoginRequest
 	}
 	tests := []struct {
@@ -339,10 +345,31 @@ func TestAccountService_Login(t *testing.T) {
 					m := shard.NewMockShardService(ctrl)
 					return m
 				},
+				userAccountRedisRepository: func(ctrl *gomock.Controller) userAccount.UserAccountRedisRepository {
+					m := userAccount.NewMockUserAccountRedisRepository(ctrl)
+					m.EXPECT().
+						Set(
+							nil,
+							nil,
+							gomock.Any(),
+						).
+						Return(
+							&userAccount.UserAccount{
+								UserId:   "0:WntR-PyhOJeDiE5jodeR",
+								Name:     "test_user_account",
+								Password: "$2a$10$J/phCDt8nXe02rhhPcDx1.9LEX3jw4mXxQq2ulKhuWcFmllaWSSqm",
+								LoginAt:  time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
+								LogoutAt: time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
+							},
+							nil,
+						)
+					return m
+				},
 			},
 			args: args{
 				ctx: nil,
 				tx:  nil,
+				rtx: nil,
 				req: &AccountLoginRequest{
 					UserId:   "0:WntR-PyhOJeDiE5jodeR",
 					Name:     "test_user_account",
@@ -381,10 +408,15 @@ func TestAccountService_Login(t *testing.T) {
 					m := shard.NewMockShardService(ctrl)
 					return m
 				},
+				userAccountRedisRepository: func(ctrl *gomock.Controller) userAccount.UserAccountRedisRepository {
+					m := userAccount.NewMockUserAccountRedisRepository(ctrl)
+					return m
+				},
 			},
 			args: args{
 				ctx: nil,
 				tx:  nil,
+				rtx: nil,
 				req: &AccountLoginRequest{
 					UserId:   "0:WntR-PyhOJeDiE5jodeR",
 					Name:     "test_user_account",
@@ -430,10 +462,15 @@ func TestAccountService_Login(t *testing.T) {
 					m := shard.NewMockShardService(ctrl)
 					return m
 				},
+				userAccountRedisRepository: func(ctrl *gomock.Controller) userAccount.UserAccountRedisRepository {
+					m := userAccount.NewMockUserAccountRedisRepository(ctrl)
+					return m
+				},
 			},
 			args: args{
 				ctx: nil,
 				tx:  nil,
+				rtx: nil,
 				req: &AccountLoginRequest{
 					UserId:   "0:WntR-PyhOJeDiE5jodeR",
 					Name:     "test_user_account",
@@ -443,6 +480,76 @@ func TestAccountService_Login(t *testing.T) {
 			want:    nil,
 			wantErr: errors.NewMethodError("s.userAccountMysqlRepository.Update", errors.NewTestError()),
 		},
+		{
+			name: "異常：s.userAccountRedisRepository.Set",
+			fields: fields{
+				userAccountMysqlRepository: func(ctrl *gomock.Controller) userAccount.UserAccountMysqlRepository {
+					m := userAccount.NewMockUserAccountMysqlRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							"0:WntR-PyhOJeDiE5jodeR",
+						).
+						Return(
+							&userAccount.UserAccount{
+								UserId:   "0:WntR-PyhOJeDiE5jodeR",
+								Name:     "test_user_account",
+								Password: "$2a$10$J/phCDt8nXe02rhhPcDx1.9LEX3jw4mXxQq2ulKhuWcFmllaWSSqm",
+								LoginAt:  time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
+								LogoutAt: time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
+							},
+							nil,
+						)
+					m.EXPECT().
+						Update(
+							nil,
+							nil,
+							gomock.Any(),
+						).
+						Return(
+							&userAccount.UserAccount{
+								UserId:   "0:WntR-PyhOJeDiE5jodeR",
+								Name:     "test_user_account",
+								Password: "$2a$10$J/phCDt8nXe02rhhPcDx1.9LEX3jw4mXxQq2ulKhuWcFmllaWSSqm",
+								LoginAt:  time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
+								LogoutAt: time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
+							},
+							nil,
+						)
+					return m
+				},
+				shardService: func(ctrl *gomock.Controller) shard.ShardService {
+					m := shard.NewMockShardService(ctrl)
+					return m
+				},
+				userAccountRedisRepository: func(ctrl *gomock.Controller) userAccount.UserAccountRedisRepository {
+					m := userAccount.NewMockUserAccountRedisRepository(ctrl)
+					m.EXPECT().
+						Set(
+							nil,
+							nil,
+							gomock.Any(),
+						).
+						Return(
+							nil,
+							errors.NewTestError(),
+						)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				tx:  nil,
+				rtx: nil,
+				req: &AccountLoginRequest{
+					UserId:   "0:WntR-PyhOJeDiE5jodeR",
+					Name:     "test_user_account",
+					Password: "M3sDUx-vXLGfYzhGz7Nl",
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.userAccountRedisRepository.Set", errors.NewTestError()),
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -450,10 +557,11 @@ func TestAccountService_Login(t *testing.T) {
 
 			s := &accountService{
 				userAccountMysqlRepository: tt.fields.userAccountMysqlRepository(ctrl),
+				userAccountRedisRepository: tt.fields.userAccountRedisRepository(ctrl),
 				shardService:               tt.fields.shardService(ctrl),
 			}
 
-			got, err := s.Login(tt.args.ctx, tt.args.tx, tt.args.req)
+			got, err := s.Login(tt.args.ctx, tt.args.tx, tt.args.rtx, tt.args.req)
 			if !reflect.DeepEqual(err, tt.wantErr) {
 				t.Errorf("Login() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -473,7 +581,7 @@ func TestAccountService_Login(t *testing.T) {
 
 func TestAccountService_Check(t *testing.T) {
 	type fields struct {
-		userAccountMysqlRepository func(ctrl *gomock.Controller) userAccount.UserAccountMysqlRepository
+		userAccountRedisRepository func(ctrl *gomock.Controller) userAccount.UserAccountRedisRepository
 		shardService               func(ctrl *gomock.Controller) shard.ShardService
 	}
 	type args struct {
@@ -490,8 +598,8 @@ func TestAccountService_Check(t *testing.T) {
 		{
 			name: "正常：アカウントが存在する場合",
 			fields: fields{
-				userAccountMysqlRepository: func(ctrl *gomock.Controller) userAccount.UserAccountMysqlRepository {
-					m := userAccount.NewMockUserAccountMysqlRepository(ctrl)
+				userAccountRedisRepository: func(ctrl *gomock.Controller) userAccount.UserAccountRedisRepository {
+					m := userAccount.NewMockUserAccountRedisRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -532,10 +640,10 @@ func TestAccountService_Check(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.userAccountMysqlRepository.Find",
+			name: "異常：s.userAccountRedisRepository.Find",
 			fields: fields{
-				userAccountMysqlRepository: func(ctrl *gomock.Controller) userAccount.UserAccountMysqlRepository {
-					m := userAccount.NewMockUserAccountMysqlRepository(ctrl)
+				userAccountRedisRepository: func(ctrl *gomock.Controller) userAccount.UserAccountRedisRepository {
+					m := userAccount.NewMockUserAccountRedisRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -559,7 +667,7 @@ func TestAccountService_Check(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userAccountMysqlRepository.Find", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userAccountRedisRepository.Find", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -567,7 +675,7 @@ func TestAccountService_Check(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &accountService{
-				userAccountMysqlRepository: tt.fields.userAccountMysqlRepository(ctrl),
+				userAccountRedisRepository: tt.fields.userAccountRedisRepository(ctrl),
 				shardService:               tt.fields.shardService(ctrl),
 			}
 

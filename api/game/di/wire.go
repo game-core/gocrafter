@@ -56,6 +56,7 @@ import (
 	userLoginBonusMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userLoginBonus"
 	userProfileMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userProfile"
 	userTransactionMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userTransaction"
+	userAccountRedisDao "github.com/game-core/gocrafter/pkg/infrastructure/redis/user/userAccount"
 	userTransactionRedisDao "github.com/game-core/gocrafter/pkg/infrastructure/redis/user/userTransaction"
 )
 
@@ -154,9 +155,11 @@ func InitializeProfileUsecase() profileUsecase.ProfileUsecase {
 func InitializeAccountService() accountService.AccountService {
 	wire.Build(
 		database.NewMysql,
+		database.NewRedis,
 		accountService.NewAccountService,
 		InitializeShardService,
 		userAccountMysqlDao.NewUserAccountDao,
+		userAccountRedisDao.NewUserAccountDao,
 	)
 	return nil
 }

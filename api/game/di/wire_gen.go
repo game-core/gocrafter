@@ -56,6 +56,7 @@ import (
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userLoginBonus"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userProfile"
 	masterTransaction2 "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userTransaction"
+	userAccount2 "github.com/game-core/gocrafter/pkg/infrastructure/redis/user/userAccount"
 	masterTransaction3 "github.com/game-core/gocrafter/pkg/infrastructure/redis/user/userTransaction"
 )
 
@@ -135,7 +136,9 @@ func InitializeAccountService() account3.AccountService {
 	shardService := InitializeShardService()
 	mysqlHandler := database.NewMysql()
 	userAccountMysqlRepository := userAccount.NewUserAccountDao(mysqlHandler)
-	accountService := account3.NewAccountService(shardService, userAccountMysqlRepository)
+	redisHandler := database.NewRedis()
+	userAccountRedisRepository := userAccount2.NewUserAccountDao(redisHandler)
+	accountService := account3.NewAccountService(shardService, userAccountMysqlRepository, userAccountRedisRepository)
 	return accountService
 }
 
