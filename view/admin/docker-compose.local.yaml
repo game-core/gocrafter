@@ -1,0 +1,23 @@
+version: '3.8'
+
+name: gocrafter-web
+
+volumes:
+  node_modules:
+    driver: local
+
+services:
+  web:
+    container_name: gocrafter-web
+    env_file:
+      - .env.local
+    build:
+      target: dev
+      context: .
+      dockerfile: ./docker/web/Dockerfile
+    volumes:
+      - .:/web:cached
+      - node_modules:/web/node_modules
+    ports:
+      - "3000:3000"
+    tty: true
