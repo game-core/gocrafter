@@ -223,7 +223,7 @@ func (s *Dao) createFind(yamlStruct *YamlStruct, primaryFields []string) string 
 	return fmt.Sprintf(
 		`func (s *%sDao) Find(ctx context.Context, %s) (*%s.%s, error) {
 			t := New%s()
-			data, err := s.ReadRedisConn.Get(ctx, %s).Result()
+			data, err := s.ReadRedisConn.HGet(ctx, t.TableName(), %s).Result()
 			if err != nil {
 				return nil, err
 			}
@@ -267,7 +267,7 @@ func (s *Dao) createSet(yamlStruct *YamlStruct, primaryFields []string) string {
 				return nil, err
 			}
 		
-			if err := conn.Set(ctx, %s, jt, 0).Err(); err != nil {
+			if err := conn.HSet(ctx, t.TableName(), %s, jt).Err(); err != nil {
 				return nil, err
 			}
 		
@@ -301,7 +301,7 @@ func (s *Dao) createDelete(yamlStruct *YamlStruct, primaryFields []string) strin
 			}
 		
 			t := New%s()
-			if err := conn.Del(ctx, %s).Err(); err != nil {
+			if err := conn.HDel(ctx, t.TableName(), %s).Err(); err != nil {
 				return err
 			}
 		
