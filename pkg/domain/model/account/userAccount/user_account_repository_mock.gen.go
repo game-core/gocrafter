@@ -12,31 +12,31 @@ import (
 	gorm "gorm.io/gorm"
 )
 
-// MockUserAccountRepository is a mock of UserAccountRepository interface.
-type MockUserAccountRepository struct {
+// MockUserAccountMysqlRepository is a mock of UserAccountMysqlRepository interface.
+type MockUserAccountMysqlRepository struct {
 	ctrl     *gomock.Controller
-	recorder *MockUserAccountRepositoryMockRecorder
+	recorder *MockUserAccountMysqlRepositoryMockRecorder
 }
 
-// MockUserAccountRepositoryMockRecorder is the mock recorder for MockUserAccountRepository.
-type MockUserAccountRepositoryMockRecorder struct {
-	mock *MockUserAccountRepository
+// MockUserAccountMysqlRepositoryMockRecorder is the mock recorder for MockUserAccountMysqlRepository.
+type MockUserAccountMysqlRepositoryMockRecorder struct {
+	mock *MockUserAccountMysqlRepository
 }
 
-// NewMockUserAccountRepository creates a new mock instance.
-func NewMockUserAccountRepository(ctrl *gomock.Controller) *MockUserAccountRepository {
-	mock := &MockUserAccountRepository{ctrl: ctrl}
-	mock.recorder = &MockUserAccountRepositoryMockRecorder{mock}
+// NewMockUserAccountMysqlRepository creates a new mock instance.
+func NewMockUserAccountMysqlRepository(ctrl *gomock.Controller) *MockUserAccountMysqlRepository {
+	mock := &MockUserAccountMysqlRepository{ctrl: ctrl}
+	mock.recorder = &MockUserAccountMysqlRepositoryMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockUserAccountRepository) EXPECT() *MockUserAccountRepositoryMockRecorder {
+func (m *MockUserAccountMysqlRepository) EXPECT() *MockUserAccountMysqlRepositoryMockRecorder {
 	return m.recorder
 }
 
 // Create mocks base method.
-func (m_2 *MockUserAccountRepository) Create(ctx context.Context, tx *gorm.DB, m *UserAccount) (*UserAccount, error) {
+func (m_2 *MockUserAccountMysqlRepository) Create(ctx context.Context, tx *gorm.DB, m *UserAccount) (*UserAccount, error) {
 	m_2.ctrl.T.Helper()
 	ret := m_2.ctrl.Call(m_2, "Create", ctx, tx, m)
 	ret0, _ := ret[0].(*UserAccount)
@@ -45,13 +45,13 @@ func (m_2 *MockUserAccountRepository) Create(ctx context.Context, tx *gorm.DB, m
 }
 
 // Create indicates an expected call of Create.
-func (mr *MockUserAccountRepositoryMockRecorder) Create(ctx, tx, m interface{}) *gomock.Call {
+func (mr *MockUserAccountMysqlRepositoryMockRecorder) Create(ctx, tx, m interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockUserAccountRepository)(nil).Create), ctx, tx, m)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockUserAccountMysqlRepository)(nil).Create), ctx, tx, m)
 }
 
 // CreateList mocks base method.
-func (m *MockUserAccountRepository) CreateList(ctx context.Context, tx *gorm.DB, ms UserAccounts) (UserAccounts, error) {
+func (m *MockUserAccountMysqlRepository) CreateList(ctx context.Context, tx *gorm.DB, ms UserAccounts) (UserAccounts, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateList", ctx, tx, ms)
 	ret0, _ := ret[0].(UserAccounts)
@@ -60,13 +60,13 @@ func (m *MockUserAccountRepository) CreateList(ctx context.Context, tx *gorm.DB,
 }
 
 // CreateList indicates an expected call of CreateList.
-func (mr *MockUserAccountRepositoryMockRecorder) CreateList(ctx, tx, ms interface{}) *gomock.Call {
+func (mr *MockUserAccountMysqlRepositoryMockRecorder) CreateList(ctx, tx, ms interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateList", reflect.TypeOf((*MockUserAccountRepository)(nil).CreateList), ctx, tx, ms)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateList", reflect.TypeOf((*MockUserAccountMysqlRepository)(nil).CreateList), ctx, tx, ms)
 }
 
 // Delete mocks base method.
-func (m_2 *MockUserAccountRepository) Delete(ctx context.Context, tx *gorm.DB, m *UserAccount) error {
+func (m_2 *MockUserAccountMysqlRepository) Delete(ctx context.Context, tx *gorm.DB, m *UserAccount) error {
 	m_2.ctrl.T.Helper()
 	ret := m_2.ctrl.Call(m_2, "Delete", ctx, tx, m)
 	ret0, _ := ret[0].(error)
@@ -74,13 +74,13 @@ func (m_2 *MockUserAccountRepository) Delete(ctx context.Context, tx *gorm.DB, m
 }
 
 // Delete indicates an expected call of Delete.
-func (mr *MockUserAccountRepositoryMockRecorder) Delete(ctx, tx, m interface{}) *gomock.Call {
+func (mr *MockUserAccountMysqlRepositoryMockRecorder) Delete(ctx, tx, m interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockUserAccountRepository)(nil).Delete), ctx, tx, m)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockUserAccountMysqlRepository)(nil).Delete), ctx, tx, m)
 }
 
 // Find mocks base method.
-func (m *MockUserAccountRepository) Find(ctx context.Context, userId string) (*UserAccount, error) {
+func (m *MockUserAccountMysqlRepository) Find(ctx context.Context, userId string) (*UserAccount, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Find", ctx, userId)
 	ret0, _ := ret[0].(*UserAccount)
@@ -89,13 +89,13 @@ func (m *MockUserAccountRepository) Find(ctx context.Context, userId string) (*U
 }
 
 // Find indicates an expected call of Find.
-func (mr *MockUserAccountRepositoryMockRecorder) Find(ctx, userId interface{}) *gomock.Call {
+func (mr *MockUserAccountMysqlRepositoryMockRecorder) Find(ctx, userId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Find", reflect.TypeOf((*MockUserAccountRepository)(nil).Find), ctx, userId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Find", reflect.TypeOf((*MockUserAccountMysqlRepository)(nil).Find), ctx, userId)
 }
 
 // FindList mocks base method.
-func (m *MockUserAccountRepository) FindList(ctx context.Context, userId string) (UserAccounts, error) {
+func (m *MockUserAccountMysqlRepository) FindList(ctx context.Context, userId string) (UserAccounts, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindList", ctx, userId)
 	ret0, _ := ret[0].(UserAccounts)
@@ -104,13 +104,13 @@ func (m *MockUserAccountRepository) FindList(ctx context.Context, userId string)
 }
 
 // FindList indicates an expected call of FindList.
-func (mr *MockUserAccountRepositoryMockRecorder) FindList(ctx, userId interface{}) *gomock.Call {
+func (mr *MockUserAccountMysqlRepositoryMockRecorder) FindList(ctx, userId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindList", reflect.TypeOf((*MockUserAccountRepository)(nil).FindList), ctx, userId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindList", reflect.TypeOf((*MockUserAccountMysqlRepository)(nil).FindList), ctx, userId)
 }
 
 // FindOrNil mocks base method.
-func (m *MockUserAccountRepository) FindOrNil(ctx context.Context, userId string) (*UserAccount, error) {
+func (m *MockUserAccountMysqlRepository) FindOrNil(ctx context.Context, userId string) (*UserAccount, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindOrNil", ctx, userId)
 	ret0, _ := ret[0].(*UserAccount)
@@ -119,13 +119,13 @@ func (m *MockUserAccountRepository) FindOrNil(ctx context.Context, userId string
 }
 
 // FindOrNil indicates an expected call of FindOrNil.
-func (mr *MockUserAccountRepositoryMockRecorder) FindOrNil(ctx, userId interface{}) *gomock.Call {
+func (mr *MockUserAccountMysqlRepositoryMockRecorder) FindOrNil(ctx, userId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNil", reflect.TypeOf((*MockUserAccountRepository)(nil).FindOrNil), ctx, userId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNil", reflect.TypeOf((*MockUserAccountMysqlRepository)(nil).FindOrNil), ctx, userId)
 }
 
 // Update mocks base method.
-func (m_2 *MockUserAccountRepository) Update(ctx context.Context, tx *gorm.DB, m *UserAccount) (*UserAccount, error) {
+func (m_2 *MockUserAccountMysqlRepository) Update(ctx context.Context, tx *gorm.DB, m *UserAccount) (*UserAccount, error) {
 	m_2.ctrl.T.Helper()
 	ret := m_2.ctrl.Call(m_2, "Update", ctx, tx, m)
 	ret0, _ := ret[0].(*UserAccount)
@@ -134,7 +134,7 @@ func (m_2 *MockUserAccountRepository) Update(ctx context.Context, tx *gorm.DB, m
 }
 
 // Update indicates an expected call of Update.
-func (mr *MockUserAccountRepositoryMockRecorder) Update(ctx, tx, m interface{}) *gomock.Call {
+func (mr *MockUserAccountMysqlRepositoryMockRecorder) Update(ctx, tx, m interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockUserAccountRepository)(nil).Update), ctx, tx, m)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockUserAccountMysqlRepository)(nil).Update), ctx, tx, m)
 }

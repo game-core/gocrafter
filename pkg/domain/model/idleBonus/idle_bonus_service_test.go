@@ -23,12 +23,12 @@ import (
 
 func TestNewItemService_NewItemService(t *testing.T) {
 	type args struct {
-		itemService                       item.ItemService
-		userIdleBonusRepository           userIdleBonus.UserIdleBonusRepository
-		masterIdleBonusRepository         masterIdleBonus.MasterIdleBonusRepository
-		masterIdleBonusEventRepository    masterIdleBonusEvent.MasterIdleBonusEventRepository
-		masterIdleBonusItemRepository     masterIdleBonusItem.MasterIdleBonusItemRepository
-		masterIdleBonusScheduleRepository masterIdleBonusSchedule.MasterIdleBonusScheduleRepository
+		itemService                            item.ItemService
+		userIdleBonusMysqlRepository           userIdleBonus.UserIdleBonusMysqlRepository
+		masterIdleBonusMysqlRepository         masterIdleBonus.MasterIdleBonusMysqlRepository
+		masterIdleBonusEventMysqlRepository    masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository
+		masterIdleBonusItemMysqlRepository     masterIdleBonusItem.MasterIdleBonusItemMysqlRepository
+		masterIdleBonusScheduleMysqlRepository masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository
 	}
 	tests := []struct {
 		name string
@@ -38,20 +38,20 @@ func TestNewItemService_NewItemService(t *testing.T) {
 		{
 			name: "正常",
 			args: args{
-				itemService:                       nil,
-				userIdleBonusRepository:           nil,
-				masterIdleBonusRepository:         nil,
-				masterIdleBonusEventRepository:    nil,
-				masterIdleBonusItemRepository:     nil,
-				masterIdleBonusScheduleRepository: nil,
+				itemService:                            nil,
+				userIdleBonusMysqlRepository:           nil,
+				masterIdleBonusMysqlRepository:         nil,
+				masterIdleBonusEventMysqlRepository:    nil,
+				masterIdleBonusItemMysqlRepository:     nil,
+				masterIdleBonusScheduleMysqlRepository: nil,
 			},
 			want: &idleBonusService{
-				itemService:                       nil,
-				userIdleBonusRepository:           nil,
-				masterIdleBonusRepository:         nil,
-				masterIdleBonusEventRepository:    nil,
-				masterIdleBonusItemRepository:     nil,
-				masterIdleBonusScheduleRepository: nil,
+				itemService:                            nil,
+				userIdleBonusMysqlRepository:           nil,
+				masterIdleBonusMysqlRepository:         nil,
+				masterIdleBonusEventMysqlRepository:    nil,
+				masterIdleBonusItemMysqlRepository:     nil,
+				masterIdleBonusScheduleMysqlRepository: nil,
 			},
 		},
 	}
@@ -59,11 +59,11 @@ func TestNewItemService_NewItemService(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := NewIdleBonusService(
 				tt.args.itemService,
-				tt.args.userIdleBonusRepository,
-				tt.args.masterIdleBonusRepository,
-				tt.args.masterIdleBonusEventRepository,
-				tt.args.masterIdleBonusItemRepository,
-				tt.args.masterIdleBonusScheduleRepository,
+				tt.args.userIdleBonusMysqlRepository,
+				tt.args.masterIdleBonusMysqlRepository,
+				tt.args.masterIdleBonusEventMysqlRepository,
+				tt.args.masterIdleBonusItemMysqlRepository,
+				tt.args.masterIdleBonusScheduleMysqlRepository,
 			)
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewIdleBonusService() = %v, want %v", got, tt.want)
@@ -74,12 +74,12 @@ func TestNewItemService_NewItemService(t *testing.T) {
 
 func TestNewItemService_GetUser(t *testing.T) {
 	type fields struct {
-		itemService                       func(ctrl *gomock.Controller) item.ItemService
-		userIdleBonusRepository           func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository
-		masterIdleBonusRepository         func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository
-		masterIdleBonusEventRepository    func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository
-		masterIdleBonusItemRepository     func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository
-		masterIdleBonusScheduleRepository func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository
+		itemService                            func(ctrl *gomock.Controller) item.ItemService
+		userIdleBonusMysqlRepository           func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusMysqlRepository
+		masterIdleBonusMysqlRepository         func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusMysqlRepository
+		masterIdleBonusEventMysqlRepository    func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository
+		masterIdleBonusItemMysqlRepository     func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemMysqlRepository
+		masterIdleBonusScheduleMysqlRepository func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository
 	}
 	type args struct {
 		ctx context.Context
@@ -95,24 +95,24 @@ func TestNewItemService_GetUser(t *testing.T) {
 		{
 			name: "正常：取得できる場合",
 			fields: fields{
-				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
-					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+				masterIdleBonusMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusMysqlRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusMysqlRepository(ctrl)
 					return m
 				},
-				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
-					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+				masterIdleBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventMysqlRepository(ctrl)
 					return m
 				},
-				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
-					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+				masterIdleBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleMysqlRepository(ctrl)
 					return m
 				},
-				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
-					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+				masterIdleBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemMysqlRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemMysqlRepository(ctrl)
 					return m
 				},
-				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
-					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+				userIdleBonusMysqlRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusMysqlRepository {
+					m := userIdleBonus.NewMockUserIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByUserId(
 							gomock.Any(),
@@ -173,26 +173,26 @@ func TestNewItemService_GetUser(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.userIdleBonusRepository.FindListByUserId",
+			name: "異常：s.userIdleBonusMysqlRepository.FindListByUserId",
 			fields: fields{
-				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
-					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+				masterIdleBonusMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusMysqlRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusMysqlRepository(ctrl)
 					return m
 				},
-				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
-					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+				masterIdleBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventMysqlRepository(ctrl)
 					return m
 				},
-				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
-					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+				masterIdleBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleMysqlRepository(ctrl)
 					return m
 				},
-				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
-					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+				masterIdleBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemMysqlRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemMysqlRepository(ctrl)
 					return m
 				},
-				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
-					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+				userIdleBonusMysqlRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusMysqlRepository {
+					m := userIdleBonus.NewMockUserIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByUserId(
 							gomock.Any(),
@@ -216,7 +216,7 @@ func TestNewItemService_GetUser(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userIdleBonusRepository.FindListByUserId", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userIdleBonusMysqlRepository.FindListByUserId", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -224,12 +224,12 @@ func TestNewItemService_GetUser(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &idleBonusService{
-				itemService:                       tt.fields.itemService(ctrl),
-				userIdleBonusRepository:           tt.fields.userIdleBonusRepository(ctrl),
-				masterIdleBonusRepository:         tt.fields.masterIdleBonusRepository(ctrl),
-				masterIdleBonusEventRepository:    tt.fields.masterIdleBonusEventRepository(ctrl),
-				masterIdleBonusItemRepository:     tt.fields.masterIdleBonusItemRepository(ctrl),
-				masterIdleBonusScheduleRepository: tt.fields.masterIdleBonusScheduleRepository(ctrl),
+				itemService:                            tt.fields.itemService(ctrl),
+				userIdleBonusMysqlRepository:           tt.fields.userIdleBonusMysqlRepository(ctrl),
+				masterIdleBonusMysqlRepository:         tt.fields.masterIdleBonusMysqlRepository(ctrl),
+				masterIdleBonusEventMysqlRepository:    tt.fields.masterIdleBonusEventMysqlRepository(ctrl),
+				masterIdleBonusItemMysqlRepository:     tt.fields.masterIdleBonusItemMysqlRepository(ctrl),
+				masterIdleBonusScheduleMysqlRepository: tt.fields.masterIdleBonusScheduleMysqlRepository(ctrl),
 			}
 
 			got, err := s.GetUser(tt.args.ctx, tt.args.req)
@@ -246,12 +246,12 @@ func TestNewItemService_GetUser(t *testing.T) {
 
 func TestNewItemService_GetMaster(t *testing.T) {
 	type fields struct {
-		itemService                       func(ctrl *gomock.Controller) item.ItemService
-		userIdleBonusRepository           func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository
-		masterIdleBonusRepository         func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository
-		masterIdleBonusEventRepository    func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository
-		masterIdleBonusItemRepository     func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository
-		masterIdleBonusScheduleRepository func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository
+		itemService                            func(ctrl *gomock.Controller) item.ItemService
+		userIdleBonusMysqlRepository           func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusMysqlRepository
+		masterIdleBonusMysqlRepository         func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusMysqlRepository
+		masterIdleBonusEventMysqlRepository    func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository
+		masterIdleBonusItemMysqlRepository     func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemMysqlRepository
+		masterIdleBonusScheduleMysqlRepository func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository
 	}
 	type args struct {
 		ctx context.Context
@@ -267,8 +267,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 		{
 			name: "正常：取得できる場合",
 			fields: fields{
-				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
-					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+				masterIdleBonusMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusMysqlRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -284,8 +284,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
-					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+				masterIdleBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -305,8 +305,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
-					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+				masterIdleBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterIdleBonusId(
 							nil,
@@ -337,8 +337,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
-					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+				masterIdleBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemMysqlRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterIdleBonusScheduleId(
 							nil,
@@ -392,8 +392,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
-					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+				userIdleBonusMysqlRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusMysqlRepository {
+					m := userIdleBonus.NewMockUserIdleBonusMysqlRepository(ctrl)
 					return m
 				},
 				itemService: func(ctrl *gomock.Controller) item.ItemService {
@@ -469,10 +469,10 @@ func TestNewItemService_GetMaster(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.masterIdleBonusRepository.Find",
+			name: "異常：s.masterIdleBonusMysqlRepository.Find",
 			fields: fields{
-				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
-					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+				masterIdleBonusMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusMysqlRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -484,20 +484,20 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
-					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+				masterIdleBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventMysqlRepository(ctrl)
 					return m
 				},
-				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
-					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+				masterIdleBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleMysqlRepository(ctrl)
 					return m
 				},
-				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
-					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+				masterIdleBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemMysqlRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemMysqlRepository(ctrl)
 					return m
 				},
-				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
-					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+				userIdleBonusMysqlRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusMysqlRepository {
+					m := userIdleBonus.NewMockUserIdleBonusMysqlRepository(ctrl)
 					return m
 				},
 				itemService: func(ctrl *gomock.Controller) item.ItemService {
@@ -512,13 +512,13 @@ func TestNewItemService_GetMaster(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.masterIdleBonusRepository.Find", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.masterIdleBonusMysqlRepository.Find", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.masterIdleBonusEventRepository.FindByMasterIdleBonusId",
+			name: "異常：s.masterIdleBonusEventMysqlRepository.FindByMasterIdleBonusId",
 			fields: fields{
-				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
-					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+				masterIdleBonusMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusMysqlRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -534,8 +534,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
-					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+				masterIdleBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -547,16 +547,16 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
-					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+				masterIdleBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleMysqlRepository(ctrl)
 					return m
 				},
-				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
-					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+				masterIdleBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemMysqlRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemMysqlRepository(ctrl)
 					return m
 				},
-				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
-					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+				userIdleBonusMysqlRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusMysqlRepository {
+					m := userIdleBonus.NewMockUserIdleBonusMysqlRepository(ctrl)
 					return m
 				},
 				itemService: func(ctrl *gomock.Controller) item.ItemService {
@@ -571,13 +571,13 @@ func TestNewItemService_GetMaster(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.masterIdleBonusEventRepository.FindByMasterIdleBonusId", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.masterIdleBonusEventMysqlRepository.FindByMasterIdleBonusId", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.masterIdleBonusScheduleRepository.FindListByMasterIdleBonusId",
+			name: "異常：s.masterIdleBonusScheduleMysqlRepository.FindListByMasterIdleBonusId",
 			fields: fields{
-				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
-					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+				masterIdleBonusMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusMysqlRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -593,8 +593,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
-					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+				masterIdleBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -614,8 +614,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
-					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+				masterIdleBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterIdleBonusId(
 							nil,
@@ -627,12 +627,12 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
-					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+				masterIdleBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemMysqlRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemMysqlRepository(ctrl)
 					return m
 				},
-				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
-					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+				userIdleBonusMysqlRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusMysqlRepository {
+					m := userIdleBonus.NewMockUserIdleBonusMysqlRepository(ctrl)
 					return m
 				},
 				itemService: func(ctrl *gomock.Controller) item.ItemService {
@@ -647,13 +647,13 @@ func TestNewItemService_GetMaster(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.masterIdleBonusScheduleRepository.FindListByMasterIdleBonusId", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.masterIdleBonusScheduleMysqlRepository.FindListByMasterIdleBonusId", errors.NewTestError()),
 		},
 		{
 			name: "異常：s.getItems",
 			fields: fields{
-				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
-					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+				masterIdleBonusMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusMysqlRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -669,8 +669,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
-					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+				masterIdleBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -690,8 +690,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
-					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+				masterIdleBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterIdleBonusId(
 							nil,
@@ -722,8 +722,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
-					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+				masterIdleBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemMysqlRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterIdleBonusScheduleId(
 							nil,
@@ -752,8 +752,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
-					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+				userIdleBonusMysqlRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusMysqlRepository {
+					m := userIdleBonus.NewMockUserIdleBonusMysqlRepository(ctrl)
 					return m
 				},
 				itemService: func(ctrl *gomock.Controller) item.ItemService {
@@ -768,7 +768,7 @@ func TestNewItemService_GetMaster(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.getItems: failed to s.masterIdleBonusItemRepository.FindListByMasterIdleBonusScheduleId", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.getItems: failed to s.masterIdleBonusItemMysqlRepository.FindListByMasterIdleBonusScheduleId", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -776,12 +776,12 @@ func TestNewItemService_GetMaster(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &idleBonusService{
-				itemService:                       tt.fields.itemService(ctrl),
-				userIdleBonusRepository:           tt.fields.userIdleBonusRepository(ctrl),
-				masterIdleBonusRepository:         tt.fields.masterIdleBonusRepository(ctrl),
-				masterIdleBonusEventRepository:    tt.fields.masterIdleBonusEventRepository(ctrl),
-				masterIdleBonusItemRepository:     tt.fields.masterIdleBonusItemRepository(ctrl),
-				masterIdleBonusScheduleRepository: tt.fields.masterIdleBonusScheduleRepository(ctrl),
+				itemService:                            tt.fields.itemService(ctrl),
+				userIdleBonusMysqlRepository:           tt.fields.userIdleBonusMysqlRepository(ctrl),
+				masterIdleBonusMysqlRepository:         tt.fields.masterIdleBonusMysqlRepository(ctrl),
+				masterIdleBonusEventMysqlRepository:    tt.fields.masterIdleBonusEventMysqlRepository(ctrl),
+				masterIdleBonusItemMysqlRepository:     tt.fields.masterIdleBonusItemMysqlRepository(ctrl),
+				masterIdleBonusScheduleMysqlRepository: tt.fields.masterIdleBonusScheduleMysqlRepository(ctrl),
 			}
 
 			got, err := s.GetMaster(tt.args.ctx, tt.args.req)
@@ -798,12 +798,12 @@ func TestNewItemService_GetMaster(t *testing.T) {
 
 func TestNewItemService_Receive(t *testing.T) {
 	type fields struct {
-		itemService                       func(ctrl *gomock.Controller) item.ItemService
-		userIdleBonusRepository           func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository
-		masterIdleBonusRepository         func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository
-		masterIdleBonusEventRepository    func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository
-		masterIdleBonusItemRepository     func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository
-		masterIdleBonusScheduleRepository func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository
+		itemService                            func(ctrl *gomock.Controller) item.ItemService
+		userIdleBonusMysqlRepository           func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusMysqlRepository
+		masterIdleBonusMysqlRepository         func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusMysqlRepository
+		masterIdleBonusEventMysqlRepository    func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository
+		masterIdleBonusItemMysqlRepository     func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemMysqlRepository
+		masterIdleBonusScheduleMysqlRepository func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository
 	}
 	type args struct {
 		ctx context.Context
@@ -821,8 +821,8 @@ func TestNewItemService_Receive(t *testing.T) {
 		{
 			name: "正常：取得できる",
 			fields: fields{
-				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
-					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+				masterIdleBonusMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusMysqlRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -838,8 +838,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
-					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+				masterIdleBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -859,8 +859,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
-					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+				masterIdleBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterIdleBonusId(
 							nil,
@@ -891,8 +891,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
-					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+				masterIdleBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemMysqlRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterIdleBonusScheduleId(
 							nil,
@@ -929,8 +929,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
-					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+				userIdleBonusMysqlRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusMysqlRepository {
+					m := userIdleBonus.NewMockUserIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -1086,8 +1086,8 @@ func TestNewItemService_Receive(t *testing.T) {
 		{
 			name: "正常：取得できる（初回）",
 			fields: fields{
-				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
-					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+				masterIdleBonusMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusMysqlRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1103,8 +1103,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
-					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+				masterIdleBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1124,16 +1124,16 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
-					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+				masterIdleBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleMysqlRepository(ctrl)
 					return m
 				},
-				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
-					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+				masterIdleBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemMysqlRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemMysqlRepository(ctrl)
 					return m
 				},
-				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
-					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+				userIdleBonusMysqlRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusMysqlRepository {
+					m := userIdleBonus.NewMockUserIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -1204,10 +1204,10 @@ func TestNewItemService_Receive(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.masterIdleBonusRepository.Find",
+			name: "異常：s.masterIdleBonusMysqlRepository.Find",
 			fields: fields{
-				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
-					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+				masterIdleBonusMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusMysqlRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1219,20 +1219,20 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
-					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+				masterIdleBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventMysqlRepository(ctrl)
 					return m
 				},
-				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
-					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+				masterIdleBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleMysqlRepository(ctrl)
 					return m
 				},
-				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
-					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+				masterIdleBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemMysqlRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemMysqlRepository(ctrl)
 					return m
 				},
-				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
-					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+				userIdleBonusMysqlRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusMysqlRepository {
+					m := userIdleBonus.NewMockUserIdleBonusMysqlRepository(ctrl)
 					return m
 				},
 				itemService: func(ctrl *gomock.Controller) item.ItemService {
@@ -1250,13 +1250,13 @@ func TestNewItemService_Receive(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.masterIdleBonusRepository.Find", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.masterIdleBonusMysqlRepository.Find", errors.NewTestError()),
 		},
 		{
-			name: "異常：failed to s.getEvent: failed to s.masterIdleBonusEventRepository.FindByMasterIdleBonusId",
+			name: "異常：failed to s.getEvent: failed to s.masterIdleBonusEventMysqlRepository.FindByMasterIdleBonusId",
 			fields: fields{
-				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
-					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+				masterIdleBonusMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusMysqlRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1272,8 +1272,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
-					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+				masterIdleBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1285,16 +1285,16 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
-					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+				masterIdleBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleMysqlRepository(ctrl)
 					return m
 				},
-				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
-					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+				masterIdleBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemMysqlRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemMysqlRepository(ctrl)
 					return m
 				},
-				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
-					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+				userIdleBonusMysqlRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusMysqlRepository {
+					m := userIdleBonus.NewMockUserIdleBonusMysqlRepository(ctrl)
 					return m
 				},
 				itemService: func(ctrl *gomock.Controller) item.ItemService {
@@ -1312,13 +1312,13 @@ func TestNewItemService_Receive(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.getEvent: failed to s.masterIdleBonusEventRepository.FindByMasterIdleBonusId", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.getEvent: failed to s.masterIdleBonusEventMysqlRepository.FindByMasterIdleBonusId", errors.NewTestError()),
 		},
 		{
 			name: "異常：failed to s.getEvent: outside the event period",
 			fields: fields{
-				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
-					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+				masterIdleBonusMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusMysqlRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1334,8 +1334,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
-					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+				masterIdleBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1355,16 +1355,16 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
-					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+				masterIdleBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleMysqlRepository(ctrl)
 					return m
 				},
-				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
-					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+				masterIdleBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemMysqlRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemMysqlRepository(ctrl)
 					return m
 				},
-				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
-					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+				userIdleBonusMysqlRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusMysqlRepository {
+					m := userIdleBonus.NewMockUserIdleBonusMysqlRepository(ctrl)
 					return m
 				},
 				itemService: func(ctrl *gomock.Controller) item.ItemService {
@@ -1385,10 +1385,10 @@ func TestNewItemService_Receive(t *testing.T) {
 			wantErr: errors.NewError("failed to s.getEvent: outside the event period"),
 		},
 		{
-			name: "異常：s.userIdleBonusRepository.FindOrNil",
+			name: "異常：s.userIdleBonusMysqlRepository.FindOrNil",
 			fields: fields{
-				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
-					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+				masterIdleBonusMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusMysqlRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1404,8 +1404,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
-					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+				masterIdleBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1425,16 +1425,16 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
-					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+				masterIdleBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleMysqlRepository(ctrl)
 					return m
 				},
-				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
-					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+				masterIdleBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemMysqlRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemMysqlRepository(ctrl)
 					return m
 				},
-				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
-					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+				userIdleBonusMysqlRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusMysqlRepository {
+					m := userIdleBonus.NewMockUserIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -1462,13 +1462,13 @@ func TestNewItemService_Receive(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userIdleBonusRepository.FindOrNil", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userIdleBonusMysqlRepository.FindOrNil", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.masterIdleBonusScheduleRepository.FindListByMasterIdleBonusId",
+			name: "異常：s.masterIdleBonusScheduleMysqlRepository.FindListByMasterIdleBonusId",
 			fields: fields{
-				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
-					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+				masterIdleBonusMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusMysqlRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1484,8 +1484,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
-					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+				masterIdleBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1505,8 +1505,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
-					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+				masterIdleBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterIdleBonusId(
 							nil,
@@ -1518,12 +1518,12 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
-					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+				masterIdleBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemMysqlRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemMysqlRepository(ctrl)
 					return m
 				},
-				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
-					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+				userIdleBonusMysqlRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusMysqlRepository {
+					m := userIdleBonus.NewMockUserIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -1555,13 +1555,13 @@ func TestNewItemService_Receive(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.getSchedules: failed to s.masterIdleBonusScheduleRepository.FindListByMasterIdleBonusId", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.getSchedules: failed to s.masterIdleBonusScheduleMysqlRepository.FindListByMasterIdleBonusId", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.masterIdleBonusItemRepository.FindListByMasterIdleBonusScheduleId",
+			name: "異常：s.masterIdleBonusItemMysqlRepository.FindListByMasterIdleBonusScheduleId",
 			fields: fields{
-				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
-					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+				masterIdleBonusMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusMysqlRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1577,8 +1577,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
-					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+				masterIdleBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1598,8 +1598,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
-					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+				masterIdleBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterIdleBonusId(
 							nil,
@@ -1630,8 +1630,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
-					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+				masterIdleBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemMysqlRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterIdleBonusScheduleId(
 							nil,
@@ -1643,8 +1643,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
-					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+				userIdleBonusMysqlRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusMysqlRepository {
+					m := userIdleBonus.NewMockUserIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -1676,13 +1676,13 @@ func TestNewItemService_Receive(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.getItems: failed to s.masterIdleBonusItemRepository.FindListByMasterIdleBonusScheduleId", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.getItems: failed to s.masterIdleBonusItemMysqlRepository.FindListByMasterIdleBonusScheduleId", errors.NewTestError()),
 		},
 		{
 			name: "異常：s.itemService.Receive",
 			fields: fields{
-				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
-					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+				masterIdleBonusMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusMysqlRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1698,8 +1698,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
-					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+				masterIdleBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1719,8 +1719,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
-					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+				masterIdleBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterIdleBonusId(
 							nil,
@@ -1751,8 +1751,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
-					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+				masterIdleBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemMysqlRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterIdleBonusScheduleId(
 							nil,
@@ -1789,8 +1789,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
-					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+				userIdleBonusMysqlRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusMysqlRepository {
+					m := userIdleBonus.NewMockUserIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -1847,10 +1847,10 @@ func TestNewItemService_Receive(t *testing.T) {
 			wantErr: errors.NewMethodError("s.receive: failed to s.itemService.Receive", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.userIdleBonusRepository.Update",
+			name: "異常：s.userIdleBonusMysqlRepository.Update",
 			fields: fields{
-				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
-					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+				masterIdleBonusMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusMysqlRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1866,8 +1866,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
-					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+				masterIdleBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1887,8 +1887,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
-					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+				masterIdleBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterIdleBonusId(
 							nil,
@@ -1919,8 +1919,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
-					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+				masterIdleBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemMysqlRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterIdleBonusScheduleId(
 							nil,
@@ -1957,8 +1957,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
-					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+				userIdleBonusMysqlRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusMysqlRepository {
+					m := userIdleBonus.NewMockUserIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -2055,13 +2055,13 @@ func TestNewItemService_Receive(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.update: failed to s.userIdleBonusRepository.Update", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.update: failed to s.userIdleBonusMysqlRepository.Update", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.userIdleBonusRepository.Create",
+			name: "異常：s.userIdleBonusMysqlRepository.Create",
 			fields: fields{
-				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
-					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+				masterIdleBonusMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusMysqlRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -2077,8 +2077,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
-					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+				masterIdleBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -2098,16 +2098,16 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
-					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+				masterIdleBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleMysqlRepository(ctrl)
 					return m
 				},
-				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
-					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+				masterIdleBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemMysqlRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemMysqlRepository(ctrl)
 					return m
 				},
-				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
-					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+				userIdleBonusMysqlRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusMysqlRepository {
+					m := userIdleBonus.NewMockUserIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -2149,13 +2149,13 @@ func TestNewItemService_Receive(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userIdleBonusRepository.Create", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userIdleBonusMysqlRepository.Create", errors.NewTestError()),
 		},
 		{
 			name: "異常：masterIdleBonusSchedules.GetStep",
 			fields: fields{
-				masterIdleBonusRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusRepository {
-					m := masterIdleBonus.NewMockMasterIdleBonusRepository(ctrl)
+				masterIdleBonusMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonus.MasterIdleBonusMysqlRepository {
+					m := masterIdleBonus.NewMockMasterIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -2171,8 +2171,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusEventRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventRepository {
-					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventRepository(ctrl)
+				masterIdleBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository {
+					m := masterIdleBonusEvent.NewMockMasterIdleBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -2192,8 +2192,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusScheduleRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleRepository {
-					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleRepository(ctrl)
+				masterIdleBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository {
+					m := masterIdleBonusSchedule.NewMockMasterIdleBonusScheduleMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterIdleBonusId(
 							nil,
@@ -2224,12 +2224,12 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterIdleBonusItemRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemRepository {
-					m := masterIdleBonusItem.NewMockMasterIdleBonusItemRepository(ctrl)
+				masterIdleBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterIdleBonusItem.MasterIdleBonusItemMysqlRepository {
+					m := masterIdleBonusItem.NewMockMasterIdleBonusItemMysqlRepository(ctrl)
 					return m
 				},
-				userIdleBonusRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusRepository {
-					m := userIdleBonus.NewMockUserIdleBonusRepository(ctrl)
+				userIdleBonusMysqlRepository: func(ctrl *gomock.Controller) userIdleBonus.UserIdleBonusMysqlRepository {
+					m := userIdleBonus.NewMockUserIdleBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -2269,12 +2269,12 @@ func TestNewItemService_Receive(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &idleBonusService{
-				itemService:                       tt.fields.itemService(ctrl),
-				userIdleBonusRepository:           tt.fields.userIdleBonusRepository(ctrl),
-				masterIdleBonusRepository:         tt.fields.masterIdleBonusRepository(ctrl),
-				masterIdleBonusEventRepository:    tt.fields.masterIdleBonusEventRepository(ctrl),
-				masterIdleBonusItemRepository:     tt.fields.masterIdleBonusItemRepository(ctrl),
-				masterIdleBonusScheduleRepository: tt.fields.masterIdleBonusScheduleRepository(ctrl),
+				itemService:                            tt.fields.itemService(ctrl),
+				userIdleBonusMysqlRepository:           tt.fields.userIdleBonusMysqlRepository(ctrl),
+				masterIdleBonusMysqlRepository:         tt.fields.masterIdleBonusMysqlRepository(ctrl),
+				masterIdleBonusEventMysqlRepository:    tt.fields.masterIdleBonusEventMysqlRepository(ctrl),
+				masterIdleBonusItemMysqlRepository:     tt.fields.masterIdleBonusItemMysqlRepository(ctrl),
+				masterIdleBonusScheduleMysqlRepository: tt.fields.masterIdleBonusScheduleMysqlRepository(ctrl),
 			}
 
 			got, err := s.Receive(tt.args.ctx, tt.args.tx, tt.args.now, tt.args.req)

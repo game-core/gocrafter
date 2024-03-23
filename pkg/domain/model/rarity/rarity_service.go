@@ -15,22 +15,22 @@ type RarityService interface {
 }
 
 type rarityService struct {
-	masterRarityRepository masterRarity.MasterRarityRepository
+	masterRarityMysqlRepository masterRarity.MasterRarityMysqlRepository
 }
 
 func NewRarityService(
-	masterRarityRepository masterRarity.MasterRarityRepository,
+	masterRarityMysqlRepository masterRarity.MasterRarityMysqlRepository,
 ) RarityService {
 	return &rarityService{
-		masterRarityRepository: masterRarityRepository,
+		masterRarityMysqlRepository: masterRarityMysqlRepository,
 	}
 }
 
 // GetAll レアリティ一覧を取得する
 func (s *rarityService) GetAll(cxt context.Context) (masterRarity.MasterRarities, error) {
-	results, err := s.masterRarityRepository.FindList(cxt)
+	results, err := s.masterRarityMysqlRepository.FindList(cxt)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterRarityRepository.FindList", err)
+		return nil, errors.NewMethodError("s.masterRarityMysqlRepository.FindList", err)
 	}
 
 	return results, nil
@@ -38,9 +38,9 @@ func (s *rarityService) GetAll(cxt context.Context) (masterRarity.MasterRarities
 
 // GetByRarityType レアリティを取得する
 func (s *rarityService) GetByRarityType(cxt context.Context, rarityType enum.RarityType) (*masterRarity.MasterRarity, error) {
-	result, err := s.masterRarityRepository.FindByRarityType(cxt, rarityType)
+	result, err := s.masterRarityMysqlRepository.FindByRarityType(cxt, rarityType)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterRarityRepository.FindByRarityType", err)
+		return nil, errors.NewMethodError("s.masterRarityMysqlRepository.FindByRarityType", err)
 	}
 
 	return result, nil

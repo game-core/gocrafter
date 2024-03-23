@@ -17,8 +17,8 @@ import (
 
 func TestNewAccountService_NewAccountService(t *testing.T) {
 	type args struct {
-		shardService          shard.ShardService
-		userAccountRepository userAccount.UserAccountRepository
+		shardService               shard.ShardService
+		userAccountMysqlRepository userAccount.UserAccountMysqlRepository
 	}
 	tests := []struct {
 		name string
@@ -28,12 +28,12 @@ func TestNewAccountService_NewAccountService(t *testing.T) {
 		{
 			name: "正常",
 			args: args{
-				shardService:          nil,
-				userAccountRepository: nil,
+				shardService:               nil,
+				userAccountMysqlRepository: nil,
 			},
 			want: &accountService{
-				shardService:          nil,
-				userAccountRepository: nil,
+				shardService:               nil,
+				userAccountMysqlRepository: nil,
 			},
 		},
 	}
@@ -41,7 +41,7 @@ func TestNewAccountService_NewAccountService(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := NewAccountService(
 				tt.args.shardService,
-				tt.args.userAccountRepository,
+				tt.args.userAccountMysqlRepository,
 			)
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewAccountService() = %v, want %v", got, tt.want)
@@ -52,8 +52,8 @@ func TestNewAccountService_NewAccountService(t *testing.T) {
 
 func TestAccountService_FindByUserId(t *testing.T) {
 	type fields struct {
-		userAccountRepository func(ctrl *gomock.Controller) userAccount.UserAccountRepository
-		shardService          func(ctrl *gomock.Controller) shard.ShardService
+		userAccountMysqlRepository func(ctrl *gomock.Controller) userAccount.UserAccountMysqlRepository
+		shardService               func(ctrl *gomock.Controller) shard.ShardService
 	}
 	type args struct {
 		ctx    context.Context
@@ -69,8 +69,8 @@ func TestAccountService_FindByUserId(t *testing.T) {
 		{
 			name: "正常：アカウントが存在する場合",
 			fields: fields{
-				userAccountRepository: func(ctrl *gomock.Controller) userAccount.UserAccountRepository {
-					m := userAccount.NewMockUserAccountRepository(ctrl)
+				userAccountMysqlRepository: func(ctrl *gomock.Controller) userAccount.UserAccountMysqlRepository {
+					m := userAccount.NewMockUserAccountMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -107,10 +107,10 @@ func TestAccountService_FindByUserId(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.userAccountRepository.Find",
+			name: "異常：s.userAccountMysqlRepository.Find",
 			fields: fields{
-				userAccountRepository: func(ctrl *gomock.Controller) userAccount.UserAccountRepository {
-					m := userAccount.NewMockUserAccountRepository(ctrl)
+				userAccountMysqlRepository: func(ctrl *gomock.Controller) userAccount.UserAccountMysqlRepository {
+					m := userAccount.NewMockUserAccountMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -132,7 +132,7 @@ func TestAccountService_FindByUserId(t *testing.T) {
 				userId: "0:WntR-PyhOJeDiE5jodeR",
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userAccountRepository.Find", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userAccountMysqlRepository.Find", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -140,8 +140,8 @@ func TestAccountService_FindByUserId(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &accountService{
-				userAccountRepository: tt.fields.userAccountRepository(ctrl),
-				shardService:          tt.fields.shardService(ctrl),
+				userAccountMysqlRepository: tt.fields.userAccountMysqlRepository(ctrl),
+				shardService:               tt.fields.shardService(ctrl),
 			}
 
 			got, err := s.FindByUserId(tt.args.ctx, tt.args.userId)
@@ -158,8 +158,8 @@ func TestAccountService_FindByUserId(t *testing.T) {
 
 func TestAccountService_Create(t *testing.T) {
 	type fields struct {
-		userAccountRepository func(ctrl *gomock.Controller) userAccount.UserAccountRepository
-		shardService          func(ctrl *gomock.Controller) shard.ShardService
+		userAccountMysqlRepository func(ctrl *gomock.Controller) userAccount.UserAccountMysqlRepository
+		shardService               func(ctrl *gomock.Controller) shard.ShardService
 	}
 	type args struct {
 		ctx context.Context
@@ -176,8 +176,8 @@ func TestAccountService_Create(t *testing.T) {
 		{
 			name: "正常：作成できる場合",
 			fields: fields{
-				userAccountRepository: func(ctrl *gomock.Controller) userAccount.UserAccountRepository {
-					m := userAccount.NewMockUserAccountRepository(ctrl)
+				userAccountMysqlRepository: func(ctrl *gomock.Controller) userAccount.UserAccountMysqlRepository {
+					m := userAccount.NewMockUserAccountMysqlRepository(ctrl)
 					m.EXPECT().
 						Create(
 							nil,
@@ -221,10 +221,10 @@ func TestAccountService_Create(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.userAccountRepository.Create",
+			name: "異常：s.userAccountMysqlRepository.Create",
 			fields: fields{
-				userAccountRepository: func(ctrl *gomock.Controller) userAccount.UserAccountRepository {
-					m := userAccount.NewMockUserAccountRepository(ctrl)
+				userAccountMysqlRepository: func(ctrl *gomock.Controller) userAccount.UserAccountMysqlRepository {
+					m := userAccount.NewMockUserAccountMysqlRepository(ctrl)
 					m.EXPECT().
 						Create(
 							nil,
@@ -251,7 +251,7 @@ func TestAccountService_Create(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userAccountRepository.Create", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userAccountMysqlRepository.Create", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -259,8 +259,8 @@ func TestAccountService_Create(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &accountService{
-				userAccountRepository: tt.fields.userAccountRepository(ctrl),
-				shardService:          tt.fields.shardService(ctrl),
+				userAccountMysqlRepository: tt.fields.userAccountMysqlRepository(ctrl),
+				shardService:               tt.fields.shardService(ctrl),
 			}
 
 			got, err := s.Create(tt.args.ctx, tt.args.tx, tt.args.req)
@@ -282,8 +282,8 @@ func TestAccountService_Create(t *testing.T) {
 
 func TestAccountService_Login(t *testing.T) {
 	type fields struct {
-		userAccountRepository func(ctrl *gomock.Controller) userAccount.UserAccountRepository
-		shardService          func(ctrl *gomock.Controller) shard.ShardService
+		userAccountMysqlRepository func(ctrl *gomock.Controller) userAccount.UserAccountMysqlRepository
+		shardService               func(ctrl *gomock.Controller) shard.ShardService
 	}
 	type args struct {
 		ctx context.Context
@@ -300,8 +300,8 @@ func TestAccountService_Login(t *testing.T) {
 		{
 			name: "正常：ログインできる場合",
 			fields: fields{
-				userAccountRepository: func(ctrl *gomock.Controller) userAccount.UserAccountRepository {
-					m := userAccount.NewMockUserAccountRepository(ctrl)
+				userAccountMysqlRepository: func(ctrl *gomock.Controller) userAccount.UserAccountMysqlRepository {
+					m := userAccount.NewMockUserAccountMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -362,10 +362,10 @@ func TestAccountService_Login(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.userAccountRepository.Find",
+			name: "異常：s.userAccountMysqlRepository.Find",
 			fields: fields{
-				userAccountRepository: func(ctrl *gomock.Controller) userAccount.UserAccountRepository {
-					m := userAccount.NewMockUserAccountRepository(ctrl)
+				userAccountMysqlRepository: func(ctrl *gomock.Controller) userAccount.UserAccountMysqlRepository {
+					m := userAccount.NewMockUserAccountMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -392,13 +392,13 @@ func TestAccountService_Login(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userAccountRepository.Find", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userAccountMysqlRepository.Find", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.userAccountRepository.Update",
+			name: "異常：s.userAccountMysqlRepository.Update",
 			fields: fields{
-				userAccountRepository: func(ctrl *gomock.Controller) userAccount.UserAccountRepository {
-					m := userAccount.NewMockUserAccountRepository(ctrl)
+				userAccountMysqlRepository: func(ctrl *gomock.Controller) userAccount.UserAccountMysqlRepository {
+					m := userAccount.NewMockUserAccountMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -441,7 +441,7 @@ func TestAccountService_Login(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userAccountRepository.Update", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userAccountMysqlRepository.Update", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -449,8 +449,8 @@ func TestAccountService_Login(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &accountService{
-				userAccountRepository: tt.fields.userAccountRepository(ctrl),
-				shardService:          tt.fields.shardService(ctrl),
+				userAccountMysqlRepository: tt.fields.userAccountMysqlRepository(ctrl),
+				shardService:               tt.fields.shardService(ctrl),
 			}
 
 			got, err := s.Login(tt.args.ctx, tt.args.tx, tt.args.req)
@@ -473,8 +473,8 @@ func TestAccountService_Login(t *testing.T) {
 
 func TestAccountService_Check(t *testing.T) {
 	type fields struct {
-		userAccountRepository func(ctrl *gomock.Controller) userAccount.UserAccountRepository
-		shardService          func(ctrl *gomock.Controller) shard.ShardService
+		userAccountMysqlRepository func(ctrl *gomock.Controller) userAccount.UserAccountMysqlRepository
+		shardService               func(ctrl *gomock.Controller) shard.ShardService
 	}
 	type args struct {
 		ctx context.Context
@@ -490,8 +490,8 @@ func TestAccountService_Check(t *testing.T) {
 		{
 			name: "正常：アカウントが存在する場合",
 			fields: fields{
-				userAccountRepository: func(ctrl *gomock.Controller) userAccount.UserAccountRepository {
-					m := userAccount.NewMockUserAccountRepository(ctrl)
+				userAccountMysqlRepository: func(ctrl *gomock.Controller) userAccount.UserAccountMysqlRepository {
+					m := userAccount.NewMockUserAccountMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -532,10 +532,10 @@ func TestAccountService_Check(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.userAccountRepository.Find",
+			name: "異常：s.userAccountMysqlRepository.Find",
 			fields: fields{
-				userAccountRepository: func(ctrl *gomock.Controller) userAccount.UserAccountRepository {
-					m := userAccount.NewMockUserAccountRepository(ctrl)
+				userAccountMysqlRepository: func(ctrl *gomock.Controller) userAccount.UserAccountMysqlRepository {
+					m := userAccount.NewMockUserAccountMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -559,7 +559,7 @@ func TestAccountService_Check(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userAccountRepository.Find", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userAccountMysqlRepository.Find", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -567,8 +567,8 @@ func TestAccountService_Check(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &accountService{
-				userAccountRepository: tt.fields.userAccountRepository(ctrl),
-				shardService:          tt.fields.shardService(ctrl),
+				userAccountMysqlRepository: tt.fields.userAccountMysqlRepository(ctrl),
+				shardService:               tt.fields.shardService(ctrl),
 			}
 
 			got, err := s.Check(tt.args.ctx, tt.args.req)
@@ -585,8 +585,8 @@ func TestAccountService_Check(t *testing.T) {
 
 func TestAccountService_GenerateUserID(t *testing.T) {
 	type fields struct {
-		userAccountRepository func(ctrl *gomock.Controller) userAccount.UserAccountRepository
-		shardService          func(ctrl *gomock.Controller) shard.ShardService
+		userAccountMysqlRepository func(ctrl *gomock.Controller) userAccount.UserAccountMysqlRepository
+		shardService               func(ctrl *gomock.Controller) shard.ShardService
 	}
 	type args struct {
 		ctx context.Context
@@ -601,8 +601,8 @@ func TestAccountService_GenerateUserID(t *testing.T) {
 		{
 			name: "正常：アカウントが存在する場合",
 			fields: fields{
-				userAccountRepository: func(ctrl *gomock.Controller) userAccount.UserAccountRepository {
-					m := userAccount.NewMockUserAccountRepository(ctrl)
+				userAccountMysqlRepository: func(ctrl *gomock.Controller) userAccount.UserAccountMysqlRepository {
+					m := userAccount.NewMockUserAccountMysqlRepository(ctrl)
 					return m
 				},
 				shardService: func(ctrl *gomock.Controller) shard.ShardService {
@@ -627,8 +627,8 @@ func TestAccountService_GenerateUserID(t *testing.T) {
 		{
 			name: "異常：s.shardService.GetShardKey",
 			fields: fields{
-				userAccountRepository: func(ctrl *gomock.Controller) userAccount.UserAccountRepository {
-					m := userAccount.NewMockUserAccountRepository(ctrl)
+				userAccountMysqlRepository: func(ctrl *gomock.Controller) userAccount.UserAccountMysqlRepository {
+					m := userAccount.NewMockUserAccountMysqlRepository(ctrl)
 					return m
 				},
 				shardService: func(ctrl *gomock.Controller) shard.ShardService {
@@ -656,8 +656,8 @@ func TestAccountService_GenerateUserID(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &accountService{
-				userAccountRepository: tt.fields.userAccountRepository(ctrl),
-				shardService:          tt.fields.shardService(ctrl),
+				userAccountMysqlRepository: tt.fields.userAccountMysqlRepository(ctrl),
+				shardService:               tt.fields.shardService(ctrl),
 			}
 
 			got, err := s.GenerateUserID(tt.args.ctx)

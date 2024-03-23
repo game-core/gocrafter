@@ -23,12 +23,12 @@ import (
 
 func TestNewItemService_NewItemService(t *testing.T) {
 	type args struct {
-		itemService                        item.ItemService
-		userLoginBonusRepository           userLoginBonus.UserLoginBonusRepository
-		masterLoginBonusRepository         masterLoginBonus.MasterLoginBonusRepository
-		masterLoginBonusEventRepository    masterLoginBonusEvent.MasterLoginBonusEventRepository
-		masterLoginBonusItemRepository     masterLoginBonusItem.MasterLoginBonusItemRepository
-		masterLoginBonusScheduleRepository masterLoginBonusSchedule.MasterLoginBonusScheduleRepository
+		itemService                             item.ItemService
+		userLoginBonusMysqlRepository           userLoginBonus.UserLoginBonusMysqlRepository
+		masterLoginBonusMysqlRepository         masterLoginBonus.MasterLoginBonusMysqlRepository
+		masterLoginBonusEventMysqlRepository    masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository
+		masterLoginBonusItemMysqlRepository     masterLoginBonusItem.MasterLoginBonusItemMysqlRepository
+		masterLoginBonusScheduleMysqlRepository masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository
 	}
 	tests := []struct {
 		name string
@@ -38,20 +38,20 @@ func TestNewItemService_NewItemService(t *testing.T) {
 		{
 			name: "正常",
 			args: args{
-				itemService:                        nil,
-				userLoginBonusRepository:           nil,
-				masterLoginBonusRepository:         nil,
-				masterLoginBonusEventRepository:    nil,
-				masterLoginBonusItemRepository:     nil,
-				masterLoginBonusScheduleRepository: nil,
+				itemService:                             nil,
+				userLoginBonusMysqlRepository:           nil,
+				masterLoginBonusMysqlRepository:         nil,
+				masterLoginBonusEventMysqlRepository:    nil,
+				masterLoginBonusItemMysqlRepository:     nil,
+				masterLoginBonusScheduleMysqlRepository: nil,
 			},
 			want: &loginBonusService{
-				itemService:                        nil,
-				userLoginBonusRepository:           nil,
-				masterLoginBonusRepository:         nil,
-				masterLoginBonusEventRepository:    nil,
-				masterLoginBonusItemRepository:     nil,
-				masterLoginBonusScheduleRepository: nil,
+				itemService:                             nil,
+				userLoginBonusMysqlRepository:           nil,
+				masterLoginBonusMysqlRepository:         nil,
+				masterLoginBonusEventMysqlRepository:    nil,
+				masterLoginBonusItemMysqlRepository:     nil,
+				masterLoginBonusScheduleMysqlRepository: nil,
 			},
 		},
 	}
@@ -59,11 +59,11 @@ func TestNewItemService_NewItemService(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := NewLoginBonusService(
 				tt.args.itemService,
-				tt.args.userLoginBonusRepository,
-				tt.args.masterLoginBonusRepository,
-				tt.args.masterLoginBonusEventRepository,
-				tt.args.masterLoginBonusItemRepository,
-				tt.args.masterLoginBonusScheduleRepository,
+				tt.args.userLoginBonusMysqlRepository,
+				tt.args.masterLoginBonusMysqlRepository,
+				tt.args.masterLoginBonusEventMysqlRepository,
+				tt.args.masterLoginBonusItemMysqlRepository,
+				tt.args.masterLoginBonusScheduleMysqlRepository,
 			)
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewLoginBonusService() = %v, want %v", got, tt.want)
@@ -74,12 +74,12 @@ func TestNewItemService_NewItemService(t *testing.T) {
 
 func TestNewItemService_GetUser(t *testing.T) {
 	type fields struct {
-		itemService                        func(ctrl *gomock.Controller) item.ItemService
-		userLoginBonusRepository           func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository
-		masterLoginBonusRepository         func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository
-		masterLoginBonusEventRepository    func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository
-		masterLoginBonusItemRepository     func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository
-		masterLoginBonusScheduleRepository func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository
+		itemService                             func(ctrl *gomock.Controller) item.ItemService
+		userLoginBonusMysqlRepository           func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusMysqlRepository
+		masterLoginBonusMysqlRepository         func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusMysqlRepository
+		masterLoginBonusEventMysqlRepository    func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository
+		masterLoginBonusItemMysqlRepository     func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemMysqlRepository
+		masterLoginBonusScheduleMysqlRepository func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository
 	}
 	type args struct {
 		ctx context.Context
@@ -95,24 +95,24 @@ func TestNewItemService_GetUser(t *testing.T) {
 		{
 			name: "正常：取得できる場合",
 			fields: fields{
-				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
-					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+				masterLoginBonusMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusMysqlRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusMysqlRepository(ctrl)
 					return m
 				},
-				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
-					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+				masterLoginBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventMysqlRepository(ctrl)
 					return m
 				},
-				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
-					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+				masterLoginBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleMysqlRepository(ctrl)
 					return m
 				},
-				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
-					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+				masterLoginBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemMysqlRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemMysqlRepository(ctrl)
 					return m
 				},
-				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
-					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+				userLoginBonusMysqlRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusMysqlRepository {
+					m := userLoginBonus.NewMockUserLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByUserId(
 							gomock.Any(),
@@ -173,26 +173,26 @@ func TestNewItemService_GetUser(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.userLoginBonusRepository.FindListByUserId",
+			name: "異常：s.userLoginBonusMysqlRepository.FindListByUserId",
 			fields: fields{
-				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
-					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+				masterLoginBonusMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusMysqlRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusMysqlRepository(ctrl)
 					return m
 				},
-				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
-					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+				masterLoginBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventMysqlRepository(ctrl)
 					return m
 				},
-				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
-					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+				masterLoginBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleMysqlRepository(ctrl)
 					return m
 				},
-				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
-					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+				masterLoginBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemMysqlRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemMysqlRepository(ctrl)
 					return m
 				},
-				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
-					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+				userLoginBonusMysqlRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusMysqlRepository {
+					m := userLoginBonus.NewMockUserLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByUserId(
 							gomock.Any(),
@@ -216,7 +216,7 @@ func TestNewItemService_GetUser(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userLoginBonusRepository.FindListByUserId", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userLoginBonusMysqlRepository.FindListByUserId", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -224,12 +224,12 @@ func TestNewItemService_GetUser(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &loginBonusService{
-				itemService:                        tt.fields.itemService(ctrl),
-				userLoginBonusRepository:           tt.fields.userLoginBonusRepository(ctrl),
-				masterLoginBonusRepository:         tt.fields.masterLoginBonusRepository(ctrl),
-				masterLoginBonusEventRepository:    tt.fields.masterLoginBonusEventRepository(ctrl),
-				masterLoginBonusItemRepository:     tt.fields.masterLoginBonusItemRepository(ctrl),
-				masterLoginBonusScheduleRepository: tt.fields.masterLoginBonusScheduleRepository(ctrl),
+				itemService:                             tt.fields.itemService(ctrl),
+				userLoginBonusMysqlRepository:           tt.fields.userLoginBonusMysqlRepository(ctrl),
+				masterLoginBonusMysqlRepository:         tt.fields.masterLoginBonusMysqlRepository(ctrl),
+				masterLoginBonusEventMysqlRepository:    tt.fields.masterLoginBonusEventMysqlRepository(ctrl),
+				masterLoginBonusItemMysqlRepository:     tt.fields.masterLoginBonusItemMysqlRepository(ctrl),
+				masterLoginBonusScheduleMysqlRepository: tt.fields.masterLoginBonusScheduleMysqlRepository(ctrl),
 			}
 
 			got, err := s.GetUser(tt.args.ctx, tt.args.req)
@@ -246,12 +246,12 @@ func TestNewItemService_GetUser(t *testing.T) {
 
 func TestNewItemService_GetMaster(t *testing.T) {
 	type fields struct {
-		itemService                        func(ctrl *gomock.Controller) item.ItemService
-		userLoginBonusRepository           func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository
-		masterLoginBonusRepository         func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository
-		masterLoginBonusEventRepository    func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository
-		masterLoginBonusItemRepository     func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository
-		masterLoginBonusScheduleRepository func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository
+		itemService                             func(ctrl *gomock.Controller) item.ItemService
+		userLoginBonusMysqlRepository           func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusMysqlRepository
+		masterLoginBonusMysqlRepository         func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusMysqlRepository
+		masterLoginBonusEventMysqlRepository    func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository
+		masterLoginBonusItemMysqlRepository     func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemMysqlRepository
+		masterLoginBonusScheduleMysqlRepository func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository
 	}
 	type args struct {
 		ctx context.Context
@@ -267,8 +267,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 		{
 			name: "正常：取得できる場合",
 			fields: fields{
-				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
-					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+				masterLoginBonusMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusMysqlRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -284,8 +284,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
-					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+				masterLoginBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -305,8 +305,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
-					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+				masterLoginBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterLoginBonusId(
 							nil,
@@ -337,8 +337,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
-					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+				masterLoginBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemMysqlRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterLoginBonusScheduleId(
 							nil,
@@ -392,8 +392,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
-					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+				userLoginBonusMysqlRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusMysqlRepository {
+					m := userLoginBonus.NewMockUserLoginBonusMysqlRepository(ctrl)
 					return m
 				},
 				itemService: func(ctrl *gomock.Controller) item.ItemService {
@@ -469,10 +469,10 @@ func TestNewItemService_GetMaster(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.masterLoginBonusRepository.Find",
+			name: "異常：s.masterLoginBonusMysqlRepository.Find",
 			fields: fields{
-				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
-					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+				masterLoginBonusMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusMysqlRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -484,20 +484,20 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
-					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+				masterLoginBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventMysqlRepository(ctrl)
 					return m
 				},
-				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
-					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+				masterLoginBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleMysqlRepository(ctrl)
 					return m
 				},
-				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
-					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+				masterLoginBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemMysqlRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemMysqlRepository(ctrl)
 					return m
 				},
-				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
-					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+				userLoginBonusMysqlRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusMysqlRepository {
+					m := userLoginBonus.NewMockUserLoginBonusMysqlRepository(ctrl)
 					return m
 				},
 				itemService: func(ctrl *gomock.Controller) item.ItemService {
@@ -512,13 +512,13 @@ func TestNewItemService_GetMaster(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.masterLoginBonusRepository.Find", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.masterLoginBonusMysqlRepository.Find", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.masterLoginBonusEventRepository.FindByMasterLoginBonusId",
+			name: "異常：s.masterLoginBonusEventMysqlRepository.FindByMasterLoginBonusId",
 			fields: fields{
-				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
-					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+				masterLoginBonusMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusMysqlRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -534,8 +534,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
-					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+				masterLoginBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -547,16 +547,16 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
-					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+				masterLoginBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleMysqlRepository(ctrl)
 					return m
 				},
-				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
-					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+				masterLoginBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemMysqlRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemMysqlRepository(ctrl)
 					return m
 				},
-				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
-					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+				userLoginBonusMysqlRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusMysqlRepository {
+					m := userLoginBonus.NewMockUserLoginBonusMysqlRepository(ctrl)
 					return m
 				},
 				itemService: func(ctrl *gomock.Controller) item.ItemService {
@@ -571,13 +571,13 @@ func TestNewItemService_GetMaster(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.masterLoginBonusEventRepository.FindByMasterLoginBonusId", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.masterLoginBonusEventMysqlRepository.FindByMasterLoginBonusId", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.masterLoginBonusScheduleRepository.FindListByMasterLoginBonusId",
+			name: "異常：s.masterLoginBonusScheduleMysqlRepository.FindListByMasterLoginBonusId",
 			fields: fields{
-				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
-					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+				masterLoginBonusMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusMysqlRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -593,8 +593,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
-					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+				masterLoginBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -614,8 +614,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
-					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+				masterLoginBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterLoginBonusId(
 							nil,
@@ -627,12 +627,12 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
-					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+				masterLoginBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemMysqlRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemMysqlRepository(ctrl)
 					return m
 				},
-				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
-					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+				userLoginBonusMysqlRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusMysqlRepository {
+					m := userLoginBonus.NewMockUserLoginBonusMysqlRepository(ctrl)
 					return m
 				},
 				itemService: func(ctrl *gomock.Controller) item.ItemService {
@@ -647,13 +647,13 @@ func TestNewItemService_GetMaster(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.masterLoginBonusScheduleRepository.FindListByMasterLoginBonusId", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.masterLoginBonusScheduleMysqlRepository.FindListByMasterLoginBonusId", errors.NewTestError()),
 		},
 		{
 			name: "異常：s.getItems",
 			fields: fields{
-				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
-					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+				masterLoginBonusMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusMysqlRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -669,8 +669,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
-					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+				masterLoginBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -690,8 +690,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
-					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+				masterLoginBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterLoginBonusId(
 							nil,
@@ -722,8 +722,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
-					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+				masterLoginBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemMysqlRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterLoginBonusScheduleId(
 							nil,
@@ -752,8 +752,8 @@ func TestNewItemService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
-					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+				userLoginBonusMysqlRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusMysqlRepository {
+					m := userLoginBonus.NewMockUserLoginBonusMysqlRepository(ctrl)
 					return m
 				},
 				itemService: func(ctrl *gomock.Controller) item.ItemService {
@@ -768,7 +768,7 @@ func TestNewItemService_GetMaster(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.getItems: failed to s.masterLoginBonusItemRepository.FindListByMasterLoginBonusScheduleId", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.getItems: failed to s.masterLoginBonusItemMysqlRepository.FindListByMasterLoginBonusScheduleId", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -776,12 +776,12 @@ func TestNewItemService_GetMaster(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &loginBonusService{
-				itemService:                        tt.fields.itemService(ctrl),
-				userLoginBonusRepository:           tt.fields.userLoginBonusRepository(ctrl),
-				masterLoginBonusRepository:         tt.fields.masterLoginBonusRepository(ctrl),
-				masterLoginBonusEventRepository:    tt.fields.masterLoginBonusEventRepository(ctrl),
-				masterLoginBonusItemRepository:     tt.fields.masterLoginBonusItemRepository(ctrl),
-				masterLoginBonusScheduleRepository: tt.fields.masterLoginBonusScheduleRepository(ctrl),
+				itemService:                             tt.fields.itemService(ctrl),
+				userLoginBonusMysqlRepository:           tt.fields.userLoginBonusMysqlRepository(ctrl),
+				masterLoginBonusMysqlRepository:         tt.fields.masterLoginBonusMysqlRepository(ctrl),
+				masterLoginBonusEventMysqlRepository:    tt.fields.masterLoginBonusEventMysqlRepository(ctrl),
+				masterLoginBonusItemMysqlRepository:     tt.fields.masterLoginBonusItemMysqlRepository(ctrl),
+				masterLoginBonusScheduleMysqlRepository: tt.fields.masterLoginBonusScheduleMysqlRepository(ctrl),
 			}
 
 			got, err := s.GetMaster(tt.args.ctx, tt.args.req)
@@ -798,12 +798,12 @@ func TestNewItemService_GetMaster(t *testing.T) {
 
 func TestNewItemService_Receive(t *testing.T) {
 	type fields struct {
-		itemService                        func(ctrl *gomock.Controller) item.ItemService
-		userLoginBonusRepository           func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository
-		masterLoginBonusRepository         func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository
-		masterLoginBonusEventRepository    func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository
-		masterLoginBonusItemRepository     func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository
-		masterLoginBonusScheduleRepository func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository
+		itemService                             func(ctrl *gomock.Controller) item.ItemService
+		userLoginBonusMysqlRepository           func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusMysqlRepository
+		masterLoginBonusMysqlRepository         func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusMysqlRepository
+		masterLoginBonusEventMysqlRepository    func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository
+		masterLoginBonusItemMysqlRepository     func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemMysqlRepository
+		masterLoginBonusScheduleMysqlRepository func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository
 	}
 	type args struct {
 		ctx context.Context
@@ -821,8 +821,8 @@ func TestNewItemService_Receive(t *testing.T) {
 		{
 			name: "正常：受け取りできる場合（既に取得したことがあるアイテム）",
 			fields: fields{
-				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
-					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+				masterLoginBonusMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusMysqlRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -838,8 +838,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
-					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+				masterLoginBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -859,8 +859,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
-					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+				masterLoginBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterLoginBonusId(
 							nil,
@@ -891,8 +891,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
-					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+				masterLoginBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemMysqlRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterLoginBonusScheduleId(
 							nil,
@@ -912,8 +912,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
-					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+				userLoginBonusMysqlRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusMysqlRepository {
+					m := userLoginBonus.NewMockUserLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -1038,8 +1038,8 @@ func TestNewItemService_Receive(t *testing.T) {
 		{
 			name: "正常：作成できる場合（取得したことがないアイテム）",
 			fields: fields{
-				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
-					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+				masterLoginBonusMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusMysqlRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1055,8 +1055,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
-					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+				masterLoginBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1076,8 +1076,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
-					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+				masterLoginBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterLoginBonusId(
 							nil,
@@ -1108,8 +1108,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
-					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+				masterLoginBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemMysqlRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterLoginBonusScheduleId(
 							nil,
@@ -1129,8 +1129,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
-					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+				userLoginBonusMysqlRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusMysqlRepository {
+					m := userLoginBonus.NewMockUserLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -1249,10 +1249,10 @@ func TestNewItemService_Receive(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.masterLoginBonusRepository.Find",
+			name: "異常：s.masterLoginBonusMysqlRepository.Find",
 			fields: fields{
-				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
-					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+				masterLoginBonusMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusMysqlRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1264,20 +1264,20 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
-					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+				masterLoginBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventMysqlRepository(ctrl)
 					return m
 				},
-				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
-					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+				masterLoginBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleMysqlRepository(ctrl)
 					return m
 				},
-				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
-					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+				masterLoginBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemMysqlRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemMysqlRepository(ctrl)
 					return m
 				},
-				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
-					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+				userLoginBonusMysqlRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusMysqlRepository {
+					m := userLoginBonus.NewMockUserLoginBonusMysqlRepository(ctrl)
 					return m
 				},
 				itemService: func(ctrl *gomock.Controller) item.ItemService {
@@ -1295,13 +1295,13 @@ func TestNewItemService_Receive(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.masterLoginBonusRepository.Find", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.masterLoginBonusMysqlRepository.Find", errors.NewTestError()),
 		},
 		{
 			name: "異常：s.getEvent",
 			fields: fields{
-				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
-					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+				masterLoginBonusMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusMysqlRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1317,8 +1317,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
-					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+				masterLoginBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1330,16 +1330,16 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
-					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+				masterLoginBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleMysqlRepository(ctrl)
 					return m
 				},
-				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
-					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+				masterLoginBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemMysqlRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemMysqlRepository(ctrl)
 					return m
 				},
-				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
-					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+				userLoginBonusMysqlRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusMysqlRepository {
+					m := userLoginBonus.NewMockUserLoginBonusMysqlRepository(ctrl)
 					return m
 				},
 				itemService: func(ctrl *gomock.Controller) item.ItemService {
@@ -1357,13 +1357,13 @@ func TestNewItemService_Receive(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.getEvent: failed to s.masterLoginBonusEventRepository.FindByMasterLoginBonusId", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.getEvent: failed to s.masterLoginBonusEventMysqlRepository.FindByMasterLoginBonusId", errors.NewTestError()),
 		},
 		{
 			name: "異常：s.getSchedule",
 			fields: fields{
-				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
-					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+				masterLoginBonusMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusMysqlRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1379,8 +1379,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
-					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+				masterLoginBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1400,8 +1400,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
-					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+				masterLoginBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterLoginBonusId(
 							nil,
@@ -1413,12 +1413,12 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
-					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+				masterLoginBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemMysqlRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemMysqlRepository(ctrl)
 					return m
 				},
-				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
-					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+				userLoginBonusMysqlRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusMysqlRepository {
+					m := userLoginBonus.NewMockUserLoginBonusMysqlRepository(ctrl)
 					return m
 				},
 				itemService: func(ctrl *gomock.Controller) item.ItemService {
@@ -1436,13 +1436,13 @@ func TestNewItemService_Receive(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.getSchedule: failed to s.masterLoginBonusScheduleRepository.FindListByMasterLoginBonusId", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.getSchedule: failed to s.masterLoginBonusScheduleMysqlRepository.FindListByMasterLoginBonusId", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.masterLoginBonusItemRepository.FindListByMasterLoginBonusScheduleId",
+			name: "異常：s.masterLoginBonusItemMysqlRepository.FindListByMasterLoginBonusScheduleId",
 			fields: fields{
-				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
-					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+				masterLoginBonusMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusMysqlRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1458,8 +1458,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
-					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+				masterLoginBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1479,8 +1479,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
-					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+				masterLoginBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterLoginBonusId(
 							nil,
@@ -1511,8 +1511,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
-					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+				masterLoginBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemMysqlRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterLoginBonusScheduleId(
 							nil,
@@ -1524,8 +1524,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
-					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+				userLoginBonusMysqlRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusMysqlRepository {
+					m := userLoginBonus.NewMockUserLoginBonusMysqlRepository(ctrl)
 					return m
 				},
 				itemService: func(ctrl *gomock.Controller) item.ItemService {
@@ -1543,13 +1543,13 @@ func TestNewItemService_Receive(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.masterLoginBonusItemRepository.FindListByMasterLoginBonusScheduleId", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.masterLoginBonusItemMysqlRepository.FindListByMasterLoginBonusScheduleId", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.userLoginBonusRepository.FindOrNil）",
+			name: "異常：s.userLoginBonusMysqlRepository.FindOrNil）",
 			fields: fields{
-				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
-					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+				masterLoginBonusMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusMysqlRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1565,8 +1565,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
-					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+				masterLoginBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1586,8 +1586,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
-					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+				masterLoginBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterLoginBonusId(
 							nil,
@@ -1618,8 +1618,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
-					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+				masterLoginBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemMysqlRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterLoginBonusScheduleId(
 							nil,
@@ -1639,8 +1639,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
-					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+				userLoginBonusMysqlRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusMysqlRepository {
+					m := userLoginBonus.NewMockUserLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -1668,13 +1668,13 @@ func TestNewItemService_Receive(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userLoginBonusRepository.FindOrNil", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userLoginBonusMysqlRepository.FindOrNil", errors.NewTestError()),
 		},
 		{
 			name: "異常：already received",
 			fields: fields{
-				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
-					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+				masterLoginBonusMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusMysqlRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1690,8 +1690,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
-					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+				masterLoginBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1711,8 +1711,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
-					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+				masterLoginBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterLoginBonusId(
 							nil,
@@ -1743,8 +1743,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
-					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+				masterLoginBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemMysqlRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterLoginBonusScheduleId(
 							nil,
@@ -1764,8 +1764,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
-					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+				userLoginBonusMysqlRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusMysqlRepository {
+					m := userLoginBonus.NewMockUserLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -1802,8 +1802,8 @@ func TestNewItemService_Receive(t *testing.T) {
 		{
 			name: "異常：s.receive",
 			fields: fields{
-				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
-					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+				masterLoginBonusMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusMysqlRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1819,8 +1819,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
-					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+				masterLoginBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1840,8 +1840,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
-					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+				masterLoginBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterLoginBonusId(
 							nil,
@@ -1872,8 +1872,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
-					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+				masterLoginBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemMysqlRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterLoginBonusScheduleId(
 							nil,
@@ -1893,8 +1893,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
-					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+				userLoginBonusMysqlRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusMysqlRepository {
+					m := userLoginBonus.NewMockUserLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -1949,8 +1949,8 @@ func TestNewItemService_Receive(t *testing.T) {
 		{
 			name: "異常：s.update",
 			fields: fields{
-				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
-					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+				masterLoginBonusMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusMysqlRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1966,8 +1966,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
-					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+				masterLoginBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1987,8 +1987,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
-					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+				masterLoginBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterLoginBonusId(
 							nil,
@@ -2019,8 +2019,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
-					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+				masterLoginBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemMysqlRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterLoginBonusScheduleId(
 							nil,
@@ -2040,8 +2040,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
-					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+				userLoginBonusMysqlRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusMysqlRepository {
+					m := userLoginBonus.NewMockUserLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -2122,13 +2122,13 @@ func TestNewItemService_Receive(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.update: failed to s.userLoginBonusRepository.Update", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.update: failed to s.userLoginBonusMysqlRepository.Update", errors.NewTestError()),
 		},
 		{
 			name: "異常：s.update",
 			fields: fields{
-				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
-					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+				masterLoginBonusMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusMysqlRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -2144,8 +2144,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
-					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+				masterLoginBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -2165,8 +2165,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
-					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+				masterLoginBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterLoginBonusId(
 							nil,
@@ -2197,8 +2197,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
-					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+				masterLoginBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemMysqlRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByMasterLoginBonusScheduleId(
 							nil,
@@ -2218,8 +2218,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
-					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+				userLoginBonusMysqlRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusMysqlRepository {
+					m := userLoginBonus.NewMockUserLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -2296,13 +2296,13 @@ func TestNewItemService_Receive(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.update: failed to s.userLoginBonusRepository.Create", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.update: failed to s.userLoginBonusMysqlRepository.Create", errors.NewTestError()),
 		},
 		{
 			name: "異常：s.getEvent: outside the event period",
 			fields: fields{
-				masterLoginBonusRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusRepository {
-					m := masterLoginBonus.NewMockMasterLoginBonusRepository(ctrl)
+				masterLoginBonusMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonus.MasterLoginBonusMysqlRepository {
+					m := masterLoginBonus.NewMockMasterLoginBonusMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -2318,8 +2318,8 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusEventRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventRepository {
-					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventRepository(ctrl)
+				masterLoginBonusEventMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository {
+					m := masterLoginBonusEvent.NewMockMasterLoginBonusEventMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -2339,16 +2339,16 @@ func TestNewItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterLoginBonusScheduleRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
-					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleRepository(ctrl)
+				masterLoginBonusScheduleMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository {
+					m := masterLoginBonusSchedule.NewMockMasterLoginBonusScheduleMysqlRepository(ctrl)
 					return m
 				},
-				masterLoginBonusItemRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemRepository {
-					m := masterLoginBonusItem.NewMockMasterLoginBonusItemRepository(ctrl)
+				masterLoginBonusItemMysqlRepository: func(ctrl *gomock.Controller) masterLoginBonusItem.MasterLoginBonusItemMysqlRepository {
+					m := masterLoginBonusItem.NewMockMasterLoginBonusItemMysqlRepository(ctrl)
 					return m
 				},
-				userLoginBonusRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusRepository {
-					m := userLoginBonus.NewMockUserLoginBonusRepository(ctrl)
+				userLoginBonusMysqlRepository: func(ctrl *gomock.Controller) userLoginBonus.UserLoginBonusMysqlRepository {
+					m := userLoginBonus.NewMockUserLoginBonusMysqlRepository(ctrl)
 					return m
 				},
 				itemService: func(ctrl *gomock.Controller) item.ItemService {
@@ -2374,12 +2374,12 @@ func TestNewItemService_Receive(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &loginBonusService{
-				itemService:                        tt.fields.itemService(ctrl),
-				userLoginBonusRepository:           tt.fields.userLoginBonusRepository(ctrl),
-				masterLoginBonusRepository:         tt.fields.masterLoginBonusRepository(ctrl),
-				masterLoginBonusEventRepository:    tt.fields.masterLoginBonusEventRepository(ctrl),
-				masterLoginBonusItemRepository:     tt.fields.masterLoginBonusItemRepository(ctrl),
-				masterLoginBonusScheduleRepository: tt.fields.masterLoginBonusScheduleRepository(ctrl),
+				itemService:                             tt.fields.itemService(ctrl),
+				userLoginBonusMysqlRepository:           tt.fields.userLoginBonusMysqlRepository(ctrl),
+				masterLoginBonusMysqlRepository:         tt.fields.masterLoginBonusMysqlRepository(ctrl),
+				masterLoginBonusEventMysqlRepository:    tt.fields.masterLoginBonusEventMysqlRepository(ctrl),
+				masterLoginBonusItemMysqlRepository:     tt.fields.masterLoginBonusItemMysqlRepository(ctrl),
+				masterLoginBonusScheduleMysqlRepository: tt.fields.masterLoginBonusScheduleMysqlRepository(ctrl),
 			}
 
 			got, err := s.Receive(tt.args.ctx, tt.args.tx, tt.args.now, tt.args.req)

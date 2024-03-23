@@ -13,31 +13,31 @@ import (
 	gorm "gorm.io/gorm"
 )
 
-// MockMasterResourceRepository is a mock of MasterResourceRepository interface.
-type MockMasterResourceRepository struct {
+// MockMasterResourceMysqlRepository is a mock of MasterResourceMysqlRepository interface.
+type MockMasterResourceMysqlRepository struct {
 	ctrl     *gomock.Controller
-	recorder *MockMasterResourceRepositoryMockRecorder
+	recorder *MockMasterResourceMysqlRepositoryMockRecorder
 }
 
-// MockMasterResourceRepositoryMockRecorder is the mock recorder for MockMasterResourceRepository.
-type MockMasterResourceRepositoryMockRecorder struct {
-	mock *MockMasterResourceRepository
+// MockMasterResourceMysqlRepositoryMockRecorder is the mock recorder for MockMasterResourceMysqlRepository.
+type MockMasterResourceMysqlRepositoryMockRecorder struct {
+	mock *MockMasterResourceMysqlRepository
 }
 
-// NewMockMasterResourceRepository creates a new mock instance.
-func NewMockMasterResourceRepository(ctrl *gomock.Controller) *MockMasterResourceRepository {
-	mock := &MockMasterResourceRepository{ctrl: ctrl}
-	mock.recorder = &MockMasterResourceRepositoryMockRecorder{mock}
+// NewMockMasterResourceMysqlRepository creates a new mock instance.
+func NewMockMasterResourceMysqlRepository(ctrl *gomock.Controller) *MockMasterResourceMysqlRepository {
+	mock := &MockMasterResourceMysqlRepository{ctrl: ctrl}
+	mock.recorder = &MockMasterResourceMysqlRepositoryMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockMasterResourceRepository) EXPECT() *MockMasterResourceRepositoryMockRecorder {
+func (m *MockMasterResourceMysqlRepository) EXPECT() *MockMasterResourceMysqlRepositoryMockRecorder {
 	return m.recorder
 }
 
 // Create mocks base method.
-func (m_2 *MockMasterResourceRepository) Create(ctx context.Context, tx *gorm.DB, m *MasterResource) (*MasterResource, error) {
+func (m_2 *MockMasterResourceMysqlRepository) Create(ctx context.Context, tx *gorm.DB, m *MasterResource) (*MasterResource, error) {
 	m_2.ctrl.T.Helper()
 	ret := m_2.ctrl.Call(m_2, "Create", ctx, tx, m)
 	ret0, _ := ret[0].(*MasterResource)
@@ -46,13 +46,13 @@ func (m_2 *MockMasterResourceRepository) Create(ctx context.Context, tx *gorm.DB
 }
 
 // Create indicates an expected call of Create.
-func (mr *MockMasterResourceRepositoryMockRecorder) Create(ctx, tx, m interface{}) *gomock.Call {
+func (mr *MockMasterResourceMysqlRepositoryMockRecorder) Create(ctx, tx, m interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockMasterResourceRepository)(nil).Create), ctx, tx, m)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockMasterResourceMysqlRepository)(nil).Create), ctx, tx, m)
 }
 
 // CreateList mocks base method.
-func (m *MockMasterResourceRepository) CreateList(ctx context.Context, tx *gorm.DB, ms MasterResources) (MasterResources, error) {
+func (m *MockMasterResourceMysqlRepository) CreateList(ctx context.Context, tx *gorm.DB, ms MasterResources) (MasterResources, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateList", ctx, tx, ms)
 	ret0, _ := ret[0].(MasterResources)
@@ -61,13 +61,13 @@ func (m *MockMasterResourceRepository) CreateList(ctx context.Context, tx *gorm.
 }
 
 // CreateList indicates an expected call of CreateList.
-func (mr *MockMasterResourceRepositoryMockRecorder) CreateList(ctx, tx, ms interface{}) *gomock.Call {
+func (mr *MockMasterResourceMysqlRepositoryMockRecorder) CreateList(ctx, tx, ms interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateList", reflect.TypeOf((*MockMasterResourceRepository)(nil).CreateList), ctx, tx, ms)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateList", reflect.TypeOf((*MockMasterResourceMysqlRepository)(nil).CreateList), ctx, tx, ms)
 }
 
 // Delete mocks base method.
-func (m_2 *MockMasterResourceRepository) Delete(ctx context.Context, tx *gorm.DB, m *MasterResource) error {
+func (m_2 *MockMasterResourceMysqlRepository) Delete(ctx context.Context, tx *gorm.DB, m *MasterResource) error {
 	m_2.ctrl.T.Helper()
 	ret := m_2.ctrl.Call(m_2, "Delete", ctx, tx, m)
 	ret0, _ := ret[0].(error)
@@ -75,13 +75,13 @@ func (m_2 *MockMasterResourceRepository) Delete(ctx context.Context, tx *gorm.DB
 }
 
 // Delete indicates an expected call of Delete.
-func (mr *MockMasterResourceRepositoryMockRecorder) Delete(ctx, tx, m interface{}) *gomock.Call {
+func (mr *MockMasterResourceMysqlRepositoryMockRecorder) Delete(ctx, tx, m interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockMasterResourceRepository)(nil).Delete), ctx, tx, m)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockMasterResourceMysqlRepository)(nil).Delete), ctx, tx, m)
 }
 
 // Find mocks base method.
-func (m *MockMasterResourceRepository) Find(ctx context.Context, id int64) (*MasterResource, error) {
+func (m *MockMasterResourceMysqlRepository) Find(ctx context.Context, id int64) (*MasterResource, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Find", ctx, id)
 	ret0, _ := ret[0].(*MasterResource)
@@ -90,13 +90,13 @@ func (m *MockMasterResourceRepository) Find(ctx context.Context, id int64) (*Mas
 }
 
 // Find indicates an expected call of Find.
-func (mr *MockMasterResourceRepositoryMockRecorder) Find(ctx, id interface{}) *gomock.Call {
+func (mr *MockMasterResourceMysqlRepositoryMockRecorder) Find(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Find", reflect.TypeOf((*MockMasterResourceRepository)(nil).Find), ctx, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Find", reflect.TypeOf((*MockMasterResourceMysqlRepository)(nil).Find), ctx, id)
 }
 
 // FindByResourceType mocks base method.
-func (m *MockMasterResourceRepository) FindByResourceType(ctx context.Context, resourceType enum.ResourceType) (*MasterResource, error) {
+func (m *MockMasterResourceMysqlRepository) FindByResourceType(ctx context.Context, resourceType enum.ResourceType) (*MasterResource, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByResourceType", ctx, resourceType)
 	ret0, _ := ret[0].(*MasterResource)
@@ -105,13 +105,13 @@ func (m *MockMasterResourceRepository) FindByResourceType(ctx context.Context, r
 }
 
 // FindByResourceType indicates an expected call of FindByResourceType.
-func (mr *MockMasterResourceRepositoryMockRecorder) FindByResourceType(ctx, resourceType interface{}) *gomock.Call {
+func (mr *MockMasterResourceMysqlRepositoryMockRecorder) FindByResourceType(ctx, resourceType interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByResourceType", reflect.TypeOf((*MockMasterResourceRepository)(nil).FindByResourceType), ctx, resourceType)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByResourceType", reflect.TypeOf((*MockMasterResourceMysqlRepository)(nil).FindByResourceType), ctx, resourceType)
 }
 
 // FindList mocks base method.
-func (m *MockMasterResourceRepository) FindList(ctx context.Context) (MasterResources, error) {
+func (m *MockMasterResourceMysqlRepository) FindList(ctx context.Context) (MasterResources, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindList", ctx)
 	ret0, _ := ret[0].(MasterResources)
@@ -120,13 +120,13 @@ func (m *MockMasterResourceRepository) FindList(ctx context.Context) (MasterReso
 }
 
 // FindList indicates an expected call of FindList.
-func (mr *MockMasterResourceRepositoryMockRecorder) FindList(ctx interface{}) *gomock.Call {
+func (mr *MockMasterResourceMysqlRepositoryMockRecorder) FindList(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindList", reflect.TypeOf((*MockMasterResourceRepository)(nil).FindList), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindList", reflect.TypeOf((*MockMasterResourceMysqlRepository)(nil).FindList), ctx)
 }
 
 // FindListByResourceType mocks base method.
-func (m *MockMasterResourceRepository) FindListByResourceType(ctx context.Context, resourceType enum.ResourceType) (MasterResources, error) {
+func (m *MockMasterResourceMysqlRepository) FindListByResourceType(ctx context.Context, resourceType enum.ResourceType) (MasterResources, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindListByResourceType", ctx, resourceType)
 	ret0, _ := ret[0].(MasterResources)
@@ -135,13 +135,13 @@ func (m *MockMasterResourceRepository) FindListByResourceType(ctx context.Contex
 }
 
 // FindListByResourceType indicates an expected call of FindListByResourceType.
-func (mr *MockMasterResourceRepositoryMockRecorder) FindListByResourceType(ctx, resourceType interface{}) *gomock.Call {
+func (mr *MockMasterResourceMysqlRepositoryMockRecorder) FindListByResourceType(ctx, resourceType interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindListByResourceType", reflect.TypeOf((*MockMasterResourceRepository)(nil).FindListByResourceType), ctx, resourceType)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindListByResourceType", reflect.TypeOf((*MockMasterResourceMysqlRepository)(nil).FindListByResourceType), ctx, resourceType)
 }
 
 // FindOrNil mocks base method.
-func (m *MockMasterResourceRepository) FindOrNil(ctx context.Context, id int64) (*MasterResource, error) {
+func (m *MockMasterResourceMysqlRepository) FindOrNil(ctx context.Context, id int64) (*MasterResource, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindOrNil", ctx, id)
 	ret0, _ := ret[0].(*MasterResource)
@@ -150,13 +150,13 @@ func (m *MockMasterResourceRepository) FindOrNil(ctx context.Context, id int64) 
 }
 
 // FindOrNil indicates an expected call of FindOrNil.
-func (mr *MockMasterResourceRepositoryMockRecorder) FindOrNil(ctx, id interface{}) *gomock.Call {
+func (mr *MockMasterResourceMysqlRepositoryMockRecorder) FindOrNil(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNil", reflect.TypeOf((*MockMasterResourceRepository)(nil).FindOrNil), ctx, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNil", reflect.TypeOf((*MockMasterResourceMysqlRepository)(nil).FindOrNil), ctx, id)
 }
 
 // FindOrNilByResourceType mocks base method.
-func (m *MockMasterResourceRepository) FindOrNilByResourceType(ctx context.Context, resourceType enum.ResourceType) (*MasterResource, error) {
+func (m *MockMasterResourceMysqlRepository) FindOrNilByResourceType(ctx context.Context, resourceType enum.ResourceType) (*MasterResource, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindOrNilByResourceType", ctx, resourceType)
 	ret0, _ := ret[0].(*MasterResource)
@@ -165,13 +165,13 @@ func (m *MockMasterResourceRepository) FindOrNilByResourceType(ctx context.Conte
 }
 
 // FindOrNilByResourceType indicates an expected call of FindOrNilByResourceType.
-func (mr *MockMasterResourceRepositoryMockRecorder) FindOrNilByResourceType(ctx, resourceType interface{}) *gomock.Call {
+func (mr *MockMasterResourceMysqlRepositoryMockRecorder) FindOrNilByResourceType(ctx, resourceType interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByResourceType", reflect.TypeOf((*MockMasterResourceRepository)(nil).FindOrNilByResourceType), ctx, resourceType)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByResourceType", reflect.TypeOf((*MockMasterResourceMysqlRepository)(nil).FindOrNilByResourceType), ctx, resourceType)
 }
 
 // Update mocks base method.
-func (m_2 *MockMasterResourceRepository) Update(ctx context.Context, tx *gorm.DB, m *MasterResource) (*MasterResource, error) {
+func (m_2 *MockMasterResourceMysqlRepository) Update(ctx context.Context, tx *gorm.DB, m *MasterResource) (*MasterResource, error) {
 	m_2.ctrl.T.Helper()
 	ret := m_2.ctrl.Call(m_2, "Update", ctx, tx, m)
 	ret0, _ := ret[0].(*MasterResource)
@@ -180,7 +180,7 @@ func (m_2 *MockMasterResourceRepository) Update(ctx context.Context, tx *gorm.DB
 }
 
 // Update indicates an expected call of Update.
-func (mr *MockMasterResourceRepositoryMockRecorder) Update(ctx, tx, m interface{}) *gomock.Call {
+func (mr *MockMasterResourceMysqlRepositoryMockRecorder) Update(ctx, tx, m interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockMasterResourceRepository)(nil).Update), ctx, tx, m)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockMasterResourceMysqlRepository)(nil).Update), ctx, tx, m)
 }

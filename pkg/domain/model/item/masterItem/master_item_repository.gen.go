@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type MasterItemRepository interface {
+type MasterItemMysqlRepository interface {
 	Find(ctx context.Context, id int64) (*MasterItem, error)
 	FindOrNil(ctx context.Context, id int64) (*MasterItem, error)
 	FindByName(ctx context.Context, name string) (*MasterItem, error)

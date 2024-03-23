@@ -14,10 +14,10 @@ import (
 	"github.com/game-core/gocrafter/internal/changes"
 )
 
-type Repository struct{}
+type MysqlRepository struct{}
 
-func NewRepository() *Repository {
-	return &Repository{}
+func NewMysqlRepository() *MysqlRepository {
+	return &MysqlRepository{}
 }
 
 const repositoryTemplate = `
@@ -38,7 +38,7 @@ import (
 `
 
 // generate 生成する
-func (s *Repository) generate(path string, base string) error {
+func (s *MysqlRepository) generate(path string, base string) error {
 	yamlStruct, err := s.getYamlStruct(path)
 	if err != nil {
 		return err
@@ -56,7 +56,7 @@ func (s *Repository) generate(path string, base string) error {
 }
 
 // getYamlStruct yaml構造体を取得する
-func (s *Repository) getYamlStruct(file string) (*YamlStruct, error) {
+func (s *MysqlRepository) getYamlStruct(file string) (*YamlStruct, error) {
 	yamlData, err := ioutil.ReadFile(file)
 	if err != nil {
 		return nil, err
@@ -71,7 +71,7 @@ func (s *Repository) getYamlStruct(file string) (*YamlStruct, error) {
 }
 
 // createOutputFile ファイルを作成する
-func (s *Repository) createOutputFile(yamlStruct *YamlStruct, outputFileName string) error {
+func (s *MysqlRepository) createOutputFile(yamlStruct *YamlStruct, outputFileName string) error {
 	outputFile, err := os.Create(outputFileName)
 	if err != nil {
 		return err
@@ -85,12 +85,12 @@ func (s *Repository) createOutputFile(yamlStruct *YamlStruct, outputFileName str
 }
 
 // getOutputFileName ファイル名を取得する
-func (s *Repository) getOutputFileName(dir, name string) string {
+func (s *MysqlRepository) getOutputFileName(dir, name string) string {
 	return filepath.Join(dir, fmt.Sprintf("%s_repository.gen.go", changes.UpperCamelToSnake(name)))
 }
 
 // createTemplate テンプレートを作成する
-func (s *Repository) createTemplate(yamlStruct *YamlStruct, outputFile *os.File) error {
+func (s *MysqlRepository) createTemplate(yamlStruct *YamlStruct, outputFile *os.File) error {
 	tmp, err := template.New("repositoryTemplate").Parse(repositoryTemplate)
 	if err != nil {
 		return err
@@ -127,9 +127,9 @@ func createMock(yamlStruct *YamlStruct) string {
 }
 
 // createScript スクリプトを作成する
-func (s *Repository) createScript(yamlStruct *YamlStruct) string {
+func (s *MysqlRepository) createScript(yamlStruct *YamlStruct) string {
 	return fmt.Sprintf(
-		`type %sRepository interface {
+		`type %sMysqlRepository interface {
 			%s
 		}`,
 		yamlStruct.Name,
@@ -138,7 +138,7 @@ func (s *Repository) createScript(yamlStruct *YamlStruct) string {
 }
 
 // createMethods メソッドを作成する
-func (s *Repository) createMethods(yamlStruct *YamlStruct) []string {
+func (s *MysqlRepository) createMethods(yamlStruct *YamlStruct) []string {
 	var methods []string
 
 	// Find
@@ -189,7 +189,7 @@ func (s *Repository) createMethods(yamlStruct *YamlStruct) []string {
 }
 
 // createFind Findを作成する
-func (s *Repository) createFind(yamlStruct *YamlStruct, primaryFields []string) string {
+func (s *MysqlRepository) createFind(yamlStruct *YamlStruct, primaryFields []string) string {
 	keys := make(map[string]Structure)
 	for _, field := range primaryFields {
 		keys[field] = yamlStruct.Structures[field]
@@ -203,7 +203,7 @@ func (s *Repository) createFind(yamlStruct *YamlStruct, primaryFields []string) 
 }
 
 // createFindOrNil FindOrNilを作成する
-func (s *Repository) createFindOrNil(yamlStruct *YamlStruct, primaryFields []string) string {
+func (s *MysqlRepository) createFindOrNil(yamlStruct *YamlStruct, primaryFields []string) string {
 	keys := make(map[string]Structure)
 	for _, field := range primaryFields {
 		keys[field] = yamlStruct.Structures[field]
@@ -217,7 +217,7 @@ func (s *Repository) createFindOrNil(yamlStruct *YamlStruct, primaryFields []str
 }
 
 // createFindByIndex FindByIndexを作成する
-func (s *Repository) createFindByIndex(yamlStruct *YamlStruct, indexFields []string) string {
+func (s *MysqlRepository) createFindByIndex(yamlStruct *YamlStruct, indexFields []string) string {
 	keys := make(map[string]Structure)
 	for _, field := range indexFields {
 		keys[field] = yamlStruct.Structures[field]
@@ -232,7 +232,7 @@ func (s *Repository) createFindByIndex(yamlStruct *YamlStruct, indexFields []str
 }
 
 // createFindOrNilByIndex FindOrNilByIndexを作成する
-func (s *Repository) createFindOrNilByIndex(yamlStruct *YamlStruct, indexFields []string) string {
+func (s *MysqlRepository) createFindOrNilByIndex(yamlStruct *YamlStruct, indexFields []string) string {
 	keys := make(map[string]Structure)
 	for _, field := range indexFields {
 		keys[field] = yamlStruct.Structures[field]
@@ -247,7 +247,7 @@ func (s *Repository) createFindOrNilByIndex(yamlStruct *YamlStruct, indexFields 
 }
 
 // createFindList FindListを作成する
-func (s *Repository) createFindList(yamlStruct *YamlStruct) string {
+func (s *MysqlRepository) createFindList(yamlStruct *YamlStruct) string {
 	return fmt.Sprintf(
 		`FindList(ctx context.Context, userId string) (%s, error)`,
 		changes.SnakeToUpperCamel(changes.SingularToPlural(changes.UpperCamelToSnake(yamlStruct.Name))),
@@ -255,7 +255,7 @@ func (s *Repository) createFindList(yamlStruct *YamlStruct) string {
 }
 
 // createFindListByIndex FindListByIndexを作成する
-func (s *Repository) createFindListByIndex(yamlStruct *YamlStruct, indexFields []string) string {
+func (s *MysqlRepository) createFindListByIndex(yamlStruct *YamlStruct, indexFields []string) string {
 	keys := make(map[string]Structure)
 	for _, field := range indexFields {
 		keys[field] = yamlStruct.Structures[field]
@@ -270,7 +270,7 @@ func (s *Repository) createFindListByIndex(yamlStruct *YamlStruct, indexFields [
 }
 
 // createCreate Createを作成する
-func (s *Repository) createCreate(yamlStruct *YamlStruct) string {
+func (s *MysqlRepository) createCreate(yamlStruct *YamlStruct) string {
 	return fmt.Sprintf(
 		`Create(ctx context.Context, tx *gorm.DB, m *%s) (*%s, error)`,
 		yamlStruct.Name,
@@ -279,7 +279,7 @@ func (s *Repository) createCreate(yamlStruct *YamlStruct) string {
 }
 
 // createCreate CreateListを作成する
-func (s *Repository) createCreateList(yamlStruct *YamlStruct) string {
+func (s *MysqlRepository) createCreateList(yamlStruct *YamlStruct) string {
 	return fmt.Sprintf(
 		`CreateList(ctx context.Context, tx *gorm.DB, ms %s) (%s, error)`,
 		changes.SnakeToUpperCamel(changes.SingularToPlural(changes.UpperCamelToSnake(yamlStruct.Name))),
@@ -288,7 +288,7 @@ func (s *Repository) createCreateList(yamlStruct *YamlStruct) string {
 }
 
 // createUpdate Updateを作成する
-func (s *Repository) createUpdate(yamlStruct *YamlStruct, primaryFields []string) string {
+func (s *MysqlRepository) createUpdate(yamlStruct *YamlStruct, primaryFields []string) string {
 	keys := make(map[string]Structure)
 	for _, field := range primaryFields {
 		keys[field] = yamlStruct.Structures[field]
@@ -302,7 +302,7 @@ func (s *Repository) createUpdate(yamlStruct *YamlStruct, primaryFields []string
 }
 
 // createDelete Deleteを作成する
-func (s *Repository) createDelete(yamlStruct *YamlStruct, primaryFields []string) string {
+func (s *MysqlRepository) createDelete(yamlStruct *YamlStruct, primaryFields []string) string {
 	keys := make(map[string]Structure)
 	for _, field := range primaryFields {
 		keys[field] = yamlStruct.Structures[field]
@@ -315,7 +315,7 @@ func (s *Repository) createDelete(yamlStruct *YamlStruct, primaryFields []string
 }
 
 // createParam Paramを作成する
-func (s *Repository) createParam(keys map[string]Structure) string {
+func (s *MysqlRepository) createParam(keys map[string]Structure) string {
 	var paramStrings []string
 	for _, field := range s.getStructures(keys) {
 		paramStrings = append(paramStrings, fmt.Sprintf("%s %s", changes.SnakeToCamel(field.Name), s.getType(field)))
@@ -325,7 +325,7 @@ func (s *Repository) createParam(keys map[string]Structure) string {
 }
 
 // getStructures フィールド構造体を取得する
-func (s *Repository) getStructures(structures map[string]Structure) []*Structure {
+func (s *MysqlRepository) getStructures(structures map[string]Structure) []*Structure {
 	var sortStructures []*Structure
 	for _, value := range structures {
 		sortStructures = append(
@@ -349,7 +349,7 @@ func (s *Repository) getStructures(structures map[string]Structure) []*Structure
 }
 
 // getType 型を取得する
-func (s *Repository) getType(field *Structure) string {
+func (s *MysqlRepository) getType(field *Structure) string {
 	var result string
 
 	switch field.Type {

@@ -16,7 +16,7 @@ type userActionDao struct {
 	ShardMysqlConn *database.ShardMysqlConn
 }
 
-func NewUserActionDao(conn *database.MysqlHandler) userAction.UserActionRepository {
+func NewUserActionDao(conn *database.MysqlHandler) userAction.UserActionMysqlRepository {
 	return &userActionDao{
 		ShardMysqlConn: conn.User,
 	}

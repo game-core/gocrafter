@@ -11,7 +11,7 @@ import (
 	"github.com/game-core/gocrafter/pkg/domain/enum"
 )
 
-type MasterActionRepository interface {
+type MasterActionMysqlRepository interface {
 	Find(ctx context.Context, id int64) (*MasterAction, error)
 	FindOrNil(ctx context.Context, id int64) (*MasterAction, error)
 	FindByName(ctx context.Context, name string) (*MasterAction, error)

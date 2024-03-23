@@ -17,47 +17,47 @@ type ItemService interface {
 }
 
 type itemService struct {
-	userItemBoxRepository userItemBox.UserItemBoxRepository
-	masterItemRepository  masterItem.MasterItemRepository
+	userItemBoxMysqlRepository userItemBox.UserItemBoxMysqlRepository
+	masterItemMysqlRepository  masterItem.MasterItemMysqlRepository
 }
 
 func NewItemService(
-	userItemBoxRepository userItemBox.UserItemBoxRepository,
-	masterItemRepository masterItem.MasterItemRepository,
+	userItemBoxMysqlRepository userItemBox.UserItemBoxMysqlRepository,
+	masterItemMysqlRepository masterItem.MasterItemMysqlRepository,
 ) ItemService {
 	return &itemService{
-		userItemBoxRepository: userItemBoxRepository,
-		masterItemRepository:  masterItemRepository,
+		userItemBoxMysqlRepository: userItemBoxMysqlRepository,
+		masterItemMysqlRepository:  masterItemMysqlRepository,
 	}
 }
 
 // Create アイテムを作成する
 func (s *itemService) Create(ctx context.Context, tx *gorm.DB, req *ItemCreateRequest) (*ItemCreateResponse, error) {
-	masterItemModel, err := s.masterItemRepository.Find(ctx, req.MasterItemId)
+	masterItemModel, err := s.masterItemMysqlRepository.Find(ctx, req.MasterItemId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterItemRepository.Find", err)
+		return nil, errors.NewMethodError("s.masterItemMysqlRepository.Find", err)
 	}
 
-	userItemBoxModel, err := s.userItemBoxRepository.FindOrNil(ctx, req.UserId, req.MasterItemId)
+	userItemBoxModel, err := s.userItemBoxMysqlRepository.FindOrNil(ctx, req.UserId, req.MasterItemId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.userItemBoxRepository.FindOrNil", err)
+		return nil, errors.NewMethodError("s.userItemBoxMysqlRepository.FindOrNil", err)
 	}
 
 	// 過去に取得したことがある場合
 	if userItemBoxModel != nil {
 		userItemBoxModel.Count = userItemBoxModel.Count + req.Count
-		result, err := s.userItemBoxRepository.Update(ctx, tx, userItemBoxModel)
+		result, err := s.userItemBoxMysqlRepository.Update(ctx, tx, userItemBoxModel)
 		if err != nil {
-			return nil, errors.NewMethodError("s.userItemBoxRepository.Update", err)
+			return nil, errors.NewMethodError("s.userItemBoxMysqlRepository.Update", err)
 		}
 
 		return SetItemCreateResponse(result, masterItemModel), nil
 	}
 
 	// 新規に取得した場合
-	result, err := s.userItemBoxRepository.Create(ctx, tx, userItemBox.SetUserItemBox(req.UserId, req.MasterItemId, req.Count))
+	result, err := s.userItemBoxMysqlRepository.Create(ctx, tx, userItemBox.SetUserItemBox(req.UserId, req.MasterItemId, req.Count))
 	if err != nil {
-		return nil, errors.NewMethodError("s.userItemBoxRepository.Create", err)
+		return nil, errors.NewMethodError("s.userItemBoxMysqlRepository.Create", err)
 	}
 
 	return SetItemCreateResponse(result, masterItemModel), nil

@@ -169,24 +169,24 @@ make docker_gen_di
     - service
       - serviceからrepository、またはservice同士の依存を許可する
       - service同士依存は依存関係の循環が発生しないように注意する
-      - パッケージ名 + Repositoryをキャメルケースで記述する
+      - パッケージ名 + MysqlRepositoryをキャメルケースで記述する
       - パッケージ名 + Serviceをキャメルケースで記述する
 ```go
 func NewLoginBonusService(
 	itemService item.ItemService,
-	userLoginBonusRepository userLoginBonus.UserLoginBonusRepository,
-	masterLoginBonusRepository masterLoginBonus.MasterLoginBonusRepository,
-	masterLoginBonusEventRepository masterLoginBonusEvent.MasterLoginBonusEventRepository,
-	masterLoginBonusItemRepository masterLoginBonusItem.MasterLoginBonusItemRepository,
-	masterLoginBonusScheduleRepository masterLoginBonusSchedule.MasterLoginBonusScheduleRepository,
+	userLoginBonusMysqlRepository userLoginBonus.UserLoginBonusMysqlRepository,
+	masterLoginBonusMysqlRepository masterLoginBonus.MasterLoginBonusMysqlRepository,
+	masterLoginBonusEventMysqlRepository masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository,
+	masterLoginBonusItemMysqlRepository masterLoginBonusItem.MasterLoginBonusItemMysqlRepository,
+	masterLoginBonusScheduleMysqlRepository masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository,
 ) LoginBonusService {
 	return &loginBonusService{
 		itemService:                        itemService,
-		userLoginBonusRepository:           userLoginBonusRepository,
-		masterLoginBonusRepository:         masterLoginBonusRepository,
-		masterLoginBonusEventRepository:    masterLoginBonusEventRepository,
-		masterLoginBonusItemRepository:     masterLoginBonusItemRepository,
-		masterLoginBonusScheduleRepository: masterLoginBonusScheduleRepository,
+		userLoginBonusMysqlRepository:           userLoginBonusMysqlRepository,
+		masterLoginBonusMysqlRepository:         masterLoginBonusMysqlRepository,
+		masterLoginBonusEventMysqlRepository:    masterLoginBonusEventMysqlRepository,
+		masterLoginBonusItemMysqlRepository:     masterLoginBonusItemMysqlRepository,
+		masterLoginBonusScheduleMysqlRepository: masterLoginBonusScheduleMysqlRepository,
 	}
 }
 ```
@@ -214,7 +214,7 @@ make docker_gen_domain
 ```
 - `./docs/yaml/pkg/domain/model`配下にyamlファイルを定義する
   - Domainサービス毎にディレクトリを作成してその中にyamlを定義する
-  - Infrastructure層のDaoとRepositoryを繋ぎこみたい場合は、さらにディレクトリ内にInfrastructureと同名のディレクトリとyamlを定義する(([例：ログインボーナス](https://github.com/game-core/gocrafter/tree/main/docs/yaml/pkg/domain/model/loginBonus)))
+  - Infrastructure層のDaoとMysqlRepositoryを繋ぎこみたい場合は、さらにディレクトリ内にInfrastructureと同名のディレクトリとyamlを定義する(([例：ログインボーナス](https://github.com/game-core/gocrafter/tree/main/docs/yaml/pkg/domain/model/loginBonus)))
   - 繋ぎこみを行わないModelを定義したい場合はDomainサービスのディレクトリ直下に定義する
 ```yaml
 name: MasterLoginBonus
@@ -270,7 +270,7 @@ func SetMasterLoginBonus(id int64, masterLoginBonusEventId int64, name string) *
 	}
 }
 ```
-- Daoと繋ぎこみの設定を行っている場合、Infrastructure層の自動生成を行ったタイミングでRepositoryが生成される
+- Daoと繋ぎこみの設定を行っている場合、Infrastructure層の自動生成を行ったタイミングでMysqlRepositoryが生成される
   - CreatedAtとUpdatedAtはmodelでは除外されるため、コード内で日時系の値を参照・更新したい場合は別途追加する
   - CreatedAtとUpdatedAtはあくまでDB側でのみ取り扱うカラムとして定義する
 ```go
@@ -285,7 +285,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type MasterLoginBonusRepository interface {
+type MasterLoginBonusMysqlRepository interface {
 	Find(ctx context.Context, id int64) (*MasterLoginBonus, error)
 	FindOrNil(ctx context.Context, id int64) (*MasterLoginBonus, error)
 	FindByMasterLoginBonusEventId(ctx context.Context, masterLoginBonusEventId int64) (*MasterLoginBonus, error)
@@ -396,7 +396,7 @@ type masterLoginBonusDao struct {
 	Cache     *cache.Cache
 }
 
-func NewMasterLoginBonusDao(conn *database.MysqlHandler) masterLoginBonus.MasterLoginBonusRepository {
+func NewMasterLoginBonusDao(conn *database.MysqlHandler) masterLoginBonus.MasterLoginBonusMysqlRepository {
 	return &masterLoginBonusDao{
 		ReadMysqlConn:  conn.Master.ReadMysqlConn,
 		WriteMysqlConn: conn.Master.WriteMysqlConn,

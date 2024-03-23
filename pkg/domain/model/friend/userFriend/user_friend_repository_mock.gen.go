@@ -12,31 +12,31 @@ import (
 	gorm "gorm.io/gorm"
 )
 
-// MockUserFriendRepository is a mock of UserFriendRepository interface.
-type MockUserFriendRepository struct {
+// MockUserFriendMysqlRepository is a mock of UserFriendMysqlRepository interface.
+type MockUserFriendMysqlRepository struct {
 	ctrl     *gomock.Controller
-	recorder *MockUserFriendRepositoryMockRecorder
+	recorder *MockUserFriendMysqlRepositoryMockRecorder
 }
 
-// MockUserFriendRepositoryMockRecorder is the mock recorder for MockUserFriendRepository.
-type MockUserFriendRepositoryMockRecorder struct {
-	mock *MockUserFriendRepository
+// MockUserFriendMysqlRepositoryMockRecorder is the mock recorder for MockUserFriendMysqlRepository.
+type MockUserFriendMysqlRepositoryMockRecorder struct {
+	mock *MockUserFriendMysqlRepository
 }
 
-// NewMockUserFriendRepository creates a new mock instance.
-func NewMockUserFriendRepository(ctrl *gomock.Controller) *MockUserFriendRepository {
-	mock := &MockUserFriendRepository{ctrl: ctrl}
-	mock.recorder = &MockUserFriendRepositoryMockRecorder{mock}
+// NewMockUserFriendMysqlRepository creates a new mock instance.
+func NewMockUserFriendMysqlRepository(ctrl *gomock.Controller) *MockUserFriendMysqlRepository {
+	mock := &MockUserFriendMysqlRepository{ctrl: ctrl}
+	mock.recorder = &MockUserFriendMysqlRepositoryMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockUserFriendRepository) EXPECT() *MockUserFriendRepositoryMockRecorder {
+func (m *MockUserFriendMysqlRepository) EXPECT() *MockUserFriendMysqlRepositoryMockRecorder {
 	return m.recorder
 }
 
 // Create mocks base method.
-func (m_2 *MockUserFriendRepository) Create(ctx context.Context, tx *gorm.DB, m *UserFriend) (*UserFriend, error) {
+func (m_2 *MockUserFriendMysqlRepository) Create(ctx context.Context, tx *gorm.DB, m *UserFriend) (*UserFriend, error) {
 	m_2.ctrl.T.Helper()
 	ret := m_2.ctrl.Call(m_2, "Create", ctx, tx, m)
 	ret0, _ := ret[0].(*UserFriend)
@@ -45,13 +45,13 @@ func (m_2 *MockUserFriendRepository) Create(ctx context.Context, tx *gorm.DB, m 
 }
 
 // Create indicates an expected call of Create.
-func (mr *MockUserFriendRepositoryMockRecorder) Create(ctx, tx, m interface{}) *gomock.Call {
+func (mr *MockUserFriendMysqlRepositoryMockRecorder) Create(ctx, tx, m interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockUserFriendRepository)(nil).Create), ctx, tx, m)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockUserFriendMysqlRepository)(nil).Create), ctx, tx, m)
 }
 
 // CreateList mocks base method.
-func (m *MockUserFriendRepository) CreateList(ctx context.Context, tx *gorm.DB, ms UserFriends) (UserFriends, error) {
+func (m *MockUserFriendMysqlRepository) CreateList(ctx context.Context, tx *gorm.DB, ms UserFriends) (UserFriends, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateList", ctx, tx, ms)
 	ret0, _ := ret[0].(UserFriends)
@@ -60,13 +60,13 @@ func (m *MockUserFriendRepository) CreateList(ctx context.Context, tx *gorm.DB, 
 }
 
 // CreateList indicates an expected call of CreateList.
-func (mr *MockUserFriendRepositoryMockRecorder) CreateList(ctx, tx, ms interface{}) *gomock.Call {
+func (mr *MockUserFriendMysqlRepositoryMockRecorder) CreateList(ctx, tx, ms interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateList", reflect.TypeOf((*MockUserFriendRepository)(nil).CreateList), ctx, tx, ms)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateList", reflect.TypeOf((*MockUserFriendMysqlRepository)(nil).CreateList), ctx, tx, ms)
 }
 
 // Delete mocks base method.
-func (m_2 *MockUserFriendRepository) Delete(ctx context.Context, tx *gorm.DB, m *UserFriend) error {
+func (m_2 *MockUserFriendMysqlRepository) Delete(ctx context.Context, tx *gorm.DB, m *UserFriend) error {
 	m_2.ctrl.T.Helper()
 	ret := m_2.ctrl.Call(m_2, "Delete", ctx, tx, m)
 	ret0, _ := ret[0].(error)
@@ -74,13 +74,13 @@ func (m_2 *MockUserFriendRepository) Delete(ctx context.Context, tx *gorm.DB, m 
 }
 
 // Delete indicates an expected call of Delete.
-func (mr *MockUserFriendRepositoryMockRecorder) Delete(ctx, tx, m interface{}) *gomock.Call {
+func (mr *MockUserFriendMysqlRepositoryMockRecorder) Delete(ctx, tx, m interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockUserFriendRepository)(nil).Delete), ctx, tx, m)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockUserFriendMysqlRepository)(nil).Delete), ctx, tx, m)
 }
 
 // Find mocks base method.
-func (m *MockUserFriendRepository) Find(ctx context.Context, userId, friendUserId string) (*UserFriend, error) {
+func (m *MockUserFriendMysqlRepository) Find(ctx context.Context, userId, friendUserId string) (*UserFriend, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Find", ctx, userId, friendUserId)
 	ret0, _ := ret[0].(*UserFriend)
@@ -89,13 +89,13 @@ func (m *MockUserFriendRepository) Find(ctx context.Context, userId, friendUserI
 }
 
 // Find indicates an expected call of Find.
-func (mr *MockUserFriendRepositoryMockRecorder) Find(ctx, userId, friendUserId interface{}) *gomock.Call {
+func (mr *MockUserFriendMysqlRepositoryMockRecorder) Find(ctx, userId, friendUserId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Find", reflect.TypeOf((*MockUserFriendRepository)(nil).Find), ctx, userId, friendUserId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Find", reflect.TypeOf((*MockUserFriendMysqlRepository)(nil).Find), ctx, userId, friendUserId)
 }
 
 // FindList mocks base method.
-func (m *MockUserFriendRepository) FindList(ctx context.Context, userId string) (UserFriends, error) {
+func (m *MockUserFriendMysqlRepository) FindList(ctx context.Context, userId string) (UserFriends, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindList", ctx, userId)
 	ret0, _ := ret[0].(UserFriends)
@@ -104,13 +104,13 @@ func (m *MockUserFriendRepository) FindList(ctx context.Context, userId string) 
 }
 
 // FindList indicates an expected call of FindList.
-func (mr *MockUserFriendRepositoryMockRecorder) FindList(ctx, userId interface{}) *gomock.Call {
+func (mr *MockUserFriendMysqlRepositoryMockRecorder) FindList(ctx, userId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindList", reflect.TypeOf((*MockUserFriendRepository)(nil).FindList), ctx, userId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindList", reflect.TypeOf((*MockUserFriendMysqlRepository)(nil).FindList), ctx, userId)
 }
 
 // FindOrNil mocks base method.
-func (m *MockUserFriendRepository) FindOrNil(ctx context.Context, userId, friendUserId string) (*UserFriend, error) {
+func (m *MockUserFriendMysqlRepository) FindOrNil(ctx context.Context, userId, friendUserId string) (*UserFriend, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindOrNil", ctx, userId, friendUserId)
 	ret0, _ := ret[0].(*UserFriend)
@@ -119,13 +119,13 @@ func (m *MockUserFriendRepository) FindOrNil(ctx context.Context, userId, friend
 }
 
 // FindOrNil indicates an expected call of FindOrNil.
-func (mr *MockUserFriendRepositoryMockRecorder) FindOrNil(ctx, userId, friendUserId interface{}) *gomock.Call {
+func (mr *MockUserFriendMysqlRepositoryMockRecorder) FindOrNil(ctx, userId, friendUserId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNil", reflect.TypeOf((*MockUserFriendRepository)(nil).FindOrNil), ctx, userId, friendUserId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNil", reflect.TypeOf((*MockUserFriendMysqlRepository)(nil).FindOrNil), ctx, userId, friendUserId)
 }
 
 // Update mocks base method.
-func (m_2 *MockUserFriendRepository) Update(ctx context.Context, tx *gorm.DB, m *UserFriend) (*UserFriend, error) {
+func (m_2 *MockUserFriendMysqlRepository) Update(ctx context.Context, tx *gorm.DB, m *UserFriend) (*UserFriend, error) {
 	m_2.ctrl.T.Helper()
 	ret := m_2.ctrl.Call(m_2, "Update", ctx, tx, m)
 	ret0, _ := ret[0].(*UserFriend)
@@ -134,7 +134,7 @@ func (m_2 *MockUserFriendRepository) Update(ctx context.Context, tx *gorm.DB, m 
 }
 
 // Update indicates an expected call of Update.
-func (mr *MockUserFriendRepositoryMockRecorder) Update(ctx, tx, m interface{}) *gomock.Call {
+func (mr *MockUserFriendMysqlRepositoryMockRecorder) Update(ctx, tx, m interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockUserFriendRepository)(nil).Update), ctx, tx, m)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockUserFriendMysqlRepository)(nil).Update), ctx, tx, m)
 }

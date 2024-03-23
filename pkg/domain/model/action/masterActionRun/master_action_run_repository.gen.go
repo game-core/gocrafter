@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type MasterActionRunRepository interface {
+type MasterActionRunMysqlRepository interface {
 	Find(ctx context.Context, id int64) (*MasterActionRun, error)
 	FindOrNil(ctx context.Context, id int64) (*MasterActionRun, error)
 	FindByName(ctx context.Context, name string) (*MasterActionRun, error)

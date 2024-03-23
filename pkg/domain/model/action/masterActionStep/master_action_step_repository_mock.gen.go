@@ -13,31 +13,31 @@ import (
 	gorm "gorm.io/gorm"
 )
 
-// MockMasterActionStepRepository is a mock of MasterActionStepRepository interface.
-type MockMasterActionStepRepository struct {
+// MockMasterActionStepMysqlRepository is a mock of MasterActionStepMysqlRepository interface.
+type MockMasterActionStepMysqlRepository struct {
 	ctrl     *gomock.Controller
-	recorder *MockMasterActionStepRepositoryMockRecorder
+	recorder *MockMasterActionStepMysqlRepositoryMockRecorder
 }
 
-// MockMasterActionStepRepositoryMockRecorder is the mock recorder for MockMasterActionStepRepository.
-type MockMasterActionStepRepositoryMockRecorder struct {
-	mock *MockMasterActionStepRepository
+// MockMasterActionStepMysqlRepositoryMockRecorder is the mock recorder for MockMasterActionStepMysqlRepository.
+type MockMasterActionStepMysqlRepositoryMockRecorder struct {
+	mock *MockMasterActionStepMysqlRepository
 }
 
-// NewMockMasterActionStepRepository creates a new mock instance.
-func NewMockMasterActionStepRepository(ctrl *gomock.Controller) *MockMasterActionStepRepository {
-	mock := &MockMasterActionStepRepository{ctrl: ctrl}
-	mock.recorder = &MockMasterActionStepRepositoryMockRecorder{mock}
+// NewMockMasterActionStepMysqlRepository creates a new mock instance.
+func NewMockMasterActionStepMysqlRepository(ctrl *gomock.Controller) *MockMasterActionStepMysqlRepository {
+	mock := &MockMasterActionStepMysqlRepository{ctrl: ctrl}
+	mock.recorder = &MockMasterActionStepMysqlRepositoryMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockMasterActionStepRepository) EXPECT() *MockMasterActionStepRepositoryMockRecorder {
+func (m *MockMasterActionStepMysqlRepository) EXPECT() *MockMasterActionStepMysqlRepositoryMockRecorder {
 	return m.recorder
 }
 
 // Create mocks base method.
-func (m_2 *MockMasterActionStepRepository) Create(ctx context.Context, tx *gorm.DB, m *MasterActionStep) (*MasterActionStep, error) {
+func (m_2 *MockMasterActionStepMysqlRepository) Create(ctx context.Context, tx *gorm.DB, m *MasterActionStep) (*MasterActionStep, error) {
 	m_2.ctrl.T.Helper()
 	ret := m_2.ctrl.Call(m_2, "Create", ctx, tx, m)
 	ret0, _ := ret[0].(*MasterActionStep)
@@ -46,13 +46,13 @@ func (m_2 *MockMasterActionStepRepository) Create(ctx context.Context, tx *gorm.
 }
 
 // Create indicates an expected call of Create.
-func (mr *MockMasterActionStepRepositoryMockRecorder) Create(ctx, tx, m interface{}) *gomock.Call {
+func (mr *MockMasterActionStepMysqlRepositoryMockRecorder) Create(ctx, tx, m interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockMasterActionStepRepository)(nil).Create), ctx, tx, m)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockMasterActionStepMysqlRepository)(nil).Create), ctx, tx, m)
 }
 
 // CreateList mocks base method.
-func (m *MockMasterActionStepRepository) CreateList(ctx context.Context, tx *gorm.DB, ms MasterActionSteps) (MasterActionSteps, error) {
+func (m *MockMasterActionStepMysqlRepository) CreateList(ctx context.Context, tx *gorm.DB, ms MasterActionSteps) (MasterActionSteps, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateList", ctx, tx, ms)
 	ret0, _ := ret[0].(MasterActionSteps)
@@ -61,13 +61,13 @@ func (m *MockMasterActionStepRepository) CreateList(ctx context.Context, tx *gor
 }
 
 // CreateList indicates an expected call of CreateList.
-func (mr *MockMasterActionStepRepositoryMockRecorder) CreateList(ctx, tx, ms interface{}) *gomock.Call {
+func (mr *MockMasterActionStepMysqlRepositoryMockRecorder) CreateList(ctx, tx, ms interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateList", reflect.TypeOf((*MockMasterActionStepRepository)(nil).CreateList), ctx, tx, ms)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateList", reflect.TypeOf((*MockMasterActionStepMysqlRepository)(nil).CreateList), ctx, tx, ms)
 }
 
 // Delete mocks base method.
-func (m_2 *MockMasterActionStepRepository) Delete(ctx context.Context, tx *gorm.DB, m *MasterActionStep) error {
+func (m_2 *MockMasterActionStepMysqlRepository) Delete(ctx context.Context, tx *gorm.DB, m *MasterActionStep) error {
 	m_2.ctrl.T.Helper()
 	ret := m_2.ctrl.Call(m_2, "Delete", ctx, tx, m)
 	ret0, _ := ret[0].(error)
@@ -75,13 +75,13 @@ func (m_2 *MockMasterActionStepRepository) Delete(ctx context.Context, tx *gorm.
 }
 
 // Delete indicates an expected call of Delete.
-func (mr *MockMasterActionStepRepositoryMockRecorder) Delete(ctx, tx, m interface{}) *gomock.Call {
+func (mr *MockMasterActionStepMysqlRepositoryMockRecorder) Delete(ctx, tx, m interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockMasterActionStepRepository)(nil).Delete), ctx, tx, m)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockMasterActionStepMysqlRepository)(nil).Delete), ctx, tx, m)
 }
 
 // Find mocks base method.
-func (m *MockMasterActionStepRepository) Find(ctx context.Context, id int64) (*MasterActionStep, error) {
+func (m *MockMasterActionStepMysqlRepository) Find(ctx context.Context, id int64) (*MasterActionStep, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Find", ctx, id)
 	ret0, _ := ret[0].(*MasterActionStep)
@@ -90,13 +90,13 @@ func (m *MockMasterActionStepRepository) Find(ctx context.Context, id int64) (*M
 }
 
 // Find indicates an expected call of Find.
-func (mr *MockMasterActionStepRepositoryMockRecorder) Find(ctx, id interface{}) *gomock.Call {
+func (mr *MockMasterActionStepMysqlRepositoryMockRecorder) Find(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Find", reflect.TypeOf((*MockMasterActionStepRepository)(nil).Find), ctx, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Find", reflect.TypeOf((*MockMasterActionStepMysqlRepository)(nil).Find), ctx, id)
 }
 
 // FindByActionStepType mocks base method.
-func (m *MockMasterActionStepRepository) FindByActionStepType(ctx context.Context, actionStepType enum.ActionStepType) (*MasterActionStep, error) {
+func (m *MockMasterActionStepMysqlRepository) FindByActionStepType(ctx context.Context, actionStepType enum.ActionStepType) (*MasterActionStep, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByActionStepType", ctx, actionStepType)
 	ret0, _ := ret[0].(*MasterActionStep)
@@ -105,13 +105,13 @@ func (m *MockMasterActionStepRepository) FindByActionStepType(ctx context.Contex
 }
 
 // FindByActionStepType indicates an expected call of FindByActionStepType.
-func (mr *MockMasterActionStepRepositoryMockRecorder) FindByActionStepType(ctx, actionStepType interface{}) *gomock.Call {
+func (mr *MockMasterActionStepMysqlRepositoryMockRecorder) FindByActionStepType(ctx, actionStepType interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByActionStepType", reflect.TypeOf((*MockMasterActionStepRepository)(nil).FindByActionStepType), ctx, actionStepType)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByActionStepType", reflect.TypeOf((*MockMasterActionStepMysqlRepository)(nil).FindByActionStepType), ctx, actionStepType)
 }
 
 // FindList mocks base method.
-func (m *MockMasterActionStepRepository) FindList(ctx context.Context) (MasterActionSteps, error) {
+func (m *MockMasterActionStepMysqlRepository) FindList(ctx context.Context) (MasterActionSteps, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindList", ctx)
 	ret0, _ := ret[0].(MasterActionSteps)
@@ -120,13 +120,13 @@ func (m *MockMasterActionStepRepository) FindList(ctx context.Context) (MasterAc
 }
 
 // FindList indicates an expected call of FindList.
-func (mr *MockMasterActionStepRepositoryMockRecorder) FindList(ctx interface{}) *gomock.Call {
+func (mr *MockMasterActionStepMysqlRepositoryMockRecorder) FindList(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindList", reflect.TypeOf((*MockMasterActionStepRepository)(nil).FindList), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindList", reflect.TypeOf((*MockMasterActionStepMysqlRepository)(nil).FindList), ctx)
 }
 
 // FindListByActionStepType mocks base method.
-func (m *MockMasterActionStepRepository) FindListByActionStepType(ctx context.Context, actionStepType enum.ActionStepType) (MasterActionSteps, error) {
+func (m *MockMasterActionStepMysqlRepository) FindListByActionStepType(ctx context.Context, actionStepType enum.ActionStepType) (MasterActionSteps, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindListByActionStepType", ctx, actionStepType)
 	ret0, _ := ret[0].(MasterActionSteps)
@@ -135,13 +135,13 @@ func (m *MockMasterActionStepRepository) FindListByActionStepType(ctx context.Co
 }
 
 // FindListByActionStepType indicates an expected call of FindListByActionStepType.
-func (mr *MockMasterActionStepRepositoryMockRecorder) FindListByActionStepType(ctx, actionStepType interface{}) *gomock.Call {
+func (mr *MockMasterActionStepMysqlRepositoryMockRecorder) FindListByActionStepType(ctx, actionStepType interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindListByActionStepType", reflect.TypeOf((*MockMasterActionStepRepository)(nil).FindListByActionStepType), ctx, actionStepType)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindListByActionStepType", reflect.TypeOf((*MockMasterActionStepMysqlRepository)(nil).FindListByActionStepType), ctx, actionStepType)
 }
 
 // FindOrNil mocks base method.
-func (m *MockMasterActionStepRepository) FindOrNil(ctx context.Context, id int64) (*MasterActionStep, error) {
+func (m *MockMasterActionStepMysqlRepository) FindOrNil(ctx context.Context, id int64) (*MasterActionStep, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindOrNil", ctx, id)
 	ret0, _ := ret[0].(*MasterActionStep)
@@ -150,13 +150,13 @@ func (m *MockMasterActionStepRepository) FindOrNil(ctx context.Context, id int64
 }
 
 // FindOrNil indicates an expected call of FindOrNil.
-func (mr *MockMasterActionStepRepositoryMockRecorder) FindOrNil(ctx, id interface{}) *gomock.Call {
+func (mr *MockMasterActionStepMysqlRepositoryMockRecorder) FindOrNil(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNil", reflect.TypeOf((*MockMasterActionStepRepository)(nil).FindOrNil), ctx, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNil", reflect.TypeOf((*MockMasterActionStepMysqlRepository)(nil).FindOrNil), ctx, id)
 }
 
 // FindOrNilByActionStepType mocks base method.
-func (m *MockMasterActionStepRepository) FindOrNilByActionStepType(ctx context.Context, actionStepType enum.ActionStepType) (*MasterActionStep, error) {
+func (m *MockMasterActionStepMysqlRepository) FindOrNilByActionStepType(ctx context.Context, actionStepType enum.ActionStepType) (*MasterActionStep, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindOrNilByActionStepType", ctx, actionStepType)
 	ret0, _ := ret[0].(*MasterActionStep)
@@ -165,13 +165,13 @@ func (m *MockMasterActionStepRepository) FindOrNilByActionStepType(ctx context.C
 }
 
 // FindOrNilByActionStepType indicates an expected call of FindOrNilByActionStepType.
-func (mr *MockMasterActionStepRepositoryMockRecorder) FindOrNilByActionStepType(ctx, actionStepType interface{}) *gomock.Call {
+func (mr *MockMasterActionStepMysqlRepositoryMockRecorder) FindOrNilByActionStepType(ctx, actionStepType interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByActionStepType", reflect.TypeOf((*MockMasterActionStepRepository)(nil).FindOrNilByActionStepType), ctx, actionStepType)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByActionStepType", reflect.TypeOf((*MockMasterActionStepMysqlRepository)(nil).FindOrNilByActionStepType), ctx, actionStepType)
 }
 
 // Update mocks base method.
-func (m_2 *MockMasterActionStepRepository) Update(ctx context.Context, tx *gorm.DB, m *MasterActionStep) (*MasterActionStep, error) {
+func (m_2 *MockMasterActionStepMysqlRepository) Update(ctx context.Context, tx *gorm.DB, m *MasterActionStep) (*MasterActionStep, error) {
 	m_2.ctrl.T.Helper()
 	ret := m_2.ctrl.Call(m_2, "Update", ctx, tx, m)
 	ret0, _ := ret[0].(*MasterActionStep)
@@ -180,7 +180,7 @@ func (m_2 *MockMasterActionStepRepository) Update(ctx context.Context, tx *gorm.
 }
 
 // Update indicates an expected call of Update.
-func (mr *MockMasterActionStepRepositoryMockRecorder) Update(ctx, tx, m interface{}) *gomock.Call {
+func (mr *MockMasterActionStepMysqlRepositoryMockRecorder) Update(ctx, tx, m interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockMasterActionStepRepository)(nil).Update), ctx, tx, m)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockMasterActionStepMysqlRepository)(nil).Update), ctx, tx, m)
 }

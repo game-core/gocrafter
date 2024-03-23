@@ -9,11 +9,11 @@ import (
 var CommonShardInstances CommonShards
 
 // GetShardKey シャードキーを取得する
-func (s *CommonShards) GetShardKey(ctx context.Context, commonShardRepository CommonShardRepository) (string, error) {
+func (s *CommonShards) GetShardKey(ctx context.Context, commonShardMysqlRepository CommonShardMysqlRepository) (string, error) {
 	if len(CommonShardInstances) <= 0 {
-		commonShards, err := commonShardRepository.FindList(ctx)
+		commonShards, err := commonShardMysqlRepository.FindList(ctx)
 		if err != nil {
-			return "", errors.NewMethodError("s.commonShardRepository.FindList", err)
+			return "", errors.NewMethodError("s.commonShardMysqlRepository.FindList", err)
 		}
 		if len(commonShards) <= 0 {
 			return "", errors.NewError("common_shard does not exist")

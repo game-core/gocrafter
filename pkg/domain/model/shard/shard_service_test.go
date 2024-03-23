@@ -13,7 +13,7 @@ import (
 
 func TestShardService_NewShardService(t *testing.T) {
 	type args struct {
-		commonShardRepository commonShard.CommonShardRepository
+		commonShardMysqlRepository commonShard.CommonShardMysqlRepository
 	}
 	tests := []struct {
 		name string
@@ -23,17 +23,17 @@ func TestShardService_NewShardService(t *testing.T) {
 		{
 			name: "正常",
 			args: args{
-				commonShardRepository: nil,
+				commonShardMysqlRepository: nil,
 			},
 			want: &shardService{
-				commonShardRepository: nil,
+				commonShardMysqlRepository: nil,
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := NewShardService(
-				tt.args.commonShardRepository,
+				tt.args.commonShardMysqlRepository,
 			)
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewShardService() = %v, want %v", got, tt.want)
@@ -44,7 +44,7 @@ func TestShardService_NewShardService(t *testing.T) {
 
 func TestShardService_GetShardKey(t *testing.T) {
 	type fields struct {
-		commonShardRepository func(ctrl *gomock.Controller) commonShard.CommonShardRepository
+		commonShardMysqlRepository func(ctrl *gomock.Controller) commonShard.CommonShardMysqlRepository
 	}
 	type args struct {
 		ctx context.Context
@@ -59,8 +59,8 @@ func TestShardService_GetShardKey(t *testing.T) {
 		{
 			name: "正常：取得できる",
 			fields: fields{
-				commonShardRepository: func(ctrl *gomock.Controller) commonShard.CommonShardRepository {
-					m := commonShard.NewMockCommonShardRepository(ctrl)
+				commonShardMysqlRepository: func(ctrl *gomock.Controller) commonShard.CommonShardMysqlRepository {
+					m := commonShard.NewMockCommonShardMysqlRepository(ctrl)
 					m.EXPECT().
 						FindList(
 							nil,
@@ -92,10 +92,10 @@ func TestShardService_GetShardKey(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.commonShardRepository.FindList",
+			name: "異常：s.commonShardMysqlRepository.FindList",
 			fields: fields{
-				commonShardRepository: func(ctrl *gomock.Controller) commonShard.CommonShardRepository {
-					m := commonShard.NewMockCommonShardRepository(ctrl)
+				commonShardMysqlRepository: func(ctrl *gomock.Controller) commonShard.CommonShardMysqlRepository {
+					m := commonShard.NewMockCommonShardMysqlRepository(ctrl)
 					m.EXPECT().
 						FindList(
 							nil,
@@ -111,13 +111,13 @@ func TestShardService_GetShardKey(t *testing.T) {
 				ctx: nil,
 			},
 			want:    "",
-			wantErr: errors.NewMethodError("shards.GetShardKey: failed to s.commonShardRepository.FindList", errors.NewTestError()),
+			wantErr: errors.NewMethodError("shards.GetShardKey: failed to s.commonShardMysqlRepository.FindList", errors.NewTestError()),
 		},
 		{
 			name: "異常：common_shard does not exist",
 			fields: fields{
-				commonShardRepository: func(ctrl *gomock.Controller) commonShard.CommonShardRepository {
-					m := commonShard.NewMockCommonShardRepository(ctrl)
+				commonShardMysqlRepository: func(ctrl *gomock.Controller) commonShard.CommonShardMysqlRepository {
+					m := commonShard.NewMockCommonShardMysqlRepository(ctrl)
 					m.EXPECT().
 						FindList(
 							nil,
@@ -142,7 +142,7 @@ func TestShardService_GetShardKey(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &shardService{
-				commonShardRepository: tt.fields.commonShardRepository(ctrl),
+				commonShardMysqlRepository: tt.fields.commonShardMysqlRepository(ctrl),
 			}
 
 			got, err := s.GetShardKey(tt.args.ctx)

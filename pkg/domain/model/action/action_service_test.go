@@ -21,11 +21,11 @@ import (
 
 func TestNewActionService_NewActionService(t *testing.T) {
 	type args struct {
-		masterActionRepository        masterAction.MasterActionRepository
-		masterActionRunRepository     masterActionRun.MasterActionRunRepository
-		masterActionStepRepository    masterActionStep.MasterActionStepRepository
-		masterActionTriggerRepository masterActionTrigger.MasterActionTriggerRepository
-		userActionRepository          userAction.UserActionRepository
+		masterActionMysqlRepository        masterAction.MasterActionMysqlRepository
+		masterActionRunMysqlRepository     masterActionRun.MasterActionRunMysqlRepository
+		masterActionStepMysqlRepository    masterActionStep.MasterActionStepMysqlRepository
+		masterActionTriggerMysqlRepository masterActionTrigger.MasterActionTriggerMysqlRepository
+		userActionMysqlRepository          userAction.UserActionMysqlRepository
 	}
 	tests := []struct {
 		name string
@@ -35,29 +35,29 @@ func TestNewActionService_NewActionService(t *testing.T) {
 		{
 			name: "正常",
 			args: args{
-				masterActionRepository:        nil,
-				masterActionRunRepository:     nil,
-				masterActionStepRepository:    nil,
-				masterActionTriggerRepository: nil,
-				userActionRepository:          nil,
+				masterActionMysqlRepository:        nil,
+				masterActionRunMysqlRepository:     nil,
+				masterActionStepMysqlRepository:    nil,
+				masterActionTriggerMysqlRepository: nil,
+				userActionMysqlRepository:          nil,
 			},
 			want: &actionService{
-				masterActionRepository:        nil,
-				masterActionRunRepository:     nil,
-				masterActionStepRepository:    nil,
-				masterActionTriggerRepository: nil,
-				userActionRepository:          nil,
+				masterActionMysqlRepository:        nil,
+				masterActionRunMysqlRepository:     nil,
+				masterActionStepMysqlRepository:    nil,
+				masterActionTriggerMysqlRepository: nil,
+				userActionMysqlRepository:          nil,
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := NewActionService(
-				tt.args.masterActionRepository,
-				tt.args.masterActionRunRepository,
-				tt.args.masterActionStepRepository,
-				tt.args.masterActionTriggerRepository,
-				tt.args.userActionRepository,
+				tt.args.masterActionMysqlRepository,
+				tt.args.masterActionRunMysqlRepository,
+				tt.args.masterActionStepMysqlRepository,
+				tt.args.masterActionTriggerMysqlRepository,
+				tt.args.userActionMysqlRepository,
 			)
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewActionService() = %v, want %v", got, tt.want)
@@ -68,11 +68,11 @@ func TestNewActionService_NewActionService(t *testing.T) {
 
 func TestActionService_GetMaster(t *testing.T) {
 	type fields struct {
-		masterActionRepository        func(ctrl *gomock.Controller) masterAction.MasterActionRepository
-		masterActionRunRepository     func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository
-		masterActionStepRepository    func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository
-		masterActionTriggerRepository func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository
-		userActionRepository          func(ctrl *gomock.Controller) userAction.UserActionRepository
+		masterActionMysqlRepository        func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository
+		masterActionRunMysqlRepository     func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository
+		masterActionStepMysqlRepository    func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository
+		masterActionTriggerMysqlRepository func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository
+		userActionMysqlRepository          func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository
 	}
 	type args struct {
 		ctx context.Context
@@ -87,8 +87,8 @@ func TestActionService_GetMaster(t *testing.T) {
 		{
 			name: "正常：取得できる",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindList(
 							nil,
@@ -118,8 +118,8 @@ func TestActionService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					m.EXPECT().
 						FindList(
 							nil,
@@ -141,8 +141,8 @@ func TestActionService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					m.EXPECT().
 						FindList(
 							nil,
@@ -164,8 +164,8 @@ func TestActionService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					m.EXPECT().
 						FindList(
 							nil,
@@ -187,8 +187,8 @@ func TestActionService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					return m
 				},
 			},
@@ -256,10 +256,10 @@ func TestActionService_GetMaster(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.masterActionRepository.FindList",
+			name: "異常：s.masterActionMysqlRepository.FindList",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindList(
 							nil,
@@ -270,20 +270,20 @@ func TestActionService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					return m
 				},
 			},
@@ -291,13 +291,13 @@ func TestActionService_GetMaster(t *testing.T) {
 				ctx: nil,
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.masterActionRepository.FindList", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.masterActionMysqlRepository.FindList", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.masterActionRunRepository.FindList",
+			name: "異常：s.masterActionRunMysqlRepository.FindList",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindList(
 							nil,
@@ -327,8 +327,8 @@ func TestActionService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					m.EXPECT().
 						FindList(
 							nil,
@@ -339,16 +339,16 @@ func TestActionService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					return m
 				},
 			},
@@ -356,13 +356,13 @@ func TestActionService_GetMaster(t *testing.T) {
 				ctx: nil,
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.masterActionRunRepository.FindList", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.masterActionRunMysqlRepository.FindList", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.masterActionStepRepository.FindList",
+			name: "異常：s.masterActionStepMysqlRepository.FindList",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindList(
 							nil,
@@ -392,8 +392,8 @@ func TestActionService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					m.EXPECT().
 						FindList(
 							nil,
@@ -415,8 +415,8 @@ func TestActionService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					m.EXPECT().
 						FindList(
 							nil,
@@ -427,12 +427,12 @@ func TestActionService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					return m
 				},
 			},
@@ -440,13 +440,13 @@ func TestActionService_GetMaster(t *testing.T) {
 				ctx: nil,
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.masterActionStepRepository.FindList", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.masterActionStepMysqlRepository.FindList", errors.NewTestError()),
 		},
 		{
 			name: "正常：取得できる",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindList(
 							nil,
@@ -476,8 +476,8 @@ func TestActionService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					m.EXPECT().
 						FindList(
 							nil,
@@ -499,8 +499,8 @@ func TestActionService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					m.EXPECT().
 						FindList(
 							nil,
@@ -522,8 +522,8 @@ func TestActionService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					m.EXPECT().
 						FindList(
 							nil,
@@ -534,8 +534,8 @@ func TestActionService_GetMaster(t *testing.T) {
 						)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					return m
 				},
 			},
@@ -543,7 +543,7 @@ func TestActionService_GetMaster(t *testing.T) {
 				ctx: nil,
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.masterActionTriggerRepository.FindList", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.masterActionTriggerMysqlRepository.FindList", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -551,11 +551,11 @@ func TestActionService_GetMaster(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &actionService{
-				masterActionRepository:        tt.fields.masterActionRepository(ctrl),
-				masterActionRunRepository:     tt.fields.masterActionRunRepository(ctrl),
-				masterActionStepRepository:    tt.fields.masterActionStepRepository(ctrl),
-				masterActionTriggerRepository: tt.fields.masterActionTriggerRepository(ctrl),
-				userActionRepository:          tt.fields.userActionRepository(ctrl),
+				masterActionMysqlRepository:        tt.fields.masterActionMysqlRepository(ctrl),
+				masterActionRunMysqlRepository:     tt.fields.masterActionRunMysqlRepository(ctrl),
+				masterActionStepMysqlRepository:    tt.fields.masterActionStepMysqlRepository(ctrl),
+				masterActionTriggerMysqlRepository: tt.fields.masterActionTriggerMysqlRepository(ctrl),
+				userActionMysqlRepository:          tt.fields.userActionMysqlRepository(ctrl),
 			}
 
 			got, err := s.GetMaster(tt.args.ctx)
@@ -572,11 +572,11 @@ func TestActionService_GetMaster(t *testing.T) {
 
 func TestActionService_Check(t *testing.T) {
 	type fields struct {
-		masterActionRepository        func(ctrl *gomock.Controller) masterAction.MasterActionRepository
-		masterActionRunRepository     func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository
-		masterActionStepRepository    func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository
-		masterActionTriggerRepository func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository
-		userActionRepository          func(ctrl *gomock.Controller) userAction.UserActionRepository
+		masterActionMysqlRepository        func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository
+		masterActionRunMysqlRepository     func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository
+		masterActionStepMysqlRepository    func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository
+		masterActionTriggerMysqlRepository func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository
+		userActionMysqlRepository          func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository
 	}
 	type args struct {
 		ctx context.Context
@@ -592,8 +592,8 @@ func TestActionService_Check(t *testing.T) {
 		{
 			name: "正常：確認できる（AnyIdがある場合）",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepTypeAndAnyId(
 							nil,
@@ -614,20 +614,20 @@ func TestActionService_Check(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -659,8 +659,8 @@ func TestActionService_Check(t *testing.T) {
 		{
 			name: "正常：確認できる（AnyIdがない場合）",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepType(
 							nil,
@@ -680,20 +680,20 @@ func TestActionService_Check(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -725,8 +725,8 @@ func TestActionService_Check(t *testing.T) {
 		{
 			name: "正常：アクションが存在しない（AnyIdがある場合）",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepTypeAndAnyId(
 							nil,
@@ -739,20 +739,20 @@ func TestActionService_Check(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					return m
 				},
 			},
@@ -770,8 +770,8 @@ func TestActionService_Check(t *testing.T) {
 		{
 			name: "正常：アクションが存在しない（AnyIdがない場合）",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepType(
 							nil,
@@ -783,20 +783,20 @@ func TestActionService_Check(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					return m
 				},
 			},
@@ -812,10 +812,10 @@ func TestActionService_Check(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.getMasterAction: failed to s.masterActionRepository.FindOrNilByActionStepTypeAndAnyId",
+			name: "異常：s.getMasterAction: failed to s.masterActionMysqlRepository.FindOrNilByActionStepTypeAndAnyId",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepTypeAndAnyId(
 							nil,
@@ -828,20 +828,20 @@ func TestActionService_Check(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					return m
 				},
 			},
@@ -854,13 +854,13 @@ func TestActionService_Check(t *testing.T) {
 					AnyId:          pointers.Int64ToPointer(1),
 				},
 			},
-			wantErr: errors.NewMethodError("s.getMasterAction: failed to s.masterActionRepository.FindOrNilByActionStepTypeAndAnyId", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.getMasterAction: failed to s.masterActionMysqlRepository.FindOrNilByActionStepTypeAndAnyId", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.getUserAction: failed to s.userActionRepository.Find",
+			name: "異常：s.getUserAction: failed to s.userActionMysqlRepository.Find",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepTypeAndAnyId(
 							nil,
@@ -881,20 +881,20 @@ func TestActionService_Check(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -917,13 +917,13 @@ func TestActionService_Check(t *testing.T) {
 					AnyId:          pointers.Int64ToPointer(1),
 				},
 			},
-			wantErr: errors.NewMethodError("s.getUserAction: failed to s.userActionRepository.Find", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.getUserAction: failed to s.userActionMysqlRepository.Find", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.getMasterAction: failed to s.masterActionRepository.FindOrNilByActionStepType",
+			name: "異常：s.getMasterAction: failed to s.masterActionMysqlRepository.FindOrNilByActionStepType",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepType(
 							nil,
@@ -935,20 +935,20 @@ func TestActionService_Check(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					return m
 				},
 			},
@@ -961,13 +961,13 @@ func TestActionService_Check(t *testing.T) {
 					AnyId:          nil,
 				},
 			},
-			wantErr: errors.NewMethodError("s.getMasterAction: failed to s.masterActionRepository.FindOrNilByActionStepType", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.getMasterAction: failed to s.masterActionMysqlRepository.FindOrNilByActionStepType", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.getUserAction: failed to s.userActionRepository.Find",
+			name: "異常：s.getUserAction: failed to s.userActionMysqlRepository.Find",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepType(
 							nil,
@@ -987,20 +987,20 @@ func TestActionService_Check(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1023,13 +1023,13 @@ func TestActionService_Check(t *testing.T) {
 					AnyId:          nil,
 				},
 			},
-			wantErr: errors.NewMethodError("s.getUserAction: failed to s.userActionRepository.Find", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.getUserAction: failed to s.userActionMysqlRepository.Find", errors.NewTestError()),
 		},
 		{
 			name: "異常：s.getUserAction: expiration date has expired",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepTypeAndAnyId(
 							nil,
@@ -1050,20 +1050,20 @@ func TestActionService_Check(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1098,11 +1098,11 @@ func TestActionService_Check(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &actionService{
-				masterActionRepository:        tt.fields.masterActionRepository(ctrl),
-				masterActionRunRepository:     tt.fields.masterActionRunRepository(ctrl),
-				masterActionStepRepository:    tt.fields.masterActionStepRepository(ctrl),
-				masterActionTriggerRepository: tt.fields.masterActionTriggerRepository(ctrl),
-				userActionRepository:          tt.fields.userActionRepository(ctrl),
+				masterActionMysqlRepository:        tt.fields.masterActionMysqlRepository(ctrl),
+				masterActionRunMysqlRepository:     tt.fields.masterActionRunMysqlRepository(ctrl),
+				masterActionStepMysqlRepository:    tt.fields.masterActionStepMysqlRepository(ctrl),
+				masterActionTriggerMysqlRepository: tt.fields.masterActionTriggerMysqlRepository(ctrl),
+				userActionMysqlRepository:          tt.fields.userActionMysqlRepository(ctrl),
 			}
 
 			err := s.Check(tt.args.ctx, tt.args.now, tt.args.req)
@@ -1116,11 +1116,11 @@ func TestActionService_Check(t *testing.T) {
 
 func TestActionService_Run(t *testing.T) {
 	type fields struct {
-		masterActionRepository        func(ctrl *gomock.Controller) masterAction.MasterActionRepository
-		masterActionRunRepository     func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository
-		masterActionStepRepository    func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository
-		masterActionTriggerRepository func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository
-		userActionRepository          func(ctrl *gomock.Controller) userAction.UserActionRepository
+		masterActionMysqlRepository        func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository
+		masterActionRunMysqlRepository     func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository
+		masterActionStepMysqlRepository    func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository
+		masterActionTriggerMysqlRepository func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository
+		userActionMysqlRepository          func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository
 	}
 	type args struct {
 		ctx context.Context
@@ -1137,8 +1137,8 @@ func TestActionService_Run(t *testing.T) {
 		{
 			name: "正常：実行できる（AnyIdがある場合）",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepTypeAndAnyId(
 							nil,
@@ -1176,8 +1176,8 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByActionId(
 							nil,
@@ -1189,16 +1189,16 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1259,8 +1259,8 @@ func TestActionService_Run(t *testing.T) {
 		{
 			name: "正常：実行できる（AnyIdがない場合）",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepType(
 							nil,
@@ -1297,8 +1297,8 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByActionId(
 							nil,
@@ -1310,16 +1310,16 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1380,8 +1380,8 @@ func TestActionService_Run(t *testing.T) {
 		{
 			name: "正常：実行できる（トリガーアクションがない場合）",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepTypeAndAnyId(
 							nil,
@@ -1402,8 +1402,8 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByActionId(
 							nil,
@@ -1415,16 +1415,16 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -1471,8 +1471,8 @@ func TestActionService_Run(t *testing.T) {
 		{
 			name: "正常：実行できる（トリガーアクションがDiscontinuationの場合）",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepTypeAndAnyId(
 							nil,
@@ -1510,8 +1510,8 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByActionId(
 							nil,
@@ -1523,16 +1523,16 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1606,8 +1606,8 @@ func TestActionService_Run(t *testing.T) {
 		{
 			name: "正常：アクションがない場合",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepTypeAndAnyId(
 							nil,
@@ -1620,20 +1620,20 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					return m
 				},
 			},
@@ -1652,8 +1652,8 @@ func TestActionService_Run(t *testing.T) {
 		{
 			name: "正常：実行できる（ActionRunが存在する場合）",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepTypeAndAnyId(
 							nil,
@@ -1691,8 +1691,8 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByActionId(
 							nil,
@@ -1715,16 +1715,16 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1841,8 +1841,8 @@ func TestActionService_Run(t *testing.T) {
 		{
 			name: "正常：実行できる（期限切れにより再実行された場合）",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepTypeAndAnyId(
 							nil,
@@ -1880,8 +1880,8 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByActionId(
 							nil,
@@ -1893,16 +1893,16 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -1978,10 +1978,10 @@ func TestActionService_Run(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.getMasterAction: failed to s.masterActionRepository.FindOrNilByActionStepTypeAndAnyId",
+			name: "異常：s.getMasterAction: failed to s.masterActionMysqlRepository.FindOrNilByActionStepTypeAndAnyId",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepTypeAndAnyId(
 							nil,
@@ -1994,20 +1994,20 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					return m
 				},
 			},
@@ -2021,13 +2021,13 @@ func TestActionService_Run(t *testing.T) {
 					AnyId:          pointers.Int64ToPointer(2),
 				},
 			},
-			wantErr: errors.NewMethodError("s.getMasterAction: failed to s.masterActionRepository.FindOrNilByActionStepTypeAndAnyId", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.getMasterAction: failed to s.masterActionMysqlRepository.FindOrNilByActionStepTypeAndAnyId", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.checkTriggerUserAction: failed to s.masterActionRepository.Find）",
+			name: "異常：s.checkTriggerUserAction: failed to s.masterActionMysqlRepository.Find）",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepTypeAndAnyId(
 							nil,
@@ -2057,20 +2057,20 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					return m
 				},
 			},
@@ -2084,13 +2084,13 @@ func TestActionService_Run(t *testing.T) {
 					AnyId:          pointers.Int64ToPointer(2),
 				},
 			},
-			wantErr: errors.NewMethodError("s.checkTriggerUserAction: failed to s.masterActionRepository.Find", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.checkTriggerUserAction: failed to s.masterActionMysqlRepository.Find", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.deleteTriggerAction: failed to s.userActionRepository.Delete",
+			name: "異常：s.deleteTriggerAction: failed to s.userActionMysqlRepository.Delete",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepTypeAndAnyId(
 							nil,
@@ -2128,20 +2128,20 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -2182,13 +2182,13 @@ func TestActionService_Run(t *testing.T) {
 					AnyId:          pointers.Int64ToPointer(2),
 				},
 			},
-			wantErr: errors.NewMethodError("s.deleteTriggerAction: failed to s.userActionRepository.Delete", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.deleteTriggerAction: failed to s.userActionMysqlRepository.Delete", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.run: failed to s.update: failed to s.userActionRepository.FindOrNil",
+			name: "異常：s.run: failed to s.update: failed to s.userActionMysqlRepository.FindOrNil",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepTypeAndAnyId(
 							nil,
@@ -2226,20 +2226,20 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -2277,13 +2277,13 @@ func TestActionService_Run(t *testing.T) {
 					AnyId:          pointers.Int64ToPointer(2),
 				},
 			},
-			wantErr: errors.NewMethodError("s.run: failed to s.update: failed to s.userActionRepository.FindOrNil", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.run: failed to s.update: failed to s.userActionMysqlRepository.FindOrNil", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.run: failed to s.update: failed to s.userActionRepository.Create",
+			name: "異常：s.run: failed to s.update: failed to s.userActionMysqlRepository.Create",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepTypeAndAnyId(
 							nil,
@@ -2321,20 +2321,20 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -2386,13 +2386,13 @@ func TestActionService_Run(t *testing.T) {
 					AnyId:          pointers.Int64ToPointer(2),
 				},
 			},
-			wantErr: errors.NewMethodError("s.run: failed to s.update: failed to s.userActionRepository.Create", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.run: failed to s.update: failed to s.userActionMysqlRepository.Create", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.getMasterAction: failed to s.masterActionRepository.FindOrNilByActionStepType",
+			name: "異常：s.getMasterAction: failed to s.masterActionMysqlRepository.FindOrNilByActionStepType",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepType(
 							nil,
@@ -2404,20 +2404,20 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					return m
 				},
 			},
@@ -2431,13 +2431,13 @@ func TestActionService_Run(t *testing.T) {
 					AnyId:          nil,
 				},
 			},
-			wantErr: errors.NewMethodError("s.getMasterAction: failed to s.masterActionRepository.FindOrNilByActionStepType", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.getMasterAction: failed to s.masterActionMysqlRepository.FindOrNilByActionStepType", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.checkTriggerUserAction: failed to s.getUserAction: failed to s.userActionRepository.Find",
+			name: "異常：s.checkTriggerUserAction: failed to s.getUserAction: failed to s.userActionMysqlRepository.Find",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepTypeAndAnyId(
 							nil,
@@ -2475,20 +2475,20 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -2512,13 +2512,13 @@ func TestActionService_Run(t *testing.T) {
 					AnyId:          pointers.Int64ToPointer(2),
 				},
 			},
-			wantErr: errors.NewMethodError("s.checkTriggerUserAction: failed to s.getUserAction: failed to s.userActionRepository.Find", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.checkTriggerUserAction: failed to s.getUserAction: failed to s.userActionMysqlRepository.Find", errors.NewTestError()),
 		},
 		{
 			name: "異常：s.checkTriggerUserAction: failed to s.getUserAction: expiration date has expired",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepTypeAndAnyId(
 							nil,
@@ -2556,20 +2556,20 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -2602,8 +2602,8 @@ func TestActionService_Run(t *testing.T) {
 		{
 			name: "異常：s.deleteTriggerAction: ActionTriggerType does not exist",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepTypeAndAnyId(
 							nil,
@@ -2641,20 +2641,20 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -2685,10 +2685,10 @@ func TestActionService_Run(t *testing.T) {
 			wantErr: errors.NewError("failed to s.deleteTriggerAction: ActionTriggerType does not exist"),
 		},
 		{
-			name: "異常：s.run: failed to s.masterActionRunRepository.FindListByActionId",
+			name: "異常：s.run: failed to s.masterActionRunMysqlRepository.FindListByActionId",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepTypeAndAnyId(
 							nil,
@@ -2726,8 +2726,8 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByActionId(
 							nil,
@@ -2739,16 +2739,16 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -2804,13 +2804,13 @@ func TestActionService_Run(t *testing.T) {
 					AnyId:          pointers.Int64ToPointer(2),
 				},
 			},
-			wantErr: errors.NewMethodError("s.run: failed to s.masterActionRunRepository.FindListByActionId", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.run: failed to s.masterActionRunMysqlRepository.FindListByActionId", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.run: failed to s.userActionRepository.Create: failed to s.userActionRepository.FindOrNil",
+			name: "異常：s.run: failed to s.userActionMysqlRepository.Create: failed to s.userActionMysqlRepository.FindOrNil",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepTypeAndAnyId(
 							nil,
@@ -2848,8 +2848,8 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					m.EXPECT().
 						FindListByActionId(
 							nil,
@@ -2872,16 +2872,16 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -2947,13 +2947,13 @@ func TestActionService_Run(t *testing.T) {
 					AnyId:          pointers.Int64ToPointer(2),
 				},
 			},
-			wantErr: errors.NewMethodError("s.run: failed to s.userActionRepository.Create: failed to s.userActionRepository.FindOrNil", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.run: failed to s.userActionMysqlRepository.Create: failed to s.userActionMysqlRepository.FindOrNil", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.run: failed to s.update: failed to s.userActionRepository.Update",
+			name: "異常：s.run: failed to s.update: failed to s.userActionMysqlRepository.Update",
 			fields: fields{
-				masterActionRepository: func(ctrl *gomock.Controller) masterAction.MasterActionRepository {
-					m := masterAction.NewMockMasterActionRepository(ctrl)
+				masterActionMysqlRepository: func(ctrl *gomock.Controller) masterAction.MasterActionMysqlRepository {
+					m := masterAction.NewMockMasterActionMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNilByActionStepTypeAndAnyId(
 							nil,
@@ -2991,20 +2991,20 @@ func TestActionService_Run(t *testing.T) {
 						)
 					return m
 				},
-				masterActionRunRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunRepository {
-					m := masterActionRun.NewMockMasterActionRunRepository(ctrl)
+				masterActionRunMysqlRepository: func(ctrl *gomock.Controller) masterActionRun.MasterActionRunMysqlRepository {
+					m := masterActionRun.NewMockMasterActionRunMysqlRepository(ctrl)
 					return m
 				},
-				masterActionStepRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepRepository {
-					m := masterActionStep.NewMockMasterActionStepRepository(ctrl)
+				masterActionStepMysqlRepository: func(ctrl *gomock.Controller) masterActionStep.MasterActionStepMysqlRepository {
+					m := masterActionStep.NewMockMasterActionStepMysqlRepository(ctrl)
 					return m
 				},
-				masterActionTriggerRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerRepository {
-					m := masterActionTrigger.NewMockMasterActionTriggerRepository(ctrl)
+				masterActionTriggerMysqlRepository: func(ctrl *gomock.Controller) masterActionTrigger.MasterActionTriggerMysqlRepository {
+					m := masterActionTrigger.NewMockMasterActionTriggerMysqlRepository(ctrl)
 					return m
 				},
-				userActionRepository: func(ctrl *gomock.Controller) userAction.UserActionRepository {
-					m := userAction.NewMockUserActionRepository(ctrl)
+				userActionMysqlRepository: func(ctrl *gomock.Controller) userAction.UserActionMysqlRepository {
+					m := userAction.NewMockUserActionMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -3073,7 +3073,7 @@ func TestActionService_Run(t *testing.T) {
 					AnyId:          pointers.Int64ToPointer(2),
 				},
 			},
-			wantErr: errors.NewMethodError("s.run: failed to s.update: failed to s.userActionRepository.Update", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.run: failed to s.update: failed to s.userActionMysqlRepository.Update", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -3081,11 +3081,11 @@ func TestActionService_Run(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &actionService{
-				masterActionRepository:        tt.fields.masterActionRepository(ctrl),
-				masterActionRunRepository:     tt.fields.masterActionRunRepository(ctrl),
-				masterActionStepRepository:    tt.fields.masterActionStepRepository(ctrl),
-				masterActionTriggerRepository: tt.fields.masterActionTriggerRepository(ctrl),
-				userActionRepository:          tt.fields.userActionRepository(ctrl),
+				masterActionMysqlRepository:        tt.fields.masterActionMysqlRepository(ctrl),
+				masterActionRunMysqlRepository:     tt.fields.masterActionRunMysqlRepository(ctrl),
+				masterActionStepMysqlRepository:    tt.fields.masterActionStepMysqlRepository(ctrl),
+				masterActionTriggerMysqlRepository: tt.fields.masterActionTriggerMysqlRepository(ctrl),
+				userActionMysqlRepository:          tt.fields.userActionMysqlRepository(ctrl),
 			}
 
 			err := s.Run(tt.args.ctx, tt.args.tx, tt.args.now, tt.args.req)

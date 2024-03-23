@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type UserAccountRepository interface {
+type UserAccountMysqlRepository interface {
 	Find(ctx context.Context, userId string) (*UserAccount, error)
 	FindOrNil(ctx context.Context, userId string) (*UserAccount, error)
 	FindList(ctx context.Context, userId string) (UserAccounts, error)

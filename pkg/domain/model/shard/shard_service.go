@@ -13,21 +13,21 @@ type ShardService interface {
 }
 
 type shardService struct {
-	commonShardRepository commonShard.CommonShardRepository
+	commonShardMysqlRepository commonShard.CommonShardMysqlRepository
 }
 
 func NewShardService(
-	commonShardRepository commonShard.CommonShardRepository,
+	commonShardMysqlRepository commonShard.CommonShardMysqlRepository,
 ) ShardService {
 	return &shardService{
-		commonShardRepository: commonShardRepository,
+		commonShardMysqlRepository: commonShardMysqlRepository,
 	}
 }
 
 // GetShardKey シャードキーを取得して更新する
 func (s *shardService) GetShardKey(ctx context.Context) (string, error) {
 	commonShards := commonShard.NewCommonShards()
-	shardKey, err := commonShards.GetShardKey(ctx, s.commonShardRepository)
+	shardKey, err := commonShards.GetShardKey(ctx, s.commonShardMysqlRepository)
 	if err != nil {
 		return "", errors.NewMethodError("shards.GetShardKey", err)
 	}

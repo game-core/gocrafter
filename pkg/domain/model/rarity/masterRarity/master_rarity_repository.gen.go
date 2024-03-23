@@ -11,7 +11,7 @@ import (
 	"github.com/game-core/gocrafter/pkg/domain/enum"
 )
 
-type MasterRarityRepository interface {
+type MasterRarityMysqlRepository interface {
 	Find(ctx context.Context, id int64) (*MasterRarity, error)
 	FindOrNil(ctx context.Context, id int64) (*MasterRarity, error)
 	FindByRarityType(ctx context.Context, rarityType enum.RarityType) (*MasterRarity, error)

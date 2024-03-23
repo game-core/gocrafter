@@ -20,7 +20,7 @@ type masterIdleBonusDao struct {
 	Cache          *cache.Cache
 }
 
-func NewMasterIdleBonusDao(conn *database.MysqlHandler) masterIdleBonus.MasterIdleBonusRepository {
+func NewMasterIdleBonusDao(conn *database.MysqlHandler) masterIdleBonus.MasterIdleBonusMysqlRepository {
 	return &masterIdleBonusDao{
 		ReadMysqlConn:  conn.Master.ReadMysqlConn,
 		WriteMysqlConn: conn.Master.WriteMysqlConn,

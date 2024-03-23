@@ -133,95 +133,95 @@ func InitializeProfileUsecase() profile2.ProfileUsecase {
 func InitializeAccountService() account3.AccountService {
 	shardService := InitializeShardService()
 	sqlHandler := database.NewMysql()
-	userAccountRepository := userAccount.NewUserAccountDao(sqlHandler)
-	accountService := account3.NewAccountService(shardService, userAccountRepository)
+	userAccountMysqlRepository := userAccount.NewUserAccountDao(sqlHandler)
+	accountService := account3.NewAccountService(shardService, userAccountMysqlRepository)
 	return accountService
 }
 
 func InitializeActionService() action.ActionService {
 	sqlHandler := database.NewMysql()
-	masterActionRepository := masterAction.NewMasterActionDao(sqlHandler)
-	masterActionRunRepository := masterActionRun.NewMasterActionRunDao(sqlHandler)
-	masterActionStepRepository := masterActionStep.NewMasterActionStepDao(sqlHandler)
-	masterActionTriggerRepository := masterActionTrigger.NewMasterActionTriggerDao(sqlHandler)
-	userActionRepository := userAction.NewUserActionDao(sqlHandler)
-	actionService := action.NewActionService(masterActionRepository, masterActionRunRepository, masterActionStepRepository, masterActionTriggerRepository, userActionRepository)
+	masterActionMysqlRepository := masterAction.NewMasterActionDao(sqlHandler)
+	masterActionRunMysqlRepository := masterActionRun.NewMasterActionRunDao(sqlHandler)
+	masterActionStepMysqlRepository := masterActionStep.NewMasterActionStepDao(sqlHandler)
+	masterActionTriggerMysqlRepository := masterActionTrigger.NewMasterActionTriggerDao(sqlHandler)
+	userActionMysqlRepository := userAction.NewUserActionDao(sqlHandler)
+	actionService := action.NewActionService(masterActionMysqlRepository, masterActionRunMysqlRepository, masterActionStepMysqlRepository, masterActionTriggerMysqlRepository, userActionMysqlRepository)
 	return actionService
 }
 
 func InitializeFriendService() friend3.FriendService {
 	accountService := InitializeAccountService()
 	sqlHandler := database.NewMysql()
-	userFriendRepository := userFriend.NewUserFriendDao(sqlHandler)
-	friendService := friend3.NewFriendService(accountService, userFriendRepository)
+	userFriendMysqlRepository := userFriend.NewUserFriendDao(sqlHandler)
+	friendService := friend3.NewFriendService(accountService, userFriendMysqlRepository)
 	return friendService
 }
 
 func InitializeIdleBonusService() idleBonus3.IdleBonusService {
 	itemService := InitializeItemService()
 	sqlHandler := database.NewMysql()
-	userIdleBonusRepository := userIdleBonus.NewUserIdleBonusDao(sqlHandler)
-	masterIdleBonusRepository := masterIdleBonus.NewMasterIdleBonusDao(sqlHandler)
-	masterIdleBonusEventRepository := masterIdleBonusEvent.NewMasterIdleBonusEventDao(sqlHandler)
-	masterIdleBonusItemRepository := masterIdleBonusItem.NewMasterIdleBonusItemDao(sqlHandler)
-	masterIdleBonusScheduleRepository := masterIdleBonusSchedule.NewMasterIdleBonusScheduleDao(sqlHandler)
-	idleBonusService := idleBonus3.NewIdleBonusService(itemService, userIdleBonusRepository, masterIdleBonusRepository, masterIdleBonusEventRepository, masterIdleBonusItemRepository, masterIdleBonusScheduleRepository)
+	userIdleBonusMysqlRepository := userIdleBonus.NewUserIdleBonusDao(sqlHandler)
+	masterIdleBonusMysqlRepository := masterIdleBonus.NewMasterIdleBonusDao(sqlHandler)
+	masterIdleBonusEventMysqlRepository := masterIdleBonusEvent.NewMasterIdleBonusEventDao(sqlHandler)
+	masterIdleBonusItemMysqlRepository := masterIdleBonusItem.NewMasterIdleBonusItemDao(sqlHandler)
+	masterIdleBonusScheduleMysqlRepository := masterIdleBonusSchedule.NewMasterIdleBonusScheduleDao(sqlHandler)
+	idleBonusService := idleBonus3.NewIdleBonusService(itemService, userIdleBonusMysqlRepository, masterIdleBonusMysqlRepository, masterIdleBonusEventMysqlRepository, masterIdleBonusItemMysqlRepository, masterIdleBonusScheduleMysqlRepository)
 	return idleBonusService
 }
 
 func InitializeItemService() item.ItemService {
 	sqlHandler := database.NewMysql()
-	userItemBoxRepository := userItemBox.NewUserItemBoxDao(sqlHandler)
-	masterItemRepository := masterItem.NewMasterItemDao(sqlHandler)
-	itemService := item.NewItemService(userItemBoxRepository, masterItemRepository)
+	userItemBoxMysqlRepository := userItemBox.NewUserItemBoxDao(sqlHandler)
+	masterItemMysqlRepository := masterItem.NewMasterItemDao(sqlHandler)
+	itemService := item.NewItemService(userItemBoxMysqlRepository, masterItemMysqlRepository)
 	return itemService
 }
 
 func InitializeLoginBonusService() loginBonus3.LoginBonusService {
 	itemService := InitializeItemService()
 	sqlHandler := database.NewMysql()
-	userLoginBonusRepository := userLoginBonus.NewUserLoginBonusDao(sqlHandler)
-	masterLoginBonusRepository := masterLoginBonus.NewMasterLoginBonusDao(sqlHandler)
-	masterLoginBonusEventRepository := masterLoginBonusEvent.NewMasterLoginBonusEventDao(sqlHandler)
-	masterLoginBonusItemRepository := masterLoginBonusItem.NewMasterLoginBonusItemDao(sqlHandler)
-	masterLoginBonusScheduleRepository := masterLoginBonusSchedule.NewMasterLoginBonusScheduleDao(sqlHandler)
-	loginBonusService := loginBonus3.NewLoginBonusService(itemService, userLoginBonusRepository, masterLoginBonusRepository, masterLoginBonusEventRepository, masterLoginBonusItemRepository, masterLoginBonusScheduleRepository)
+	userLoginBonusMysqlRepository := userLoginBonus.NewUserLoginBonusDao(sqlHandler)
+	masterLoginBonusMysqlRepository := masterLoginBonus.NewMasterLoginBonusDao(sqlHandler)
+	masterLoginBonusEventMysqlRepository := masterLoginBonusEvent.NewMasterLoginBonusEventDao(sqlHandler)
+	masterLoginBonusItemMysqlRepository := masterLoginBonusItem.NewMasterLoginBonusItemDao(sqlHandler)
+	masterLoginBonusScheduleMysqlRepository := masterLoginBonusSchedule.NewMasterLoginBonusScheduleDao(sqlHandler)
+	loginBonusService := loginBonus3.NewLoginBonusService(itemService, userLoginBonusMysqlRepository, masterLoginBonusMysqlRepository, masterLoginBonusEventMysqlRepository, masterLoginBonusItemMysqlRepository, masterLoginBonusScheduleMysqlRepository)
 	return loginBonusService
 }
 
 func InitializeProfileService() profile3.ProfileService {
 	sqlHandler := database.NewMysql()
-	userProfileRepository := userProfile.NewUserProfileDao(sqlHandler)
-	profileService := profile3.NewProfileService(userProfileRepository)
+	userProfileMysqlRepository := userProfile.NewUserProfileDao(sqlHandler)
+	profileService := profile3.NewProfileService(userProfileMysqlRepository)
 	return profileService
 }
 
 func InitializeRarityService() rarity.RarityService {
 	sqlHandler := database.NewMysql()
-	masterRarityRepository := masterRarity.NewMasterRarityDao(sqlHandler)
-	rarityService := rarity.NewRarityService(masterRarityRepository)
+	masterRarityMysqlRepository := masterRarity.NewMasterRarityDao(sqlHandler)
+	rarityService := rarity.NewRarityService(masterRarityMysqlRepository)
 	return rarityService
 }
 
 func InitializeResourceService() resource.ResourceService {
 	sqlHandler := database.NewMysql()
-	masterResourceRepository := masterResource.NewMasterResourceDao(sqlHandler)
-	resourceService := resource.NewResourceService(masterResourceRepository)
+	masterResourceMysqlRepository := masterResource.NewMasterResourceDao(sqlHandler)
+	resourceService := resource.NewResourceService(masterResourceMysqlRepository)
 	return resourceService
 }
 
 func InitializeShardService() shard.ShardService {
 	sqlHandler := database.NewMysql()
-	commonShardRepository := commonShard.NewCommonShardDao(sqlHandler)
-	shardService := shard.NewShardService(commonShardRepository)
+	commonShardMysqlRepository := commonShard.NewCommonShardDao(sqlHandler)
+	shardService := shard.NewShardService(commonShardMysqlRepository)
 	return shardService
 }
 
 func InitializeTransactionService() transaction.TransactionService {
 	sqlHandler := database.NewMysql()
-	commonTransactionRepository := commonTransaction.NewCommonTransactionDao(sqlHandler)
-	masterTransactionRepository := masterTransaction.NewMasterTransactionDao(sqlHandler)
-	userTransactionRepository := masterTransaction2.NewUserTransactionDao(sqlHandler)
-	transactionService := transaction.NewTransactionService(commonTransactionRepository, masterTransactionRepository, userTransactionRepository)
+	commonTransactionMysqlRepository := commonTransaction.NewCommonTransactionDao(sqlHandler)
+	masterTransactionMysqlRepository := masterTransaction.NewMasterTransactionDao(sqlHandler)
+	userTransactionMysqlRepository := masterTransaction2.NewUserTransactionDao(sqlHandler)
+	transactionService := transaction.NewTransactionService(commonTransactionMysqlRepository, masterTransactionMysqlRepository, userTransactionMysqlRepository)
 	return transactionService
 }

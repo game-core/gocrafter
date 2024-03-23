@@ -16,7 +16,7 @@ type userAccountDao struct {
 	ShardMysqlConn *database.ShardMysqlConn
 }
 
-func NewUserAccountDao(conn *database.MysqlHandler) userAccount.UserAccountRepository {
+func NewUserAccountDao(conn *database.MysqlHandler) userAccount.UserAccountMysqlRepository {
 	return &userAccountDao{
 		ShardMysqlConn: conn.User,
 	}

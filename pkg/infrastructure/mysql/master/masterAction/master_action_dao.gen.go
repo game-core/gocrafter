@@ -21,7 +21,7 @@ type masterActionDao struct {
 	Cache          *cache.Cache
 }
 
-func NewMasterActionDao(conn *database.MysqlHandler) masterAction.MasterActionRepository {
+func NewMasterActionDao(conn *database.MysqlHandler) masterAction.MasterActionMysqlRepository {
 	return &masterActionDao{
 		ReadMysqlConn:  conn.Master.ReadMysqlConn,
 		WriteMysqlConn: conn.Master.WriteMysqlConn,

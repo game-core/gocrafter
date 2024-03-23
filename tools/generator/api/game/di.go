@@ -298,8 +298,8 @@ func (s *Di) serviceScript(structName string, fields []*ast.Field) string {
 				scripts = append(scripts, fmt.Sprintf("Initialize%sService,", changes.CamelToUpperCamel(name)))
 			}
 
-			if strings.Contains(fieldName, "Repository") {
-				name := strings.Replace(fieldName, "Repository", "", -1)
+			if strings.Contains(fieldName, "MysqlRepository") {
+				name := strings.Replace(fieldName, "MysqlRepository", "", -1)
 				importCode = fmt.Sprintf("%s\n%s", importCode, fmt.Sprintf("%sDao \"github.com/game-core/gocrafter/pkg/infrastructure/mysql/%s/%s\"", name, s.getDaoDir(name), name))
 				scripts = append(scripts, fmt.Sprintf("%sDao.New%sDao,", name, changes.CamelToUpperCamel(name)))
 			}

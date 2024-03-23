@@ -21,25 +21,25 @@ type FriendService interface {
 }
 
 type friendService struct {
-	accountService       account.AccountService
-	userFriendRepository userFriend.UserFriendRepository
+	accountService            account.AccountService
+	userFriendMysqlRepository userFriend.UserFriendMysqlRepository
 }
 
 func NewFriendService(
 	accountService account.AccountService,
-	userFriendRepository userFriend.UserFriendRepository,
+	userFriendMysqlRepository userFriend.UserFriendMysqlRepository,
 ) FriendService {
 	return &friendService{
-		accountService:       accountService,
-		userFriendRepository: userFriendRepository,
+		accountService:            accountService,
+		userFriendMysqlRepository: userFriendMysqlRepository,
 	}
 }
 
 // Get フレンドを取得する
 func (s *friendService) Get(ctx context.Context, req *FriendGetRequest) (*FriendGetResponse, error) {
-	userFriendModels, err := s.userFriendRepository.FindList(ctx, req.UserId)
+	userFriendModels, err := s.userFriendMysqlRepository.FindList(ctx, req.UserId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.userFriendRepository.FindList", err)
+		return nil, errors.NewMethodError("s.userFriendMysqlRepository.FindList", err)
 	}
 
 	return SetFriendGetResponse(userFriendModels), nil
@@ -51,22 +51,22 @@ func (s *friendService) Send(ctx context.Context, txs map[string]*gorm.DB, req *
 		return nil, errors.NewMethodError("s.accountService.Check", err)
 	}
 
-	userFriendModel, err := s.userFriendRepository.FindOrNil(ctx, req.UserId, req.FriendUserId)
+	userFriendModel, err := s.userFriendMysqlRepository.FindOrNil(ctx, req.UserId, req.FriendUserId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.userFriendRepository.FindOrNil", err)
+		return nil, errors.NewMethodError("s.userFriendMysqlRepository.FindOrNil", err)
 	}
 
 	if userFriendModel != nil {
 		return nil, errors.NewError("already applied")
 	}
 
-	if _, err := s.userFriendRepository.Create(ctx, txs[req.FriendUserId], userFriend.SetUserFriend(req.FriendUserId, req.UserId, enum.FriendType_NotApproved)); err != nil {
-		return nil, errors.NewMethodError("s.userFriendRepository.Create", err)
+	if _, err := s.userFriendMysqlRepository.Create(ctx, txs[req.FriendUserId], userFriend.SetUserFriend(req.FriendUserId, req.UserId, enum.FriendType_NotApproved)); err != nil {
+		return nil, errors.NewMethodError("s.userFriendMysqlRepository.Create", err)
 	}
 
-	result, err := s.userFriendRepository.Create(ctx, txs[req.UserId], userFriend.SetUserFriend(req.UserId, req.FriendUserId, enum.FriendType_Applying))
+	result, err := s.userFriendMysqlRepository.Create(ctx, txs[req.UserId], userFriend.SetUserFriend(req.UserId, req.FriendUserId, enum.FriendType_Applying))
 	if err != nil {
-		return nil, errors.NewMethodError("s.userFriendRepository.Create", err)
+		return nil, errors.NewMethodError("s.userFriendMysqlRepository.Create", err)
 	}
 
 	return SetFriendSendResponse(result), nil
@@ -74,22 +74,22 @@ func (s *friendService) Send(ctx context.Context, txs map[string]*gorm.DB, req *
 
 // Approve フレンド申請を承認する
 func (s *friendService) Approve(ctx context.Context, txs map[string]*gorm.DB, req *FriendApproveRequest) (*FriendApproveResponse, error) {
-	userFriendModel, err := s.userFriendRepository.FindOrNil(ctx, req.UserId, req.FriendUserId)
+	userFriendModel, err := s.userFriendMysqlRepository.FindOrNil(ctx, req.UserId, req.FriendUserId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.userFriendRepository.FindOrNil", err)
+		return nil, errors.NewMethodError("s.userFriendMysqlRepository.FindOrNil", err)
 	}
 
 	if userFriendModel == nil || userFriendModel.FriendType != enum.FriendType_NotApproved {
 		return nil, errors.NewError("not applied")
 	}
 
-	if _, err := s.userFriendRepository.Update(ctx, txs[req.FriendUserId], userFriend.SetUserFriend(req.FriendUserId, req.UserId, enum.FriendType_Approved)); err != nil {
-		return nil, errors.NewMethodError("s.userFriendRepository.Update", err)
+	if _, err := s.userFriendMysqlRepository.Update(ctx, txs[req.FriendUserId], userFriend.SetUserFriend(req.FriendUserId, req.UserId, enum.FriendType_Approved)); err != nil {
+		return nil, errors.NewMethodError("s.userFriendMysqlRepository.Update", err)
 	}
 
-	result, err := s.userFriendRepository.Update(ctx, txs[req.UserId], userFriend.SetUserFriend(req.UserId, req.FriendUserId, enum.FriendType_Approved))
+	result, err := s.userFriendMysqlRepository.Update(ctx, txs[req.UserId], userFriend.SetUserFriend(req.UserId, req.FriendUserId, enum.FriendType_Approved))
 	if err != nil {
-		return nil, errors.NewMethodError("s.userFriendRepository.Update", err)
+		return nil, errors.NewMethodError("s.userFriendMysqlRepository.Update", err)
 	}
 
 	return SetFriendApproveResponse(result), nil
@@ -97,21 +97,21 @@ func (s *friendService) Approve(ctx context.Context, txs map[string]*gorm.DB, re
 
 // Disapprove フレンド申請を拒否する
 func (s *friendService) Disapprove(ctx context.Context, txs map[string]*gorm.DB, req *FriendDisapproveRequest) (*FriendDisapproveResponse, error) {
-	userFriendModel, err := s.userFriendRepository.FindOrNil(ctx, req.UserId, req.FriendUserId)
+	userFriendModel, err := s.userFriendMysqlRepository.FindOrNil(ctx, req.UserId, req.FriendUserId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.userFriendRepository.FindOrNil", err)
+		return nil, errors.NewMethodError("s.userFriendMysqlRepository.FindOrNil", err)
 	}
 
 	if userFriendModel == nil || userFriendModel.FriendType != enum.FriendType_NotApproved {
 		return nil, errors.NewError("not applied")
 	}
 
-	if err := s.userFriendRepository.Delete(ctx, txs[req.FriendUserId], userFriend.SetUserFriend(req.FriendUserId, req.UserId, enum.FriendType_NotApproved)); err != nil {
-		return nil, errors.NewMethodError("s.userFriendRepository.Delete", err)
+	if err := s.userFriendMysqlRepository.Delete(ctx, txs[req.FriendUserId], userFriend.SetUserFriend(req.FriendUserId, req.UserId, enum.FriendType_NotApproved)); err != nil {
+		return nil, errors.NewMethodError("s.userFriendMysqlRepository.Delete", err)
 	}
 
-	if err := s.userFriendRepository.Delete(ctx, txs[req.UserId], userFriend.SetUserFriend(req.UserId, req.FriendUserId, enum.FriendType_NotApproved)); err != nil {
-		return nil, errors.NewMethodError("s.userFriendRepository.Delete", err)
+	if err := s.userFriendMysqlRepository.Delete(ctx, txs[req.UserId], userFriend.SetUserFriend(req.UserId, req.FriendUserId, enum.FriendType_NotApproved)); err != nil {
+		return nil, errors.NewMethodError("s.userFriendMysqlRepository.Delete", err)
 	}
 
 	return SetFriendDisapproveResponse(userFriend.SetUserFriend(req.UserId, req.FriendUserId, enum.FriendType_Disapproved)), nil
@@ -119,21 +119,21 @@ func (s *friendService) Disapprove(ctx context.Context, txs map[string]*gorm.DB,
 
 // Delete フレンドを削除する
 func (s *friendService) Delete(ctx context.Context, txs map[string]*gorm.DB, req *FriendDeleteRequest) (*FriendDeleteResponse, error) {
-	userFriendModel, err := s.userFriendRepository.FindOrNil(ctx, req.UserId, req.FriendUserId)
+	userFriendModel, err := s.userFriendMysqlRepository.FindOrNil(ctx, req.UserId, req.FriendUserId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.userFriendRepository.FindOrNil", err)
+		return nil, errors.NewMethodError("s.userFriendMysqlRepository.FindOrNil", err)
 	}
 
 	if userFriendModel == nil || userFriendModel.FriendType != enum.FriendType_Approved {
 		return nil, errors.NewError("not friend")
 	}
 
-	if err := s.userFriendRepository.Delete(ctx, txs[req.FriendUserId], userFriend.SetUserFriend(req.FriendUserId, req.UserId, enum.FriendType_Approved)); err != nil {
-		return nil, errors.NewMethodError("s.userFriendRepository.Delete", err)
+	if err := s.userFriendMysqlRepository.Delete(ctx, txs[req.FriendUserId], userFriend.SetUserFriend(req.FriendUserId, req.UserId, enum.FriendType_Approved)); err != nil {
+		return nil, errors.NewMethodError("s.userFriendMysqlRepository.Delete", err)
 	}
 
-	if err := s.userFriendRepository.Delete(ctx, txs[req.UserId], userFriend.SetUserFriend(req.UserId, req.FriendUserId, enum.FriendType_Approved)); err != nil {
-		return nil, errors.NewMethodError("s.userFriendRepository.Delete", err)
+	if err := s.userFriendMysqlRepository.Delete(ctx, txs[req.UserId], userFriend.SetUserFriend(req.UserId, req.FriendUserId, enum.FriendType_Approved)); err != nil {
+		return nil, errors.NewMethodError("s.userFriendMysqlRepository.Delete", err)
 	}
 
 	return SetFriendDeleteResponse(userFriend.SetUserFriend(req.UserId, req.FriendUserId, enum.FriendType_NotFriend)), nil

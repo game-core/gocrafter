@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type MasterLoginBonusEventRepository interface {
+type MasterLoginBonusEventMysqlRepository interface {
 	Find(ctx context.Context, id int64) (*MasterLoginBonusEvent, error)
 	FindOrNil(ctx context.Context, id int64) (*MasterLoginBonusEvent, error)
 	FindList(ctx context.Context) (MasterLoginBonusEvents, error)

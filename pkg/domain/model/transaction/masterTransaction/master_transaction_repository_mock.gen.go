@@ -12,31 +12,31 @@ import (
 	gorm "gorm.io/gorm"
 )
 
-// MockMasterTransactionRepository is a mock of MasterTransactionRepository interface.
-type MockMasterTransactionRepository struct {
+// MockMasterTransactionMysqlRepository is a mock of MasterTransactionMysqlRepository interface.
+type MockMasterTransactionMysqlRepository struct {
 	ctrl     *gomock.Controller
-	recorder *MockMasterTransactionRepositoryMockRecorder
+	recorder *MockMasterTransactionMysqlRepositoryMockRecorder
 }
 
-// MockMasterTransactionRepositoryMockRecorder is the mock recorder for MockMasterTransactionRepository.
-type MockMasterTransactionRepositoryMockRecorder struct {
-	mock *MockMasterTransactionRepository
+// MockMasterTransactionMysqlRepositoryMockRecorder is the mock recorder for MockMasterTransactionMysqlRepository.
+type MockMasterTransactionMysqlRepositoryMockRecorder struct {
+	mock *MockMasterTransactionMysqlRepository
 }
 
-// NewMockMasterTransactionRepository creates a new mock instance.
-func NewMockMasterTransactionRepository(ctrl *gomock.Controller) *MockMasterTransactionRepository {
-	mock := &MockMasterTransactionRepository{ctrl: ctrl}
-	mock.recorder = &MockMasterTransactionRepositoryMockRecorder{mock}
+// NewMockMasterTransactionMysqlRepository creates a new mock instance.
+func NewMockMasterTransactionMysqlRepository(ctrl *gomock.Controller) *MockMasterTransactionMysqlRepository {
+	mock := &MockMasterTransactionMysqlRepository{ctrl: ctrl}
+	mock.recorder = &MockMasterTransactionMysqlRepositoryMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockMasterTransactionRepository) EXPECT() *MockMasterTransactionRepositoryMockRecorder {
+func (m *MockMasterTransactionMysqlRepository) EXPECT() *MockMasterTransactionMysqlRepositoryMockRecorder {
 	return m.recorder
 }
 
 // Begin mocks base method.
-func (m *MockMasterTransactionRepository) Begin(ctx context.Context) (*gorm.DB, error) {
+func (m *MockMasterTransactionMysqlRepository) Begin(ctx context.Context) (*gorm.DB, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Begin", ctx)
 	ret0, _ := ret[0].(*gorm.DB)
@@ -45,13 +45,13 @@ func (m *MockMasterTransactionRepository) Begin(ctx context.Context) (*gorm.DB, 
 }
 
 // Begin indicates an expected call of Begin.
-func (mr *MockMasterTransactionRepositoryMockRecorder) Begin(ctx interface{}) *gomock.Call {
+func (mr *MockMasterTransactionMysqlRepositoryMockRecorder) Begin(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Begin", reflect.TypeOf((*MockMasterTransactionRepository)(nil).Begin), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Begin", reflect.TypeOf((*MockMasterTransactionMysqlRepository)(nil).Begin), ctx)
 }
 
 // Commit mocks base method.
-func (m *MockMasterTransactionRepository) Commit(ctx context.Context, tx *gorm.DB) error {
+func (m *MockMasterTransactionMysqlRepository) Commit(ctx context.Context, tx *gorm.DB) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Commit", ctx, tx)
 	ret0, _ := ret[0].(error)
@@ -59,13 +59,13 @@ func (m *MockMasterTransactionRepository) Commit(ctx context.Context, tx *gorm.D
 }
 
 // Commit indicates an expected call of Commit.
-func (mr *MockMasterTransactionRepositoryMockRecorder) Commit(ctx, tx interface{}) *gomock.Call {
+func (mr *MockMasterTransactionMysqlRepositoryMockRecorder) Commit(ctx, tx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Commit", reflect.TypeOf((*MockMasterTransactionRepository)(nil).Commit), ctx, tx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Commit", reflect.TypeOf((*MockMasterTransactionMysqlRepository)(nil).Commit), ctx, tx)
 }
 
 // Rollback mocks base method.
-func (m *MockMasterTransactionRepository) Rollback(ctx context.Context, tx *gorm.DB) error {
+func (m *MockMasterTransactionMysqlRepository) Rollback(ctx context.Context, tx *gorm.DB) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Rollback", ctx, tx)
 	ret0, _ := ret[0].(error)
@@ -73,7 +73,7 @@ func (m *MockMasterTransactionRepository) Rollback(ctx context.Context, tx *gorm
 }
 
 // Rollback indicates an expected call of Rollback.
-func (mr *MockMasterTransactionRepositoryMockRecorder) Rollback(ctx, tx interface{}) *gomock.Call {
+func (mr *MockMasterTransactionMysqlRepositoryMockRecorder) Rollback(ctx, tx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Rollback", reflect.TypeOf((*MockMasterTransactionRepository)(nil).Rollback), ctx, tx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Rollback", reflect.TypeOf((*MockMasterTransactionMysqlRepository)(nil).Rollback), ctx, tx)
 }

@@ -40,7 +40,7 @@
         <mxCell id="_JmauRq5uz_-VhJxKEEN-7" value="&lt;font color=&quot;#ffffff&quot; style=&quot;font-size: 25px;&quot;&gt;Service&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF99FF;strokeColor=none;" parent="1" vertex="1">
           <mxGeometry x="1080.5" y="520" width="160" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="_JmauRq5uz_-VhJxKEEN-8" value="&lt;font color=&quot;#ffffff&quot; style=&quot;font-size: 25px;&quot;&gt;Repository&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF99FF;strokeColor=none;" parent="1" vertex="1">
+        <mxCell id="_JmauRq5uz_-VhJxKEEN-8" value="&lt;font color=&quot;#ffffff&quot; style=&quot;font-size: 25px;&quot;&gt;MysqlRepository&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF99FF;strokeColor=none;" parent="1" vertex="1">
           <mxGeometry x="1360" y="520" width="160" height="40" as="geometry" />
         </mxCell>
         <mxCell id="_JmauRq5uz_-VhJxKEEN-9" value="&lt;font color=&quot;#ffffff&quot;&gt;&lt;span style=&quot;font-size: 25px;&quot;&gt;Model&lt;/span&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF99FF;strokeColor=none;" parent="1" vertex="1">
@@ -85,7 +85,7 @@
         <mxCell id="_JmauRq5uz_-VhJxKEEN-24" value="&lt;font color=&quot;#ffffff&quot; style=&quot;font-size: 25px;&quot;&gt;Service&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF99FF;strokeColor=none;" parent="1" vertex="1">
           <mxGeometry x="1080.25" y="680" width="160" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="_JmauRq5uz_-VhJxKEEN-25" value="&lt;font color=&quot;#ffffff&quot; style=&quot;font-size: 25px;&quot;&gt;Repository&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF99FF;strokeColor=none;" parent="1" vertex="1">
+        <mxCell id="_JmauRq5uz_-VhJxKEEN-25" value="&lt;font color=&quot;#ffffff&quot; style=&quot;font-size: 25px;&quot;&gt;MysqlRepository&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF99FF;strokeColor=none;" parent="1" vertex="1">
           <mxGeometry x="1359.75" y="680" width="160" height="40" as="geometry" />
         </mxCell>
         <mxCell id="_JmauRq5uz_-VhJxKEEN-26" value="&lt;font color=&quot;#ffffff&quot;&gt;&lt;span style=&quot;font-size: 25px;&quot;&gt;Model&lt;/span&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF99FF;strokeColor=none;" parent="1" vertex="1">
@@ -208,7 +208,7 @@
         <mxCell id="_JmauRq5uz_-VhJxKEEN-63" value="&lt;font color=&quot;#ffffff&quot; style=&quot;font-size: 25px;&quot;&gt;Service&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF99FF;strokeColor=none;" parent="1" vertex="1">
           <mxGeometry x="1080" y="280" width="160" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="_JmauRq5uz_-VhJxKEEN-64" value="&lt;font color=&quot;#ffffff&quot; style=&quot;font-size: 25px;&quot;&gt;Repository&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF99FF;strokeColor=none;" parent="1" vertex="1">
+        <mxCell id="_JmauRq5uz_-VhJxKEEN-64" value="&lt;font color=&quot;#ffffff&quot; style=&quot;font-size: 25px;&quot;&gt;MysqlRepository&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF99FF;strokeColor=none;" parent="1" vertex="1">
           <mxGeometry x="1359.75" y="280" width="160" height="40" as="geometry" />
         </mxCell>
         <mxCell id="_JmauRq5uz_-VhJxKEEN-65" value="&lt;font color=&quot;#ffffff&quot; style=&quot;font-size: 25px;&quot;&gt;Dao&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FF9999;strokeColor=none;" parent="1" vertex="1">

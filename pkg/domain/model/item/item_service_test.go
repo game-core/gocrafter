@@ -16,8 +16,8 @@ import (
 
 func TestNewItemService_NewItemService(t *testing.T) {
 	type args struct {
-		userItemBoxRepository userItemBox.UserItemBoxRepository
-		masterItemRepository  masterItem.MasterItemRepository
+		userItemBoxMysqlRepository userItemBox.UserItemBoxMysqlRepository
+		masterItemMysqlRepository  masterItem.MasterItemMysqlRepository
 	}
 	tests := []struct {
 		name string
@@ -27,20 +27,20 @@ func TestNewItemService_NewItemService(t *testing.T) {
 		{
 			name: "正常",
 			args: args{
-				userItemBoxRepository: nil,
-				masterItemRepository:  nil,
+				userItemBoxMysqlRepository: nil,
+				masterItemMysqlRepository:  nil,
 			},
 			want: &itemService{
-				userItemBoxRepository: nil,
-				masterItemRepository:  nil,
+				userItemBoxMysqlRepository: nil,
+				masterItemMysqlRepository:  nil,
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := NewItemService(
-				tt.args.userItemBoxRepository,
-				tt.args.masterItemRepository,
+				tt.args.userItemBoxMysqlRepository,
+				tt.args.masterItemMysqlRepository,
 			)
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewItemService() = %v, want %v", got, tt.want)
@@ -51,8 +51,8 @@ func TestNewItemService_NewItemService(t *testing.T) {
 
 func TestItemService_Create(t *testing.T) {
 	type fields struct {
-		userItemBoxRepository func(ctrl *gomock.Controller) userItemBox.UserItemBoxRepository
-		masterItemRepository  func(ctrl *gomock.Controller) masterItem.MasterItemRepository
+		userItemBoxMysqlRepository func(ctrl *gomock.Controller) userItemBox.UserItemBoxMysqlRepository
+		masterItemMysqlRepository  func(ctrl *gomock.Controller) masterItem.MasterItemMysqlRepository
 	}
 	type args struct {
 		ctx context.Context
@@ -69,8 +69,8 @@ func TestItemService_Create(t *testing.T) {
 		{
 			name: "正常：作成できる場合（既に取得したことがあるアイテム）",
 			fields: fields{
-				userItemBoxRepository: func(ctrl *gomock.Controller) userItemBox.UserItemBoxRepository {
-					m := userItemBox.NewMockUserItemBoxRepository(ctrl)
+				userItemBoxMysqlRepository: func(ctrl *gomock.Controller) userItemBox.UserItemBoxMysqlRepository {
+					m := userItemBox.NewMockUserItemBoxMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -105,8 +105,8 @@ func TestItemService_Create(t *testing.T) {
 						)
 					return m
 				},
-				masterItemRepository: func(ctrl *gomock.Controller) masterItem.MasterItemRepository {
-					m := masterItem.NewMockMasterItemRepository(ctrl)
+				masterItemMysqlRepository: func(ctrl *gomock.Controller) masterItem.MasterItemMysqlRepository {
+					m := masterItem.NewMockMasterItemMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -153,8 +153,8 @@ func TestItemService_Create(t *testing.T) {
 		{
 			name: "正常：作成できる場合（取得したことがないアイテム）",
 			fields: fields{
-				userItemBoxRepository: func(ctrl *gomock.Controller) userItemBox.UserItemBoxRepository {
-					m := userItemBox.NewMockUserItemBoxRepository(ctrl)
+				userItemBoxMysqlRepository: func(ctrl *gomock.Controller) userItemBox.UserItemBoxMysqlRepository {
+					m := userItemBox.NewMockUserItemBoxMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -185,8 +185,8 @@ func TestItemService_Create(t *testing.T) {
 						)
 					return m
 				},
-				masterItemRepository: func(ctrl *gomock.Controller) masterItem.MasterItemRepository {
-					m := masterItem.NewMockMasterItemRepository(ctrl)
+				masterItemMysqlRepository: func(ctrl *gomock.Controller) masterItem.MasterItemMysqlRepository {
+					m := masterItem.NewMockMasterItemMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -231,14 +231,14 @@ func TestItemService_Create(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.masterItemRepository.Find",
+			name: "異常：s.masterItemMysqlRepository.Find",
 			fields: fields{
-				userItemBoxRepository: func(ctrl *gomock.Controller) userItemBox.UserItemBoxRepository {
-					m := userItemBox.NewMockUserItemBoxRepository(ctrl)
+				userItemBoxMysqlRepository: func(ctrl *gomock.Controller) userItemBox.UserItemBoxMysqlRepository {
+					m := userItemBox.NewMockUserItemBoxMysqlRepository(ctrl)
 					return m
 				},
-				masterItemRepository: func(ctrl *gomock.Controller) masterItem.MasterItemRepository {
-					m := masterItem.NewMockMasterItemRepository(ctrl)
+				masterItemMysqlRepository: func(ctrl *gomock.Controller) masterItem.MasterItemMysqlRepository {
+					m := masterItem.NewMockMasterItemMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -261,13 +261,13 @@ func TestItemService_Create(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.masterItemRepository.Find", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.masterItemMysqlRepository.Find", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.userItemBoxRepository.FindOrNil",
+			name: "異常：s.userItemBoxMysqlRepository.FindOrNil",
 			fields: fields{
-				userItemBoxRepository: func(ctrl *gomock.Controller) userItemBox.UserItemBoxRepository {
-					m := userItemBox.NewMockUserItemBoxRepository(ctrl)
+				userItemBoxMysqlRepository: func(ctrl *gomock.Controller) userItemBox.UserItemBoxMysqlRepository {
+					m := userItemBox.NewMockUserItemBoxMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -280,8 +280,8 @@ func TestItemService_Create(t *testing.T) {
 						)
 					return m
 				},
-				masterItemRepository: func(ctrl *gomock.Controller) masterItem.MasterItemRepository {
-					m := masterItem.NewMockMasterItemRepository(ctrl)
+				masterItemMysqlRepository: func(ctrl *gomock.Controller) masterItem.MasterItemMysqlRepository {
+					m := masterItem.NewMockMasterItemMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -310,13 +310,13 @@ func TestItemService_Create(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userItemBoxRepository.FindOrNil", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userItemBoxMysqlRepository.FindOrNil", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.userItemBoxRepository.Update",
+			name: "異常：s.userItemBoxMysqlRepository.Update",
 			fields: fields{
-				userItemBoxRepository: func(ctrl *gomock.Controller) userItemBox.UserItemBoxRepository {
-					m := userItemBox.NewMockUserItemBoxRepository(ctrl)
+				userItemBoxMysqlRepository: func(ctrl *gomock.Controller) userItemBox.UserItemBoxMysqlRepository {
+					m := userItemBox.NewMockUserItemBoxMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -347,8 +347,8 @@ func TestItemService_Create(t *testing.T) {
 						)
 					return m
 				},
-				masterItemRepository: func(ctrl *gomock.Controller) masterItem.MasterItemRepository {
-					m := masterItem.NewMockMasterItemRepository(ctrl)
+				masterItemMysqlRepository: func(ctrl *gomock.Controller) masterItem.MasterItemMysqlRepository {
+					m := masterItem.NewMockMasterItemMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -377,13 +377,13 @@ func TestItemService_Create(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userItemBoxRepository.Update", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userItemBoxMysqlRepository.Update", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.userItemBoxRepository.Create",
+			name: "異常：s.userItemBoxMysqlRepository.Create",
 			fields: fields{
-				userItemBoxRepository: func(ctrl *gomock.Controller) userItemBox.UserItemBoxRepository {
-					m := userItemBox.NewMockUserItemBoxRepository(ctrl)
+				userItemBoxMysqlRepository: func(ctrl *gomock.Controller) userItemBox.UserItemBoxMysqlRepository {
+					m := userItemBox.NewMockUserItemBoxMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -410,8 +410,8 @@ func TestItemService_Create(t *testing.T) {
 						)
 					return m
 				},
-				masterItemRepository: func(ctrl *gomock.Controller) masterItem.MasterItemRepository {
-					m := masterItem.NewMockMasterItemRepository(ctrl)
+				masterItemMysqlRepository: func(ctrl *gomock.Controller) masterItem.MasterItemMysqlRepository {
+					m := masterItem.NewMockMasterItemMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -440,7 +440,7 @@ func TestItemService_Create(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userItemBoxRepository.Create", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userItemBoxMysqlRepository.Create", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -448,8 +448,8 @@ func TestItemService_Create(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &itemService{
-				userItemBoxRepository: tt.fields.userItemBoxRepository(ctrl),
-				masterItemRepository:  tt.fields.masterItemRepository(ctrl),
+				userItemBoxMysqlRepository: tt.fields.userItemBoxMysqlRepository(ctrl),
+				masterItemMysqlRepository:  tt.fields.masterItemMysqlRepository(ctrl),
 			}
 
 			got, err := s.Create(tt.args.ctx, tt.args.tx, tt.args.req)
@@ -466,8 +466,8 @@ func TestItemService_Create(t *testing.T) {
 
 func TestItemService_Receive(t *testing.T) {
 	type fields struct {
-		userItemBoxRepository func(ctrl *gomock.Controller) userItemBox.UserItemBoxRepository
-		masterItemRepository  func(ctrl *gomock.Controller) masterItem.MasterItemRepository
+		userItemBoxMysqlRepository func(ctrl *gomock.Controller) userItemBox.UserItemBoxMysqlRepository
+		masterItemMysqlRepository  func(ctrl *gomock.Controller) masterItem.MasterItemMysqlRepository
 	}
 	type args struct {
 		ctx context.Context
@@ -484,8 +484,8 @@ func TestItemService_Receive(t *testing.T) {
 		{
 			name: "正常：作成できる場合（取得したことがないアイテム））",
 			fields: fields{
-				userItemBoxRepository: func(ctrl *gomock.Controller) userItemBox.UserItemBoxRepository {
-					m := userItemBox.NewMockUserItemBoxRepository(ctrl)
+				userItemBoxMysqlRepository: func(ctrl *gomock.Controller) userItemBox.UserItemBoxMysqlRepository {
+					m := userItemBox.NewMockUserItemBoxMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -544,8 +544,8 @@ func TestItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterItemRepository: func(ctrl *gomock.Controller) masterItem.MasterItemRepository {
-					m := masterItem.NewMockMasterItemRepository(ctrl)
+				masterItemMysqlRepository: func(ctrl *gomock.Controller) masterItem.MasterItemMysqlRepository {
+					m := masterItem.NewMockMasterItemMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -631,8 +631,8 @@ func TestItemService_Receive(t *testing.T) {
 		{
 			name: "正常：作成できる場合（既に取得したことがあるアイテム）",
 			fields: fields{
-				userItemBoxRepository: func(ctrl *gomock.Controller) userItemBox.UserItemBoxRepository {
-					m := userItemBox.NewMockUserItemBoxRepository(ctrl)
+				userItemBoxMysqlRepository: func(ctrl *gomock.Controller) userItemBox.UserItemBoxMysqlRepository {
+					m := userItemBox.NewMockUserItemBoxMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -699,8 +699,8 @@ func TestItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterItemRepository: func(ctrl *gomock.Controller) masterItem.MasterItemRepository {
-					m := masterItem.NewMockMasterItemRepository(ctrl)
+				masterItemMysqlRepository: func(ctrl *gomock.Controller) masterItem.MasterItemMysqlRepository {
+					m := masterItem.NewMockMasterItemMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -786,8 +786,8 @@ func TestItemService_Receive(t *testing.T) {
 		{
 			name: "異常：s.Create",
 			fields: fields{
-				userItemBoxRepository: func(ctrl *gomock.Controller) userItemBox.UserItemBoxRepository {
-					m := userItemBox.NewMockUserItemBoxRepository(ctrl)
+				userItemBoxMysqlRepository: func(ctrl *gomock.Controller) userItemBox.UserItemBoxMysqlRepository {
+					m := userItemBox.NewMockUserItemBoxMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -818,8 +818,8 @@ func TestItemService_Receive(t *testing.T) {
 						)
 					return m
 				},
-				masterItemRepository: func(ctrl *gomock.Controller) masterItem.MasterItemRepository {
-					m := masterItem.NewMockMasterItemRepository(ctrl)
+				masterItemMysqlRepository: func(ctrl *gomock.Controller) masterItem.MasterItemMysqlRepository {
+					m := masterItem.NewMockMasterItemMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -865,7 +865,7 @@ func TestItemService_Receive(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.Create: failed to s.masterItemRepository.Find", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.Create: failed to s.masterItemMysqlRepository.Find", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -873,8 +873,8 @@ func TestItemService_Receive(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &itemService{
-				userItemBoxRepository: tt.fields.userItemBoxRepository(ctrl),
-				masterItemRepository:  tt.fields.masterItemRepository(ctrl),
+				userItemBoxMysqlRepository: tt.fields.userItemBoxMysqlRepository(ctrl),
+				masterItemMysqlRepository:  tt.fields.masterItemMysqlRepository(ctrl),
 			}
 
 			got, err := s.Receive(tt.args.ctx, tt.args.tx, tt.args.req)

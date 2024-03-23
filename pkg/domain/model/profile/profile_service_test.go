@@ -14,7 +14,7 @@ import (
 
 func TestNewProfileService_NewProfileService(t *testing.T) {
 	type args struct {
-		userProfileRepository userProfile.UserProfileRepository
+		userProfileMysqlRepository userProfile.UserProfileMysqlRepository
 	}
 	tests := []struct {
 		name string
@@ -24,17 +24,17 @@ func TestNewProfileService_NewProfileService(t *testing.T) {
 		{
 			name: "正常",
 			args: args{
-				userProfileRepository: nil,
+				userProfileMysqlRepository: nil,
 			},
 			want: &profileService{
-				userProfileRepository: nil,
+				userProfileMysqlRepository: nil,
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := NewProfileService(
-				tt.args.userProfileRepository,
+				tt.args.userProfileMysqlRepository,
 			)
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewProfileService() = %v, want %v", got, tt.want)
@@ -45,7 +45,7 @@ func TestNewProfileService_NewProfileService(t *testing.T) {
 
 func TestProfileService_Get(t *testing.T) {
 	type fields struct {
-		userProfileRepository func(ctrl *gomock.Controller) userProfile.UserProfileRepository
+		userProfileMysqlRepository func(ctrl *gomock.Controller) userProfile.UserProfileMysqlRepository
 	}
 	type args struct {
 		ctx context.Context
@@ -62,8 +62,8 @@ func TestProfileService_Get(t *testing.T) {
 		{
 			name: "正常：取得できる場合",
 			fields: fields{
-				userProfileRepository: func(ctrl *gomock.Controller) userProfile.UserProfileRepository {
-					m := userProfile.NewMockUserProfileRepository(ctrl)
+				userProfileMysqlRepository: func(ctrl *gomock.Controller) userProfile.UserProfileMysqlRepository {
+					m := userProfile.NewMockUserProfileMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -97,10 +97,10 @@ func TestProfileService_Get(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.userProfileRepository.Find",
+			name: "異常：s.userProfileMysqlRepository.Find",
 			fields: fields{
-				userProfileRepository: func(ctrl *gomock.Controller) userProfile.UserProfileRepository {
-					m := userProfile.NewMockUserProfileRepository(ctrl)
+				userProfileMysqlRepository: func(ctrl *gomock.Controller) userProfile.UserProfileMysqlRepository {
+					m := userProfile.NewMockUserProfileMysqlRepository(ctrl)
 					m.EXPECT().
 						Find(
 							nil,
@@ -121,7 +121,7 @@ func TestProfileService_Get(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userProfileRepository.Find", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userProfileMysqlRepository.Find", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -129,7 +129,7 @@ func TestProfileService_Get(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &profileService{
-				userProfileRepository: tt.fields.userProfileRepository(ctrl),
+				userProfileMysqlRepository: tt.fields.userProfileMysqlRepository(ctrl),
 			}
 
 			got, err := s.Get(tt.args.ctx, tt.args.req)
@@ -146,7 +146,7 @@ func TestProfileService_Get(t *testing.T) {
 
 func TestProfileService_Create(t *testing.T) {
 	type fields struct {
-		userProfileRepository func(ctrl *gomock.Controller) userProfile.UserProfileRepository
+		userProfileMysqlRepository func(ctrl *gomock.Controller) userProfile.UserProfileMysqlRepository
 	}
 	type args struct {
 		ctx context.Context
@@ -163,8 +163,8 @@ func TestProfileService_Create(t *testing.T) {
 		{
 			name: "正常：作成できる場合",
 			fields: fields{
-				userProfileRepository: func(ctrl *gomock.Controller) userProfile.UserProfileRepository {
-					m := userProfile.NewMockUserProfileRepository(ctrl)
+				userProfileMysqlRepository: func(ctrl *gomock.Controller) userProfile.UserProfileMysqlRepository {
+					m := userProfile.NewMockUserProfileMysqlRepository(ctrl)
 					m.EXPECT().
 						Create(
 							nil,
@@ -205,10 +205,10 @@ func TestProfileService_Create(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.userProfileRepository.Create",
+			name: "異常：s.userProfileMysqlRepository.Create",
 			fields: fields{
-				userProfileRepository: func(ctrl *gomock.Controller) userProfile.UserProfileRepository {
-					m := userProfile.NewMockUserProfileRepository(ctrl)
+				userProfileMysqlRepository: func(ctrl *gomock.Controller) userProfile.UserProfileMysqlRepository {
+					m := userProfile.NewMockUserProfileMysqlRepository(ctrl)
 					m.EXPECT().
 						Create(
 							nil,
@@ -236,7 +236,7 @@ func TestProfileService_Create(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userProfileRepository.Create", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userProfileMysqlRepository.Create", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -244,7 +244,7 @@ func TestProfileService_Create(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &profileService{
-				userProfileRepository: tt.fields.userProfileRepository(ctrl),
+				userProfileMysqlRepository: tt.fields.userProfileMysqlRepository(ctrl),
 			}
 
 			got, err := s.Create(tt.args.ctx, tt.args.tx, tt.args.req)
@@ -261,7 +261,7 @@ func TestProfileService_Create(t *testing.T) {
 
 func TestProfileService_Update(t *testing.T) {
 	type fields struct {
-		userProfileRepository func(ctrl *gomock.Controller) userProfile.UserProfileRepository
+		userProfileMysqlRepository func(ctrl *gomock.Controller) userProfile.UserProfileMysqlRepository
 	}
 	type args struct {
 		ctx context.Context
@@ -278,8 +278,8 @@ func TestProfileService_Update(t *testing.T) {
 		{
 			name: "正常：更新できる場合",
 			fields: fields{
-				userProfileRepository: func(ctrl *gomock.Controller) userProfile.UserProfileRepository {
-					m := userProfile.NewMockUserProfileRepository(ctrl)
+				userProfileMysqlRepository: func(ctrl *gomock.Controller) userProfile.UserProfileMysqlRepository {
+					m := userProfile.NewMockUserProfileMysqlRepository(ctrl)
 					m.EXPECT().
 						Update(
 							nil,
@@ -320,10 +320,10 @@ func TestProfileService_Update(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.userProfileRepository.Create",
+			name: "異常：s.userProfileMysqlRepository.Create",
 			fields: fields{
-				userProfileRepository: func(ctrl *gomock.Controller) userProfile.UserProfileRepository {
-					m := userProfile.NewMockUserProfileRepository(ctrl)
+				userProfileMysqlRepository: func(ctrl *gomock.Controller) userProfile.UserProfileMysqlRepository {
+					m := userProfile.NewMockUserProfileMysqlRepository(ctrl)
 					m.EXPECT().
 						Update(
 							nil,
@@ -351,7 +351,7 @@ func TestProfileService_Update(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userProfileRepository.Update", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userProfileMysqlRepository.Update", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -359,7 +359,7 @@ func TestProfileService_Update(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &profileService{
-				userProfileRepository: tt.fields.userProfileRepository(ctrl),
+				userProfileMysqlRepository: tt.fields.userProfileMysqlRepository(ctrl),
 			}
 
 			got, err := s.Update(tt.args.ctx, tt.args.tx, tt.args.req)

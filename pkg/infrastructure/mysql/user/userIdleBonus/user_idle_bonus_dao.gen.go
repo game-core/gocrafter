@@ -16,7 +16,7 @@ type userIdleBonusDao struct {
 	ShardMysqlConn *database.ShardMysqlConn
 }
 
-func NewUserIdleBonusDao(conn *database.MysqlHandler) userIdleBonus.UserIdleBonusRepository {
+func NewUserIdleBonusDao(conn *database.MysqlHandler) userIdleBonus.UserIdleBonusMysqlRepository {
 	return &userIdleBonusDao{
 		ShardMysqlConn: conn.User,
 	}

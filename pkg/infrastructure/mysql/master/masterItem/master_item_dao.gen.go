@@ -20,7 +20,7 @@ type masterItemDao struct {
 	Cache          *cache.Cache
 }
 
-func NewMasterItemDao(conn *database.MysqlHandler) masterItem.MasterItemRepository {
+func NewMasterItemDao(conn *database.MysqlHandler) masterItem.MasterItemMysqlRepository {
 	return &masterItemDao{
 		ReadMysqlConn:  conn.Master.ReadMysqlConn,
 		WriteMysqlConn: conn.Master.WriteMysqlConn,

@@ -17,22 +17,22 @@ type ProfileService interface {
 }
 
 type profileService struct {
-	userProfileRepository userProfile.UserProfileRepository
+	userProfileMysqlRepository userProfile.UserProfileMysqlRepository
 }
 
 func NewProfileService(
-	userProfileRepository userProfile.UserProfileRepository,
+	userProfileMysqlRepository userProfile.UserProfileMysqlRepository,
 ) ProfileService {
 	return &profileService{
-		userProfileRepository: userProfileRepository,
+		userProfileMysqlRepository: userProfileMysqlRepository,
 	}
 }
 
 // Get プロフィールを取得する
 func (s *profileService) Get(ctx context.Context, req *ProfileGetRequest) (*ProfileGetResponse, error) {
-	userProfileModel, err := s.userProfileRepository.Find(ctx, req.UserId)
+	userProfileModel, err := s.userProfileMysqlRepository.Find(ctx, req.UserId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.userProfileRepository.Find", err)
+		return nil, errors.NewMethodError("s.userProfileMysqlRepository.Find", err)
 	}
 
 	return SetProfileGetResponse(userProfileModel), nil
@@ -40,9 +40,9 @@ func (s *profileService) Get(ctx context.Context, req *ProfileGetRequest) (*Prof
 
 // Create プロフィールを作成する
 func (s *profileService) Create(ctx context.Context, tx *gorm.DB, req *ProfileCreateRequest) (*ProfileCreateResponse, error) {
-	userProfileModel, err := s.userProfileRepository.Create(ctx, tx, userProfile.SetUserProfile(req.UserId, req.Name, req.Content))
+	userProfileModel, err := s.userProfileMysqlRepository.Create(ctx, tx, userProfile.SetUserProfile(req.UserId, req.Name, req.Content))
 	if err != nil {
-		return nil, errors.NewMethodError("s.userProfileRepository.Create", err)
+		return nil, errors.NewMethodError("s.userProfileMysqlRepository.Create", err)
 	}
 
 	return SetProfileCreateResponse(userProfileModel), nil
@@ -50,9 +50,9 @@ func (s *profileService) Create(ctx context.Context, tx *gorm.DB, req *ProfileCr
 
 // Update プロフィールを更新する
 func (s *profileService) Update(ctx context.Context, tx *gorm.DB, req *ProfileUpdateRequest) (*ProfileUpdateResponse, error) {
-	userProfileModel, err := s.userProfileRepository.Update(ctx, tx, userProfile.SetUserProfile(req.UserId, req.Name, req.Content))
+	userProfileModel, err := s.userProfileMysqlRepository.Update(ctx, tx, userProfile.SetUserProfile(req.UserId, req.Name, req.Content))
 	if err != nil {
-		return nil, errors.NewMethodError("s.userProfileRepository.Update", err)
+		return nil, errors.NewMethodError("s.userProfileMysqlRepository.Update", err)
 	}
 
 	return SetProfileUpdateResponse(userProfileModel), nil

@@ -12,31 +12,31 @@ import (
 	gorm "gorm.io/gorm"
 )
 
-// MockMasterLoginBonusScheduleRepository is a mock of MasterLoginBonusScheduleRepository interface.
-type MockMasterLoginBonusScheduleRepository struct {
+// MockMasterLoginBonusScheduleMysqlRepository is a mock of MasterLoginBonusScheduleMysqlRepository interface.
+type MockMasterLoginBonusScheduleMysqlRepository struct {
 	ctrl     *gomock.Controller
-	recorder *MockMasterLoginBonusScheduleRepositoryMockRecorder
+	recorder *MockMasterLoginBonusScheduleMysqlRepositoryMockRecorder
 }
 
-// MockMasterLoginBonusScheduleRepositoryMockRecorder is the mock recorder for MockMasterLoginBonusScheduleRepository.
-type MockMasterLoginBonusScheduleRepositoryMockRecorder struct {
-	mock *MockMasterLoginBonusScheduleRepository
+// MockMasterLoginBonusScheduleMysqlRepositoryMockRecorder is the mock recorder for MockMasterLoginBonusScheduleMysqlRepository.
+type MockMasterLoginBonusScheduleMysqlRepositoryMockRecorder struct {
+	mock *MockMasterLoginBonusScheduleMysqlRepository
 }
 
-// NewMockMasterLoginBonusScheduleRepository creates a new mock instance.
-func NewMockMasterLoginBonusScheduleRepository(ctrl *gomock.Controller) *MockMasterLoginBonusScheduleRepository {
-	mock := &MockMasterLoginBonusScheduleRepository{ctrl: ctrl}
-	mock.recorder = &MockMasterLoginBonusScheduleRepositoryMockRecorder{mock}
+// NewMockMasterLoginBonusScheduleMysqlRepository creates a new mock instance.
+func NewMockMasterLoginBonusScheduleMysqlRepository(ctrl *gomock.Controller) *MockMasterLoginBonusScheduleMysqlRepository {
+	mock := &MockMasterLoginBonusScheduleMysqlRepository{ctrl: ctrl}
+	mock.recorder = &MockMasterLoginBonusScheduleMysqlRepositoryMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockMasterLoginBonusScheduleRepository) EXPECT() *MockMasterLoginBonusScheduleRepositoryMockRecorder {
+func (m *MockMasterLoginBonusScheduleMysqlRepository) EXPECT() *MockMasterLoginBonusScheduleMysqlRepositoryMockRecorder {
 	return m.recorder
 }
 
 // Create mocks base method.
-func (m_2 *MockMasterLoginBonusScheduleRepository) Create(ctx context.Context, tx *gorm.DB, m *MasterLoginBonusSchedule) (*MasterLoginBonusSchedule, error) {
+func (m_2 *MockMasterLoginBonusScheduleMysqlRepository) Create(ctx context.Context, tx *gorm.DB, m *MasterLoginBonusSchedule) (*MasterLoginBonusSchedule, error) {
 	m_2.ctrl.T.Helper()
 	ret := m_2.ctrl.Call(m_2, "Create", ctx, tx, m)
 	ret0, _ := ret[0].(*MasterLoginBonusSchedule)
@@ -45,13 +45,13 @@ func (m_2 *MockMasterLoginBonusScheduleRepository) Create(ctx context.Context, t
 }
 
 // Create indicates an expected call of Create.
-func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) Create(ctx, tx, m interface{}) *gomock.Call {
+func (mr *MockMasterLoginBonusScheduleMysqlRepositoryMockRecorder) Create(ctx, tx, m interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).Create), ctx, tx, m)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockMasterLoginBonusScheduleMysqlRepository)(nil).Create), ctx, tx, m)
 }
 
 // CreateList mocks base method.
-func (m *MockMasterLoginBonusScheduleRepository) CreateList(ctx context.Context, tx *gorm.DB, ms MasterLoginBonusSchedules) (MasterLoginBonusSchedules, error) {
+func (m *MockMasterLoginBonusScheduleMysqlRepository) CreateList(ctx context.Context, tx *gorm.DB, ms MasterLoginBonusSchedules) (MasterLoginBonusSchedules, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateList", ctx, tx, ms)
 	ret0, _ := ret[0].(MasterLoginBonusSchedules)
@@ -60,13 +60,13 @@ func (m *MockMasterLoginBonusScheduleRepository) CreateList(ctx context.Context,
 }
 
 // CreateList indicates an expected call of CreateList.
-func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) CreateList(ctx, tx, ms interface{}) *gomock.Call {
+func (mr *MockMasterLoginBonusScheduleMysqlRepositoryMockRecorder) CreateList(ctx, tx, ms interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateList", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).CreateList), ctx, tx, ms)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateList", reflect.TypeOf((*MockMasterLoginBonusScheduleMysqlRepository)(nil).CreateList), ctx, tx, ms)
 }
 
 // Delete mocks base method.
-func (m_2 *MockMasterLoginBonusScheduleRepository) Delete(ctx context.Context, tx *gorm.DB, m *MasterLoginBonusSchedule) error {
+func (m_2 *MockMasterLoginBonusScheduleMysqlRepository) Delete(ctx context.Context, tx *gorm.DB, m *MasterLoginBonusSchedule) error {
 	m_2.ctrl.T.Helper()
 	ret := m_2.ctrl.Call(m_2, "Delete", ctx, tx, m)
 	ret0, _ := ret[0].(error)
@@ -74,13 +74,13 @@ func (m_2 *MockMasterLoginBonusScheduleRepository) Delete(ctx context.Context, t
 }
 
 // Delete indicates an expected call of Delete.
-func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) Delete(ctx, tx, m interface{}) *gomock.Call {
+func (mr *MockMasterLoginBonusScheduleMysqlRepositoryMockRecorder) Delete(ctx, tx, m interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).Delete), ctx, tx, m)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockMasterLoginBonusScheduleMysqlRepository)(nil).Delete), ctx, tx, m)
 }
 
 // Find mocks base method.
-func (m *MockMasterLoginBonusScheduleRepository) Find(ctx context.Context, id int64) (*MasterLoginBonusSchedule, error) {
+func (m *MockMasterLoginBonusScheduleMysqlRepository) Find(ctx context.Context, id int64) (*MasterLoginBonusSchedule, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Find", ctx, id)
 	ret0, _ := ret[0].(*MasterLoginBonusSchedule)
@@ -89,13 +89,13 @@ func (m *MockMasterLoginBonusScheduleRepository) Find(ctx context.Context, id in
 }
 
 // Find indicates an expected call of Find.
-func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) Find(ctx, id interface{}) *gomock.Call {
+func (mr *MockMasterLoginBonusScheduleMysqlRepositoryMockRecorder) Find(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Find", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).Find), ctx, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Find", reflect.TypeOf((*MockMasterLoginBonusScheduleMysqlRepository)(nil).Find), ctx, id)
 }
 
 // FindByMasterLoginBonusId mocks base method.
-func (m *MockMasterLoginBonusScheduleRepository) FindByMasterLoginBonusId(ctx context.Context, masterLoginBonusId int64) (*MasterLoginBonusSchedule, error) {
+func (m *MockMasterLoginBonusScheduleMysqlRepository) FindByMasterLoginBonusId(ctx context.Context, masterLoginBonusId int64) (*MasterLoginBonusSchedule, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByMasterLoginBonusId", ctx, masterLoginBonusId)
 	ret0, _ := ret[0].(*MasterLoginBonusSchedule)
@@ -104,13 +104,13 @@ func (m *MockMasterLoginBonusScheduleRepository) FindByMasterLoginBonusId(ctx co
 }
 
 // FindByMasterLoginBonusId indicates an expected call of FindByMasterLoginBonusId.
-func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) FindByMasterLoginBonusId(ctx, masterLoginBonusId interface{}) *gomock.Call {
+func (mr *MockMasterLoginBonusScheduleMysqlRepositoryMockRecorder) FindByMasterLoginBonusId(ctx, masterLoginBonusId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByMasterLoginBonusId", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).FindByMasterLoginBonusId), ctx, masterLoginBonusId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByMasterLoginBonusId", reflect.TypeOf((*MockMasterLoginBonusScheduleMysqlRepository)(nil).FindByMasterLoginBonusId), ctx, masterLoginBonusId)
 }
 
 // FindByMasterLoginBonusIdAndStep mocks base method.
-func (m *MockMasterLoginBonusScheduleRepository) FindByMasterLoginBonusIdAndStep(ctx context.Context, masterLoginBonusId int64, step int32) (*MasterLoginBonusSchedule, error) {
+func (m *MockMasterLoginBonusScheduleMysqlRepository) FindByMasterLoginBonusIdAndStep(ctx context.Context, masterLoginBonusId int64, step int32) (*MasterLoginBonusSchedule, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByMasterLoginBonusIdAndStep", ctx, masterLoginBonusId, step)
 	ret0, _ := ret[0].(*MasterLoginBonusSchedule)
@@ -119,13 +119,13 @@ func (m *MockMasterLoginBonusScheduleRepository) FindByMasterLoginBonusIdAndStep
 }
 
 // FindByMasterLoginBonusIdAndStep indicates an expected call of FindByMasterLoginBonusIdAndStep.
-func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) FindByMasterLoginBonusIdAndStep(ctx, masterLoginBonusId, step interface{}) *gomock.Call {
+func (mr *MockMasterLoginBonusScheduleMysqlRepositoryMockRecorder) FindByMasterLoginBonusIdAndStep(ctx, masterLoginBonusId, step interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByMasterLoginBonusIdAndStep", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).FindByMasterLoginBonusIdAndStep), ctx, masterLoginBonusId, step)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByMasterLoginBonusIdAndStep", reflect.TypeOf((*MockMasterLoginBonusScheduleMysqlRepository)(nil).FindByMasterLoginBonusIdAndStep), ctx, masterLoginBonusId, step)
 }
 
 // FindByStep mocks base method.
-func (m *MockMasterLoginBonusScheduleRepository) FindByStep(ctx context.Context, step int32) (*MasterLoginBonusSchedule, error) {
+func (m *MockMasterLoginBonusScheduleMysqlRepository) FindByStep(ctx context.Context, step int32) (*MasterLoginBonusSchedule, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByStep", ctx, step)
 	ret0, _ := ret[0].(*MasterLoginBonusSchedule)
@@ -134,13 +134,13 @@ func (m *MockMasterLoginBonusScheduleRepository) FindByStep(ctx context.Context,
 }
 
 // FindByStep indicates an expected call of FindByStep.
-func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) FindByStep(ctx, step interface{}) *gomock.Call {
+func (mr *MockMasterLoginBonusScheduleMysqlRepositoryMockRecorder) FindByStep(ctx, step interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByStep", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).FindByStep), ctx, step)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByStep", reflect.TypeOf((*MockMasterLoginBonusScheduleMysqlRepository)(nil).FindByStep), ctx, step)
 }
 
 // FindList mocks base method.
-func (m *MockMasterLoginBonusScheduleRepository) FindList(ctx context.Context) (MasterLoginBonusSchedules, error) {
+func (m *MockMasterLoginBonusScheduleMysqlRepository) FindList(ctx context.Context) (MasterLoginBonusSchedules, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindList", ctx)
 	ret0, _ := ret[0].(MasterLoginBonusSchedules)
@@ -149,13 +149,13 @@ func (m *MockMasterLoginBonusScheduleRepository) FindList(ctx context.Context) (
 }
 
 // FindList indicates an expected call of FindList.
-func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) FindList(ctx interface{}) *gomock.Call {
+func (mr *MockMasterLoginBonusScheduleMysqlRepositoryMockRecorder) FindList(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindList", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).FindList), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindList", reflect.TypeOf((*MockMasterLoginBonusScheduleMysqlRepository)(nil).FindList), ctx)
 }
 
 // FindListByMasterLoginBonusId mocks base method.
-func (m *MockMasterLoginBonusScheduleRepository) FindListByMasterLoginBonusId(ctx context.Context, masterLoginBonusId int64) (MasterLoginBonusSchedules, error) {
+func (m *MockMasterLoginBonusScheduleMysqlRepository) FindListByMasterLoginBonusId(ctx context.Context, masterLoginBonusId int64) (MasterLoginBonusSchedules, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindListByMasterLoginBonusId", ctx, masterLoginBonusId)
 	ret0, _ := ret[0].(MasterLoginBonusSchedules)
@@ -164,13 +164,13 @@ func (m *MockMasterLoginBonusScheduleRepository) FindListByMasterLoginBonusId(ct
 }
 
 // FindListByMasterLoginBonusId indicates an expected call of FindListByMasterLoginBonusId.
-func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) FindListByMasterLoginBonusId(ctx, masterLoginBonusId interface{}) *gomock.Call {
+func (mr *MockMasterLoginBonusScheduleMysqlRepositoryMockRecorder) FindListByMasterLoginBonusId(ctx, masterLoginBonusId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindListByMasterLoginBonusId", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).FindListByMasterLoginBonusId), ctx, masterLoginBonusId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindListByMasterLoginBonusId", reflect.TypeOf((*MockMasterLoginBonusScheduleMysqlRepository)(nil).FindListByMasterLoginBonusId), ctx, masterLoginBonusId)
 }
 
 // FindListByMasterLoginBonusIdAndStep mocks base method.
-func (m *MockMasterLoginBonusScheduleRepository) FindListByMasterLoginBonusIdAndStep(ctx context.Context, masterLoginBonusId int64, step int32) (MasterLoginBonusSchedules, error) {
+func (m *MockMasterLoginBonusScheduleMysqlRepository) FindListByMasterLoginBonusIdAndStep(ctx context.Context, masterLoginBonusId int64, step int32) (MasterLoginBonusSchedules, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindListByMasterLoginBonusIdAndStep", ctx, masterLoginBonusId, step)
 	ret0, _ := ret[0].(MasterLoginBonusSchedules)
@@ -179,13 +179,13 @@ func (m *MockMasterLoginBonusScheduleRepository) FindListByMasterLoginBonusIdAnd
 }
 
 // FindListByMasterLoginBonusIdAndStep indicates an expected call of FindListByMasterLoginBonusIdAndStep.
-func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) FindListByMasterLoginBonusIdAndStep(ctx, masterLoginBonusId, step interface{}) *gomock.Call {
+func (mr *MockMasterLoginBonusScheduleMysqlRepositoryMockRecorder) FindListByMasterLoginBonusIdAndStep(ctx, masterLoginBonusId, step interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindListByMasterLoginBonusIdAndStep", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).FindListByMasterLoginBonusIdAndStep), ctx, masterLoginBonusId, step)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindListByMasterLoginBonusIdAndStep", reflect.TypeOf((*MockMasterLoginBonusScheduleMysqlRepository)(nil).FindListByMasterLoginBonusIdAndStep), ctx, masterLoginBonusId, step)
 }
 
 // FindListByStep mocks base method.
-func (m *MockMasterLoginBonusScheduleRepository) FindListByStep(ctx context.Context, step int32) (MasterLoginBonusSchedules, error) {
+func (m *MockMasterLoginBonusScheduleMysqlRepository) FindListByStep(ctx context.Context, step int32) (MasterLoginBonusSchedules, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindListByStep", ctx, step)
 	ret0, _ := ret[0].(MasterLoginBonusSchedules)
@@ -194,13 +194,13 @@ func (m *MockMasterLoginBonusScheduleRepository) FindListByStep(ctx context.Cont
 }
 
 // FindListByStep indicates an expected call of FindListByStep.
-func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) FindListByStep(ctx, step interface{}) *gomock.Call {
+func (mr *MockMasterLoginBonusScheduleMysqlRepositoryMockRecorder) FindListByStep(ctx, step interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindListByStep", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).FindListByStep), ctx, step)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindListByStep", reflect.TypeOf((*MockMasterLoginBonusScheduleMysqlRepository)(nil).FindListByStep), ctx, step)
 }
 
 // FindOrNil mocks base method.
-func (m *MockMasterLoginBonusScheduleRepository) FindOrNil(ctx context.Context, id int64) (*MasterLoginBonusSchedule, error) {
+func (m *MockMasterLoginBonusScheduleMysqlRepository) FindOrNil(ctx context.Context, id int64) (*MasterLoginBonusSchedule, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindOrNil", ctx, id)
 	ret0, _ := ret[0].(*MasterLoginBonusSchedule)
@@ -209,13 +209,13 @@ func (m *MockMasterLoginBonusScheduleRepository) FindOrNil(ctx context.Context, 
 }
 
 // FindOrNil indicates an expected call of FindOrNil.
-func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) FindOrNil(ctx, id interface{}) *gomock.Call {
+func (mr *MockMasterLoginBonusScheduleMysqlRepositoryMockRecorder) FindOrNil(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNil", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).FindOrNil), ctx, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNil", reflect.TypeOf((*MockMasterLoginBonusScheduleMysqlRepository)(nil).FindOrNil), ctx, id)
 }
 
 // FindOrNilByMasterLoginBonusId mocks base method.
-func (m *MockMasterLoginBonusScheduleRepository) FindOrNilByMasterLoginBonusId(ctx context.Context, masterLoginBonusId int64) (*MasterLoginBonusSchedule, error) {
+func (m *MockMasterLoginBonusScheduleMysqlRepository) FindOrNilByMasterLoginBonusId(ctx context.Context, masterLoginBonusId int64) (*MasterLoginBonusSchedule, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindOrNilByMasterLoginBonusId", ctx, masterLoginBonusId)
 	ret0, _ := ret[0].(*MasterLoginBonusSchedule)
@@ -224,13 +224,13 @@ func (m *MockMasterLoginBonusScheduleRepository) FindOrNilByMasterLoginBonusId(c
 }
 
 // FindOrNilByMasterLoginBonusId indicates an expected call of FindOrNilByMasterLoginBonusId.
-func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) FindOrNilByMasterLoginBonusId(ctx, masterLoginBonusId interface{}) *gomock.Call {
+func (mr *MockMasterLoginBonusScheduleMysqlRepositoryMockRecorder) FindOrNilByMasterLoginBonusId(ctx, masterLoginBonusId interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByMasterLoginBonusId", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).FindOrNilByMasterLoginBonusId), ctx, masterLoginBonusId)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByMasterLoginBonusId", reflect.TypeOf((*MockMasterLoginBonusScheduleMysqlRepository)(nil).FindOrNilByMasterLoginBonusId), ctx, masterLoginBonusId)
 }
 
 // FindOrNilByMasterLoginBonusIdAndStep mocks base method.
-func (m *MockMasterLoginBonusScheduleRepository) FindOrNilByMasterLoginBonusIdAndStep(ctx context.Context, masterLoginBonusId int64, step int32) (*MasterLoginBonusSchedule, error) {
+func (m *MockMasterLoginBonusScheduleMysqlRepository) FindOrNilByMasterLoginBonusIdAndStep(ctx context.Context, masterLoginBonusId int64, step int32) (*MasterLoginBonusSchedule, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindOrNilByMasterLoginBonusIdAndStep", ctx, masterLoginBonusId, step)
 	ret0, _ := ret[0].(*MasterLoginBonusSchedule)
@@ -239,13 +239,13 @@ func (m *MockMasterLoginBonusScheduleRepository) FindOrNilByMasterLoginBonusIdAn
 }
 
 // FindOrNilByMasterLoginBonusIdAndStep indicates an expected call of FindOrNilByMasterLoginBonusIdAndStep.
-func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) FindOrNilByMasterLoginBonusIdAndStep(ctx, masterLoginBonusId, step interface{}) *gomock.Call {
+func (mr *MockMasterLoginBonusScheduleMysqlRepositoryMockRecorder) FindOrNilByMasterLoginBonusIdAndStep(ctx, masterLoginBonusId, step interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByMasterLoginBonusIdAndStep", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).FindOrNilByMasterLoginBonusIdAndStep), ctx, masterLoginBonusId, step)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByMasterLoginBonusIdAndStep", reflect.TypeOf((*MockMasterLoginBonusScheduleMysqlRepository)(nil).FindOrNilByMasterLoginBonusIdAndStep), ctx, masterLoginBonusId, step)
 }
 
 // FindOrNilByStep mocks base method.
-func (m *MockMasterLoginBonusScheduleRepository) FindOrNilByStep(ctx context.Context, step int32) (*MasterLoginBonusSchedule, error) {
+func (m *MockMasterLoginBonusScheduleMysqlRepository) FindOrNilByStep(ctx context.Context, step int32) (*MasterLoginBonusSchedule, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindOrNilByStep", ctx, step)
 	ret0, _ := ret[0].(*MasterLoginBonusSchedule)
@@ -254,13 +254,13 @@ func (m *MockMasterLoginBonusScheduleRepository) FindOrNilByStep(ctx context.Con
 }
 
 // FindOrNilByStep indicates an expected call of FindOrNilByStep.
-func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) FindOrNilByStep(ctx, step interface{}) *gomock.Call {
+func (mr *MockMasterLoginBonusScheduleMysqlRepositoryMockRecorder) FindOrNilByStep(ctx, step interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByStep", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).FindOrNilByStep), ctx, step)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByStep", reflect.TypeOf((*MockMasterLoginBonusScheduleMysqlRepository)(nil).FindOrNilByStep), ctx, step)
 }
 
 // Update mocks base method.
-func (m_2 *MockMasterLoginBonusScheduleRepository) Update(ctx context.Context, tx *gorm.DB, m *MasterLoginBonusSchedule) (*MasterLoginBonusSchedule, error) {
+func (m_2 *MockMasterLoginBonusScheduleMysqlRepository) Update(ctx context.Context, tx *gorm.DB, m *MasterLoginBonusSchedule) (*MasterLoginBonusSchedule, error) {
 	m_2.ctrl.T.Helper()
 	ret := m_2.ctrl.Call(m_2, "Update", ctx, tx, m)
 	ret0, _ := ret[0].(*MasterLoginBonusSchedule)
@@ -269,7 +269,7 @@ func (m_2 *MockMasterLoginBonusScheduleRepository) Update(ctx context.Context, t
 }
 
 // Update indicates an expected call of Update.
-func (mr *MockMasterLoginBonusScheduleRepositoryMockRecorder) Update(ctx, tx, m interface{}) *gomock.Call {
+func (mr *MockMasterLoginBonusScheduleMysqlRepositoryMockRecorder) Update(ctx, tx, m interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockMasterLoginBonusScheduleRepository)(nil).Update), ctx, tx, m)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockMasterLoginBonusScheduleMysqlRepository)(nil).Update), ctx, tx, m)
 }

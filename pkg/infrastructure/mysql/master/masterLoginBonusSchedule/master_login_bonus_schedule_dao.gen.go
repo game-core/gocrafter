@@ -20,7 +20,7 @@ type masterLoginBonusScheduleDao struct {
 	Cache          *cache.Cache
 }
 
-func NewMasterLoginBonusScheduleDao(conn *database.MysqlHandler) masterLoginBonusSchedule.MasterLoginBonusScheduleRepository {
+func NewMasterLoginBonusScheduleDao(conn *database.MysqlHandler) masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository {
 	return &masterLoginBonusScheduleDao{
 		ReadMysqlConn:  conn.Master.ReadMysqlConn,
 		WriteMysqlConn: conn.Master.WriteMysqlConn,

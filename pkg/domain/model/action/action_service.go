@@ -23,49 +23,49 @@ type ActionService interface {
 }
 
 type actionService struct {
-	masterActionRepository        masterAction.MasterActionRepository
-	masterActionRunRepository     masterActionRun.MasterActionRunRepository
-	masterActionStepRepository    masterActionStep.MasterActionStepRepository
-	masterActionTriggerRepository masterActionTrigger.MasterActionTriggerRepository
-	userActionRepository          userAction.UserActionRepository
+	masterActionMysqlRepository        masterAction.MasterActionMysqlRepository
+	masterActionRunMysqlRepository     masterActionRun.MasterActionRunMysqlRepository
+	masterActionStepMysqlRepository    masterActionStep.MasterActionStepMysqlRepository
+	masterActionTriggerMysqlRepository masterActionTrigger.MasterActionTriggerMysqlRepository
+	userActionMysqlRepository          userAction.UserActionMysqlRepository
 }
 
 func NewActionService(
-	masterActionRepository masterAction.MasterActionRepository,
-	masterActionRunRepository masterActionRun.MasterActionRunRepository,
-	masterActionStepRepository masterActionStep.MasterActionStepRepository,
-	masterActionTriggerRepository masterActionTrigger.MasterActionTriggerRepository,
-	userActionRepository userAction.UserActionRepository,
+	masterActionMysqlRepository masterAction.MasterActionMysqlRepository,
+	masterActionRunMysqlRepository masterActionRun.MasterActionRunMysqlRepository,
+	masterActionStepMysqlRepository masterActionStep.MasterActionStepMysqlRepository,
+	masterActionTriggerMysqlRepository masterActionTrigger.MasterActionTriggerMysqlRepository,
+	userActionMysqlRepository userAction.UserActionMysqlRepository,
 ) ActionService {
 	return &actionService{
-		masterActionRepository:        masterActionRepository,
-		masterActionRunRepository:     masterActionRunRepository,
-		masterActionStepRepository:    masterActionStepRepository,
-		masterActionTriggerRepository: masterActionTriggerRepository,
-		userActionRepository:          userActionRepository,
+		masterActionMysqlRepository:        masterActionMysqlRepository,
+		masterActionRunMysqlRepository:     masterActionRunMysqlRepository,
+		masterActionStepMysqlRepository:    masterActionStepMysqlRepository,
+		masterActionTriggerMysqlRepository: masterActionTriggerMysqlRepository,
+		userActionMysqlRepository:          userActionMysqlRepository,
 	}
 }
 
 // GetMaster アクション一覧を取得する
 func (s *actionService) GetMaster(ctx context.Context) (*ActionGetMasterResponse, error) {
-	masterActionModels, err := s.masterActionRepository.FindList(ctx)
+	masterActionModels, err := s.masterActionMysqlRepository.FindList(ctx)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterActionRepository.FindList", err)
+		return nil, errors.NewMethodError("s.masterActionMysqlRepository.FindList", err)
 	}
 
-	masterActionRunModels, err := s.masterActionRunRepository.FindList(ctx)
+	masterActionRunModels, err := s.masterActionRunMysqlRepository.FindList(ctx)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterActionRunRepository.FindList", err)
+		return nil, errors.NewMethodError("s.masterActionRunMysqlRepository.FindList", err)
 	}
 
-	masterActionStepModels, err := s.masterActionStepRepository.FindList(ctx)
+	masterActionStepModels, err := s.masterActionStepMysqlRepository.FindList(ctx)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterActionStepRepository.FindList", err)
+		return nil, errors.NewMethodError("s.masterActionStepMysqlRepository.FindList", err)
 	}
 
-	masterActionTriggerModels, err := s.masterActionTriggerRepository.FindList(ctx)
+	masterActionTriggerModels, err := s.masterActionTriggerMysqlRepository.FindList(ctx)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterActionTriggerRepository.FindList", err)
+		return nil, errors.NewMethodError("s.masterActionTriggerMysqlRepository.FindList", err)
 	}
 
 	return SetActionGetMasterResponse(masterActionModels, masterActionRunModels, masterActionStepModels, masterActionTriggerModels), nil
@@ -119,17 +119,17 @@ func (s *actionService) Run(ctx context.Context, tx *gorm.DB, now time.Time, req
 // getMasterAction マスターアクションを取得する
 func (s *actionService) getMasterAction(ctx context.Context, actionStepType enum.ActionStepType, anyId *int64) (*masterAction.MasterAction, error) {
 	if anyId != nil {
-		masterActionModel, err := s.masterActionRepository.FindOrNilByActionStepTypeAndAnyId(ctx, actionStepType, anyId)
+		masterActionModel, err := s.masterActionMysqlRepository.FindOrNilByActionStepTypeAndAnyId(ctx, actionStepType, anyId)
 		if err != nil {
-			return nil, errors.NewMethodError("s.masterActionRepository.FindOrNilByActionStepTypeAndAnyId", err)
+			return nil, errors.NewMethodError("s.masterActionMysqlRepository.FindOrNilByActionStepTypeAndAnyId", err)
 		}
 
 		return masterActionModel, nil
 	}
 
-	masterActionModel, err := s.masterActionRepository.FindOrNilByActionStepType(ctx, actionStepType)
+	masterActionModel, err := s.masterActionMysqlRepository.FindOrNilByActionStepType(ctx, actionStepType)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterActionRepository.FindOrNilByActionStepType", err)
+		return nil, errors.NewMethodError("s.masterActionMysqlRepository.FindOrNilByActionStepType", err)
 	}
 
 	return masterActionModel, nil
@@ -137,9 +137,9 @@ func (s *actionService) getMasterAction(ctx context.Context, actionStepType enum
 
 // getUserAction アクションを取得する
 func (s *actionService) getUserAction(ctx context.Context, now time.Time, userId string, masterActionModel *masterAction.MasterAction) (*userAction.UserAction, error) {
-	userActionModel, err := s.userActionRepository.Find(ctx, userId, masterActionModel.Id)
+	userActionModel, err := s.userActionMysqlRepository.Find(ctx, userId, masterActionModel.Id)
 	if err != nil {
-		return nil, errors.NewMethodError("s.userActionRepository.Find", err)
+		return nil, errors.NewMethodError("s.userActionMysqlRepository.Find", err)
 	}
 
 	if !userActionModel.CheckExpiration(now, masterActionModel.Expiration) {
@@ -155,9 +155,9 @@ func (s *actionService) getTriggerUserAction(ctx context.Context, now time.Time,
 		return nil, nil, nil
 	}
 
-	triggerMasterActionModel, err := s.masterActionRepository.Find(ctx, *triggerActionId)
+	triggerMasterActionModel, err := s.masterActionMysqlRepository.Find(ctx, *triggerActionId)
 	if err != nil {
-		return nil, nil, errors.NewMethodError("s.masterActionRepository.Find", err)
+		return nil, nil, errors.NewMethodError("s.masterActionMysqlRepository.Find", err)
 	}
 
 	triggerUserActionModel, err := s.getUserAction(ctx, now, userId, triggerMasterActionModel)
@@ -175,8 +175,8 @@ func (s *actionService) deleteTriggerAction(ctx context.Context, tx *gorm.DB, tr
 		case enum.ActionTriggerType_Continuation:
 			return nil
 		case enum.ActionTriggerType_Discontinuation:
-			if err := s.userActionRepository.Delete(ctx, tx, triggerUserActionModel); err != nil {
-				return errors.NewMethodError("s.userActionRepository.Delete", err)
+			if err := s.userActionMysqlRepository.Delete(ctx, tx, triggerUserActionModel); err != nil {
+				return errors.NewMethodError("s.userActionMysqlRepository.Delete", err)
 			}
 		default:
 			return errors.NewError("ActionTriggerType does not exist")
@@ -193,14 +193,14 @@ func (s *actionService) run(ctx context.Context, tx *gorm.DB, now time.Time, use
 	}
 
 	// 実行されるアクションがある場合
-	masterActionRunModels, err := s.masterActionRunRepository.FindListByActionId(ctx, masterActionModel.Id)
+	masterActionRunModels, err := s.masterActionRunMysqlRepository.FindListByActionId(ctx, masterActionModel.Id)
 	if err != nil {
-		return errors.NewMethodError("s.masterActionRunRepository.FindListByActionId", err)
+		return errors.NewMethodError("s.masterActionRunMysqlRepository.FindListByActionId", err)
 	}
 
 	for _, model := range masterActionRunModels {
 		if err := s.update(ctx, tx, userAction.SetUserAction(userId, model.ActionId, now)); err != nil {
-			return errors.NewMethodError("s.userActionRepository.Create", err)
+			return errors.NewMethodError("s.userActionMysqlRepository.Create", err)
 		}
 	}
 
@@ -209,21 +209,21 @@ func (s *actionService) run(ctx context.Context, tx *gorm.DB, now time.Time, use
 
 // update 更新する
 func (s *actionService) update(ctx context.Context, tx *gorm.DB, model *userAction.UserAction) error {
-	userActionModel, err := s.userActionRepository.FindOrNil(ctx, model.UserId, model.MasterActionId)
+	userActionModel, err := s.userActionMysqlRepository.FindOrNil(ctx, model.UserId, model.MasterActionId)
 	if err != nil {
-		return errors.NewMethodError("s.userActionRepository.FindOrNil", err)
+		return errors.NewMethodError("s.userActionMysqlRepository.FindOrNil", err)
 	}
 
 	if userActionModel != nil {
-		if _, err := s.userActionRepository.Update(ctx, tx, model); err != nil {
-			return errors.NewMethodError("s.userActionRepository.Update", err)
+		if _, err := s.userActionMysqlRepository.Update(ctx, tx, model); err != nil {
+			return errors.NewMethodError("s.userActionMysqlRepository.Update", err)
 		}
 
 		return nil
 	}
 
-	if _, err := s.userActionRepository.Create(ctx, tx, model); err != nil {
-		return errors.NewMethodError("s.userActionRepository.Create", err)
+	if _, err := s.userActionMysqlRepository.Create(ctx, tx, model); err != nil {
+		return errors.NewMethodError("s.userActionMysqlRepository.Create", err)
 	}
 
 	return nil

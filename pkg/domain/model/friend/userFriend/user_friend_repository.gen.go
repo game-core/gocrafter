@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type UserFriendRepository interface {
+type UserFriendMysqlRepository interface {
 	Find(ctx context.Context, userId string, friendUserId string) (*UserFriend, error)
 	FindOrNil(ctx context.Context, userId string, friendUserId string) (*UserFriend, error)
 	FindList(ctx context.Context, userId string) (UserFriends, error)

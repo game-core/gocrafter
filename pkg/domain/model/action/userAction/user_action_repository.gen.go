@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type UserActionRepository interface {
+type UserActionMysqlRepository interface {
 	Find(ctx context.Context, userId string, masterActionId int64) (*UserAction, error)
 	FindOrNil(ctx context.Context, userId string, masterActionId int64) (*UserAction, error)
 	FindList(ctx context.Context, userId string) (UserActions, error)

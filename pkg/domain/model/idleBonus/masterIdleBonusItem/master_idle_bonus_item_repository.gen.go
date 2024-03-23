@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type MasterIdleBonusItemRepository interface {
+type MasterIdleBonusItemMysqlRepository interface {
 	Find(ctx context.Context, id int64) (*MasterIdleBonusItem, error)
 	FindOrNil(ctx context.Context, id int64) (*MasterIdleBonusItem, error)
 	FindByMasterIdleBonusScheduleId(ctx context.Context, masterIdleBonusScheduleId int64) (*MasterIdleBonusItem, error)

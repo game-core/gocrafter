@@ -23,37 +23,37 @@ type LoginBonusService interface {
 }
 
 type loginBonusService struct {
-	itemService                        item.ItemService
-	userLoginBonusRepository           userLoginBonus.UserLoginBonusRepository
-	masterLoginBonusRepository         masterLoginBonus.MasterLoginBonusRepository
-	masterLoginBonusEventRepository    masterLoginBonusEvent.MasterLoginBonusEventRepository
-	masterLoginBonusItemRepository     masterLoginBonusItem.MasterLoginBonusItemRepository
-	masterLoginBonusScheduleRepository masterLoginBonusSchedule.MasterLoginBonusScheduleRepository
+	itemService                             item.ItemService
+	userLoginBonusMysqlRepository           userLoginBonus.UserLoginBonusMysqlRepository
+	masterLoginBonusMysqlRepository         masterLoginBonus.MasterLoginBonusMysqlRepository
+	masterLoginBonusEventMysqlRepository    masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository
+	masterLoginBonusItemMysqlRepository     masterLoginBonusItem.MasterLoginBonusItemMysqlRepository
+	masterLoginBonusScheduleMysqlRepository masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository
 }
 
 func NewLoginBonusService(
 	itemService item.ItemService,
-	userLoginBonusRepository userLoginBonus.UserLoginBonusRepository,
-	masterLoginBonusRepository masterLoginBonus.MasterLoginBonusRepository,
-	masterLoginBonusEventRepository masterLoginBonusEvent.MasterLoginBonusEventRepository,
-	masterLoginBonusItemRepository masterLoginBonusItem.MasterLoginBonusItemRepository,
-	masterLoginBonusScheduleRepository masterLoginBonusSchedule.MasterLoginBonusScheduleRepository,
+	userLoginBonusMysqlRepository userLoginBonus.UserLoginBonusMysqlRepository,
+	masterLoginBonusMysqlRepository masterLoginBonus.MasterLoginBonusMysqlRepository,
+	masterLoginBonusEventMysqlRepository masterLoginBonusEvent.MasterLoginBonusEventMysqlRepository,
+	masterLoginBonusItemMysqlRepository masterLoginBonusItem.MasterLoginBonusItemMysqlRepository,
+	masterLoginBonusScheduleMysqlRepository masterLoginBonusSchedule.MasterLoginBonusScheduleMysqlRepository,
 ) LoginBonusService {
 	return &loginBonusService{
-		itemService:                        itemService,
-		userLoginBonusRepository:           userLoginBonusRepository,
-		masterLoginBonusRepository:         masterLoginBonusRepository,
-		masterLoginBonusEventRepository:    masterLoginBonusEventRepository,
-		masterLoginBonusItemRepository:     masterLoginBonusItemRepository,
-		masterLoginBonusScheduleRepository: masterLoginBonusScheduleRepository,
+		itemService:                             itemService,
+		userLoginBonusMysqlRepository:           userLoginBonusMysqlRepository,
+		masterLoginBonusMysqlRepository:         masterLoginBonusMysqlRepository,
+		masterLoginBonusEventMysqlRepository:    masterLoginBonusEventMysqlRepository,
+		masterLoginBonusItemMysqlRepository:     masterLoginBonusItemMysqlRepository,
+		masterLoginBonusScheduleMysqlRepository: masterLoginBonusScheduleMysqlRepository,
 	}
 }
 
 // GetUser ユーザーデータを取得する
 func (s *loginBonusService) GetUser(ctx context.Context, req *LoginBonusGetUserRequest) (*LoginBonusGetUserResponse, error) {
-	result, err := s.userLoginBonusRepository.FindListByUserId(ctx, req.UserId)
+	result, err := s.userLoginBonusMysqlRepository.FindListByUserId(ctx, req.UserId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.userLoginBonusRepository.FindListByUserId", err)
+		return nil, errors.NewMethodError("s.userLoginBonusMysqlRepository.FindListByUserId", err)
 	}
 
 	return SetLoginBonusGetUserResponse(result), nil
@@ -61,19 +61,19 @@ func (s *loginBonusService) GetUser(ctx context.Context, req *LoginBonusGetUserR
 
 // GetMaster マスターデータを取得する
 func (s *loginBonusService) GetMaster(ctx context.Context, req *LoginBonusGetMasterRequest) (*LoginBonusGetMasterResponse, error) {
-	masterLoginBonusModel, err := s.masterLoginBonusRepository.Find(ctx, req.MasterLoginBonusId)
+	masterLoginBonusModel, err := s.masterLoginBonusMysqlRepository.Find(ctx, req.MasterLoginBonusId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterLoginBonusRepository.Find", err)
+		return nil, errors.NewMethodError("s.masterLoginBonusMysqlRepository.Find", err)
 	}
 
-	masterLoginBonusEventModel, err := s.masterLoginBonusEventRepository.Find(ctx, masterLoginBonusModel.MasterLoginBonusEventId)
+	masterLoginBonusEventModel, err := s.masterLoginBonusEventMysqlRepository.Find(ctx, masterLoginBonusModel.MasterLoginBonusEventId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterLoginBonusEventRepository.FindByMasterLoginBonusId", err)
+		return nil, errors.NewMethodError("s.masterLoginBonusEventMysqlRepository.FindByMasterLoginBonusId", err)
 	}
 
-	masterLoginBonusScheduleModels, err := s.masterLoginBonusScheduleRepository.FindListByMasterLoginBonusId(ctx, masterLoginBonusModel.Id)
+	masterLoginBonusScheduleModels, err := s.masterLoginBonusScheduleMysqlRepository.FindListByMasterLoginBonusId(ctx, masterLoginBonusModel.Id)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterLoginBonusScheduleRepository.FindListByMasterLoginBonusId", err)
+		return nil, errors.NewMethodError("s.masterLoginBonusScheduleMysqlRepository.FindListByMasterLoginBonusId", err)
 	}
 
 	masterLoginBonusItemModels, err := s.getItems(ctx, masterLoginBonusScheduleModels)
@@ -91,9 +91,9 @@ func (s *loginBonusService) GetMaster(ctx context.Context, req *LoginBonusGetMas
 
 // Receive ログインボーナスを受け取る
 func (s *loginBonusService) Receive(ctx context.Context, tx *gorm.DB, now time.Time, req *LoginBonusReceiveRequest) (*LoginBonusReceiveResponse, error) {
-	masterLoginBonusModel, err := s.masterLoginBonusRepository.Find(ctx, req.MasterLoginBonusId)
+	masterLoginBonusModel, err := s.masterLoginBonusMysqlRepository.Find(ctx, req.MasterLoginBonusId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterLoginBonusRepository.Find", err)
+		return nil, errors.NewMethodError("s.masterLoginBonusMysqlRepository.Find", err)
 	}
 
 	masterLoginBonusEventModel, err := s.getEvent(ctx, now, masterLoginBonusModel.MasterLoginBonusEventId)
@@ -106,14 +106,14 @@ func (s *loginBonusService) Receive(ctx context.Context, tx *gorm.DB, now time.T
 		return nil, errors.NewMethodError("s.getSchedule", err)
 	}
 
-	masterLoginBonusItemModels, err := s.masterLoginBonusItemRepository.FindListByMasterLoginBonusScheduleId(ctx, masterLoginBonusScheduleModel.Id)
+	masterLoginBonusItemModels, err := s.masterLoginBonusItemMysqlRepository.FindListByMasterLoginBonusScheduleId(ctx, masterLoginBonusScheduleModel.Id)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterLoginBonusItemRepository.FindListByMasterLoginBonusScheduleId", err)
+		return nil, errors.NewMethodError("s.masterLoginBonusItemMysqlRepository.FindListByMasterLoginBonusScheduleId", err)
 	}
 
-	userLoginBonusModel, err := s.userLoginBonusRepository.FindOrNil(ctx, req.UserId, req.MasterLoginBonusId)
+	userLoginBonusModel, err := s.userLoginBonusMysqlRepository.FindOrNil(ctx, req.UserId, req.MasterLoginBonusId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.userLoginBonusRepository.FindOrNil", err)
+		return nil, errors.NewMethodError("s.userLoginBonusMysqlRepository.FindOrNil", err)
 	}
 	if userLoginBonusModel != nil && userLoginBonusModel.CheckReceived(masterLoginBonusEventModel.ResetHour, now) {
 		return nil, errors.NewError("already received")
@@ -139,9 +139,9 @@ func (s *loginBonusService) Receive(ctx context.Context, tx *gorm.DB, now time.T
 
 // getEvent イベントを取得する
 func (s *loginBonusService) getEvent(ctx context.Context, now time.Time, masterLoginBonusEventId int64) (*masterLoginBonusEvent.MasterLoginBonusEvent, error) {
-	masterLoginBonusEvent, err := s.masterLoginBonusEventRepository.Find(ctx, masterLoginBonusEventId)
+	masterLoginBonusEvent, err := s.masterLoginBonusEventMysqlRepository.Find(ctx, masterLoginBonusEventId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterLoginBonusEventRepository.FindByMasterLoginBonusId", err)
+		return nil, errors.NewMethodError("s.masterLoginBonusEventMysqlRepository.FindByMasterLoginBonusId", err)
 	}
 
 	// イベント期間外の場合
@@ -156,9 +156,9 @@ func (s *loginBonusService) getEvent(ctx context.Context, now time.Time, masterL
 func (s *loginBonusService) getItems(ctx context.Context, masterLoginBonusScheduleModels masterLoginBonusSchedule.MasterLoginBonusSchedules) (masterLoginBonusItem.MasterLoginBonusItems, error) {
 	masterLoginBonusItemModels := masterLoginBonusItem.NewMasterLoginBonusItems()
 	for _, schedule := range masterLoginBonusScheduleModels {
-		items, err := s.masterLoginBonusItemRepository.FindListByMasterLoginBonusScheduleId(ctx, schedule.Id)
+		items, err := s.masterLoginBonusItemMysqlRepository.FindListByMasterLoginBonusScheduleId(ctx, schedule.Id)
 		if err != nil {
-			return nil, errors.NewMethodError("s.masterLoginBonusItemRepository.FindListByMasterLoginBonusScheduleId", err)
+			return nil, errors.NewMethodError("s.masterLoginBonusItemMysqlRepository.FindListByMasterLoginBonusScheduleId", err)
 		}
 		masterLoginBonusItemModels = append(masterLoginBonusItemModels, items...)
 	}
@@ -168,9 +168,9 @@ func (s *loginBonusService) getItems(ctx context.Context, masterLoginBonusSchedu
 
 // getSchedule スケジュールを取得する
 func (s *loginBonusService) getSchedule(ctx context.Context, now time.Time, masterLoginBonusId int64, intervalHour int32, startAt time.Time) (*masterLoginBonusSchedule.MasterLoginBonusSchedule, error) {
-	masterLoginBonusSchedules, err := s.masterLoginBonusScheduleRepository.FindListByMasterLoginBonusId(ctx, masterLoginBonusId)
+	masterLoginBonusSchedules, err := s.masterLoginBonusScheduleMysqlRepository.FindListByMasterLoginBonusId(ctx, masterLoginBonusId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterLoginBonusScheduleRepository.FindListByMasterLoginBonusId", err)
+		return nil, errors.NewMethodError("s.masterLoginBonusScheduleMysqlRepository.FindListByMasterLoginBonusId", err)
 	}
 
 	return masterLoginBonusSchedules.GetScheduleByStep(masterLoginBonusSchedules.GetStep(intervalHour, startAt, now)), nil
@@ -195,17 +195,17 @@ func (s *loginBonusService) receive(ctx context.Context, tx *gorm.DB, userId str
 func (s *loginBonusService) update(ctx context.Context, tx *gorm.DB, now time.Time, userId string, masterLoginBonusId int64, userLoginBonusModel *userLoginBonus.UserLoginBonus) (*userLoginBonus.UserLoginBonus, error) {
 	if userLoginBonusModel != nil {
 		userLoginBonusModel.ReceivedAt = now
-		result, err := s.userLoginBonusRepository.Update(ctx, tx, userLoginBonusModel)
+		result, err := s.userLoginBonusMysqlRepository.Update(ctx, tx, userLoginBonusModel)
 		if err != nil {
-			return nil, errors.NewMethodError("s.userLoginBonusRepository.Update", err)
+			return nil, errors.NewMethodError("s.userLoginBonusMysqlRepository.Update", err)
 		}
 
 		return result, nil
 	}
 
-	result, err := s.userLoginBonusRepository.Create(ctx, tx, userLoginBonus.SetUserLoginBonus(userId, masterLoginBonusId, now))
+	result, err := s.userLoginBonusMysqlRepository.Create(ctx, tx, userLoginBonus.SetUserLoginBonus(userId, masterLoginBonusId, now))
 	if err != nil {
-		return nil, errors.NewMethodError("s.userLoginBonusRepository.Create", err)
+		return nil, errors.NewMethodError("s.userLoginBonusMysqlRepository.Create", err)
 	}
 
 	return result, nil

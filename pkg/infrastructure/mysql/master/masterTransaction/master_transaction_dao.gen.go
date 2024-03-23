@@ -14,7 +14,7 @@ type masterTransactionDao struct {
 	WriteMysqlConn *gorm.DB
 }
 
-func NewMasterTransactionDao(conn *database.MysqlHandler) masterTransaction.MasterTransactionRepository {
+func NewMasterTransactionDao(conn *database.MysqlHandler) masterTransaction.MasterTransactionMysqlRepository {
 	return &masterTransactionDao{
 		ReadMysqlConn:  conn.Master.ReadMysqlConn,
 		WriteMysqlConn: conn.Master.WriteMysqlConn,

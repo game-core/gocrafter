@@ -15,22 +15,22 @@ type ResourceService interface {
 }
 
 type resourceService struct {
-	masterResourceRepository masterResource.MasterResourceRepository
+	masterResourceMysqlRepository masterResource.MasterResourceMysqlRepository
 }
 
 func NewResourceService(
-	masterResourceRepository masterResource.MasterResourceRepository,
+	masterResourceMysqlRepository masterResource.MasterResourceMysqlRepository,
 ) ResourceService {
 	return &resourceService{
-		masterResourceRepository: masterResourceRepository,
+		masterResourceMysqlRepository: masterResourceMysqlRepository,
 	}
 }
 
 // GetAll リソース一覧を取得する
 func (s *resourceService) GetAll(cxt context.Context) (masterResource.MasterResources, error) {
-	results, err := s.masterResourceRepository.FindList(cxt)
+	results, err := s.masterResourceMysqlRepository.FindList(cxt)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterResourceRepository.FindList", err)
+		return nil, errors.NewMethodError("s.masterResourceMysqlRepository.FindList", err)
 	}
 
 	return results, nil
@@ -38,9 +38,9 @@ func (s *resourceService) GetAll(cxt context.Context) (masterResource.MasterReso
 
 // GetByResourceType リソースを取得する
 func (s *resourceService) GetByResourceType(cxt context.Context, resourceType enum.ResourceType) (*masterResource.MasterResource, error) {
-	result, err := s.masterResourceRepository.FindByResourceType(cxt, resourceType)
+	result, err := s.masterResourceMysqlRepository.FindByResourceType(cxt, resourceType)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterResourceRepository.FindByResourceType", err)
+		return nil, errors.NewMethodError("s.masterResourceMysqlRepository.FindByResourceType", err)
 	}
 
 	return result, nil

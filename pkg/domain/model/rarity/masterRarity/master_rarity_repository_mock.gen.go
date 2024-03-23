@@ -13,31 +13,31 @@ import (
 	gorm "gorm.io/gorm"
 )
 
-// MockMasterRarityRepository is a mock of MasterRarityRepository interface.
-type MockMasterRarityRepository struct {
+// MockMasterRarityMysqlRepository is a mock of MasterRarityMysqlRepository interface.
+type MockMasterRarityMysqlRepository struct {
 	ctrl     *gomock.Controller
-	recorder *MockMasterRarityRepositoryMockRecorder
+	recorder *MockMasterRarityMysqlRepositoryMockRecorder
 }
 
-// MockMasterRarityRepositoryMockRecorder is the mock recorder for MockMasterRarityRepository.
-type MockMasterRarityRepositoryMockRecorder struct {
-	mock *MockMasterRarityRepository
+// MockMasterRarityMysqlRepositoryMockRecorder is the mock recorder for MockMasterRarityMysqlRepository.
+type MockMasterRarityMysqlRepositoryMockRecorder struct {
+	mock *MockMasterRarityMysqlRepository
 }
 
-// NewMockMasterRarityRepository creates a new mock instance.
-func NewMockMasterRarityRepository(ctrl *gomock.Controller) *MockMasterRarityRepository {
-	mock := &MockMasterRarityRepository{ctrl: ctrl}
-	mock.recorder = &MockMasterRarityRepositoryMockRecorder{mock}
+// NewMockMasterRarityMysqlRepository creates a new mock instance.
+func NewMockMasterRarityMysqlRepository(ctrl *gomock.Controller) *MockMasterRarityMysqlRepository {
+	mock := &MockMasterRarityMysqlRepository{ctrl: ctrl}
+	mock.recorder = &MockMasterRarityMysqlRepositoryMockRecorder{mock}
 	return mock
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockMasterRarityRepository) EXPECT() *MockMasterRarityRepositoryMockRecorder {
+func (m *MockMasterRarityMysqlRepository) EXPECT() *MockMasterRarityMysqlRepositoryMockRecorder {
 	return m.recorder
 }
 
 // Create mocks base method.
-func (m_2 *MockMasterRarityRepository) Create(ctx context.Context, tx *gorm.DB, m *MasterRarity) (*MasterRarity, error) {
+func (m_2 *MockMasterRarityMysqlRepository) Create(ctx context.Context, tx *gorm.DB, m *MasterRarity) (*MasterRarity, error) {
 	m_2.ctrl.T.Helper()
 	ret := m_2.ctrl.Call(m_2, "Create", ctx, tx, m)
 	ret0, _ := ret[0].(*MasterRarity)
@@ -46,13 +46,13 @@ func (m_2 *MockMasterRarityRepository) Create(ctx context.Context, tx *gorm.DB, 
 }
 
 // Create indicates an expected call of Create.
-func (mr *MockMasterRarityRepositoryMockRecorder) Create(ctx, tx, m interface{}) *gomock.Call {
+func (mr *MockMasterRarityMysqlRepositoryMockRecorder) Create(ctx, tx, m interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockMasterRarityRepository)(nil).Create), ctx, tx, m)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockMasterRarityMysqlRepository)(nil).Create), ctx, tx, m)
 }
 
 // CreateList mocks base method.
-func (m *MockMasterRarityRepository) CreateList(ctx context.Context, tx *gorm.DB, ms MasterRarities) (MasterRarities, error) {
+func (m *MockMasterRarityMysqlRepository) CreateList(ctx context.Context, tx *gorm.DB, ms MasterRarities) (MasterRarities, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateList", ctx, tx, ms)
 	ret0, _ := ret[0].(MasterRarities)
@@ -61,13 +61,13 @@ func (m *MockMasterRarityRepository) CreateList(ctx context.Context, tx *gorm.DB
 }
 
 // CreateList indicates an expected call of CreateList.
-func (mr *MockMasterRarityRepositoryMockRecorder) CreateList(ctx, tx, ms interface{}) *gomock.Call {
+func (mr *MockMasterRarityMysqlRepositoryMockRecorder) CreateList(ctx, tx, ms interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateList", reflect.TypeOf((*MockMasterRarityRepository)(nil).CreateList), ctx, tx, ms)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateList", reflect.TypeOf((*MockMasterRarityMysqlRepository)(nil).CreateList), ctx, tx, ms)
 }
 
 // Delete mocks base method.
-func (m_2 *MockMasterRarityRepository) Delete(ctx context.Context, tx *gorm.DB, m *MasterRarity) error {
+func (m_2 *MockMasterRarityMysqlRepository) Delete(ctx context.Context, tx *gorm.DB, m *MasterRarity) error {
 	m_2.ctrl.T.Helper()
 	ret := m_2.ctrl.Call(m_2, "Delete", ctx, tx, m)
 	ret0, _ := ret[0].(error)
@@ -75,13 +75,13 @@ func (m_2 *MockMasterRarityRepository) Delete(ctx context.Context, tx *gorm.DB, 
 }
 
 // Delete indicates an expected call of Delete.
-func (mr *MockMasterRarityRepositoryMockRecorder) Delete(ctx, tx, m interface{}) *gomock.Call {
+func (mr *MockMasterRarityMysqlRepositoryMockRecorder) Delete(ctx, tx, m interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockMasterRarityRepository)(nil).Delete), ctx, tx, m)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockMasterRarityMysqlRepository)(nil).Delete), ctx, tx, m)
 }
 
 // Find mocks base method.
-func (m *MockMasterRarityRepository) Find(ctx context.Context, id int64) (*MasterRarity, error) {
+func (m *MockMasterRarityMysqlRepository) Find(ctx context.Context, id int64) (*MasterRarity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Find", ctx, id)
 	ret0, _ := ret[0].(*MasterRarity)
@@ -90,13 +90,13 @@ func (m *MockMasterRarityRepository) Find(ctx context.Context, id int64) (*Maste
 }
 
 // Find indicates an expected call of Find.
-func (mr *MockMasterRarityRepositoryMockRecorder) Find(ctx, id interface{}) *gomock.Call {
+func (mr *MockMasterRarityMysqlRepositoryMockRecorder) Find(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Find", reflect.TypeOf((*MockMasterRarityRepository)(nil).Find), ctx, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Find", reflect.TypeOf((*MockMasterRarityMysqlRepository)(nil).Find), ctx, id)
 }
 
 // FindByRarityType mocks base method.
-func (m *MockMasterRarityRepository) FindByRarityType(ctx context.Context, rarityType enum.RarityType) (*MasterRarity, error) {
+func (m *MockMasterRarityMysqlRepository) FindByRarityType(ctx context.Context, rarityType enum.RarityType) (*MasterRarity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindByRarityType", ctx, rarityType)
 	ret0, _ := ret[0].(*MasterRarity)
@@ -105,13 +105,13 @@ func (m *MockMasterRarityRepository) FindByRarityType(ctx context.Context, rarit
 }
 
 // FindByRarityType indicates an expected call of FindByRarityType.
-func (mr *MockMasterRarityRepositoryMockRecorder) FindByRarityType(ctx, rarityType interface{}) *gomock.Call {
+func (mr *MockMasterRarityMysqlRepositoryMockRecorder) FindByRarityType(ctx, rarityType interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByRarityType", reflect.TypeOf((*MockMasterRarityRepository)(nil).FindByRarityType), ctx, rarityType)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByRarityType", reflect.TypeOf((*MockMasterRarityMysqlRepository)(nil).FindByRarityType), ctx, rarityType)
 }
 
 // FindList mocks base method.
-func (m *MockMasterRarityRepository) FindList(ctx context.Context) (MasterRarities, error) {
+func (m *MockMasterRarityMysqlRepository) FindList(ctx context.Context) (MasterRarities, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindList", ctx)
 	ret0, _ := ret[0].(MasterRarities)
@@ -120,13 +120,13 @@ func (m *MockMasterRarityRepository) FindList(ctx context.Context) (MasterRariti
 }
 
 // FindList indicates an expected call of FindList.
-func (mr *MockMasterRarityRepositoryMockRecorder) FindList(ctx interface{}) *gomock.Call {
+func (mr *MockMasterRarityMysqlRepositoryMockRecorder) FindList(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindList", reflect.TypeOf((*MockMasterRarityRepository)(nil).FindList), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindList", reflect.TypeOf((*MockMasterRarityMysqlRepository)(nil).FindList), ctx)
 }
 
 // FindListByRarityType mocks base method.
-func (m *MockMasterRarityRepository) FindListByRarityType(ctx context.Context, rarityType enum.RarityType) (MasterRarities, error) {
+func (m *MockMasterRarityMysqlRepository) FindListByRarityType(ctx context.Context, rarityType enum.RarityType) (MasterRarities, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindListByRarityType", ctx, rarityType)
 	ret0, _ := ret[0].(MasterRarities)
@@ -135,13 +135,13 @@ func (m *MockMasterRarityRepository) FindListByRarityType(ctx context.Context, r
 }
 
 // FindListByRarityType indicates an expected call of FindListByRarityType.
-func (mr *MockMasterRarityRepositoryMockRecorder) FindListByRarityType(ctx, rarityType interface{}) *gomock.Call {
+func (mr *MockMasterRarityMysqlRepositoryMockRecorder) FindListByRarityType(ctx, rarityType interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindListByRarityType", reflect.TypeOf((*MockMasterRarityRepository)(nil).FindListByRarityType), ctx, rarityType)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindListByRarityType", reflect.TypeOf((*MockMasterRarityMysqlRepository)(nil).FindListByRarityType), ctx, rarityType)
 }
 
 // FindOrNil mocks base method.
-func (m *MockMasterRarityRepository) FindOrNil(ctx context.Context, id int64) (*MasterRarity, error) {
+func (m *MockMasterRarityMysqlRepository) FindOrNil(ctx context.Context, id int64) (*MasterRarity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindOrNil", ctx, id)
 	ret0, _ := ret[0].(*MasterRarity)
@@ -150,13 +150,13 @@ func (m *MockMasterRarityRepository) FindOrNil(ctx context.Context, id int64) (*
 }
 
 // FindOrNil indicates an expected call of FindOrNil.
-func (mr *MockMasterRarityRepositoryMockRecorder) FindOrNil(ctx, id interface{}) *gomock.Call {
+func (mr *MockMasterRarityMysqlRepositoryMockRecorder) FindOrNil(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNil", reflect.TypeOf((*MockMasterRarityRepository)(nil).FindOrNil), ctx, id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNil", reflect.TypeOf((*MockMasterRarityMysqlRepository)(nil).FindOrNil), ctx, id)
 }
 
 // FindOrNilByRarityType mocks base method.
-func (m *MockMasterRarityRepository) FindOrNilByRarityType(ctx context.Context, rarityType enum.RarityType) (*MasterRarity, error) {
+func (m *MockMasterRarityMysqlRepository) FindOrNilByRarityType(ctx context.Context, rarityType enum.RarityType) (*MasterRarity, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "FindOrNilByRarityType", ctx, rarityType)
 	ret0, _ := ret[0].(*MasterRarity)
@@ -165,13 +165,13 @@ func (m *MockMasterRarityRepository) FindOrNilByRarityType(ctx context.Context, 
 }
 
 // FindOrNilByRarityType indicates an expected call of FindOrNilByRarityType.
-func (mr *MockMasterRarityRepositoryMockRecorder) FindOrNilByRarityType(ctx, rarityType interface{}) *gomock.Call {
+func (mr *MockMasterRarityMysqlRepositoryMockRecorder) FindOrNilByRarityType(ctx, rarityType interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByRarityType", reflect.TypeOf((*MockMasterRarityRepository)(nil).FindOrNilByRarityType), ctx, rarityType)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByRarityType", reflect.TypeOf((*MockMasterRarityMysqlRepository)(nil).FindOrNilByRarityType), ctx, rarityType)
 }
 
 // Update mocks base method.
-func (m_2 *MockMasterRarityRepository) Update(ctx context.Context, tx *gorm.DB, m *MasterRarity) (*MasterRarity, error) {
+func (m_2 *MockMasterRarityMysqlRepository) Update(ctx context.Context, tx *gorm.DB, m *MasterRarity) (*MasterRarity, error) {
 	m_2.ctrl.T.Helper()
 	ret := m_2.ctrl.Call(m_2, "Update", ctx, tx, m)
 	ret0, _ := ret[0].(*MasterRarity)
@@ -180,7 +180,7 @@ func (m_2 *MockMasterRarityRepository) Update(ctx context.Context, tx *gorm.DB, 
 }
 
 // Update indicates an expected call of Update.
-func (mr *MockMasterRarityRepositoryMockRecorder) Update(ctx, tx, m interface{}) *gomock.Call {
+func (mr *MockMasterRarityMysqlRepositoryMockRecorder) Update(ctx, tx, m interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockMasterRarityRepository)(nil).Update), ctx, tx, m)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockMasterRarityMysqlRepository)(nil).Update), ctx, tx, m)
 }

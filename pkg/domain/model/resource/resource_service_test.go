@@ -14,7 +14,7 @@ import (
 
 func TestNewResourceService_NewResourceService(t *testing.T) {
 	type args struct {
-		masterResourceRepository masterResource.MasterResourceRepository
+		masterResourceMysqlRepository masterResource.MasterResourceMysqlRepository
 	}
 	tests := []struct {
 		name string
@@ -24,17 +24,17 @@ func TestNewResourceService_NewResourceService(t *testing.T) {
 		{
 			name: "正常",
 			args: args{
-				masterResourceRepository: nil,
+				masterResourceMysqlRepository: nil,
 			},
 			want: &resourceService{
-				masterResourceRepository: nil,
+				masterResourceMysqlRepository: nil,
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := NewResourceService(
-				tt.args.masterResourceRepository,
+				tt.args.masterResourceMysqlRepository,
 			)
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewResourceService() = %v, want %v", got, tt.want)
@@ -45,7 +45,7 @@ func TestNewResourceService_NewResourceService(t *testing.T) {
 
 func TestResourceService_GetAll(t *testing.T) {
 	type fields struct {
-		masterResourceRepository func(ctrl *gomock.Controller) masterResource.MasterResourceRepository
+		masterResourceMysqlRepository func(ctrl *gomock.Controller) masterResource.MasterResourceMysqlRepository
 	}
 	type args struct {
 		ctx context.Context
@@ -60,8 +60,8 @@ func TestResourceService_GetAll(t *testing.T) {
 		{
 			name: "正常：取得できる場合",
 			fields: fields{
-				masterResourceRepository: func(ctrl *gomock.Controller) masterResource.MasterResourceRepository {
-					m := masterResource.NewMockMasterResourceRepository(ctrl)
+				masterResourceMysqlRepository: func(ctrl *gomock.Controller) masterResource.MasterResourceMysqlRepository {
+					m := masterResource.NewMockMasterResourceMysqlRepository(ctrl)
 					m.EXPECT().
 						FindList(
 							nil,
@@ -132,10 +132,10 @@ func TestResourceService_GetAll(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.masterResourceRepository.FindList",
+			name: "異常：s.masterResourceMysqlRepository.FindList",
 			fields: fields{
-				masterResourceRepository: func(ctrl *gomock.Controller) masterResource.MasterResourceRepository {
-					m := masterResource.NewMockMasterResourceRepository(ctrl)
+				masterResourceMysqlRepository: func(ctrl *gomock.Controller) masterResource.MasterResourceMysqlRepository {
+					m := masterResource.NewMockMasterResourceMysqlRepository(ctrl)
 					m.EXPECT().
 						FindList(
 							nil,
@@ -151,7 +151,7 @@ func TestResourceService_GetAll(t *testing.T) {
 				ctx: nil,
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.masterResourceRepository.FindList", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.masterResourceMysqlRepository.FindList", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -159,7 +159,7 @@ func TestResourceService_GetAll(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &resourceService{
-				masterResourceRepository: tt.fields.masterResourceRepository(ctrl),
+				masterResourceMysqlRepository: tt.fields.masterResourceMysqlRepository(ctrl),
 			}
 
 			got, err := s.GetAll(tt.args.ctx)
@@ -176,7 +176,7 @@ func TestResourceService_GetAll(t *testing.T) {
 
 func TestResourceService_GetByResourceType(t *testing.T) {
 	type fields struct {
-		masterResourceRepository func(ctrl *gomock.Controller) masterResource.MasterResourceRepository
+		masterResourceMysqlRepository func(ctrl *gomock.Controller) masterResource.MasterResourceMysqlRepository
 	}
 	type args struct {
 		ctx          context.Context
@@ -192,8 +192,8 @@ func TestResourceService_GetByResourceType(t *testing.T) {
 		{
 			name: "正常：取得できる場合",
 			fields: fields{
-				masterResourceRepository: func(ctrl *gomock.Controller) masterResource.MasterResourceRepository {
-					m := masterResource.NewMockMasterResourceRepository(ctrl)
+				masterResourceMysqlRepository: func(ctrl *gomock.Controller) masterResource.MasterResourceMysqlRepository {
+					m := masterResource.NewMockMasterResourceMysqlRepository(ctrl)
 					m.EXPECT().
 						FindByResourceType(
 							nil,
@@ -221,10 +221,10 @@ func TestResourceService_GetByResourceType(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.masterResourceRepository.FindByResourceType",
+			name: "異常：s.masterResourceMysqlRepository.FindByResourceType",
 			fields: fields{
-				masterResourceRepository: func(ctrl *gomock.Controller) masterResource.MasterResourceRepository {
-					m := masterResource.NewMockMasterResourceRepository(ctrl)
+				masterResourceMysqlRepository: func(ctrl *gomock.Controller) masterResource.MasterResourceMysqlRepository {
+					m := masterResource.NewMockMasterResourceMysqlRepository(ctrl)
 					m.EXPECT().
 						FindByResourceType(
 							nil,
@@ -241,7 +241,7 @@ func TestResourceService_GetByResourceType(t *testing.T) {
 				ctx: nil,
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.masterResourceRepository.FindByResourceType", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.masterResourceMysqlRepository.FindByResourceType", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -249,7 +249,7 @@ func TestResourceService_GetByResourceType(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &resourceService{
-				masterResourceRepository: tt.fields.masterResourceRepository(ctrl),
+				masterResourceMysqlRepository: tt.fields.masterResourceMysqlRepository(ctrl),
 			}
 
 			got, err := s.GetByResourceType(tt.args.ctx, tt.args.resourceType)

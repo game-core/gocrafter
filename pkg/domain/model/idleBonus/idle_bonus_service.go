@@ -23,37 +23,37 @@ type IdleBonusService interface {
 }
 
 type idleBonusService struct {
-	itemService                       item.ItemService
-	userIdleBonusRepository           userIdleBonus.UserIdleBonusRepository
-	masterIdleBonusRepository         masterIdleBonus.MasterIdleBonusRepository
-	masterIdleBonusEventRepository    masterIdleBonusEvent.MasterIdleBonusEventRepository
-	masterIdleBonusItemRepository     masterIdleBonusItem.MasterIdleBonusItemRepository
-	masterIdleBonusScheduleRepository masterIdleBonusSchedule.MasterIdleBonusScheduleRepository
+	itemService                            item.ItemService
+	userIdleBonusMysqlRepository           userIdleBonus.UserIdleBonusMysqlRepository
+	masterIdleBonusMysqlRepository         masterIdleBonus.MasterIdleBonusMysqlRepository
+	masterIdleBonusEventMysqlRepository    masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository
+	masterIdleBonusItemMysqlRepository     masterIdleBonusItem.MasterIdleBonusItemMysqlRepository
+	masterIdleBonusScheduleMysqlRepository masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository
 }
 
 func NewIdleBonusService(
 	itemService item.ItemService,
-	userIdleBonusRepository userIdleBonus.UserIdleBonusRepository,
-	masterIdleBonusRepository masterIdleBonus.MasterIdleBonusRepository,
-	masterIdleBonusEventRepository masterIdleBonusEvent.MasterIdleBonusEventRepository,
-	masterIdleBonusItemRepository masterIdleBonusItem.MasterIdleBonusItemRepository,
-	masterIdleBonusScheduleRepository masterIdleBonusSchedule.MasterIdleBonusScheduleRepository,
+	userIdleBonusMysqlRepository userIdleBonus.UserIdleBonusMysqlRepository,
+	masterIdleBonusMysqlRepository masterIdleBonus.MasterIdleBonusMysqlRepository,
+	masterIdleBonusEventMysqlRepository masterIdleBonusEvent.MasterIdleBonusEventMysqlRepository,
+	masterIdleBonusItemMysqlRepository masterIdleBonusItem.MasterIdleBonusItemMysqlRepository,
+	masterIdleBonusScheduleMysqlRepository masterIdleBonusSchedule.MasterIdleBonusScheduleMysqlRepository,
 ) IdleBonusService {
 	return &idleBonusService{
-		itemService:                       itemService,
-		userIdleBonusRepository:           userIdleBonusRepository,
-		masterIdleBonusRepository:         masterIdleBonusRepository,
-		masterIdleBonusEventRepository:    masterIdleBonusEventRepository,
-		masterIdleBonusItemRepository:     masterIdleBonusItemRepository,
-		masterIdleBonusScheduleRepository: masterIdleBonusScheduleRepository,
+		itemService:                            itemService,
+		userIdleBonusMysqlRepository:           userIdleBonusMysqlRepository,
+		masterIdleBonusMysqlRepository:         masterIdleBonusMysqlRepository,
+		masterIdleBonusEventMysqlRepository:    masterIdleBonusEventMysqlRepository,
+		masterIdleBonusItemMysqlRepository:     masterIdleBonusItemMysqlRepository,
+		masterIdleBonusScheduleMysqlRepository: masterIdleBonusScheduleMysqlRepository,
 	}
 }
 
 // GetUser ユーザーデータを取得する
 func (s *idleBonusService) GetUser(ctx context.Context, req *IdleBonusGetUserRequest) (*IdleBonusGetUserResponse, error) {
-	result, err := s.userIdleBonusRepository.FindListByUserId(ctx, req.UserId)
+	result, err := s.userIdleBonusMysqlRepository.FindListByUserId(ctx, req.UserId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.userIdleBonusRepository.FindListByUserId", err)
+		return nil, errors.NewMethodError("s.userIdleBonusMysqlRepository.FindListByUserId", err)
 	}
 
 	return SetIdleBonusGetUserResponse(result), nil
@@ -61,19 +61,19 @@ func (s *idleBonusService) GetUser(ctx context.Context, req *IdleBonusGetUserReq
 
 // GetMaster マスターデータを取得する
 func (s *idleBonusService) GetMaster(ctx context.Context, req *IdleBonusGetMasterRequest) (*IdleBonusGetMasterResponse, error) {
-	masterIdleBonusModel, err := s.masterIdleBonusRepository.Find(ctx, req.MasterIdleBonusId)
+	masterIdleBonusModel, err := s.masterIdleBonusMysqlRepository.Find(ctx, req.MasterIdleBonusId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterIdleBonusRepository.Find", err)
+		return nil, errors.NewMethodError("s.masterIdleBonusMysqlRepository.Find", err)
 	}
 
-	masterIdleBonusEventModel, err := s.masterIdleBonusEventRepository.Find(ctx, masterIdleBonusModel.MasterIdleBonusEventId)
+	masterIdleBonusEventModel, err := s.masterIdleBonusEventMysqlRepository.Find(ctx, masterIdleBonusModel.MasterIdleBonusEventId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterIdleBonusEventRepository.FindByMasterIdleBonusId", err)
+		return nil, errors.NewMethodError("s.masterIdleBonusEventMysqlRepository.FindByMasterIdleBonusId", err)
 	}
 
-	masterIdleBonusScheduleModels, err := s.masterIdleBonusScheduleRepository.FindListByMasterIdleBonusId(ctx, masterIdleBonusModel.Id)
+	masterIdleBonusScheduleModels, err := s.masterIdleBonusScheduleMysqlRepository.FindListByMasterIdleBonusId(ctx, masterIdleBonusModel.Id)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterIdleBonusScheduleRepository.FindListByMasterIdleBonusId", err)
+		return nil, errors.NewMethodError("s.masterIdleBonusScheduleMysqlRepository.FindListByMasterIdleBonusId", err)
 	}
 
 	masterIdleBonusItemModels, err := s.getItems(ctx, masterIdleBonusScheduleModels)
@@ -91,9 +91,9 @@ func (s *idleBonusService) GetMaster(ctx context.Context, req *IdleBonusGetMaste
 
 // Receive 放置ボーナスを受け取る
 func (s *idleBonusService) Receive(ctx context.Context, tx *gorm.DB, now time.Time, req *IdleBonusReceiveRequest) (*IdleBonusReceiveResponse, error) {
-	masterIdleBonusModel, err := s.masterIdleBonusRepository.Find(ctx, req.MasterIdleBonusId)
+	masterIdleBonusModel, err := s.masterIdleBonusMysqlRepository.Find(ctx, req.MasterIdleBonusId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterIdleBonusRepository.Find", err)
+		return nil, errors.NewMethodError("s.masterIdleBonusMysqlRepository.Find", err)
 	}
 
 	masterIdleBonusEventModel, err := s.getEvent(ctx, now, masterIdleBonusModel.MasterIdleBonusEventId)
@@ -101,14 +101,14 @@ func (s *idleBonusService) Receive(ctx context.Context, tx *gorm.DB, now time.Ti
 		return nil, errors.NewMethodError("s.getEvent", err)
 	}
 
-	userIdleBonusModel, err := s.userIdleBonusRepository.FindOrNil(ctx, req.UserId, req.MasterIdleBonusId)
+	userIdleBonusModel, err := s.userIdleBonusMysqlRepository.FindOrNil(ctx, req.UserId, req.MasterIdleBonusId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.userIdleBonusRepository.FindOrNil", err)
+		return nil, errors.NewMethodError("s.userIdleBonusMysqlRepository.FindOrNil", err)
 	}
 	if userIdleBonusModel == nil {
-		result, err := s.userIdleBonusRepository.Create(ctx, tx, userIdleBonus.SetUserIdleBonus(req.UserId, req.MasterIdleBonusId, now))
+		result, err := s.userIdleBonusMysqlRepository.Create(ctx, tx, userIdleBonus.SetUserIdleBonus(req.UserId, req.MasterIdleBonusId, now))
 		if err != nil {
-			return nil, errors.NewMethodError("s.userIdleBonusRepository.Create", err)
+			return nil, errors.NewMethodError("s.userIdleBonusMysqlRepository.Create", err)
 		}
 
 		return SetIdleBonusReceiveResponse(
@@ -150,9 +150,9 @@ func (s *idleBonusService) Receive(ctx context.Context, tx *gorm.DB, now time.Ti
 
 // getEvent イベントを取得する
 func (s *idleBonusService) getEvent(ctx context.Context, now time.Time, masterIdleBonusEventId int64) (*masterIdleBonusEvent.MasterIdleBonusEvent, error) {
-	masterIdleBonusEvent, err := s.masterIdleBonusEventRepository.Find(ctx, masterIdleBonusEventId)
+	masterIdleBonusEvent, err := s.masterIdleBonusEventMysqlRepository.Find(ctx, masterIdleBonusEventId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterIdleBonusEventRepository.FindByMasterIdleBonusId", err)
+		return nil, errors.NewMethodError("s.masterIdleBonusEventMysqlRepository.FindByMasterIdleBonusId", err)
 	}
 
 	// イベント期間外の場合
@@ -165,9 +165,9 @@ func (s *idleBonusService) getEvent(ctx context.Context, now time.Time, masterId
 
 // getSchedules スケジュール一覧を取得する
 func (s *idleBonusService) getSchedules(ctx context.Context, now time.Time, masterIdleBonusId int64, intervalHour int32, receivedAt time.Time) (masterIdleBonusSchedule.MasterIdleBonusSchedules, error) {
-	masterIdleBonusSchedules, err := s.masterIdleBonusScheduleRepository.FindListByMasterIdleBonusId(ctx, masterIdleBonusId)
+	masterIdleBonusSchedules, err := s.masterIdleBonusScheduleMysqlRepository.FindListByMasterIdleBonusId(ctx, masterIdleBonusId)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterIdleBonusScheduleRepository.FindListByMasterIdleBonusId", err)
+		return nil, errors.NewMethodError("s.masterIdleBonusScheduleMysqlRepository.FindListByMasterIdleBonusId", err)
 	}
 
 	step, err := masterIdleBonusSchedules.GetStep(intervalHour, receivedAt, now)
@@ -183,9 +183,9 @@ func (s *idleBonusService) getItems(ctx context.Context, masterIdleBonusSchedule
 	result := masterIdleBonusItem.NewMasterIdleBonusItems()
 
 	for _, masterIdleBonusScheduleModel := range masterIdleBonusScheduleModels {
-		masterIdleBonusItemModels, err := s.masterIdleBonusItemRepository.FindListByMasterIdleBonusScheduleId(ctx, masterIdleBonusScheduleModel.Id)
+		masterIdleBonusItemModels, err := s.masterIdleBonusItemMysqlRepository.FindListByMasterIdleBonusScheduleId(ctx, masterIdleBonusScheduleModel.Id)
 		if err != nil {
-			return nil, errors.NewMethodError("s.masterIdleBonusItemRepository.FindListByMasterIdleBonusScheduleId", err)
+			return nil, errors.NewMethodError("s.masterIdleBonusItemMysqlRepository.FindListByMasterIdleBonusScheduleId", err)
 		}
 
 		result = append(result, masterIdleBonusItemModels...)
@@ -212,9 +212,9 @@ func (s *idleBonusService) receive(ctx context.Context, tx *gorm.DB, userId stri
 // update ユーザーログインボーナスを更新
 func (s *idleBonusService) update(ctx context.Context, tx *gorm.DB, now time.Time, userId string, masterIdleBonusId int64, userIdleBonusModel *userIdleBonus.UserIdleBonus) (*userIdleBonus.UserIdleBonus, error) {
 	userIdleBonusModel.ReceivedAt = now
-	result, err := s.userIdleBonusRepository.Update(ctx, tx, userIdleBonusModel)
+	result, err := s.userIdleBonusMysqlRepository.Update(ctx, tx, userIdleBonusModel)
 	if err != nil {
-		return nil, errors.NewMethodError("s.userIdleBonusRepository.Update", err)
+		return nil, errors.NewMethodError("s.userIdleBonusMysqlRepository.Update", err)
 	}
 
 	return result, nil

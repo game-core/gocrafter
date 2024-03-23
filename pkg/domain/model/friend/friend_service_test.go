@@ -19,8 +19,8 @@ import (
 
 func TestNewFriendService_NewFriendService(t *testing.T) {
 	type args struct {
-		accountService       account.AccountService
-		userFriendRepository userFriend.UserFriendRepository
+		accountService            account.AccountService
+		userFriendMysqlRepository userFriend.UserFriendMysqlRepository
 	}
 	tests := []struct {
 		name string
@@ -30,11 +30,11 @@ func TestNewFriendService_NewFriendService(t *testing.T) {
 		{
 			name: "正常",
 			args: args{
-				accountService:       nil,
-				userFriendRepository: nil,
+				accountService:            nil,
+				userFriendMysqlRepository: nil,
 			},
 			want: &friendService{
-				userFriendRepository: nil,
+				userFriendMysqlRepository: nil,
 			},
 		},
 	}
@@ -42,7 +42,7 @@ func TestNewFriendService_NewFriendService(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := NewFriendService(
 				tt.args.accountService,
-				tt.args.userFriendRepository,
+				tt.args.userFriendMysqlRepository,
 			)
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewFriendService() = %v, want %v", got, tt.want)
@@ -53,7 +53,7 @@ func TestNewFriendService_NewFriendService(t *testing.T) {
 
 func TestFriendService_Get(t *testing.T) {
 	type fields struct {
-		userFriendRepository func(ctrl *gomock.Controller) userFriend.UserFriendRepository
+		userFriendMysqlRepository func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository
 	}
 	type args struct {
 		ctx context.Context
@@ -69,8 +69,8 @@ func TestFriendService_Get(t *testing.T) {
 		{
 			name: "正常：取得できる",
 			fields: fields{
-				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
-					m := userFriend.NewMockUserFriendRepository(ctrl)
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
 					m.EXPECT().
 						FindList(
 							nil,
@@ -127,10 +127,10 @@ func TestFriendService_Get(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.userFriendRepository.FindList",
+			name: "異常：s.userFriendMysqlRepository.FindList",
 			fields: fields{
-				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
-					m := userFriend.NewMockUserFriendRepository(ctrl)
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
 					m.EXPECT().
 						FindList(
 							nil,
@@ -150,7 +150,7 @@ func TestFriendService_Get(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userFriendRepository.FindList", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userFriendMysqlRepository.FindList", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -158,7 +158,7 @@ func TestFriendService_Get(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &friendService{
-				userFriendRepository: tt.fields.userFriendRepository(ctrl),
+				userFriendMysqlRepository: tt.fields.userFriendMysqlRepository(ctrl),
 			}
 
 			got, err := s.Get(tt.args.ctx, tt.args.req)
@@ -175,8 +175,8 @@ func TestFriendService_Get(t *testing.T) {
 
 func TestFriendService_Send(t *testing.T) {
 	type fields struct {
-		accountService       func(ctrl *gomock.Controller) account.AccountService
-		userFriendRepository func(ctrl *gomock.Controller) userFriend.UserFriendRepository
+		accountService            func(ctrl *gomock.Controller) account.AccountService
+		userFriendMysqlRepository func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository
 	}
 	type args struct {
 		ctx context.Context
@@ -216,8 +216,8 @@ func TestFriendService_Send(t *testing.T) {
 						)
 					return m
 				},
-				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
-					m := userFriend.NewMockUserFriendRepository(ctrl)
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -301,8 +301,8 @@ func TestFriendService_Send(t *testing.T) {
 						)
 					return m
 				},
-				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
-					m := userFriend.NewMockUserFriendRepository(ctrl)
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
 					return m
 				},
 			},
@@ -317,7 +317,7 @@ func TestFriendService_Send(t *testing.T) {
 			wantErr: errors.NewMethodError("s.accountService.Check", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.userFriendRepository.FindOrNil",
+			name: "異常：s.userFriendMysqlRepository.FindOrNil",
 			fields: fields{
 				accountService: func(ctrl *gomock.Controller) account.AccountService {
 					m := account.NewMockAccountService(ctrl)
@@ -342,8 +342,8 @@ func TestFriendService_Send(t *testing.T) {
 						)
 					return m
 				},
-				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
-					m := userFriend.NewMockUserFriendRepository(ctrl)
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -365,7 +365,7 @@ func TestFriendService_Send(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userFriendRepository.FindOrNil", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userFriendMysqlRepository.FindOrNil", errors.NewTestError()),
 		},
 		{
 			name: "異常：already applied",
@@ -393,8 +393,8 @@ func TestFriendService_Send(t *testing.T) {
 						)
 					return m
 				},
-				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
-					m := userFriend.NewMockUserFriendRepository(ctrl)
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -423,7 +423,7 @@ func TestFriendService_Send(t *testing.T) {
 			wantErr: errors.NewError("already applied"),
 		},
 		{
-			name: "異常：s.userFriendRepository.Create",
+			name: "異常：s.userFriendMysqlRepository.Create",
 			fields: fields{
 				accountService: func(ctrl *gomock.Controller) account.AccountService {
 					m := account.NewMockAccountService(ctrl)
@@ -448,8 +448,8 @@ func TestFriendService_Send(t *testing.T) {
 						)
 					return m
 				},
-				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
-					m := userFriend.NewMockUserFriendRepository(ctrl)
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -485,10 +485,10 @@ func TestFriendService_Send(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userFriendRepository.Create", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userFriendMysqlRepository.Create", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.userFriendRepository.Create",
+			name: "異常：s.userFriendMysqlRepository.Create",
 			fields: fields{
 				accountService: func(ctrl *gomock.Controller) account.AccountService {
 					m := account.NewMockAccountService(ctrl)
@@ -513,8 +513,8 @@ func TestFriendService_Send(t *testing.T) {
 						)
 					return m
 				},
-				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
-					m := userFriend.NewMockUserFriendRepository(ctrl)
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -568,7 +568,7 @@ func TestFriendService_Send(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userFriendRepository.Create", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userFriendMysqlRepository.Create", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -576,8 +576,8 @@ func TestFriendService_Send(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &friendService{
-				accountService:       tt.fields.accountService(ctrl),
-				userFriendRepository: tt.fields.userFriendRepository(ctrl),
+				accountService:            tt.fields.accountService(ctrl),
+				userFriendMysqlRepository: tt.fields.userFriendMysqlRepository(ctrl),
 			}
 
 			got, err := s.Send(tt.args.ctx, tt.args.txs, tt.args.req)
@@ -594,7 +594,7 @@ func TestFriendService_Send(t *testing.T) {
 
 func TestFriendService_Approve(t *testing.T) {
 	type fields struct {
-		userFriendRepository func(ctrl *gomock.Controller) userFriend.UserFriendRepository
+		userFriendMysqlRepository func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository
 	}
 	type args struct {
 		ctx context.Context
@@ -611,8 +611,8 @@ func TestFriendService_Approve(t *testing.T) {
 		{
 			name: "正常：承認できる",
 			fields: fields{
-				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
-					m := userFriend.NewMockUserFriendRepository(ctrl)
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -683,10 +683,10 @@ func TestFriendService_Approve(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.userFriendRepository.FindOrNil",
+			name: "異常：s.userFriendMysqlRepository.FindOrNil",
 			fields: fields{
-				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
-					m := userFriend.NewMockUserFriendRepository(ctrl)
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -708,13 +708,13 @@ func TestFriendService_Approve(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userFriendRepository.FindOrNil", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userFriendMysqlRepository.FindOrNil", errors.NewTestError()),
 		},
 		{
 			name: "異常：not applied",
 			fields: fields{
-				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
-					m := userFriend.NewMockUserFriendRepository(ctrl)
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -739,10 +739,10 @@ func TestFriendService_Approve(t *testing.T) {
 			wantErr: errors.NewError("not applied"),
 		},
 		{
-			name: "異常：s.userFriendRepository.Update",
+			name: "異常：s.userFriendMysqlRepository.Update",
 			fields: fields{
-				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
-					m := userFriend.NewMockUserFriendRepository(ctrl)
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -782,13 +782,13 @@ func TestFriendService_Approve(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userFriendRepository.Update", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userFriendMysqlRepository.Update", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.userFriendRepository.Update",
+			name: "異常：s.userFriendMysqlRepository.Update",
 			fields: fields{
-				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
-					m := userFriend.NewMockUserFriendRepository(ctrl)
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -846,7 +846,7 @@ func TestFriendService_Approve(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userFriendRepository.Update", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userFriendMysqlRepository.Update", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -854,7 +854,7 @@ func TestFriendService_Approve(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &friendService{
-				userFriendRepository: tt.fields.userFriendRepository(ctrl),
+				userFriendMysqlRepository: tt.fields.userFriendMysqlRepository(ctrl),
 			}
 
 			got, err := s.Approve(tt.args.ctx, tt.args.txs, tt.args.req)
@@ -871,7 +871,7 @@ func TestFriendService_Approve(t *testing.T) {
 
 func TestFriendService_Disapprove(t *testing.T) {
 	type fields struct {
-		userFriendRepository func(ctrl *gomock.Controller) userFriend.UserFriendRepository
+		userFriendMysqlRepository func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository
 	}
 	type args struct {
 		ctx context.Context
@@ -888,8 +888,8 @@ func TestFriendService_Disapprove(t *testing.T) {
 		{
 			name: "正常：拒否できる",
 			fields: fields{
-				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
-					m := userFriend.NewMockUserFriendRepository(ctrl)
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -950,10 +950,10 @@ func TestFriendService_Disapprove(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.userFriendRepository.FindOrNil",
+			name: "異常：s.userFriendMysqlRepository.FindOrNil",
 			fields: fields{
-				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
-					m := userFriend.NewMockUserFriendRepository(ctrl)
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -975,13 +975,13 @@ func TestFriendService_Disapprove(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userFriendRepository.FindOrNil", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userFriendMysqlRepository.FindOrNil", errors.NewTestError()),
 		},
 		{
 			name: "異常：not applied",
 			fields: fields{
-				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
-					m := userFriend.NewMockUserFriendRepository(ctrl)
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -1006,10 +1006,10 @@ func TestFriendService_Disapprove(t *testing.T) {
 			wantErr: errors.NewError("not applied"),
 		},
 		{
-			name: "異常：s.userFriendRepository.Delete",
+			name: "異常：s.userFriendMysqlRepository.Delete",
 			fields: fields{
-				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
-					m := userFriend.NewMockUserFriendRepository(ctrl)
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -1048,13 +1048,13 @@ func TestFriendService_Disapprove(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userFriendRepository.Delete", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userFriendMysqlRepository.Delete", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.userFriendRepository.Delete",
+			name: "異常：s.userFriendMysqlRepository.Delete",
 			fields: fields{
-				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
-					m := userFriend.NewMockUserFriendRepository(ctrl)
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -1106,7 +1106,7 @@ func TestFriendService_Disapprove(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userFriendRepository.Delete", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userFriendMysqlRepository.Delete", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -1114,7 +1114,7 @@ func TestFriendService_Disapprove(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &friendService{
-				userFriendRepository: tt.fields.userFriendRepository(ctrl),
+				userFriendMysqlRepository: tt.fields.userFriendMysqlRepository(ctrl),
 			}
 
 			got, err := s.Disapprove(tt.args.ctx, tt.args.txs, tt.args.req)
@@ -1131,7 +1131,7 @@ func TestFriendService_Disapprove(t *testing.T) {
 
 func TestFriendService_Delete(t *testing.T) {
 	type fields struct {
-		userFriendRepository func(ctrl *gomock.Controller) userFriend.UserFriendRepository
+		userFriendMysqlRepository func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository
 	}
 	type args struct {
 		ctx context.Context
@@ -1148,8 +1148,8 @@ func TestFriendService_Delete(t *testing.T) {
 		{
 			name: "正常：削除できる",
 			fields: fields{
-				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
-					m := userFriend.NewMockUserFriendRepository(ctrl)
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -1210,10 +1210,10 @@ func TestFriendService_Delete(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.userFriendRepository.FindOrNil",
+			name: "異常：s.userFriendMysqlRepository.FindOrNil",
 			fields: fields{
-				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
-					m := userFriend.NewMockUserFriendRepository(ctrl)
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -1235,13 +1235,13 @@ func TestFriendService_Delete(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userFriendRepository.FindOrNil", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userFriendMysqlRepository.FindOrNil", errors.NewTestError()),
 		},
 		{
 			name: "異常：not friend",
 			fields: fields{
-				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
-					m := userFriend.NewMockUserFriendRepository(ctrl)
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -1266,10 +1266,10 @@ func TestFriendService_Delete(t *testing.T) {
 			wantErr: errors.NewError("not friend"),
 		},
 		{
-			name: "異常：s.userFriendRepository.Delete",
+			name: "異常：s.userFriendMysqlRepository.Delete",
 			fields: fields{
-				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
-					m := userFriend.NewMockUserFriendRepository(ctrl)
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -1308,13 +1308,13 @@ func TestFriendService_Delete(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userFriendRepository.Delete", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userFriendMysqlRepository.Delete", errors.NewTestError()),
 		},
 		{
-			name: "異常：s.userFriendRepository.Delete",
+			name: "異常：s.userFriendMysqlRepository.Delete",
 			fields: fields{
-				userFriendRepository: func(ctrl *gomock.Controller) userFriend.UserFriendRepository {
-					m := userFriend.NewMockUserFriendRepository(ctrl)
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
 					m.EXPECT().
 						FindOrNil(
 							nil,
@@ -1366,7 +1366,7 @@ func TestFriendService_Delete(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.userFriendRepository.Delete", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.userFriendMysqlRepository.Delete", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -1374,7 +1374,7 @@ func TestFriendService_Delete(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &friendService{
-				userFriendRepository: tt.fields.userFriendRepository(ctrl),
+				userFriendMysqlRepository: tt.fields.userFriendMysqlRepository(ctrl),
 			}
 
 			got, err := s.Delete(tt.args.ctx, tt.args.txs, tt.args.req)

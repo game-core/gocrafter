@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type UserItemBoxRepository interface {
+type UserItemBoxMysqlRepository interface {
 	Find(ctx context.Context, userId string, masterItemId int64) (*UserItemBox, error)
 	FindOrNil(ctx context.Context, userId string, masterItemId int64) (*UserItemBox, error)
 	FindList(ctx context.Context, userId string) (UserItemBoxes, error)

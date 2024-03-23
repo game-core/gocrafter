@@ -20,7 +20,7 @@ type masterLoginBonusItemDao struct {
 	Cache          *cache.Cache
 }
 
-func NewMasterLoginBonusItemDao(conn *database.MysqlHandler) masterLoginBonusItem.MasterLoginBonusItemRepository {
+func NewMasterLoginBonusItemDao(conn *database.MysqlHandler) masterLoginBonusItem.MasterLoginBonusItemMysqlRepository {
 	return &masterLoginBonusItemDao{
 		ReadMysqlConn:  conn.Master.ReadMysqlConn,
 		WriteMysqlConn: conn.Master.WriteMysqlConn,

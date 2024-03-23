@@ -14,7 +14,7 @@ import (
 
 func TestNewRarityService_NewRarityService(t *testing.T) {
 	type args struct {
-		masterRarityRepository masterRarity.MasterRarityRepository
+		masterRarityMysqlRepository masterRarity.MasterRarityMysqlRepository
 	}
 	tests := []struct {
 		name string
@@ -24,17 +24,17 @@ func TestNewRarityService_NewRarityService(t *testing.T) {
 		{
 			name: "正常",
 			args: args{
-				masterRarityRepository: nil,
+				masterRarityMysqlRepository: nil,
 			},
 			want: &rarityService{
-				masterRarityRepository: nil,
+				masterRarityMysqlRepository: nil,
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := NewRarityService(
-				tt.args.masterRarityRepository,
+				tt.args.masterRarityMysqlRepository,
 			)
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewRarityService() = %v, want %v", got, tt.want)
@@ -45,7 +45,7 @@ func TestNewRarityService_NewRarityService(t *testing.T) {
 
 func TestRarityService_GetAll(t *testing.T) {
 	type fields struct {
-		masterRarityRepository func(ctrl *gomock.Controller) masterRarity.MasterRarityRepository
+		masterRarityMysqlRepository func(ctrl *gomock.Controller) masterRarity.MasterRarityMysqlRepository
 	}
 	type args struct {
 		ctx context.Context
@@ -60,8 +60,8 @@ func TestRarityService_GetAll(t *testing.T) {
 		{
 			name: "正常：取得できる場合",
 			fields: fields{
-				masterRarityRepository: func(ctrl *gomock.Controller) masterRarity.MasterRarityRepository {
-					m := masterRarity.NewMockMasterRarityRepository(ctrl)
+				masterRarityMysqlRepository: func(ctrl *gomock.Controller) masterRarity.MasterRarityMysqlRepository {
+					m := masterRarity.NewMockMasterRarityMysqlRepository(ctrl)
 					m.EXPECT().
 						FindList(
 							nil,
@@ -122,10 +122,10 @@ func TestRarityService_GetAll(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.masterRarityRepository.FindList",
+			name: "異常：s.masterRarityMysqlRepository.FindList",
 			fields: fields{
-				masterRarityRepository: func(ctrl *gomock.Controller) masterRarity.MasterRarityRepository {
-					m := masterRarity.NewMockMasterRarityRepository(ctrl)
+				masterRarityMysqlRepository: func(ctrl *gomock.Controller) masterRarity.MasterRarityMysqlRepository {
+					m := masterRarity.NewMockMasterRarityMysqlRepository(ctrl)
 					m.EXPECT().
 						FindList(
 							nil,
@@ -141,7 +141,7 @@ func TestRarityService_GetAll(t *testing.T) {
 				ctx: nil,
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.masterRarityRepository.FindList", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.masterRarityMysqlRepository.FindList", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -149,7 +149,7 @@ func TestRarityService_GetAll(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &rarityService{
-				masterRarityRepository: tt.fields.masterRarityRepository(ctrl),
+				masterRarityMysqlRepository: tt.fields.masterRarityMysqlRepository(ctrl),
 			}
 
 			got, err := s.GetAll(tt.args.ctx)
@@ -166,7 +166,7 @@ func TestRarityService_GetAll(t *testing.T) {
 
 func TestRarityService_GetByRarityType(t *testing.T) {
 	type fields struct {
-		masterRarityRepository func(ctrl *gomock.Controller) masterRarity.MasterRarityRepository
+		masterRarityMysqlRepository func(ctrl *gomock.Controller) masterRarity.MasterRarityMysqlRepository
 	}
 	type args struct {
 		ctx        context.Context
@@ -182,8 +182,8 @@ func TestRarityService_GetByRarityType(t *testing.T) {
 		{
 			name: "正常：取得できる場合",
 			fields: fields{
-				masterRarityRepository: func(ctrl *gomock.Controller) masterRarity.MasterRarityRepository {
-					m := masterRarity.NewMockMasterRarityRepository(ctrl)
+				masterRarityMysqlRepository: func(ctrl *gomock.Controller) masterRarity.MasterRarityMysqlRepository {
+					m := masterRarity.NewMockMasterRarityMysqlRepository(ctrl)
 					m.EXPECT().
 						FindByRarityType(
 							nil,
@@ -211,10 +211,10 @@ func TestRarityService_GetByRarityType(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.masterRarityRepository.FindByRarityType",
+			name: "異常：s.masterRarityMysqlRepository.FindByRarityType",
 			fields: fields{
-				masterRarityRepository: func(ctrl *gomock.Controller) masterRarity.MasterRarityRepository {
-					m := masterRarity.NewMockMasterRarityRepository(ctrl)
+				masterRarityMysqlRepository: func(ctrl *gomock.Controller) masterRarity.MasterRarityMysqlRepository {
+					m := masterRarity.NewMockMasterRarityMysqlRepository(ctrl)
 					m.EXPECT().
 						FindByRarityType(
 							nil,
@@ -231,7 +231,7 @@ func TestRarityService_GetByRarityType(t *testing.T) {
 				ctx: nil,
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.masterRarityRepository.FindByRarityType", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.masterRarityMysqlRepository.FindByRarityType", errors.NewTestError()),
 		},
 	}
 	for _, tt := range tests {
@@ -239,7 +239,7 @@ func TestRarityService_GetByRarityType(t *testing.T) {
 			ctrl := gomock.NewController(t)
 
 			s := &rarityService{
-				masterRarityRepository: tt.fields.masterRarityRepository(ctrl),
+				masterRarityMysqlRepository: tt.fields.masterRarityMysqlRepository(ctrl),
 			}
 
 			got, err := s.GetByRarityType(tt.args.ctx, tt.args.rarityType)

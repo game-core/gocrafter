@@ -38,7 +38,7 @@ type {{.CamelName}}Dao struct {
 	Cache     *cache.Cache
 }
 
-func New{{.Name}}Dao(conn *database.MysqlHandler) {{.Package}}.{{.Name}}Repository {
+func New{{.Name}}Dao(conn *database.MysqlHandler) {{.Package}}.{{.Name}}MysqlRepository {
 	return &{{.CamelName}}Dao{
 		ReadMysqlConn:  conn.Master.ReadMysqlConn,
 		WriteMysqlConn: conn.Master.WriteMysqlConn,
@@ -69,7 +69,7 @@ func (s *Dao) generate(path string, base string) error {
 		return err
 	}
 
-	if err := NewRepository().generate(path, domainPath); err != nil {
+	if err := NewMysqlRepository().generate(path, domainPath); err != nil {
 		return err
 	}
 

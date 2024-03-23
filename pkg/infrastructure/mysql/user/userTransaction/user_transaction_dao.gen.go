@@ -13,7 +13,7 @@ type userTransactionDao struct {
 	ShardMysqlConn *database.ShardMysqlConn
 }
 
-func NewUserTransactionDao(conn *database.MysqlHandler) userTransaction.UserTransactionRepository {
+func NewUserTransactionDao(conn *database.MysqlHandler) userTransaction.UserTransactionMysqlRepository {
 	return &userTransactionDao{
 		ShardMysqlConn: conn.User,
 	}

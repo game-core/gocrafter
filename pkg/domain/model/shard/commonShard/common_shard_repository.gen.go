@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type CommonShardRepository interface {
+type CommonShardMysqlRepository interface {
 	Find(ctx context.Context, id int64) (*CommonShard, error)
 	FindOrNil(ctx context.Context, id int64) (*CommonShard, error)
 	FindByShardKey(ctx context.Context, shardKey string) (*CommonShard, error)
