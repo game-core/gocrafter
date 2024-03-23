@@ -1,0 +1,9 @@
+name: UserRedisTableType
+package: enum
+comment: "ユーザーRedisのテーブル一覧"
+
+structure:
+  UserAccount:
+    name: UserAccount
+    number: 0
+    comment: "ユーザーアカウント"
