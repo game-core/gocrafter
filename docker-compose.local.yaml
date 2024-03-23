@@ -70,3 +70,20 @@ services:
     depends_on:
       - mysql
       - redis
+
+  multi-game:
+    container_name: gocrafter-api-multi
+    env_file:
+      - .env.local
+    build:
+      target: dev
+      context: .
+      dockerfile: ./docker/api/multi/Dockerfile
+    ports:
+      - "50052:50051"
+    volumes:
+      - ./:/go/src/app
+    tty: true
+    depends_on:
+      - mysql
+      - redis

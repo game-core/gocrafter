@@ -34,10 +34,12 @@ docker_gen_mock:
 # diを生成
 docker_gen_di:
 	$(DOCKER_COMPOSE) exec generator wire api/game/di/wire.go
+	$(DOCKER_COMPOSE) exec generator wire api/multi/di/wire.go
 
 # apiを生成
 docker_gen_api:
 	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/api/game/main.go
+	$(DOCKER_COMPOSE) exec generator go generate ./tools/generator/api/multi/main.go
 	$(DOCKER_COMPOSE) exec generator sh ./scripts/bulk-generate-protos.sh
 	$(DOCKER_COMPOSE) exec generator goimports -w ./api
 
