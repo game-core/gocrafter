@@ -146,6 +146,11 @@ func (s *MysqlRepository) createMethods(yamlStruct *YamlStruct) []string {
 		methods = append(methods, s.createFind(yamlStruct, strings.Split(yamlStruct.Primary[0], ",")))
 	}
 
+	// FindOrNil
+	if len(yamlStruct.Primary) > 0 {
+		methods = append(methods, s.createFindOrNil(yamlStruct, strings.Split(yamlStruct.Primary[0], ",")))
+	}
+
 	// Set
 	methods = append(methods, s.createSet(yamlStruct))
 
@@ -166,6 +171,20 @@ func (s *MysqlRepository) createFind(yamlStruct *YamlStruct, primaryFields []str
 
 	return fmt.Sprintf(
 		`Find(ctx context.Context, %s) (*%s, error)`,
+		s.createParam(keys),
+		yamlStruct.Name,
+	)
+}
+
+// createFindOrNil FindOrNilを作成する
+func (s *MysqlRepository) createFindOrNil(yamlStruct *YamlStruct, primaryFields []string) string {
+	keys := make(map[string]Structure)
+	for _, field := range primaryFields {
+		keys[field] = yamlStruct.Structures[field]
+	}
+
+	return fmt.Sprintf(
+		`FindOrNil(ctx context.Context, %s) (*%s, error)`,
 		s.createParam(keys),
 		yamlStruct.Name,
 	)

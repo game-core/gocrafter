@@ -11,6 +11,7 @@ import (
 
 type UserAccountRedisRepository interface {
 	Find(ctx context.Context, userId string) (*UserAccount, error)
+	FindOrNil(ctx context.Context, userId string) (*UserAccount, error)
 	Set(ctx context.Context, tx redis.Pipeliner, m *UserAccount) (*UserAccount, error)
 	Delete(ctx context.Context, tx redis.Pipeliner, m *UserAccount) error
 }

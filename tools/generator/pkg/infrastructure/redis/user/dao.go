@@ -198,6 +198,11 @@ func (s *Dao) createMethods(yamlStruct *YamlStruct) []string {
 		methods = append(methods, s.createFind(yamlStruct, strings.Split(yamlStruct.Primary[0], ",")))
 	}
 
+	// FindOrNil
+	if len(yamlStruct.Primary) > 0 {
+		methods = append(methods, s.createFindOrNil(yamlStruct, strings.Split(yamlStruct.Primary[0], ",")))
+	}
+
 	// Set
 	if len(yamlStruct.Primary) > 0 {
 		methods = append(methods, s.createSet(yamlStruct, strings.Split(yamlStruct.Primary[0], ",")))
@@ -225,6 +230,42 @@ func (s *Dao) createFind(yamlStruct *YamlStruct, primaryFields []string) string 
 			t := New%s()
 			data, err := s.ReadRedisConn.HGet(ctx, t.TableName(), %s).Result()
 			if err != nil {
+				return nil, err
+			}
+		
+			if err := t.JsonToTable(data); err != nil {
+				return nil, err
+			}
+		
+			return %s, nil
+		}`,
+		changes.UpperCamelToCamel(yamlStruct.Name),
+		s.createParam(keys),
+		yamlStruct.Package,
+		yamlStruct.Name,
+		yamlStruct.Name,
+		s.createKey(keyList),
+		s.createModelSetter(yamlStruct),
+	)
+}
+
+// createFindOrNil FindOrNilを作成する
+func (s *Dao) createFindOrNil(yamlStruct *YamlStruct, primaryFields []string) string {
+	keys := make(map[string]Structure)
+	var keyList []string
+	for _, field := range primaryFields {
+		keys[field] = yamlStruct.Structures[field]
+		keyList = append(keyList, changes.UpperCamelToCamel(field))
+	}
+
+	return fmt.Sprintf(
+		`func (s *%sDao) FindOrNil(ctx context.Context, %s) (*%s.%s, error) {
+			t := New%s()
+			data, err := s.ReadRedisConn.HGet(ctx, t.TableName(), %s).Result()
+			if err != nil {
+				if err == redis.Nil {
+					return nil, nil
+				}
 				return nil, err
 			}
 		
