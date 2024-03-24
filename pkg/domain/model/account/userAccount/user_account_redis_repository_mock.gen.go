@@ -64,6 +64,21 @@ func (mr *MockUserAccountRedisRepositoryMockRecorder) Find(ctx, userId interface
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Find", reflect.TypeOf((*MockUserAccountRedisRepository)(nil).Find), ctx, userId)
 }
 
+// FindOrNil mocks base method.
+func (m *MockUserAccountRedisRepository) FindOrNil(ctx context.Context, userId string) (*UserAccount, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FindOrNil", ctx, userId)
+	ret0, _ := ret[0].(*UserAccount)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// FindOrNil indicates an expected call of FindOrNil.
+func (mr *MockUserAccountRedisRepositoryMockRecorder) FindOrNil(ctx, userId interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNil", reflect.TypeOf((*MockUserAccountRedisRepository)(nil).FindOrNil), ctx, userId)
+}
+
 // Set mocks base method.
 func (m_2 *MockUserAccountRedisRepository) Set(ctx context.Context, tx v9.Pipeliner, m *UserAccount) (*UserAccount, error) {
 	m_2.ctrl.T.Helper()

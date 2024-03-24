@@ -1,0 +1,9 @@
+name: ConfigType
+package: enum
+comment: "設定タイプ"
+
+structure:
+  MaxRoom:
+    name: MaxRoom
+    number: 0
+    comment: "最大ルーム数（ユーザー）"
