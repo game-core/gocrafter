@@ -121,7 +121,7 @@ func (s *roomService) CheckIn(ctx context.Context, tx *gorm.DB, req *RoomCheckIn
 
 	commonRoomUserModel, err := s.commonRoomUserMysqlRepository.Create(ctx, tx, commonRoomUser.SetCommonRoomUser(req.RoomId, req.UserId, enum.RoomUserPositionType_General))
 	if err != nil {
-		return nil, errors.NewMethodError("s.commonRoomMysqlRepository.Find", err)
+		return nil, errors.NewMethodError("s.commonRoomMysqlRepository.Create", err)
 	}
 
 	return SetRoomCheckInResponse(newCommonRoomModel, commonRoomUserModel), nil
@@ -160,7 +160,7 @@ func (s *roomService) CheckOut(ctx context.Context, tx *gorm.DB, req *RoomCheckO
 func (s *roomService) generateRoomId(ctx context.Context, userId string) (string, error) {
 	commonRoomModels, err := s.commonRoomMysqlRepository.FindListByHostUserId(ctx, userId)
 	if err != nil {
-		return "", errors.NewMethodError("s.commonRoomMysqlRepository.Create", err)
+		return "", errors.NewMethodError("s.commonRoomMysqlRepository.FindListByHostUserId", err)
 	}
 
 	maxRoomNumber, err := s.configService.GetInt32(ctx, enum.ConfigType_MaxRoomNumber)
