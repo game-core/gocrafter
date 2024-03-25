@@ -7,7 +7,10 @@ option go_package = "api/game/presentation/server/room";
 
 import "room_create_request.proto";
 import "room_create_response.proto";
+import "room_delete_request.proto";
+import "room_delete_response.proto";
 
 service Room {
   rpc Create (RoomCreateRequest) returns (RoomCreateResponse);
+  rpc Delete (RoomDeleteRequest) returns (RoomDeleteResponse);
 }

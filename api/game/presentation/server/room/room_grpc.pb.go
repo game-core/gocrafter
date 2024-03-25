@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	Room_Create_FullMethodName = "/proto.Room/Create"
+	Room_Delete_FullMethodName = "/proto.Room/Delete"
 )
 
 // RoomClient is the client API for Room service.
@@ -30,6 +31,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type RoomClient interface {
 	Create(ctx context.Context, in *RoomCreateRequest, opts ...grpc.CallOption) (*RoomCreateResponse, error)
+	Delete(ctx context.Context, in *RoomDeleteRequest, opts ...grpc.CallOption) (*RoomDeleteResponse, error)
 }
 
 type roomClient struct {
@@ -49,11 +51,21 @@ func (c *roomClient) Create(ctx context.Context, in *RoomCreateRequest, opts ...
 	return out, nil
 }
 
+func (c *roomClient) Delete(ctx context.Context, in *RoomDeleteRequest, opts ...grpc.CallOption) (*RoomDeleteResponse, error) {
+	out := new(RoomDeleteResponse)
+	err := c.cc.Invoke(ctx, Room_Delete_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // RoomServer is the server API for Room service.
 // All implementations must embed UnimplementedRoomServer
 // for forward compatibility
 type RoomServer interface {
 	Create(context.Context, *RoomCreateRequest) (*RoomCreateResponse, error)
+	Delete(context.Context, *RoomDeleteRequest) (*RoomDeleteResponse, error)
 	mustEmbedUnimplementedRoomServer()
 }
 
@@ -63,6 +75,9 @@ type UnimplementedRoomServer struct {
 
 func (UnimplementedRoomServer) Create(context.Context, *RoomCreateRequest) (*RoomCreateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
+}
+func (UnimplementedRoomServer) Delete(context.Context, *RoomDeleteRequest) (*RoomDeleteResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedRoomServer) mustEmbedUnimplementedRoomServer() {}
 
@@ -95,6 +110,24 @@ func _Room_Create_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Room_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RoomDeleteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RoomServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Room_Delete_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RoomServer).Delete(ctx, req.(*RoomDeleteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Room_ServiceDesc is the grpc.ServiceDesc for Room service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -105,6 +138,10 @@ var Room_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Create",
 			Handler:    _Room_Create_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _Room_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -13,6 +13,7 @@ import (
 
 type RoomUsecase interface {
 	Create(ctx context.Context, req *roomServer.RoomCreateRequest) (*roomServer.RoomCreateResponse, error)
+	Delete(ctx context.Context, req *roomServer.RoomDeleteRequest) (*roomServer.RoomDeleteResponse, error)
 }
 
 type roomUsecase struct {
@@ -47,6 +48,33 @@ func (s *roomUsecase) Create(ctx context.Context, req *roomServer.RoomCreateRequ
 	}
 
 	return roomServer.SetRoomCreateResponse(
+		roomServer.SetCommonRoom(
+			result.CommonRoom.RoomId,
+			result.CommonRoom.HostUserId,
+			roomServer.RoomReleaseType(result.CommonRoom.RoomReleaseType),
+			result.CommonRoom.Name,
+			result.CommonRoom.UserCount,
+		),
+	), nil
+}
+
+// Delete プロフィールを削除する
+func (s *roomUsecase) Delete(ctx context.Context, req *roomServer.RoomDeleteRequest) (*roomServer.RoomDeleteResponse, error) {
+	// transaction
+	tx, err := s.transactionService.CommonMysqlBegin(ctx)
+	if err != nil {
+		return nil, errors.NewMethodError("s.transactionService.CommonMysqlBegin", err)
+	}
+	defer func() {
+		s.transactionService.CommonMysqlEnd(ctx, tx, err)
+	}()
+
+	result, err := s.roomService.Delete(ctx, tx, roomService.SetRoomDeleteRequest(req.UserId, req.RoomId))
+	if err != nil {
+		return nil, errors.NewMethodError("s.roomService.Create", err)
+	}
+
+	return roomServer.SetRoomDeleteResponse(
 		roomServer.SetCommonRoom(
 			result.CommonRoom.RoomId,
 			result.CommonRoom.HostUserId,

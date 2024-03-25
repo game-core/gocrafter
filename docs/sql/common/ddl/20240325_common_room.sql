@@ -10,5 +10,6 @@ CREATE TABLE common_room
 	PRIMARY KEY(room_id),
 	UNIQUE KEY(room_id),
 	INDEX(host_user_id),
+	INDEX(room_id,host_user_id),
 	INDEX(name)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

@@ -11,3 +11,11 @@ structure:
     response: RoomCreateResponse
     number: 1
     comment: "ルームを作成する"
+  Delete:
+    name: delete
+    method: unary
+    auth: true
+    request: RoomDeleteRequest
+    response: RoomDeleteResponse
+    number: 1
+    comment: "ルームを削除する"

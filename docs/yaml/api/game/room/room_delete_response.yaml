@@ -1,0 +1,11 @@
+name: RoomDeleteResponse
+package: room
+comment: "ルーム削除レスポンス"
+
+structure:
+  CommonRoom:
+    name: common_room
+    type: structure
+    nullable: true
+    number: 1
+    comment: "ルーム"

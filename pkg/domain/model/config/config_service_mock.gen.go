@@ -36,6 +36,21 @@ func (m *MockConfigService) EXPECT() *MockConfigServiceMockRecorder {
 	return m.recorder
 }
 
+// Get mocks base method.
+func (m *MockConfigService) Get(cxt context.Context, configType enum.ConfigType) (*masterConfig.MasterConfig, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Get", cxt, configType)
+	ret0, _ := ret[0].(*masterConfig.MasterConfig)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Get indicates an expected call of Get.
+func (mr *MockConfigServiceMockRecorder) Get(cxt, configType interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockConfigService)(nil).Get), cxt, configType)
+}
+
 // GetAll mocks base method.
 func (m *MockConfigService) GetAll(cxt context.Context) (masterConfig.MasterConfigs, error) {
 	m.ctrl.T.Helper()
@@ -51,17 +66,17 @@ func (mr *MockConfigServiceMockRecorder) GetAll(cxt interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetAll", reflect.TypeOf((*MockConfigService)(nil).GetAll), cxt)
 }
 
-// GetByConfigType mocks base method.
-func (m *MockConfigService) GetByConfigType(cxt context.Context, configType enum.ConfigType) (*masterConfig.MasterConfig, error) {
+// GetInt32 mocks base method.
+func (m *MockConfigService) GetInt32(cxt context.Context, configType enum.ConfigType) (int32, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetByConfigType", cxt, configType)
-	ret0, _ := ret[0].(*masterConfig.MasterConfig)
+	ret := m.ctrl.Call(m, "GetInt32", cxt, configType)
+	ret0, _ := ret[0].(int32)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetByConfigType indicates an expected call of GetByConfigType.
-func (mr *MockConfigServiceMockRecorder) GetByConfigType(cxt, configType interface{}) *gomock.Call {
+// GetInt32 indicates an expected call of GetInt32.
+func (mr *MockConfigServiceMockRecorder) GetInt32(cxt, configType interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetByConfigType", reflect.TypeOf((*MockConfigService)(nil).GetByConfigType), cxt, configType)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetInt32", reflect.TypeOf((*MockConfigService)(nil).GetInt32), cxt, configType)
 }

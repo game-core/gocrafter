@@ -38,3 +38,16 @@ func (s *roomHandler) Create(ctx context.Context, req *room.RoomCreateRequest) (
 
 	return res, nil
 }
+
+// Delete ルームを削除する
+func (s *roomHandler) Delete(ctx context.Context, req *room.RoomDeleteRequest) (*room.RoomDeleteResponse, error) {
+	if err := tokens.CheckJwtClaims(ctx, req.UserId); err != nil {
+		return nil, errors.NewMethodError("internal.CheckJwtClaims", err)
+	}
+	res, err := s.roomUsecase.Delete(ctx, req)
+	if err != nil {
+		return nil, errors.NewMethodError("s.roomUsecase.Delete", err)
+	}
+
+	return res, nil
+}

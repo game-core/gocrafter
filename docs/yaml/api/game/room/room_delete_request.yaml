@@ -1,0 +1,17 @@
+name: RoomDeleteRequest
+package: room
+comment: "ルーム削除リクエスト"
+
+structure:
+  UserId:
+    name: user_id
+    type: string
+    nullable: false
+    number: 1
+    comment: "ユーザーID"
+  RoomId:
+    name: room_id
+    type: string
+    nullable: false
+    number: 2
+    comment: "ルームID"

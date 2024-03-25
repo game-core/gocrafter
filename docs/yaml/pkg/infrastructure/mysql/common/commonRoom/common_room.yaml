@@ -51,4 +51,5 @@ unique:
   - RoomId
 index:
   - HostUserId
+  - RoomId,HostUserId
   - Name

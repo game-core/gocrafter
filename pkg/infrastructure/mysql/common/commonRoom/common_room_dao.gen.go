@@ -62,6 +62,19 @@ func (s *commonRoomDao) FindByHostUserId(ctx context.Context, hostUserId string)
 	return commonRoom.SetCommonRoom(t.RoomId, t.HostUserId, t.RoomReleaseType, t.Name, t.UserCount), nil
 }
 
+func (s *commonRoomDao) FindByRoomIdAndHostUserId(ctx context.Context, roomId string, hostUserId string) (*commonRoom.CommonRoom, error) {
+	t := NewCommonRoom()
+	res := s.ReadMysqlConn.WithContext(ctx).Where("room_id = ?", roomId).Where("host_user_id = ?", hostUserId).Find(t)
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+	if res.RowsAffected == 0 {
+		return nil, errors.NewError("record does not exist")
+	}
+
+	return commonRoom.SetCommonRoom(t.RoomId, t.HostUserId, t.RoomReleaseType, t.Name, t.UserCount), nil
+}
+
 func (s *commonRoomDao) FindByName(ctx context.Context, name string) (*commonRoom.CommonRoom, error) {
 	t := NewCommonRoom()
 	res := s.ReadMysqlConn.WithContext(ctx).Where("name = ?", name).Find(t)
@@ -78,6 +91,19 @@ func (s *commonRoomDao) FindByName(ctx context.Context, name string) (*commonRoo
 func (s *commonRoomDao) FindOrNilByHostUserId(ctx context.Context, hostUserId string) (*commonRoom.CommonRoom, error) {
 	t := NewCommonRoom()
 	res := s.ReadMysqlConn.WithContext(ctx).Where("host_user_id = ?", hostUserId).Find(t)
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+	if res.RowsAffected == 0 {
+		return nil, nil
+	}
+
+	return commonRoom.SetCommonRoom(t.RoomId, t.HostUserId, t.RoomReleaseType, t.Name, t.UserCount), nil
+}
+
+func (s *commonRoomDao) FindOrNilByRoomIdAndHostUserId(ctx context.Context, roomId string, hostUserId string) (*commonRoom.CommonRoom, error) {
+	t := NewCommonRoom()
+	res := s.ReadMysqlConn.WithContext(ctx).Where("room_id = ?", roomId).Where("host_user_id = ?", hostUserId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -119,6 +145,21 @@ func (s *commonRoomDao) FindList(ctx context.Context) (commonRoom.CommonRooms, e
 func (s *commonRoomDao) FindListByHostUserId(ctx context.Context, hostUserId string) (commonRoom.CommonRooms, error) {
 	ts := NewCommonRooms()
 	res := s.ReadMysqlConn.WithContext(ctx).Where("host_user_id = ?", hostUserId).Find(&ts)
+	if err := res.Error; err != nil {
+		return nil, err
+	}
+
+	ms := commonRoom.NewCommonRooms()
+	for _, t := range ts {
+		ms = append(ms, commonRoom.SetCommonRoom(t.RoomId, t.HostUserId, t.RoomReleaseType, t.Name, t.UserCount))
+	}
+
+	return ms, nil
+}
+
+func (s *commonRoomDao) FindListByRoomIdAndHostUserId(ctx context.Context, roomId string, hostUserId string) (commonRoom.CommonRooms, error) {
+	ts := NewCommonRooms()
+	res := s.ReadMysqlConn.WithContext(ctx).Where("room_id = ?", roomId).Where("host_user_id = ?", hostUserId).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
