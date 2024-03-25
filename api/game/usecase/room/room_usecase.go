@@ -3,10 +3,9 @@ package room
 import (
 	"context"
 
-	"github.com/game-core/gocrafter/pkg/domain/enum"
-
 	roomServer "github.com/game-core/gocrafter/api/game/presentation/server/room"
 	"github.com/game-core/gocrafter/internal/errors"
+	"github.com/game-core/gocrafter/pkg/domain/enum"
 	roomService "github.com/game-core/gocrafter/pkg/domain/model/room"
 	transactionService "github.com/game-core/gocrafter/pkg/domain/model/transaction"
 )
