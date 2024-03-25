@@ -71,7 +71,7 @@ func TestConfigService_GetAll(t *testing.T) {
 								{
 									Id:         1,
 									Name:       "ルーム最大数",
-									ConfigType: enum.ConfigType_MaxRoom,
+									ConfigType: enum.ConfigType_MaxRoomNumber,
 								},
 							},
 							nil,
@@ -86,7 +86,7 @@ func TestConfigService_GetAll(t *testing.T) {
 				{
 					Id:         1,
 					Name:       "ルーム最大数",
-					ConfigType: enum.ConfigType_MaxRoom,
+					ConfigType: enum.ConfigType_MaxRoomNumber,
 				},
 			},
 			wantErr: nil,
@@ -134,7 +134,7 @@ func TestConfigService_GetAll(t *testing.T) {
 	}
 }
 
-func TestConfigService_GetByConfigType(t *testing.T) {
+func TestConfigService_Get(t *testing.T) {
 	type fields struct {
 		masterConfigMysqlRepository func(ctrl *gomock.Controller) masterConfig.MasterConfigMysqlRepository
 	}
@@ -157,13 +157,13 @@ func TestConfigService_GetByConfigType(t *testing.T) {
 					m.EXPECT().
 						FindByConfigType(
 							nil,
-							enum.ConfigType_MaxRoom,
+							enum.ConfigType_MaxRoomNumber,
 						).
 						Return(
 							&masterConfig.MasterConfig{
 								Id:         1,
 								Name:       "ルーム最大数",
-								ConfigType: enum.ConfigType_MaxRoom,
+								ConfigType: enum.ConfigType_MaxRoomNumber,
 							},
 							nil,
 						)
@@ -176,7 +176,7 @@ func TestConfigService_GetByConfigType(t *testing.T) {
 			want: &masterConfig.MasterConfig{
 				Id:         1,
 				Name:       "ルーム最大数",
-				ConfigType: enum.ConfigType_MaxRoom,
+				ConfigType: enum.ConfigType_MaxRoomNumber,
 			},
 			wantErr: nil,
 		},
@@ -188,7 +188,7 @@ func TestConfigService_GetByConfigType(t *testing.T) {
 					m.EXPECT().
 						FindByConfigType(
 							nil,
-							enum.ConfigType_MaxRoom,
+							enum.ConfigType_MaxRoomNumber,
 						).
 						Return(
 							nil,
@@ -212,13 +212,128 @@ func TestConfigService_GetByConfigType(t *testing.T) {
 				masterConfigMysqlRepository: tt.fields.masterConfigMysqlRepository(ctrl),
 			}
 
-			got, err := s.GetByConfigType(tt.args.ctx, tt.args.configType)
+			got, err := s.Get(tt.args.ctx, tt.args.configType)
 			if !reflect.DeepEqual(err, tt.wantErr) {
-				t.Errorf("GetByConfigType() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetByConfigType() = %v, want %v", got, tt.want)
+				t.Errorf("Get() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestConfigService_GetInt32(t *testing.T) {
+	type fields struct {
+		masterConfigMysqlRepository func(ctrl *gomock.Controller) masterConfig.MasterConfigMysqlRepository
+	}
+	type args struct {
+		ctx        context.Context
+		configType enum.ConfigType
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    int32
+		wantErr error
+	}{
+		{
+			name: "正常：取得できる場合",
+			fields: fields{
+				masterConfigMysqlRepository: func(ctrl *gomock.Controller) masterConfig.MasterConfigMysqlRepository {
+					m := masterConfig.NewMockMasterConfigMysqlRepository(ctrl)
+					m.EXPECT().
+						FindByConfigType(
+							nil,
+							enum.ConfigType_MaxRoomNumber,
+						).
+						Return(
+							&masterConfig.MasterConfig{
+								Id:         1,
+								Name:       "ルーム最大数",
+								ConfigType: enum.ConfigType_MaxRoomNumber,
+								Value:      "1",
+							},
+							nil,
+						)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+			},
+			want:    1,
+			wantErr: nil,
+		},
+		{
+			name: "異常：s.masterConfigMysqlRepository.FindByConfigType",
+			fields: fields{
+				masterConfigMysqlRepository: func(ctrl *gomock.Controller) masterConfig.MasterConfigMysqlRepository {
+					m := masterConfig.NewMockMasterConfigMysqlRepository(ctrl)
+					m.EXPECT().
+						FindByConfigType(
+							nil,
+							enum.ConfigType_MaxRoomNumber,
+						).
+						Return(
+							nil,
+							errors.NewTestError(),
+						)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+			},
+			want:    0,
+			wantErr: errors.NewMethodError("s.masterConfigMysqlRepository.FindByConfigType", errors.NewTestError()),
+		},
+		{
+			name: "異常：changes.StringToInt32",
+			fields: fields{
+				masterConfigMysqlRepository: func(ctrl *gomock.Controller) masterConfig.MasterConfigMysqlRepository {
+					m := masterConfig.NewMockMasterConfigMysqlRepository(ctrl)
+					m.EXPECT().
+						FindByConfigType(
+							nil,
+							enum.ConfigType_MaxRoomNumber,
+						).
+						Return(
+							&masterConfig.MasterConfig{
+								Id:         1,
+								Name:       "ルーム最大数",
+								ConfigType: enum.ConfigType_MaxRoomNumber,
+								Value:      "a",
+							},
+							nil,
+						)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+			},
+			want:    0,
+			wantErr: errors.NewError("failed to changes.StringToInt32: strconv.Atoi: parsing \"a\": invalid syntax"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctrl := gomock.NewController(t)
+
+			s := &configService{
+				masterConfigMysqlRepository: tt.fields.masterConfigMysqlRepository(ctrl),
+			}
+
+			got, err := s.GetInt32(tt.args.ctx, tt.args.configType)
+			if !reflect.DeepEqual(err, tt.wantErr) {
+				t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Get() = %v, want %v", got, tt.want)
 			}
 		})
 	}

@@ -20,7 +20,7 @@ type AccountService interface {
 	Create(ctx context.Context, tx *gorm.DB, req *AccountCreateRequest) (*AccountCreateResponse, error)
 	Login(ctx context.Context, mtx *gorm.DB, rtx redis.Pipeliner, req *AccountLoginRequest) (*AccountLoginResponse, error)
 	Check(ctx context.Context, req *AccountCheckRequest) (*AccountCheckResponse, error)
-	GenerateUserID(ctx context.Context) (string, error)
+	GenerateUserId(ctx context.Context) (string, error)
 }
 
 type accountService struct {
@@ -112,16 +112,16 @@ func (s *accountService) Check(ctx context.Context, req *AccountCheckRequest) (*
 	return SetAccountCheckResponse(userAccountModel), err
 }
 
-// GenerateUserID ユーザーIDを生成する
-func (s *accountService) GenerateUserID(ctx context.Context) (string, error) {
+// GenerateUserId ユーザーIDを生成する
+func (s *accountService) GenerateUserId(ctx context.Context) (string, error) {
 	shardKey, err := s.shardService.GetShardKey(ctx)
 	if err != nil {
 		return "", errors.NewMethodError("s.shardService.GetShardKey", err)
 	}
 
-	userId, err := keys.GenerateUserID(shardKey)
+	userId, err := keys.GenerateUserId(shardKey)
 	if err != nil {
-		return "", errors.NewMethodError("keys.GenerateUserID", err)
+		return "", errors.NewMethodError("keys.GenerateUserId", err)
 	}
 
 	return userId, nil

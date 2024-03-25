@@ -6,7 +6,7 @@
 - [Create](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/account.md#Create)
 - [Login](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/account.md#Login)
 - [Check](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/account.md#Check)
-- [GenerateUserID](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/account.md#GenerateUserID)
+- [GenerateUserId](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/account.md#GenerateUserId)
 
 ## FindByUserId
 ユーザーIDから取得する。
@@ -75,7 +75,7 @@
 | res | *AccountCheckResponse | レスポンス |
 | err | error | エラー |
 
-## GenerateUserID
+## GenerateUserId
 ユーザーIDを生成する。
 - request
 

@@ -2,9 +2,20 @@ package changes
 
 import (
 	"regexp"
+	"strconv"
 	"strings"
 	"unicode"
 )
+
+// StringToInt32 stringからint32に変換
+func StringToInt32(s string) (int32, error) {
+	num, err := strconv.Atoi(s)
+	if err != nil {
+		return 0, err
+	}
+
+	return int32(num), nil
+}
 
 // SnakeToUpperCamel スネークケースからアッパーキャメルケースに変換
 func SnakeToUpperCamel(s string) string {

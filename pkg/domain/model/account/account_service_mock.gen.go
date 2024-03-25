@@ -82,19 +82,19 @@ func (mr *MockAccountServiceMockRecorder) FindByUserId(ctx, userId interface{}) 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByUserId", reflect.TypeOf((*MockAccountService)(nil).FindByUserId), ctx, userId)
 }
 
-// GenerateUserID mocks base method.
-func (m *MockAccountService) GenerateUserID(ctx context.Context) (string, error) {
+// GenerateUserId mocks base method.
+func (m *MockAccountService) GenerateUserId(ctx context.Context) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GenerateUserID", ctx)
+	ret := m.ctrl.Call(m, "GenerateUserId", ctx)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GenerateUserID indicates an expected call of GenerateUserID.
-func (mr *MockAccountServiceMockRecorder) GenerateUserID(ctx interface{}) *gomock.Call {
+// GenerateUserId indicates an expected call of GenerateUserId.
+func (mr *MockAccountServiceMockRecorder) GenerateUserId(ctx interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GenerateUserID", reflect.TypeOf((*MockAccountService)(nil).GenerateUserID), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GenerateUserId", reflect.TypeOf((*MockAccountService)(nil).GenerateUserId), ctx)
 }
 
 // Login mocks base method.

@@ -2,8 +2,6 @@
 package commonRoomUser
 
 import (
-	"time"
-
 	"github.com/game-core/gocrafter/pkg/domain/enum"
 )
 
@@ -11,10 +9,8 @@ type CommonRoomUsers []*CommonRoomUser
 
 type CommonRoomUser struct {
 	RoomId               string
-	HostUserId           string
+	UserId               string
 	RoomUserPositionType enum.RoomUserPositionType
-	CreatedAt            time.Time
-	UpdatedAt            time.Time
 }
 
 func NewCommonRoomUser() *CommonRoomUser {
@@ -25,12 +21,10 @@ func NewCommonRoomUsers() CommonRoomUsers {
 	return CommonRoomUsers{}
 }
 
-func SetCommonRoomUser(roomId string, hostUserId string, roomUserPositionType enum.RoomUserPositionType, createdAt time.Time, updatedAt time.Time) *CommonRoomUser {
+func SetCommonRoomUser(roomId string, userId string, roomUserPositionType enum.RoomUserPositionType) *CommonRoomUser {
 	return &CommonRoomUser{
 		RoomId:               roomId,
-		HostUserId:           hostUserId,
+		UserId:               userId,
 		RoomUserPositionType: roomUserPositionType,
-		CreatedAt:            createdAt,
-		UpdatedAt:            updatedAt,
 	}
 }

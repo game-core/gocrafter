@@ -23,9 +23,9 @@ func NewCommonRoomUserDao(conn *database.MysqlHandler) commonRoomUser.CommonRoom
 	}
 }
 
-func (s *commonRoomUserDao) Find(ctx context.Context, roomId string, hostUserId string) (*commonRoomUser.CommonRoomUser, error) {
+func (s *commonRoomUserDao) Find(ctx context.Context, roomId string, userId string) (*commonRoomUser.CommonRoomUser, error) {
 	t := NewCommonRoomUser()
-	res := s.ReadMysqlConn.WithContext(ctx).Where("room_id = ?", roomId).Where("host_user_id = ?", hostUserId).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("room_id = ?", roomId).Where("user_id = ?", userId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -33,12 +33,12 @@ func (s *commonRoomUserDao) Find(ctx context.Context, roomId string, hostUserId 
 		return nil, errors.NewError("record does not exist")
 	}
 
-	return commonRoomUser.SetCommonRoomUser(t.RoomId, t.HostUserId, t.RoomUserPositionType), nil
+	return commonRoomUser.SetCommonRoomUser(t.RoomId, t.UserId, t.RoomUserPositionType), nil
 }
 
-func (s *commonRoomUserDao) FindOrNil(ctx context.Context, roomId string, hostUserId string) (*commonRoomUser.CommonRoomUser, error) {
+func (s *commonRoomUserDao) FindOrNil(ctx context.Context, roomId string, userId string) (*commonRoomUser.CommonRoomUser, error) {
 	t := NewCommonRoomUser()
-	res := s.ReadMysqlConn.WithContext(ctx).Where("room_id = ?", roomId).Where("host_user_id = ?", hostUserId).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("room_id = ?", roomId).Where("user_id = ?", userId).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (s *commonRoomUserDao) FindOrNil(ctx context.Context, roomId string, hostUs
 		return nil, nil
 	}
 
-	return commonRoomUser.SetCommonRoomUser(t.RoomId, t.HostUserId, t.RoomUserPositionType), nil
+	return commonRoomUser.SetCommonRoomUser(t.RoomId, t.UserId, t.RoomUserPositionType), nil
 }
 
 func (s *commonRoomUserDao) FindByRoomId(ctx context.Context, roomId string) (*commonRoomUser.CommonRoomUser, error) {
@@ -59,7 +59,7 @@ func (s *commonRoomUserDao) FindByRoomId(ctx context.Context, roomId string) (*c
 		return nil, errors.NewError("record does not exist")
 	}
 
-	return commonRoomUser.SetCommonRoomUser(t.RoomId, t.HostUserId, t.RoomUserPositionType), nil
+	return commonRoomUser.SetCommonRoomUser(t.RoomId, t.UserId, t.RoomUserPositionType), nil
 }
 
 func (s *commonRoomUserDao) FindOrNilByRoomId(ctx context.Context, roomId string) (*commonRoomUser.CommonRoomUser, error) {
@@ -72,7 +72,7 @@ func (s *commonRoomUserDao) FindOrNilByRoomId(ctx context.Context, roomId string
 		return nil, nil
 	}
 
-	return commonRoomUser.SetCommonRoomUser(t.RoomId, t.HostUserId, t.RoomUserPositionType), nil
+	return commonRoomUser.SetCommonRoomUser(t.RoomId, t.UserId, t.RoomUserPositionType), nil
 }
 
 func (s *commonRoomUserDao) FindList(ctx context.Context) (commonRoomUser.CommonRoomUsers, error) {
@@ -84,7 +84,7 @@ func (s *commonRoomUserDao) FindList(ctx context.Context) (commonRoomUser.Common
 
 	ms := commonRoomUser.NewCommonRoomUsers()
 	for _, t := range ts {
-		ms = append(ms, commonRoomUser.SetCommonRoomUser(t.RoomId, t.HostUserId, t.RoomUserPositionType))
+		ms = append(ms, commonRoomUser.SetCommonRoomUser(t.RoomId, t.UserId, t.RoomUserPositionType))
 	}
 
 	return ms, nil
@@ -99,7 +99,7 @@ func (s *commonRoomUserDao) FindListByRoomId(ctx context.Context, roomId string)
 
 	ms := commonRoomUser.NewCommonRoomUsers()
 	for _, t := range ts {
-		ms = append(ms, commonRoomUser.SetCommonRoomUser(t.RoomId, t.HostUserId, t.RoomUserPositionType))
+		ms = append(ms, commonRoomUser.SetCommonRoomUser(t.RoomId, t.UserId, t.RoomUserPositionType))
 	}
 
 	return ms, nil
@@ -115,7 +115,7 @@ func (s *commonRoomUserDao) Create(ctx context.Context, tx *gorm.DB, m *commonRo
 
 	t := &CommonRoomUser{
 		RoomId:               m.RoomId,
-		HostUserId:           m.HostUserId,
+		UserId:               m.UserId,
 		RoomUserPositionType: m.RoomUserPositionType,
 	}
 	res := conn.Model(NewCommonRoomUser()).WithContext(ctx).Create(t)
@@ -123,7 +123,7 @@ func (s *commonRoomUserDao) Create(ctx context.Context, tx *gorm.DB, m *commonRo
 		return nil, err
 	}
 
-	return commonRoomUser.SetCommonRoomUser(t.RoomId, t.HostUserId, t.RoomUserPositionType), nil
+	return commonRoomUser.SetCommonRoomUser(t.RoomId, t.UserId, t.RoomUserPositionType), nil
 }
 
 func (s *commonRoomUserDao) CreateList(ctx context.Context, tx *gorm.DB, ms commonRoomUser.CommonRoomUsers) (commonRoomUser.CommonRoomUsers, error) {
@@ -138,7 +138,7 @@ func (s *commonRoomUserDao) CreateList(ctx context.Context, tx *gorm.DB, ms comm
 	for _, m := range ms {
 		t := &CommonRoomUser{
 			RoomId:               m.RoomId,
-			HostUserId:           m.HostUserId,
+			UserId:               m.UserId,
 			RoomUserPositionType: m.RoomUserPositionType,
 		}
 		ts = append(ts, t)
@@ -162,15 +162,15 @@ func (s *commonRoomUserDao) Update(ctx context.Context, tx *gorm.DB, m *commonRo
 
 	t := &CommonRoomUser{
 		RoomId:               m.RoomId,
-		HostUserId:           m.HostUserId,
+		UserId:               m.UserId,
 		RoomUserPositionType: m.RoomUserPositionType,
 	}
-	res := conn.Model(NewCommonRoomUser()).WithContext(ctx).Where("room_id = ?", m.RoomId).Where("host_user_id = ?", m.HostUserId).Updates(t)
+	res := conn.Model(NewCommonRoomUser()).WithContext(ctx).Where("room_id = ?", m.RoomId).Where("user_id = ?", m.UserId).Updates(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
 
-	return commonRoomUser.SetCommonRoomUser(t.RoomId, t.HostUserId, t.RoomUserPositionType), nil
+	return commonRoomUser.SetCommonRoomUser(t.RoomId, t.UserId, t.RoomUserPositionType), nil
 }
 
 func (s *commonRoomUserDao) Delete(ctx context.Context, tx *gorm.DB, m *commonRoomUser.CommonRoomUser) error {
@@ -181,7 +181,7 @@ func (s *commonRoomUserDao) Delete(ctx context.Context, tx *gorm.DB, m *commonRo
 		conn = s.WriteMysqlConn
 	}
 
-	res := conn.Model(NewCommonRoomUser()).WithContext(ctx).Where("room_id = ?", m.RoomId).Where("host_user_id = ?", m.HostUserId).Delete(NewCommonRoomUser())
+	res := conn.Model(NewCommonRoomUser()).WithContext(ctx).Where("room_id = ?", m.RoomId).Where("user_id = ?", m.UserId).Delete(NewCommonRoomUser())
 	if err := res.Error; err != nil {
 		return err
 	}

@@ -10,7 +10,7 @@ structure:
     number: 1
     comment: "ルームID"
   UserId:
-    name: host_user_id
+    name: user_id
     type: string
     nullable: false
     number: 2

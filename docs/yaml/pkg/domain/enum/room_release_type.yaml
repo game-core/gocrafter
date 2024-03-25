@@ -1,0 +1,13 @@
+name: RoomReleaseType
+package: enum
+comment: "ルーム公開タイプ"
+
+structure:
+  Private:
+    name: Private
+    number: 0
+    comment: "非公開"
+  Public:
+    name: Public
+    number: 1
+    comment: "公開"

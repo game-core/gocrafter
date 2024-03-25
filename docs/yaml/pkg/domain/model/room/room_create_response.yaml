@@ -1,0 +1,12 @@
+name: RoomCreateResponse
+package: room
+comment: "ルーム作成レスポンス"
+
+structure:
+  CommonRoom:
+    name: common_room
+    type: structure
+    package: room/commonRoom
+    nullable: true
+    number: 1
+    comment: "ルーム"

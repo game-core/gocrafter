@@ -691,7 +691,7 @@ func TestAccountService_Check(t *testing.T) {
 	}
 }
 
-func TestAccountService_GenerateUserID(t *testing.T) {
+func TestAccountService_GenerateUserId(t *testing.T) {
 	type fields struct {
 		userAccountMysqlRepository func(ctrl *gomock.Controller) userAccount.UserAccountMysqlRepository
 		shardService               func(ctrl *gomock.Controller) shard.ShardService
@@ -768,16 +768,16 @@ func TestAccountService_GenerateUserID(t *testing.T) {
 				shardService:               tt.fields.shardService(ctrl),
 			}
 
-			got, err := s.GenerateUserID(tt.args.ctx)
+			got, err := s.GenerateUserId(tt.args.ctx)
 			if !reflect.DeepEqual(err, tt.wantErr) {
-				t.Errorf("GenerateUserID() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("GenerateUserId() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if err == nil {
 				got = "0:WntR-PyhOJeDiE5jodeR"
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GenerateUserID() = %v, want %v", got, tt.want)
+				t.Errorf("GenerateUserId() = %v, want %v", got, tt.want)
 			}
 		})
 	}

@@ -10,8 +10,8 @@ import (
 )
 
 type CommonRoomUserMysqlRepository interface {
-	Find(ctx context.Context, roomId string, hostUserId string) (*CommonRoomUser, error)
-	FindOrNil(ctx context.Context, roomId string, hostUserId string) (*CommonRoomUser, error)
+	Find(ctx context.Context, roomId string, userId string) (*CommonRoomUser, error)
+	FindOrNil(ctx context.Context, roomId string, userId string) (*CommonRoomUser, error)
 	FindByRoomId(ctx context.Context, roomId string) (*CommonRoomUser, error)
 	FindOrNilByRoomId(ctx context.Context, roomId string) (*CommonRoomUser, error)
 	FindList(ctx context.Context) (CommonRoomUsers, error)

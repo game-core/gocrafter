@@ -8,14 +8,24 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// GenerateUserID UserIDを生成する
-func GenerateUserID(shardKey string) (string, error) {
+// GenerateUserId UserIdを生成する
+func GenerateUserId(shardKey string) (string, error) {
 	uuid, err := gonanoid.New(20)
 	if err != nil {
 		return "", err
 	}
 
 	return fmt.Sprintf("%s:%s", shardKey, uuid), nil
+}
+
+// GenerateRoomId RoomIdを生成する
+func GenerateRoomId() (string, error) {
+	uuid, err := gonanoid.New(20)
+	if err != nil {
+		return "", err
+	}
+
+	return uuid, nil
 }
 
 // GetShardKeyByUserId ユーザIDからシャードキーを取得する

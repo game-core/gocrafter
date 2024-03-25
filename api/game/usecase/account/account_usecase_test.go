@@ -70,7 +70,7 @@ func TestAccountUsecase_Create(t *testing.T) {
 				accountService: func(ctrl *gomock.Controller) accountService.AccountService {
 					m := accountService.NewMockAccountService(ctrl)
 					m.EXPECT().
-						GenerateUserID(
+						GenerateUserId(
 							nil,
 						).
 						Return(
@@ -138,12 +138,12 @@ func TestAccountUsecase_Create(t *testing.T) {
 			wantErr: nil,
 		},
 		{
-			name: "異常：s.accountService.GenerateUserID",
+			name: "異常：s.accountService.GenerateUserId",
 			fields: fields{
 				accountService: func(ctrl *gomock.Controller) accountService.AccountService {
 					m := accountService.NewMockAccountService(ctrl)
 					m.EXPECT().
-						GenerateUserID(
+						GenerateUserId(
 							nil,
 						).
 						Return(
@@ -164,7 +164,7 @@ func TestAccountUsecase_Create(t *testing.T) {
 				},
 			},
 			want:    nil,
-			wantErr: errors.NewMethodError("s.accountService.GenerateUserID", errors.NewTestError()),
+			wantErr: errors.NewMethodError("s.accountService.GenerateUserId", errors.NewTestError()),
 		},
 		{
 			name: "異常：s.transactionService.UserMysqlBegin",
@@ -172,7 +172,7 @@ func TestAccountUsecase_Create(t *testing.T) {
 				accountService: func(ctrl *gomock.Controller) accountService.AccountService {
 					m := accountService.NewMockAccountService(ctrl)
 					m.EXPECT().
-						GenerateUserID(
+						GenerateUserId(
 							nil,
 						).
 						Return(
@@ -210,7 +210,7 @@ func TestAccountUsecase_Create(t *testing.T) {
 				accountService: func(ctrl *gomock.Controller) accountService.AccountService {
 					m := accountService.NewMockAccountService(ctrl)
 					m.EXPECT().
-						GenerateUserID(
+						GenerateUserId(
 							nil,
 						).
 						Return(

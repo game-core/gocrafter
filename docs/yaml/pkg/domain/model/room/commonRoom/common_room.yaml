@@ -15,12 +15,12 @@ structure:
     nullable: false
     number: 2
     comment: "作成したユーザーID"
-  RoomNumber:
-    name: room_number
-    type: int32
+  RoomReleaseType:
+    name: room_release_type
+    type: enum
     nullable: false
     number: 3
-    comment: "ルーム番号"
+    comment: "ルーム公開タイプ"
   Name:
     name: name
     type: string
@@ -33,22 +33,3 @@ structure:
     nullable: false
     number: 5
     comment: "ユーザー数"
-  CreatedAt:
-    name: created_at
-    type: time
-    nullable: false
-    number: 6
-    comment: "作成日時"
-  UpdatedAt:
-    name: updated_at
-    type: time
-    nullable: false
-    number: 7
-    comment: "更新日時"
-primary:
-  - RoomId
-unique:
-  - RoomId
-index:
-  - HostUserId
-  - Name

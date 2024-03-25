@@ -33,9 +33,9 @@ func NewAccountUsecase(
 
 // Create アカウントを作成する
 func (s *accountUsecase) Create(ctx context.Context, req *accountServer.AccountCreateRequest) (*accountServer.AccountCreateResponse, error) {
-	userId, err := s.accountService.GenerateUserID(ctx)
+	userId, err := s.accountService.GenerateUserId(ctx)
 	if err != nil {
-		return nil, errors.NewMethodError("s.accountService.GenerateUserID", err)
+		return nil, errors.NewMethodError("s.accountService.GenerateUserId", err)
 	}
 
 	// transaction
