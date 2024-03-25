@@ -1,0 +1,13 @@
+name: RoomUserPositionType
+package: enum
+comment: "ルームユーザー立場タイプ"
+
+structure:
+  Leader:
+    name: Leader
+    number: 0
+    comment: "リーダー"
+  General:
+    name: General
+    number: 1
+    comment: "一般"

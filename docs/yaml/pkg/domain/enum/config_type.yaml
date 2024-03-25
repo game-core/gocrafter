@@ -3,7 +3,11 @@ package: enum
 comment: "設定タイプ"
 
 structure:
-  MaxRoom:
-    name: MaxRoom
+  MaxRoomNumber:
+    name: MaxRoomNumber
     number: 0
-    comment: "最大ルーム数（ユーザー）"
+    comment: "最大ルーム番号"
+  MaxRoomUser:
+    name: MaxRoomUser
+    number: 1
+    comment: "最大ルームユーザー数"

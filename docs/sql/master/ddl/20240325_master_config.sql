@@ -1,0 +1,10 @@
+CREATE TABLE master_config
+(
+    id BIGINT NOT NULL AUTO_INCREMENT COMMENT "ID",
+	name VARCHAR(255) NOT NULL COMMENT "設定名",
+	config_type INT NOT NULL COMMENT "設定タイプ",
+	value VARCHAR(255) NOT NULL COMMENT "設定値",
+	PRIMARY KEY(id),
+	UNIQUE KEY(id),
+	INDEX(config_type)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
