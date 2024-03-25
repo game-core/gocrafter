@@ -52,14 +52,14 @@ func (s *roomHandler) Delete(ctx context.Context, req *room.RoomDeleteRequest) (
 	return res, nil
 }
 
-// Join ルームに参加する
-func (s *roomHandler) Join(ctx context.Context, req *room.RoomJoinRequest) (*room.RoomJoinResponse, error) {
+// CheckIn ルームに参加する
+func (s *roomHandler) CheckIn(ctx context.Context, req *room.RoomCheckInRequest) (*room.RoomCheckInResponse, error) {
 	if err := tokens.CheckJwtClaims(ctx, req.UserId); err != nil {
 		return nil, errors.NewMethodError("internal.CheckJwtClaims", err)
 	}
-	res, err := s.roomUsecase.Join(ctx, req)
+	res, err := s.roomUsecase.CheckIn(ctx, req)
 	if err != nil {
-		return nil, errors.NewMethodError("s.roomUsecase.Join", err)
+		return nil, errors.NewMethodError("s.roomUsecase.CheckIn", err)
 	}
 
 	return res, nil

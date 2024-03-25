@@ -50,6 +50,21 @@ func (mr *MockFriendServiceMockRecorder) Approve(ctx, txs, req interface{}) *gom
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Approve", reflect.TypeOf((*MockFriendService)(nil).Approve), ctx, txs, req)
 }
 
+// Check mocks base method.
+func (m *MockFriendService) Check(ctx context.Context, req *FriendCheckRequest) (*FriendCheckResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Check", ctx, req)
+	ret0, _ := ret[0].(*FriendCheckResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Check indicates an expected call of Check.
+func (mr *MockFriendServiceMockRecorder) Check(ctx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Check", reflect.TypeOf((*MockFriendService)(nil).Check), ctx, req)
+}
+
 // Delete mocks base method.
 func (m *MockFriendService) Delete(ctx context.Context, txs map[string]*gorm.DB, req *FriendDeleteRequest) (*FriendDeleteResponse, error) {
 	m.ctrl.T.Helper()

@@ -5,7 +5,7 @@ package proto;
 
 option go_package = "api/game/presentation/server/room";
 
-message RoomJoinRequest {
+message RoomCheckInRequest {
   string user_id = 1;
   string room_id = 2;
 }

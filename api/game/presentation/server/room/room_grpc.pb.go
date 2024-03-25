@@ -22,9 +22,9 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Room_Create_FullMethodName = "/proto.Room/Create"
-	Room_Delete_FullMethodName = "/proto.Room/Delete"
-	Room_Join_FullMethodName   = "/proto.Room/Join"
+	Room_Create_FullMethodName  = "/proto.Room/Create"
+	Room_Delete_FullMethodName  = "/proto.Room/Delete"
+	Room_CheckIn_FullMethodName = "/proto.Room/CheckIn"
 )
 
 // RoomClient is the client API for Room service.
@@ -33,7 +33,7 @@ const (
 type RoomClient interface {
 	Create(ctx context.Context, in *RoomCreateRequest, opts ...grpc.CallOption) (*RoomCreateResponse, error)
 	Delete(ctx context.Context, in *RoomDeleteRequest, opts ...grpc.CallOption) (*RoomDeleteResponse, error)
-	Join(ctx context.Context, in *RoomJoinRequest, opts ...grpc.CallOption) (*RoomJoinResponse, error)
+	CheckIn(ctx context.Context, in *RoomCheckInRequest, opts ...grpc.CallOption) (*RoomCheckInResponse, error)
 }
 
 type roomClient struct {
@@ -62,9 +62,9 @@ func (c *roomClient) Delete(ctx context.Context, in *RoomDeleteRequest, opts ...
 	return out, nil
 }
 
-func (c *roomClient) Join(ctx context.Context, in *RoomJoinRequest, opts ...grpc.CallOption) (*RoomJoinResponse, error) {
-	out := new(RoomJoinResponse)
-	err := c.cc.Invoke(ctx, Room_Join_FullMethodName, in, out, opts...)
+func (c *roomClient) CheckIn(ctx context.Context, in *RoomCheckInRequest, opts ...grpc.CallOption) (*RoomCheckInResponse, error) {
+	out := new(RoomCheckInResponse)
+	err := c.cc.Invoke(ctx, Room_CheckIn_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +77,7 @@ func (c *roomClient) Join(ctx context.Context, in *RoomJoinRequest, opts ...grpc
 type RoomServer interface {
 	Create(context.Context, *RoomCreateRequest) (*RoomCreateResponse, error)
 	Delete(context.Context, *RoomDeleteRequest) (*RoomDeleteResponse, error)
-	Join(context.Context, *RoomJoinRequest) (*RoomJoinResponse, error)
+	CheckIn(context.Context, *RoomCheckInRequest) (*RoomCheckInResponse, error)
 	mustEmbedUnimplementedRoomServer()
 }
 
@@ -91,8 +91,8 @@ func (UnimplementedRoomServer) Create(context.Context, *RoomCreateRequest) (*Roo
 func (UnimplementedRoomServer) Delete(context.Context, *RoomDeleteRequest) (*RoomDeleteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
-func (UnimplementedRoomServer) Join(context.Context, *RoomJoinRequest) (*RoomJoinResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Join not implemented")
+func (UnimplementedRoomServer) CheckIn(context.Context, *RoomCheckInRequest) (*RoomCheckInResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckIn not implemented")
 }
 func (UnimplementedRoomServer) mustEmbedUnimplementedRoomServer() {}
 
@@ -143,20 +143,20 @@ func _Room_Delete_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Room_Join_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RoomJoinRequest)
+func _Room_CheckIn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RoomCheckInRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RoomServer).Join(ctx, in)
+		return srv.(RoomServer).CheckIn(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Room_Join_FullMethodName,
+		FullMethod: Room_CheckIn_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RoomServer).Join(ctx, req.(*RoomJoinRequest))
+		return srv.(RoomServer).CheckIn(ctx, req.(*RoomCheckInRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -177,8 +177,8 @@ var Room_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Room_Delete_Handler,
 		},
 		{
-			MethodName: "Join",
-			Handler:    _Room_Join_Handler,
+			MethodName: "CheckIn",
+			Handler:    _Room_CheckIn_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

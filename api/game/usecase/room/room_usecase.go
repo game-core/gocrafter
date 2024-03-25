@@ -14,7 +14,7 @@ import (
 type RoomUsecase interface {
 	Create(ctx context.Context, req *roomServer.RoomCreateRequest) (*roomServer.RoomCreateResponse, error)
 	Delete(ctx context.Context, req *roomServer.RoomDeleteRequest) (*roomServer.RoomDeleteResponse, error)
-	Join(ctx context.Context, req *roomServer.RoomJoinRequest) (*roomServer.RoomJoinResponse, error)
+	CheckIn(ctx context.Context, req *roomServer.RoomCheckInRequest) (*roomServer.RoomCheckInResponse, error)
 }
 
 type roomUsecase struct {
@@ -86,8 +86,8 @@ func (s *roomUsecase) Delete(ctx context.Context, req *roomServer.RoomDeleteRequ
 	), nil
 }
 
-// Join ルームに参加する
-func (s *roomUsecase) Join(ctx context.Context, req *roomServer.RoomJoinRequest) (*roomServer.RoomJoinResponse, error) {
+// CheckIn ルームに参加する
+func (s *roomUsecase) CheckIn(ctx context.Context, req *roomServer.RoomCheckInRequest) (*roomServer.RoomCheckInResponse, error) {
 	// transaction
 	tx, err := s.transactionService.CommonMysqlBegin(ctx)
 	if err != nil {
@@ -97,12 +97,12 @@ func (s *roomUsecase) Join(ctx context.Context, req *roomServer.RoomJoinRequest)
 		s.transactionService.CommonMysqlEnd(ctx, tx, err)
 	}()
 
-	result, err := s.roomService.Join(ctx, tx, roomService.SetRoomJoinRequest(req.UserId, req.RoomId))
+	result, err := s.roomService.CheckIn(ctx, tx, roomService.SetRoomCheckInRequest(req.UserId, req.RoomId))
 	if err != nil {
 		return nil, errors.NewMethodError("s.roomService.Join", err)
 	}
 
-	return roomServer.SetRoomJoinResponse(
+	return roomServer.SetRoomCheckInResponse(
 		roomServer.SetCommonRoom(
 			result.CommonRoom.RoomId,
 			result.CommonRoom.HostUserId,

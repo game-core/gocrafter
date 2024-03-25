@@ -3,6 +3,7 @@ package room
 
 import (
 	"context"
+
 	"gorm.io/gorm"
 
 	"github.com/game-core/gocrafter/internal/errors"
@@ -17,7 +18,7 @@ import (
 type RoomService interface {
 	Create(ctx context.Context, tx *gorm.DB, req *RoomCreateRequest) (*RoomCreateResponse, error)
 	Delete(ctx context.Context, tx *gorm.DB, req *RoomDeleteRequest) (*RoomDeleteResponse, error)
-	Join(ctx context.Context, tx *gorm.DB, req *RoomJoinRequest) (*RoomJoinResponse, error)
+	CheckIn(ctx context.Context, tx *gorm.DB, req *RoomCheckInRequest) (*RoomCheckInResponse, error)
 }
 
 type roomService struct {
@@ -85,8 +86,8 @@ func (s *roomService) Delete(ctx context.Context, tx *gorm.DB, req *RoomDeleteRe
 	return SetRoomDeleteResponse(commonRoomModel), nil
 }
 
-// Join ルームに参加する
-func (s *roomService) Join(ctx context.Context, tx *gorm.DB, req *RoomJoinRequest) (*RoomJoinResponse, error) {
+// CheckIn ルームに参加する
+func (s *roomService) CheckIn(ctx context.Context, tx *gorm.DB, req *RoomCheckInRequest) (*RoomCheckInResponse, error) {
 	commonRoomModel, err := s.commonRoomMysqlRepository.Find(ctx, req.RoomId)
 	if err != nil {
 		return nil, errors.NewMethodError("s.commonRoomMysqlRepository.Find", err)
@@ -100,12 +101,18 @@ func (s *roomService) Join(ctx context.Context, tx *gorm.DB, req *RoomJoinReques
 	case enum.RoomReleaseType_Public:
 	}
 
+	commonRoomModel.UserCount += 1
+	newCommonRoomModel, err := s.commonRoomMysqlRepository.Update(ctx, tx, commonRoomModel)
+	if err != nil {
+		return nil, errors.NewMethodError("s.commonRoomMysqlRepository.Update", err)
+	}
+
 	commonRoomUserModel, err := s.commonRoomUserMysqlRepository.Create(ctx, tx, commonRoomUser.SetCommonRoomUser(req.RoomId, req.UserId, enum.RoomUserPositionType_General))
 	if err != nil {
 		return nil, errors.NewMethodError("s.commonRoomMysqlRepository.Find", err)
 	}
 
-	return SetRoomJoinResponse(commonRoomModel, commonRoomUserModel), nil
+	return SetRoomCheckInResponse(newCommonRoomModel, commonRoomUserModel), nil
 }
 
 // generateRoomId ルームIdを生成する

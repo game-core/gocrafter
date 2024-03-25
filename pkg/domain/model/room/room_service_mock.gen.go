@@ -35,6 +35,21 @@ func (m *MockRoomService) EXPECT() *MockRoomServiceMockRecorder {
 	return m.recorder
 }
 
+// CheckIn mocks base method.
+func (m *MockRoomService) CheckIn(ctx context.Context, tx *gorm.DB, req *RoomCheckInRequest) (*RoomCheckInResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CheckIn", ctx, tx, req)
+	ret0, _ := ret[0].(*RoomCheckInResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CheckIn indicates an expected call of CheckIn.
+func (mr *MockRoomServiceMockRecorder) CheckIn(ctx, tx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckIn", reflect.TypeOf((*MockRoomService)(nil).CheckIn), ctx, tx, req)
+}
+
 // Create mocks base method.
 func (m *MockRoomService) Create(ctx context.Context, tx *gorm.DB, req *RoomCreateRequest) (*RoomCreateResponse, error) {
 	m.ctrl.T.Helper()
@@ -48,4 +63,19 @@ func (m *MockRoomService) Create(ctx context.Context, tx *gorm.DB, req *RoomCrea
 func (mr *MockRoomServiceMockRecorder) Create(ctx, tx, req interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockRoomService)(nil).Create), ctx, tx, req)
+}
+
+// Delete mocks base method.
+func (m *MockRoomService) Delete(ctx context.Context, tx *gorm.DB, req *RoomDeleteRequest) (*RoomDeleteResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Delete", ctx, tx, req)
+	ret0, _ := ret[0].(*RoomDeleteResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Delete indicates an expected call of Delete.
+func (mr *MockRoomServiceMockRecorder) Delete(ctx, tx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockRoomService)(nil).Delete), ctx, tx, req)
 }

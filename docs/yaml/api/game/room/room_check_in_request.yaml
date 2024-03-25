@@ -1,4 +1,4 @@
-name: RoomJoinRequest
+name: RoomCheckInRequest
 package: room
 comment: "ルーム参加リクエスト"
 

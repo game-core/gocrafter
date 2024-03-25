@@ -19,11 +19,11 @@ structure:
     response: RoomDeleteResponse
     number: 2
     comment: "ルームを削除する"
-  Join:
-    name: join
+  CheckIn:
+    name: check_in
     method: unary
     auth: true
-    request: RoomJoinRequest
-    response: RoomJoinResponse
+    request: RoomCheckInRequest
+    response: RoomCheckInResponse
     number: 3
     comment: "ルームに参加する"

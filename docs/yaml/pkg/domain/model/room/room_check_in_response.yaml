@@ -1,4 +1,4 @@
-name: RoomJoinResponse
+name: RoomCheckInResponse
 package: room
 comment: "ルーム参加レスポンス"
 
@@ -6,12 +6,14 @@ structure:
   CommonRoom:
     name: common_room
     type: structure
+    package: room/commonRoom
     nullable: true
     number: 1
     comment: "ルーム"
   CommonRoomUser:
     name: common_room_user
     type: structure
+    package: room/commonRoomUser
     nullable: true
     number: 2
     comment: "ルームユーザー"
