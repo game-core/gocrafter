@@ -1388,3 +1388,137 @@ func TestFriendService_Delete(t *testing.T) {
 		})
 	}
 }
+
+func TestFriendService_Check(t *testing.T) {
+	type fields struct {
+		userFriendMysqlRepository func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository
+	}
+	type args struct {
+		ctx context.Context
+		req *FriendCheckRequest
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *FriendCheckResponse
+		wantErr error
+	}{
+		{
+			name: "正常：確認できる",
+			fields: fields{
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							"0:0000",
+							"1:1111",
+						).
+						Return(
+							&userFriend.UserFriend{
+								UserId:       "0:0000",
+								FriendUserId: "1:1111",
+								FriendType:   enum.FriendType_Approved,
+							},
+							nil,
+						)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &FriendCheckRequest{
+					UserId:       "0:0000",
+					FriendUserId: "1:1111",
+				},
+			},
+			want: &FriendCheckResponse{
+				UserFriend: &userFriend.UserFriend{
+					UserId:       "0:0000",
+					FriendUserId: "1:1111",
+					FriendType:   enum.FriendType_Approved,
+				},
+			},
+			wantErr: nil,
+		},
+		{
+			name: "異常：s.userFriendMysqlRepository.FindOrNil",
+			fields: fields{
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							"0:0000",
+							"1:1111",
+						).
+						Return(
+							nil,
+							errors.NewTestError(),
+						)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &FriendCheckRequest{
+					UserId:       "0:0000",
+					FriendUserId: "1:1111",
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.userFriendMysqlRepository.Find", errors.NewTestError()),
+		},
+		{
+			name: "異常：not a friend",
+			fields: fields{
+				userFriendMysqlRepository: func(ctrl *gomock.Controller) userFriend.UserFriendMysqlRepository {
+					m := userFriend.NewMockUserFriendMysqlRepository(ctrl)
+					m.EXPECT().
+						Find(
+							nil,
+							"0:0000",
+							"1:1111",
+						).
+						Return(
+							&userFriend.UserFriend{
+								UserId:       "0:0000",
+								FriendUserId: "1:1111",
+								FriendType:   enum.FriendType_Applying,
+							},
+							nil,
+						)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &FriendCheckRequest{
+					UserId:       "0:0000",
+					FriendUserId: "1:1111",
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewError("not a friend"),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctrl := gomock.NewController(t)
+
+			s := &friendService{
+				userFriendMysqlRepository: tt.fields.userFriendMysqlRepository(ctrl),
+			}
+
+			got, err := s.Check(tt.args.ctx, tt.args.req)
+			if !reflect.DeepEqual(err, tt.wantErr) {
+				t.Errorf("Check() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Check() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

@@ -17,5 +17,13 @@ structure:
     auth: true
     request: RoomDeleteRequest
     response: RoomDeleteResponse
-    number: 1
+    number: 2
     comment: "ルームを削除する"
+  Join:
+    name: join
+    method: unary
+    auth: true
+    request: RoomJoinRequest
+    response: RoomJoinResponse
+    number: 3
+    comment: "ルームに参加する"

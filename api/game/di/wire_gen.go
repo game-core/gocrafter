@@ -243,10 +243,11 @@ func InitializeResourceService() resource.ResourceService {
 
 func InitializeRoomService() room3.RoomService {
 	configService := InitializeConfigService()
+	friendService := InitializeFriendService()
 	mysqlHandler := database.NewMysql()
 	commonRoomMysqlRepository := commonRoom.NewCommonRoomDao(mysqlHandler)
 	commonRoomUserMysqlRepository := commonRoomUser.NewCommonRoomUserDao(mysqlHandler)
-	roomService := room3.NewRoomService(configService, commonRoomMysqlRepository, commonRoomUserMysqlRepository)
+	roomService := room3.NewRoomService(configService, friendService, commonRoomMysqlRepository, commonRoomUserMysqlRepository)
 	return roomService
 }
 

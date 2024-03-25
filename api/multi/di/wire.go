@@ -176,6 +176,7 @@ func InitializeRoomService() roomService.RoomService {
 		database.NewMysql,
 		roomService.NewRoomService,
 		InitializeConfigService,
+		InitializeFriendService,
 		commonRoomMysqlDao.NewCommonRoomDao,
 		commonRoomUserMysqlDao.NewCommonRoomUserDao,
 	)

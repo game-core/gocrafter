@@ -1,0 +1,11 @@
+name: FriendCheckResponse
+package: friend
+comment: "フレンド確認レスポンス"
+
+structure:
+  UserFriend:
+    name: user_friend
+    type: structure
+    nullable: true
+    number: 1
+    comment: "ユーザーフレンド"

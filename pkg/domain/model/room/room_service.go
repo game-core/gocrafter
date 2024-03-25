@@ -3,13 +3,13 @@ package room
 
 import (
 	"context"
-
 	"gorm.io/gorm"
 
 	"github.com/game-core/gocrafter/internal/errors"
 	"github.com/game-core/gocrafter/internal/keys"
 	"github.com/game-core/gocrafter/pkg/domain/enum"
 	configService "github.com/game-core/gocrafter/pkg/domain/model/config"
+	friendService "github.com/game-core/gocrafter/pkg/domain/model/friend"
 	"github.com/game-core/gocrafter/pkg/domain/model/room/commonRoom"
 	"github.com/game-core/gocrafter/pkg/domain/model/room/commonRoomUser"
 )
@@ -17,21 +17,25 @@ import (
 type RoomService interface {
 	Create(ctx context.Context, tx *gorm.DB, req *RoomCreateRequest) (*RoomCreateResponse, error)
 	Delete(ctx context.Context, tx *gorm.DB, req *RoomDeleteRequest) (*RoomDeleteResponse, error)
+	Join(ctx context.Context, tx *gorm.DB, req *RoomJoinRequest) (*RoomJoinResponse, error)
 }
 
 type roomService struct {
 	configService                 configService.ConfigService
+	friendService                 friendService.FriendService
 	commonRoomMysqlRepository     commonRoom.CommonRoomMysqlRepository
 	commonRoomUserMysqlRepository commonRoomUser.CommonRoomUserMysqlRepository
 }
 
 func NewRoomService(
 	configService configService.ConfigService,
+	friendService friendService.FriendService,
 	commonRoomMysqlRepository commonRoom.CommonRoomMysqlRepository,
 	commonRoomUserMysqlRepository commonRoomUser.CommonRoomUserMysqlRepository,
 ) RoomService {
 	return &roomService{
 		configService:                 configService,
+		friendService:                 friendService,
 		commonRoomMysqlRepository:     commonRoomMysqlRepository,
 		commonRoomUserMysqlRepository: commonRoomUserMysqlRepository,
 	}
@@ -44,7 +48,7 @@ func (s *roomService) Create(ctx context.Context, tx *gorm.DB, req *RoomCreateRe
 		return nil, errors.NewMethodError("s.generateRoomId", err)
 	}
 
-	commonRoomModel, err := s.commonRoomMysqlRepository.Create(ctx, tx, commonRoom.SetCommonRoom(roomId, req.UserId, 1, req.Name, 1))
+	commonRoomModel, err := s.commonRoomMysqlRepository.Create(ctx, tx, commonRoom.SetCommonRoom(roomId, req.UserId, req.RoomReleaseType, req.Name, 1))
 	if err != nil {
 		return nil, errors.NewMethodError("s.commonRoomMysqlRepository.Create", err)
 	}
@@ -79,6 +83,29 @@ func (s *roomService) Delete(ctx context.Context, tx *gorm.DB, req *RoomDeleteRe
 	}
 
 	return SetRoomDeleteResponse(commonRoomModel), nil
+}
+
+// Join ルームに参加する
+func (s *roomService) Join(ctx context.Context, tx *gorm.DB, req *RoomJoinRequest) (*RoomJoinResponse, error) {
+	commonRoomModel, err := s.commonRoomMysqlRepository.Find(ctx, req.RoomId)
+	if err != nil {
+		return nil, errors.NewMethodError("s.commonRoomMysqlRepository.Find", err)
+	}
+
+	switch commonRoomModel.RoomReleaseType {
+	case enum.RoomReleaseType_Private:
+		if _, err := s.friendService.Check(ctx, friendService.SetFriendCheckRequest(commonRoomModel.HostUserId, req.UserId)); err != nil {
+			return nil, errors.NewMethodError("s.friendService.Check", err)
+		}
+	case enum.RoomReleaseType_Public:
+	}
+
+	commonRoomUserModel, err := s.commonRoomUserMysqlRepository.Create(ctx, tx, commonRoomUser.SetCommonRoomUser(req.RoomId, req.UserId, enum.RoomUserPositionType_General))
+	if err != nil {
+		return nil, errors.NewMethodError("s.commonRoomMysqlRepository.Find", err)
+	}
+
+	return SetRoomJoinResponse(commonRoomModel, commonRoomUserModel), nil
 }
 
 // generateRoomId ルームIdを生成する

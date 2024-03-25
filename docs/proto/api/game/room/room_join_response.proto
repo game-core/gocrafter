@@ -1,0 +1,14 @@
+// ルーム参加レスポンス
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/room";
+
+import "common_room_structure.proto";
+import "common_room_user_structure.proto";
+
+message RoomJoinResponse {
+  optional CommonRoom common_room = 1;
+  optional CommonRoomUser common_room_user = 2;
+}

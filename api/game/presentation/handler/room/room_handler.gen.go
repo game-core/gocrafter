@@ -51,3 +51,16 @@ func (s *roomHandler) Delete(ctx context.Context, req *room.RoomDeleteRequest) (
 
 	return res, nil
 }
+
+// Join ルームに参加する
+func (s *roomHandler) Join(ctx context.Context, req *room.RoomJoinRequest) (*room.RoomJoinResponse, error) {
+	if err := tokens.CheckJwtClaims(ctx, req.UserId); err != nil {
+		return nil, errors.NewMethodError("internal.CheckJwtClaims", err)
+	}
+	res, err := s.roomUsecase.Join(ctx, req)
+	if err != nil {
+		return nil, errors.NewMethodError("s.roomUsecase.Join", err)
+	}
+
+	return res, nil
+}

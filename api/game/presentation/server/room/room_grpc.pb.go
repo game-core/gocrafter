@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	Room_Create_FullMethodName = "/proto.Room/Create"
 	Room_Delete_FullMethodName = "/proto.Room/Delete"
+	Room_Join_FullMethodName   = "/proto.Room/Join"
 )
 
 // RoomClient is the client API for Room service.
@@ -32,6 +33,7 @@ const (
 type RoomClient interface {
 	Create(ctx context.Context, in *RoomCreateRequest, opts ...grpc.CallOption) (*RoomCreateResponse, error)
 	Delete(ctx context.Context, in *RoomDeleteRequest, opts ...grpc.CallOption) (*RoomDeleteResponse, error)
+	Join(ctx context.Context, in *RoomJoinRequest, opts ...grpc.CallOption) (*RoomJoinResponse, error)
 }
 
 type roomClient struct {
@@ -60,12 +62,22 @@ func (c *roomClient) Delete(ctx context.Context, in *RoomDeleteRequest, opts ...
 	return out, nil
 }
 
+func (c *roomClient) Join(ctx context.Context, in *RoomJoinRequest, opts ...grpc.CallOption) (*RoomJoinResponse, error) {
+	out := new(RoomJoinResponse)
+	err := c.cc.Invoke(ctx, Room_Join_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // RoomServer is the server API for Room service.
 // All implementations must embed UnimplementedRoomServer
 // for forward compatibility
 type RoomServer interface {
 	Create(context.Context, *RoomCreateRequest) (*RoomCreateResponse, error)
 	Delete(context.Context, *RoomDeleteRequest) (*RoomDeleteResponse, error)
+	Join(context.Context, *RoomJoinRequest) (*RoomJoinResponse, error)
 	mustEmbedUnimplementedRoomServer()
 }
 
@@ -78,6 +90,9 @@ func (UnimplementedRoomServer) Create(context.Context, *RoomCreateRequest) (*Roo
 }
 func (UnimplementedRoomServer) Delete(context.Context, *RoomDeleteRequest) (*RoomDeleteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+}
+func (UnimplementedRoomServer) Join(context.Context, *RoomJoinRequest) (*RoomJoinResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Join not implemented")
 }
 func (UnimplementedRoomServer) mustEmbedUnimplementedRoomServer() {}
 
@@ -128,6 +143,24 @@ func _Room_Delete_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Room_Join_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RoomJoinRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RoomServer).Join(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Room_Join_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RoomServer).Join(ctx, req.(*RoomJoinRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Room_ServiceDesc is the grpc.ServiceDesc for Room service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -142,6 +175,10 @@ var Room_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Delete",
 			Handler:    _Room_Delete_Handler,
+		},
+		{
+			MethodName: "Join",
+			Handler:    _Room_Join_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

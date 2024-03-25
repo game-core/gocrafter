@@ -18,6 +18,7 @@ type FriendService interface {
 	Approve(ctx context.Context, txs map[string]*gorm.DB, req *FriendApproveRequest) (*FriendApproveResponse, error)
 	Disapprove(ctx context.Context, txs map[string]*gorm.DB, req *FriendDisapproveRequest) (*FriendDisapproveResponse, error)
 	Delete(ctx context.Context, txs map[string]*gorm.DB, req *FriendDeleteRequest) (*FriendDeleteResponse, error)
+	Check(ctx context.Context, req *FriendCheckRequest) (*FriendCheckResponse, error)
 }
 
 type friendService struct {
@@ -137,4 +138,18 @@ func (s *friendService) Delete(ctx context.Context, txs map[string]*gorm.DB, req
 	}
 
 	return SetFriendDeleteResponse(userFriend.SetUserFriend(req.UserId, req.FriendUserId, enum.FriendType_NotFriend)), nil
+}
+
+// Check フレンドを確認する
+func (s *friendService) Check(ctx context.Context, req *FriendCheckRequest) (*FriendCheckResponse, error) {
+	userFriendModel, err := s.userFriendMysqlRepository.Find(ctx, req.UserId, req.FriendUserId)
+	if err != nil {
+		return nil, errors.NewMethodError("s.userFriendMysqlRepository.Find", err)
+	}
+
+	if userFriendModel.FriendType != enum.FriendType_Approved {
+		return nil, errors.NewError("not a friend")
+	}
+
+	return SetFriendCheckResponse(userFriendModel), nil
 }

@@ -9,8 +9,11 @@ import "room_create_request.proto";
 import "room_create_response.proto";
 import "room_delete_request.proto";
 import "room_delete_response.proto";
+import "room_join_request.proto";
+import "room_join_response.proto";
 
 service Room {
   rpc Create (RoomCreateRequest) returns (RoomCreateResponse);
   rpc Delete (RoomDeleteRequest) returns (RoomDeleteResponse);
+  rpc Join (RoomJoinRequest) returns (RoomJoinResponse);
 }

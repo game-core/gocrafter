@@ -1,0 +1,14 @@
+// ルームユーザー
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/room";
+
+import "room_user_position_type_enum.proto";
+
+message CommonRoomUser {
+  string room_id = 1;
+  string user_id = 2;
+  RoomUserPositionType room_user_position_type = 3;
+}
