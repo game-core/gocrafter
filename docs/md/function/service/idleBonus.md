@@ -1,6 +1,6 @@
 # IdleBonus
 放置ボーナス関連。  
-[protobuf](https://github.com/game-core/gocrafter/tree/main/docs/proto/api/game/idleBonus)  
+[model](https://github.com/game-core/gocrafter/tree/main/pkg/domain/model/idleBonus)
 
 - [GetUser](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/idleBonus.md#GetUser)
 - [GetMaster](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/idleBonus.md#GetMaster)

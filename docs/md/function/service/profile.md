@@ -1,6 +1,6 @@
 # Profile
 プロフィール関連。
-[protobuf](https://github.com/game-core/gocrafter/tree/main/docs/proto/api/game/profile)  
+[model](https://github.com/game-core/gocrafter/tree/main/pkg/domain/model/profile)
 
 - [Create](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/profile.md#create)
 - [Update](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/profile.md#update)

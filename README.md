@@ -11,6 +11,7 @@
   - [IdleBonus：放置ボーナス](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/idleBonus.md)
   - [LoginBonus：ログインボーナス](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/loginBonus.md)
   - [Profile：プロフィール](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/profile.md)
+  - [Room：ルーム](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/room.md)
 - Service
   - [Account：アカウント](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/account.md)
   - [Action：ユーザー行動管理](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/action.md)
@@ -22,6 +23,7 @@
   - [Rarity：レアリティ](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/rarity.md)
   - [Config：設定](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/config.md)
   - [Resource：リソース](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/resource.md)
+  - [Room：ルーム](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/room.md)
   - [Shard：シャード管理](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/shard.md)
   - [Transaction：トランザクション管理](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/transaction.md)
 ## リンク

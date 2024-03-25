@@ -1,6 +1,6 @@
 # Friend
-フレンド関連。  
-[protobuf](https://github.com/game-core/gocrafter/tree/main/docs/proto/api/game/friend)  
+フレンド関連。
+[model](https://github.com/game-core/gocrafter/tree/main/pkg/domain/model/friend)
 
 - [Get](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/friend.md#get)
 - [Send](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/friend.md#send)
