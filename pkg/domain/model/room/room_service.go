@@ -4,11 +4,10 @@ package room
 import (
 	"context"
 
-	"github.com/game-core/gocrafter/internal/keys"
-
 	"gorm.io/gorm"
 
 	"github.com/game-core/gocrafter/internal/errors"
+	"github.com/game-core/gocrafter/internal/keys"
 	"github.com/game-core/gocrafter/pkg/domain/enum"
 	configService "github.com/game-core/gocrafter/pkg/domain/model/config"
 	"github.com/game-core/gocrafter/pkg/domain/model/room/commonRoom"
