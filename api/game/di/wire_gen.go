@@ -12,15 +12,18 @@ import (
 	"github.com/game-core/gocrafter/api/game/presentation/handler/idleBonus"
 	"github.com/game-core/gocrafter/api/game/presentation/handler/loginBonus"
 	"github.com/game-core/gocrafter/api/game/presentation/handler/profile"
+	"github.com/game-core/gocrafter/api/game/presentation/handler/room"
 	"github.com/game-core/gocrafter/api/game/presentation/interceptor/auth"
 	account2 "github.com/game-core/gocrafter/api/game/usecase/account"
 	friend2 "github.com/game-core/gocrafter/api/game/usecase/friend"
 	idleBonus2 "github.com/game-core/gocrafter/api/game/usecase/idleBonus"
 	loginBonus2 "github.com/game-core/gocrafter/api/game/usecase/loginBonus"
 	profile2 "github.com/game-core/gocrafter/api/game/usecase/profile"
+	room2 "github.com/game-core/gocrafter/api/game/usecase/room"
 	"github.com/game-core/gocrafter/configs/database"
 	account3 "github.com/game-core/gocrafter/pkg/domain/model/account"
 	"github.com/game-core/gocrafter/pkg/domain/model/action"
+	"github.com/game-core/gocrafter/pkg/domain/model/config"
 	friend3 "github.com/game-core/gocrafter/pkg/domain/model/friend"
 	idleBonus3 "github.com/game-core/gocrafter/pkg/domain/model/idleBonus"
 	"github.com/game-core/gocrafter/pkg/domain/model/item"
@@ -28,14 +31,18 @@ import (
 	profile3 "github.com/game-core/gocrafter/pkg/domain/model/profile"
 	"github.com/game-core/gocrafter/pkg/domain/model/rarity"
 	"github.com/game-core/gocrafter/pkg/domain/model/resource"
+	room3 "github.com/game-core/gocrafter/pkg/domain/model/room"
 	"github.com/game-core/gocrafter/pkg/domain/model/shard"
 	"github.com/game-core/gocrafter/pkg/domain/model/transaction"
+	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonRoom"
+	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonRoomUser"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonShard"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonTransaction"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterAction"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionRun"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionStep"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionTrigger"
+	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterConfig"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonus"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusEvent"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusItem"
@@ -97,6 +104,12 @@ func InitializeProfileHandler() profile.ProfileHandler {
 	return profileHandler
 }
 
+func InitializeRoomHandler() room.RoomHandler {
+	roomUsecase := InitializeRoomUsecase()
+	roomHandler := room.NewRoomHandler(roomUsecase)
+	return roomHandler
+}
+
 func InitializeAccountUsecase() account2.AccountUsecase {
 	accountService := InitializeAccountService()
 	transactionService := InitializeTransactionService()
@@ -132,6 +145,13 @@ func InitializeProfileUsecase() profile2.ProfileUsecase {
 	return profileUsecase
 }
 
+func InitializeRoomUsecase() room2.RoomUsecase {
+	roomService := InitializeRoomService()
+	transactionService := InitializeTransactionService()
+	roomUsecase := room2.NewRoomUsecase(roomService, transactionService)
+	return roomUsecase
+}
+
 func InitializeAccountService() account3.AccountService {
 	shardService := InitializeShardService()
 	mysqlHandler := database.NewMysql()
@@ -151,6 +171,13 @@ func InitializeActionService() action.ActionService {
 	userActionMysqlRepository := userAction.NewUserActionDao(mysqlHandler)
 	actionService := action.NewActionService(masterActionMysqlRepository, masterActionRunMysqlRepository, masterActionStepMysqlRepository, masterActionTriggerMysqlRepository, userActionMysqlRepository)
 	return actionService
+}
+
+func InitializeConfigService() config.ConfigService {
+	mysqlHandler := database.NewMysql()
+	masterConfigMysqlRepository := masterConfig.NewMasterConfigDao(mysqlHandler)
+	configService := config.NewConfigService(masterConfigMysqlRepository)
+	return configService
 }
 
 func InitializeFriendService() friend3.FriendService {
@@ -212,6 +239,15 @@ func InitializeResourceService() resource.ResourceService {
 	masterResourceMysqlRepository := masterResource.NewMasterResourceDao(mysqlHandler)
 	resourceService := resource.NewResourceService(masterResourceMysqlRepository)
 	return resourceService
+}
+
+func InitializeRoomService() room3.RoomService {
+	configService := InitializeConfigService()
+	mysqlHandler := database.NewMysql()
+	commonRoomMysqlRepository := commonRoom.NewCommonRoomDao(mysqlHandler)
+	commonRoomUserMysqlRepository := commonRoomUser.NewCommonRoomUserDao(mysqlHandler)
+	roomService := room3.NewRoomService(configService, commonRoomMysqlRepository, commonRoomUserMysqlRepository)
+	return roomService
 }
 
 func InitializeShardService() shard.ShardService {

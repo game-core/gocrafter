@@ -1,0 +1,35 @@
+name: CommonRoom
+package: room
+comment: "ルーム"
+
+structure:
+  RoomId:
+    name: room_id
+    type: string
+    nullable: false
+    number: 1
+    comment: "ルームID"
+  HostUserId:
+    name: host_user_id
+    type: string
+    nullable: false
+    number: 2
+    comment: "作成したユーザーID"
+  RoomReleaseType:
+    name: room_release_type
+    type: enum
+    nullable: false
+    number: 3
+    comment: "ルーム公開タイプ"
+  Name:
+    name: name
+    type: string
+    nullable: false
+    number: 4
+    comment: "ルーム名"
+  UserCount:
+    name: user_count
+    type: int32
+    nullable: false
+    number: 5
+    comment: "ユーザー数"

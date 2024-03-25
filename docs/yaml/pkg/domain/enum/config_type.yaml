@@ -6,7 +6,7 @@ structure:
   MaxRoomNumber:
     name: MaxRoomNumber
     number: 0
-    comment: "最大ルーム番号"
+    comment: "最大ルーム数"
   MaxRoomUser:
     name: MaxRoomUser
     number: 1

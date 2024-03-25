@@ -1,0 +1,16 @@
+// ルーム
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/room";
+
+import "room_release_type_enum.proto";
+
+message CommonRoom {
+  string room_id = 1;
+  string host_user_id = 2;
+  RoomReleaseType room_release_type = 3;
+  string name = 4;
+  int32 user_count = 5;
+}

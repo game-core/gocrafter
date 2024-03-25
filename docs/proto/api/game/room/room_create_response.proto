@@ -1,0 +1,12 @@
+// ルーム作成レスポンス
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/room";
+
+import "common_room_structure.proto";
+
+message RoomCreateResponse {
+  optional CommonRoom common_room = 1;
+}

@@ -1,0 +1,13 @@
+name: Room
+package: room
+comment: "ルーム"
+
+structure:
+  Create:
+    name: create
+    method: unary
+    auth: true
+    request: RoomCreateRequest
+    response: RoomCreateResponse
+    number: 1
+    comment: "ルームを作成する"

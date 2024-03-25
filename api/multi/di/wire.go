@@ -11,6 +11,7 @@ import (
 	authInterceptor "github.com/game-core/gocrafter/api/multi/presentation/interceptor/auth"
 	accountService "github.com/game-core/gocrafter/pkg/domain/model/account"
 	actionService "github.com/game-core/gocrafter/pkg/domain/model/action"
+	configService "github.com/game-core/gocrafter/pkg/domain/model/config"
 	friendService "github.com/game-core/gocrafter/pkg/domain/model/friend"
 	idleBonusService "github.com/game-core/gocrafter/pkg/domain/model/idleBonus"
 	itemService "github.com/game-core/gocrafter/pkg/domain/model/item"
@@ -18,14 +19,18 @@ import (
 	profileService "github.com/game-core/gocrafter/pkg/domain/model/profile"
 	rarityService "github.com/game-core/gocrafter/pkg/domain/model/rarity"
 	resourceService "github.com/game-core/gocrafter/pkg/domain/model/resource"
+	roomService "github.com/game-core/gocrafter/pkg/domain/model/room"
 	shardService "github.com/game-core/gocrafter/pkg/domain/model/shard"
 	transactionService "github.com/game-core/gocrafter/pkg/domain/model/transaction"
+	commonRoomMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonRoom"
+	commonRoomUserMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonRoomUser"
 	commonShardMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonShard"
 	commonTransactionMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonTransaction"
 	masterActionMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterAction"
 	masterActionRunMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionRun"
 	masterActionStepMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionStep"
 	masterActionTriggerMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionTrigger"
+	masterConfigMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterConfig"
 	masterIdleBonusMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonus"
 	masterIdleBonusEventMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusEvent"
 	masterIdleBonusItemMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusItem"
@@ -78,6 +83,15 @@ func InitializeActionService() actionService.ActionService {
 		masterActionStepMysqlDao.NewMasterActionStepDao,
 		masterActionTriggerMysqlDao.NewMasterActionTriggerDao,
 		userActionMysqlDao.NewUserActionDao,
+	)
+	return nil
+}
+
+func InitializeConfigService() configService.ConfigService {
+	wire.Build(
+		database.NewMysql,
+		configService.NewConfigService,
+		masterConfigMysqlDao.NewMasterConfigDao,
 	)
 	return nil
 }
@@ -153,6 +167,17 @@ func InitializeResourceService() resourceService.ResourceService {
 		database.NewMysql,
 		resourceService.NewResourceService,
 		masterResourceMysqlDao.NewMasterResourceDao,
+	)
+	return nil
+}
+
+func InitializeRoomService() roomService.RoomService {
+	wire.Build(
+		database.NewMysql,
+		roomService.NewRoomService,
+		InitializeConfigService,
+		commonRoomMysqlDao.NewCommonRoomDao,
+		commonRoomUserMysqlDao.NewCommonRoomUserDao,
 	)
 	return nil
 }

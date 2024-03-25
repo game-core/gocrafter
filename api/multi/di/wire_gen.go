@@ -11,6 +11,7 @@ import (
 	"github.com/game-core/gocrafter/configs/database"
 	"github.com/game-core/gocrafter/pkg/domain/model/account"
 	"github.com/game-core/gocrafter/pkg/domain/model/action"
+	"github.com/game-core/gocrafter/pkg/domain/model/config"
 	"github.com/game-core/gocrafter/pkg/domain/model/friend"
 	"github.com/game-core/gocrafter/pkg/domain/model/idleBonus"
 	"github.com/game-core/gocrafter/pkg/domain/model/item"
@@ -18,14 +19,18 @@ import (
 	"github.com/game-core/gocrafter/pkg/domain/model/profile"
 	"github.com/game-core/gocrafter/pkg/domain/model/rarity"
 	"github.com/game-core/gocrafter/pkg/domain/model/resource"
+	"github.com/game-core/gocrafter/pkg/domain/model/room"
 	"github.com/game-core/gocrafter/pkg/domain/model/shard"
 	"github.com/game-core/gocrafter/pkg/domain/model/transaction"
+	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonRoom"
+	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonRoomUser"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonShard"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonTransaction"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterAction"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionRun"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionStep"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionTrigger"
+	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterConfig"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonus"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusEvent"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusItem"
@@ -76,6 +81,13 @@ func InitializeActionService() action.ActionService {
 	userActionMysqlRepository := userAction.NewUserActionDao(mysqlHandler)
 	actionService := action.NewActionService(masterActionMysqlRepository, masterActionRunMysqlRepository, masterActionStepMysqlRepository, masterActionTriggerMysqlRepository, userActionMysqlRepository)
 	return actionService
+}
+
+func InitializeConfigService() config.ConfigService {
+	mysqlHandler := database.NewMysql()
+	masterConfigMysqlRepository := masterConfig.NewMasterConfigDao(mysqlHandler)
+	configService := config.NewConfigService(masterConfigMysqlRepository)
+	return configService
 }
 
 func InitializeFriendService() friend.FriendService {
@@ -137,6 +149,15 @@ func InitializeResourceService() resource.ResourceService {
 	masterResourceMysqlRepository := masterResource.NewMasterResourceDao(mysqlHandler)
 	resourceService := resource.NewResourceService(masterResourceMysqlRepository)
 	return resourceService
+}
+
+func InitializeRoomService() room.RoomService {
+	configService := InitializeConfigService()
+	mysqlHandler := database.NewMysql()
+	commonRoomMysqlRepository := commonRoom.NewCommonRoomDao(mysqlHandler)
+	commonRoomUserMysqlRepository := commonRoomUser.NewCommonRoomUserDao(mysqlHandler)
+	roomService := room.NewRoomService(configService, commonRoomMysqlRepository, commonRoomUserMysqlRepository)
+	return roomService
 }
 
 func InitializeShardService() shard.ShardService {

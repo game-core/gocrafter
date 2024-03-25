@@ -13,14 +13,17 @@ import (
 	idleBonusHandler "github.com/game-core/gocrafter/api/game/presentation/handler/idleBonus"
 	loginBonusHandler "github.com/game-core/gocrafter/api/game/presentation/handler/loginBonus"
 	profileHandler "github.com/game-core/gocrafter/api/game/presentation/handler/profile"
+	roomHandler "github.com/game-core/gocrafter/api/game/presentation/handler/room"
 	authInterceptor "github.com/game-core/gocrafter/api/game/presentation/interceptor/auth"
 	accountUsecase "github.com/game-core/gocrafter/api/game/usecase/account"
 	friendUsecase "github.com/game-core/gocrafter/api/game/usecase/friend"
 	idleBonusUsecase "github.com/game-core/gocrafter/api/game/usecase/idleBonus"
 	loginBonusUsecase "github.com/game-core/gocrafter/api/game/usecase/loginBonus"
 	profileUsecase "github.com/game-core/gocrafter/api/game/usecase/profile"
+	roomUsecase "github.com/game-core/gocrafter/api/game/usecase/room"
 	accountService "github.com/game-core/gocrafter/pkg/domain/model/account"
 	actionService "github.com/game-core/gocrafter/pkg/domain/model/action"
+	configService "github.com/game-core/gocrafter/pkg/domain/model/config"
 	friendService "github.com/game-core/gocrafter/pkg/domain/model/friend"
 	idleBonusService "github.com/game-core/gocrafter/pkg/domain/model/idleBonus"
 	itemService "github.com/game-core/gocrafter/pkg/domain/model/item"
@@ -28,14 +31,18 @@ import (
 	profileService "github.com/game-core/gocrafter/pkg/domain/model/profile"
 	rarityService "github.com/game-core/gocrafter/pkg/domain/model/rarity"
 	resourceService "github.com/game-core/gocrafter/pkg/domain/model/resource"
+	roomService "github.com/game-core/gocrafter/pkg/domain/model/room"
 	shardService "github.com/game-core/gocrafter/pkg/domain/model/shard"
 	transactionService "github.com/game-core/gocrafter/pkg/domain/model/transaction"
+	commonRoomMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonRoom"
+	commonRoomUserMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonRoomUser"
 	commonShardMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonShard"
 	commonTransactionMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonTransaction"
 	masterActionMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterAction"
 	masterActionRunMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionRun"
 	masterActionStepMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionStep"
 	masterActionTriggerMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionTrigger"
+	masterConfigMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterConfig"
 	masterIdleBonusMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonus"
 	masterIdleBonusEventMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusEvent"
 	masterIdleBonusItemMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusItem"
@@ -107,6 +114,14 @@ func InitializeProfileHandler() profileHandler.ProfileHandler {
 	return nil
 }
 
+func InitializeRoomHandler() roomHandler.RoomHandler {
+	wire.Build(
+		roomHandler.NewRoomHandler,
+		InitializeRoomUsecase,
+	)
+	return nil
+}
+
 func InitializeAccountUsecase() accountUsecase.AccountUsecase {
 	wire.Build(
 		accountUsecase.NewAccountUsecase,
@@ -152,6 +167,15 @@ func InitializeProfileUsecase() profileUsecase.ProfileUsecase {
 	return nil
 }
 
+func InitializeRoomUsecase() roomUsecase.RoomUsecase {
+	wire.Build(
+		roomUsecase.NewRoomUsecase,
+		InitializeRoomService,
+		InitializeTransactionService,
+	)
+	return nil
+}
+
 func InitializeAccountService() accountService.AccountService {
 	wire.Build(
 		database.NewMysql,
@@ -173,6 +197,15 @@ func InitializeActionService() actionService.ActionService {
 		masterActionStepMysqlDao.NewMasterActionStepDao,
 		masterActionTriggerMysqlDao.NewMasterActionTriggerDao,
 		userActionMysqlDao.NewUserActionDao,
+	)
+	return nil
+}
+
+func InitializeConfigService() configService.ConfigService {
+	wire.Build(
+		database.NewMysql,
+		configService.NewConfigService,
+		masterConfigMysqlDao.NewMasterConfigDao,
 	)
 	return nil
 }
@@ -248,6 +281,17 @@ func InitializeResourceService() resourceService.ResourceService {
 		database.NewMysql,
 		resourceService.NewResourceService,
 		masterResourceMysqlDao.NewMasterResourceDao,
+	)
+	return nil
+}
+
+func InitializeRoomService() roomService.RoomService {
+	wire.Build(
+		database.NewMysql,
+		roomService.NewRoomService,
+		InitializeConfigService,
+		commonRoomMysqlDao.NewCommonRoomDao,
+		commonRoomUserMysqlDao.NewCommonRoomUserDao,
 	)
 	return nil
 }
