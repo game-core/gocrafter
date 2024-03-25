@@ -122,8 +122,8 @@ func (s *roomUsecase) CheckIn(ctx context.Context, req *roomServer.RoomCheckInRe
 			result.CommonRoom.UserCount,
 		),
 		roomServer.SetCommonRoomUser(
-			result.CommonRoomUser.UserId,
 			result.CommonRoomUser.RoomId,
+			result.CommonRoomUser.UserId,
 			roomServer.RoomUserPositionType(result.CommonRoomUser.RoomUserPositionType),
 		),
 	), nil
@@ -154,8 +154,8 @@ func (s *roomUsecase) CheckOut(ctx context.Context, req *roomServer.RoomCheckOut
 			result.CommonRoom.UserCount,
 		),
 		roomServer.SetCommonRoomUser(
-			result.CommonRoomUser.UserId,
 			result.CommonRoomUser.RoomId,
+			result.CommonRoomUser.UserId,
 			roomServer.RoomUserPositionType(result.CommonRoomUser.RoomUserPositionType),
 		),
 	), nil
