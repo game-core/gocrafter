@@ -26,6 +26,19 @@ func NewRoomHandler(
 	}
 }
 
+// Search ルームを検索する
+func (s *roomHandler) Search(ctx context.Context, req *room.RoomSearchRequest) (*room.RoomSearchResponse, error) {
+	if err := tokens.CheckJwtClaims(ctx, req.UserId); err != nil {
+		return nil, errors.NewMethodError("internal.CheckJwtClaims", err)
+	}
+	res, err := s.roomUsecase.Search(ctx, req)
+	if err != nil {
+		return nil, errors.NewMethodError("s.roomUsecase.Search", err)
+	}
+
+	return res, nil
+}
+
 // Create ルームを作成する
 func (s *roomHandler) Create(ctx context.Context, req *room.RoomCreateRequest) (*room.RoomCreateResponse, error) {
 	if err := tokens.CheckJwtClaims(ctx, req.UserId); err != nil {

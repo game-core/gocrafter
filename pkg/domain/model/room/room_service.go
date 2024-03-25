@@ -16,6 +16,7 @@ import (
 )
 
 type RoomService interface {
+	Search(ctx context.Context, req *RoomSearchRequest) (*RoomSearchResponse, error)
 	Create(ctx context.Context, tx *gorm.DB, req *RoomCreateRequest) (*RoomCreateResponse, error)
 	Delete(ctx context.Context, tx *gorm.DB, req *RoomDeleteRequest) (*RoomDeleteResponse, error)
 	CheckIn(ctx context.Context, tx *gorm.DB, req *RoomCheckInRequest) (*RoomCheckInResponse, error)
@@ -41,6 +42,16 @@ func NewRoomService(
 		commonRoomMysqlRepository:     commonRoomMysqlRepository,
 		commonRoomUserMysqlRepository: commonRoomUserMysqlRepository,
 	}
+}
+
+// Search ルームを検索する
+func (s *roomService) Search(ctx context.Context, req *RoomSearchRequest) (*RoomSearchResponse, error) {
+	commonRoomModels, err := s.commonRoomMysqlRepository.FindListByName(ctx, req.Name)
+	if err != nil {
+		return nil, errors.NewMethodError("s.commonRoomMysqlRepository.FindListByName", err)
+	}
+
+	return SetRoomSearchResponse(commonRoomModels), nil
 }
 
 // Create ルームを作成する

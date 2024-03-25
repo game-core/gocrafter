@@ -1,0 +1,17 @@
+name: RoomSearchRequest
+package: room
+comment: "ルーム検索リクエスト"
+
+structure:
+  UserId:
+    name: user_id
+    type: string
+    nullable: false
+    number: 1
+    comment: "ユーザーID"
+  Name:
+    name: name
+    type: string
+    nullable: false
+    number: 2
+    comment: "ルーム名"

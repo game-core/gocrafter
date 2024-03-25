@@ -50,6 +50,21 @@ func (mr *MockRoomServiceMockRecorder) CheckIn(ctx, tx, req interface{}) *gomock
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckIn", reflect.TypeOf((*MockRoomService)(nil).CheckIn), ctx, tx, req)
 }
 
+// CheckOut mocks base method.
+func (m *MockRoomService) CheckOut(ctx context.Context, tx *gorm.DB, req *RoomCheckOutRequest) (*RoomCheckOutResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CheckOut", ctx, tx, req)
+	ret0, _ := ret[0].(*RoomCheckOutResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CheckOut indicates an expected call of CheckOut.
+func (mr *MockRoomServiceMockRecorder) CheckOut(ctx, tx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckOut", reflect.TypeOf((*MockRoomService)(nil).CheckOut), ctx, tx, req)
+}
+
 // Create mocks base method.
 func (m *MockRoomService) Create(ctx context.Context, tx *gorm.DB, req *RoomCreateRequest) (*RoomCreateResponse, error) {
 	m.ctrl.T.Helper()
@@ -78,4 +93,19 @@ func (m *MockRoomService) Delete(ctx context.Context, tx *gorm.DB, req *RoomDele
 func (mr *MockRoomServiceMockRecorder) Delete(ctx, tx, req interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockRoomService)(nil).Delete), ctx, tx, req)
+}
+
+// Search mocks base method.
+func (m *MockRoomService) Search(ctx context.Context, req *RoomSearchRequest) (*RoomSearchResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Search", ctx, req)
+	ret0, _ := ret[0].(*RoomSearchResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Search indicates an expected call of Search.
+func (mr *MockRoomServiceMockRecorder) Search(ctx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Search", reflect.TypeOf((*MockRoomService)(nil).Search), ctx, req)
 }

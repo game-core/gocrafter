@@ -3,13 +3,21 @@ package: room
 comment: "ルーム"
 
 structure:
+  Search:
+    name: search
+    method: unary
+    auth: true
+    request: RoomSearchRequest
+    response: RoomSearchResponse
+    number: 1
+    comment: "ルームを検索する"
   Create:
     name: create
     method: unary
     auth: true
     request: RoomCreateRequest
     response: RoomCreateResponse
-    number: 1
+    number: 2
     comment: "ルームを作成する"
   Delete:
     name: delete
@@ -17,7 +25,7 @@ structure:
     auth: true
     request: RoomDeleteRequest
     response: RoomDeleteResponse
-    number: 2
+    number: 3
     comment: "ルームを削除する"
   CheckIn:
     name: check_in
@@ -25,7 +33,7 @@ structure:
     auth: true
     request: RoomCheckInRequest
     response: RoomCheckInResponse
-    number: 3
+    number: 4
     comment: "ルームに参加する"
   CheckOut:
     name: check_out
@@ -33,5 +41,5 @@ structure:
     auth: true
     request: RoomCheckOutRequest
     response: RoomCheckOutResponse
-    number: 3
+    number: 5
     comment: "ルームを退出する"

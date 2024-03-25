@@ -22,6 +22,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
+	Room_Search_FullMethodName   = "/proto.Room/Search"
 	Room_Create_FullMethodName   = "/proto.Room/Create"
 	Room_Delete_FullMethodName   = "/proto.Room/Delete"
 	Room_CheckIn_FullMethodName  = "/proto.Room/CheckIn"
@@ -32,6 +33,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type RoomClient interface {
+	Search(ctx context.Context, in *RoomSearchRequest, opts ...grpc.CallOption) (*RoomSearchResponse, error)
 	Create(ctx context.Context, in *RoomCreateRequest, opts ...grpc.CallOption) (*RoomCreateResponse, error)
 	Delete(ctx context.Context, in *RoomDeleteRequest, opts ...grpc.CallOption) (*RoomDeleteResponse, error)
 	CheckIn(ctx context.Context, in *RoomCheckInRequest, opts ...grpc.CallOption) (*RoomCheckInResponse, error)
@@ -44,6 +46,15 @@ type roomClient struct {
 
 func NewRoomClient(cc grpc.ClientConnInterface) RoomClient {
 	return &roomClient{cc}
+}
+
+func (c *roomClient) Search(ctx context.Context, in *RoomSearchRequest, opts ...grpc.CallOption) (*RoomSearchResponse, error) {
+	out := new(RoomSearchResponse)
+	err := c.cc.Invoke(ctx, Room_Search_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *roomClient) Create(ctx context.Context, in *RoomCreateRequest, opts ...grpc.CallOption) (*RoomCreateResponse, error) {
@@ -86,6 +97,7 @@ func (c *roomClient) CheckOut(ctx context.Context, in *RoomCheckOutRequest, opts
 // All implementations must embed UnimplementedRoomServer
 // for forward compatibility
 type RoomServer interface {
+	Search(context.Context, *RoomSearchRequest) (*RoomSearchResponse, error)
 	Create(context.Context, *RoomCreateRequest) (*RoomCreateResponse, error)
 	Delete(context.Context, *RoomDeleteRequest) (*RoomDeleteResponse, error)
 	CheckIn(context.Context, *RoomCheckInRequest) (*RoomCheckInResponse, error)
@@ -97,6 +109,9 @@ type RoomServer interface {
 type UnimplementedRoomServer struct {
 }
 
+func (UnimplementedRoomServer) Search(context.Context, *RoomSearchRequest) (*RoomSearchResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Search not implemented")
+}
 func (UnimplementedRoomServer) Create(context.Context, *RoomCreateRequest) (*RoomCreateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
@@ -120,6 +135,24 @@ type UnsafeRoomServer interface {
 
 func RegisterRoomServer(s grpc.ServiceRegistrar, srv RoomServer) {
 	s.RegisterService(&Room_ServiceDesc, srv)
+}
+
+func _Room_Search_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RoomSearchRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RoomServer).Search(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Room_Search_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RoomServer).Search(ctx, req.(*RoomSearchRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Room_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -201,6 +234,10 @@ var Room_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "proto.Room",
 	HandlerType: (*RoomServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Search",
+			Handler:    _Room_Search_Handler,
+		},
 		{
 			MethodName: "Create",
 			Handler:    _Room_Create_Handler,

@@ -12,6 +12,7 @@ import (
 )
 
 type RoomUsecase interface {
+	Search(ctx context.Context, req *roomServer.RoomSearchRequest) (*roomServer.RoomSearchResponse, error)
 	Create(ctx context.Context, req *roomServer.RoomCreateRequest) (*roomServer.RoomCreateResponse, error)
 	Delete(ctx context.Context, req *roomServer.RoomDeleteRequest) (*roomServer.RoomDeleteResponse, error)
 	CheckIn(ctx context.Context, req *roomServer.RoomCheckInRequest) (*roomServer.RoomCheckInResponse, error)
@@ -31,6 +32,16 @@ func NewRoomUsecase(
 		roomService:        roomService,
 		transactionService: transactionService,
 	}
+}
+
+// Search ルームを検索する
+func (s *roomUsecase) Search(ctx context.Context, req *roomServer.RoomSearchRequest) (*roomServer.RoomSearchResponse, error) {
+	result, err := s.roomService.Search(ctx, roomService.SetRoomSearchRequest(req.UserId, req.Name))
+	if err != nil {
+		return nil, errors.NewMethodError("s.roomService.Search", err)
+	}
+
+	return roomServer.SetRoomSearchResponse(roomServer.SetCommonRooms(result.CommonRooms)), nil
 }
 
 // Create ルームを作成する

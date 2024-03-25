@@ -1,0 +1,12 @@
+// ルーム検索リクエスト
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/room";
+
+import "common_room_structure.proto";
+
+message RoomSearchResponse {
+  repeated CommonRoom common_rooms = 1;
+}

@@ -1,0 +1,11 @@
+// ルーム検索リクエスト
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/room";
+
+message RoomSearchRequest {
+  string user_id = 1;
+  string name = 2;
+}

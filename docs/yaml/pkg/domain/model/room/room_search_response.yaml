@@ -1,0 +1,12 @@
+name: RoomSearchResponse
+package: room
+comment: "ルーム検索リクエスト"
+
+structure:
+  CommonRooms:
+    name: common_rooms
+    type: structures
+    package: room/commonRoom
+    nullable: false
+    number: 1
+    comment: "ルーム一覧"
