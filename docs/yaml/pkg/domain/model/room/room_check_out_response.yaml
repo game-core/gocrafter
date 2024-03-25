@@ -1,0 +1,19 @@
+name: RoomCheckOutResponse
+package: room
+comment: "ルーム退出レスポンス"
+
+structure:
+  CommonRoom:
+    name: common_room
+    type: structure
+    package: room/commonRoom
+    nullable: true
+    number: 1
+    comment: "ルーム"
+  CommonRoomUser:
+    name: common_room_user
+    type: structure
+    package: room/commonRoomUser
+    nullable: true
+    number: 2
+    comment: "ルームユーザー"

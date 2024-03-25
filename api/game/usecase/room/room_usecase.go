@@ -15,6 +15,7 @@ type RoomUsecase interface {
 	Create(ctx context.Context, req *roomServer.RoomCreateRequest) (*roomServer.RoomCreateResponse, error)
 	Delete(ctx context.Context, req *roomServer.RoomDeleteRequest) (*roomServer.RoomDeleteResponse, error)
 	CheckIn(ctx context.Context, req *roomServer.RoomCheckInRequest) (*roomServer.RoomCheckInResponse, error)
+	CheckOut(ctx context.Context, req *roomServer.RoomCheckOutRequest) (*roomServer.RoomCheckOutResponse, error)
 }
 
 type roomUsecase struct {
@@ -99,10 +100,42 @@ func (s *roomUsecase) CheckIn(ctx context.Context, req *roomServer.RoomCheckInRe
 
 	result, err := s.roomService.CheckIn(ctx, tx, roomService.SetRoomCheckInRequest(req.UserId, req.RoomId))
 	if err != nil {
-		return nil, errors.NewMethodError("s.roomService.Join", err)
+		return nil, errors.NewMethodError("s.roomService.CheckIn", err)
 	}
 
 	return roomServer.SetRoomCheckInResponse(
+		roomServer.SetCommonRoom(
+			result.CommonRoom.RoomId,
+			result.CommonRoom.HostUserId,
+			roomServer.RoomReleaseType(result.CommonRoom.RoomReleaseType),
+			result.CommonRoom.Name,
+			result.CommonRoom.UserCount,
+		),
+		roomServer.SetCommonRoomUser(
+			result.CommonRoomUser.UserId,
+			result.CommonRoomUser.RoomId,
+			roomServer.RoomUserPositionType(result.CommonRoomUser.RoomUserPositionType),
+		),
+	), nil
+}
+
+// CheckOut ルームを退出する
+func (s *roomUsecase) CheckOut(ctx context.Context, req *roomServer.RoomCheckOutRequest) (*roomServer.RoomCheckOutResponse, error) {
+	// transaction
+	tx, err := s.transactionService.CommonMysqlBegin(ctx)
+	if err != nil {
+		return nil, errors.NewMethodError("s.transactionService.CommonMysqlBegin", err)
+	}
+	defer func() {
+		s.transactionService.CommonMysqlEnd(ctx, tx, err)
+	}()
+
+	result, err := s.roomService.CheckOut(ctx, tx, roomService.SetRoomCheckOutRequest(req.UserId, req.RoomId))
+	if err != nil {
+		return nil, errors.NewMethodError("s.roomService.CheckOut", err)
+	}
+
+	return roomServer.SetRoomCheckOutResponse(
 		roomServer.SetCommonRoom(
 			result.CommonRoom.RoomId,
 			result.CommonRoom.HostUserId,

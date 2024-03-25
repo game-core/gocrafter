@@ -1,0 +1,11 @@
+// ルーム退出リクエスト
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/room";
+
+message RoomCheckOutRequest {
+  string user_id = 1;
+  string room_id = 2;
+}

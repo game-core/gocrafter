@@ -64,3 +64,16 @@ func (s *roomHandler) CheckIn(ctx context.Context, req *room.RoomCheckInRequest)
 
 	return res, nil
 }
+
+// CheckOut ルームを退出する
+func (s *roomHandler) CheckOut(ctx context.Context, req *room.RoomCheckOutRequest) (*room.RoomCheckOutResponse, error) {
+	if err := tokens.CheckJwtClaims(ctx, req.UserId); err != nil {
+		return nil, errors.NewMethodError("internal.CheckJwtClaims", err)
+	}
+	res, err := s.roomUsecase.CheckOut(ctx, req)
+	if err != nil {
+		return nil, errors.NewMethodError("s.roomUsecase.CheckOut", err)
+	}
+
+	return res, nil
+}

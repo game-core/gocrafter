@@ -19,6 +19,7 @@ type RoomService interface {
 	Create(ctx context.Context, tx *gorm.DB, req *RoomCreateRequest) (*RoomCreateResponse, error)
 	Delete(ctx context.Context, tx *gorm.DB, req *RoomDeleteRequest) (*RoomDeleteResponse, error)
 	CheckIn(ctx context.Context, tx *gorm.DB, req *RoomCheckInRequest) (*RoomCheckInResponse, error)
+	CheckOut(ctx context.Context, tx *gorm.DB, req *RoomCheckOutRequest) (*RoomCheckOutResponse, error)
 }
 
 type roomService struct {
@@ -113,6 +114,35 @@ func (s *roomService) CheckIn(ctx context.Context, tx *gorm.DB, req *RoomCheckIn
 	}
 
 	return SetRoomCheckInResponse(newCommonRoomModel, commonRoomUserModel), nil
+}
+
+// CheckOut ルームを退出する
+func (s *roomService) CheckOut(ctx context.Context, tx *gorm.DB, req *RoomCheckOutRequest) (*RoomCheckOutResponse, error) {
+	commonRoomModel, err := s.commonRoomMysqlRepository.Find(ctx, req.RoomId)
+	if err != nil {
+		return nil, errors.NewMethodError("s.commonRoomMysqlRepository.Find", err)
+	}
+
+	if commonRoomModel.HostUserId == req.UserId {
+		return nil, errors.NewError("host user cannot check out")
+	}
+
+	commonRoomUserModel, err := s.commonRoomUserMysqlRepository.Find(ctx, req.RoomId, req.UserId)
+	if err != nil {
+		return nil, errors.NewMethodError("s.commonRoomUserMysqlRepository.Find", err)
+	}
+
+	commonRoomModel.UserCount -= 1
+	newCommonRoomModel, err := s.commonRoomMysqlRepository.Update(ctx, tx, commonRoomModel)
+	if err != nil {
+		return nil, errors.NewMethodError("s.commonRoomMysqlRepository.Update", err)
+	}
+
+	if err := s.commonRoomUserMysqlRepository.Delete(ctx, tx, commonRoomUserModel); err != nil {
+		return nil, errors.NewMethodError("s.commonRoomUserMysqlRepository.Delete", err)
+	}
+
+	return SetRoomCheckOutResponse(newCommonRoomModel, commonRoomUserModel), nil
 }
 
 // generateRoomId ルームIdを生成する

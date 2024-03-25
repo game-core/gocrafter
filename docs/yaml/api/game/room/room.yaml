@@ -27,3 +27,11 @@ structure:
     response: RoomCheckInResponse
     number: 3
     comment: "ルームに参加する"
+  CheckOut:
+    name: check_out
+    method: unary
+    auth: true
+    request: RoomCheckOutRequest
+    response: RoomCheckOutResponse
+    number: 3
+    comment: "ルームを退出する"
