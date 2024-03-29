@@ -244,7 +244,7 @@ func (s *Dao) createFind(yamlStruct *YamlStruct, primaryFields []string) string 
 		yamlStruct.Package,
 		yamlStruct.Name,
 		yamlStruct.Name,
-		s.createKey(keyList),
+		s.createKey(keyList, keyList),
 		s.createModelSetter(yamlStruct),
 	)
 }
@@ -280,7 +280,7 @@ func (s *Dao) createFindOrNil(yamlStruct *YamlStruct, primaryFields []string) st
 		yamlStruct.Package,
 		yamlStruct.Name,
 		yamlStruct.Name,
-		s.createKey(keyList),
+		s.createKey(keyList, keyList),
 		s.createModelSetter(yamlStruct),
 	)
 }
@@ -288,8 +288,10 @@ func (s *Dao) createFindOrNil(yamlStruct *YamlStruct, primaryFields []string) st
 // createSet Setを作成する
 func (s *Dao) createSet(yamlStruct *YamlStruct, primaryFields []string) string {
 	var keys []string
+	var values []string
 	for _, field := range primaryFields {
-		keys = append(keys, fmt.Sprintf("m.%s", field))
+		keys = append(keys, changes.UpperCamelToCamel(field))
+		values = append(values, fmt.Sprintf("m.%s", field))
 	}
 
 	return fmt.Sprintf(
@@ -320,7 +322,7 @@ func (s *Dao) createSet(yamlStruct *YamlStruct, primaryFields []string) string {
 		yamlStruct.Package,
 		yamlStruct.Name,
 		s.createTableSetter(yamlStruct),
-		s.createKey(keys),
+		s.createKey(keys, values),
 		s.createModelSetter(yamlStruct),
 	)
 }
@@ -328,8 +330,10 @@ func (s *Dao) createSet(yamlStruct *YamlStruct, primaryFields []string) string {
 // createDelete Deleteを作成する
 func (s *Dao) createDelete(yamlStruct *YamlStruct, primaryFields []string) string {
 	var keys []string
+	var values []string
 	for _, field := range primaryFields {
-		keys = append(keys, fmt.Sprintf("m.%s", field))
+		keys = append(keys, changes.UpperCamelToCamel(field))
+		values = append(values, fmt.Sprintf("m.%s", field))
 	}
 
 	return fmt.Sprintf(
@@ -352,13 +356,18 @@ func (s *Dao) createDelete(yamlStruct *YamlStruct, primaryFields []string) strin
 		yamlStruct.Package,
 		yamlStruct.Name,
 		yamlStruct.Name,
-		s.createKey(keys),
+		s.createKey(keys, values),
 	)
 }
 
 // createKey Keyを作成する
-func (s *Dao) createKey(keys []string) string {
-	return "fmt.Sprintf(\"%s:" + "%v\", t.TableName(), " + strings.Join(keys, ",") + ")"
+func (s *Dao) createKey(keys, values []string) string {
+	var params []string
+	for _, k := range keys {
+		params = append(params, k+":%v")
+	}
+
+	return "fmt.Sprintf(\"%s:" + strings.Join(params, ",") + "\", t.TableName(), " + strings.Join(values, ",") + ")"
 }
 
 // createParam Paramを作成する

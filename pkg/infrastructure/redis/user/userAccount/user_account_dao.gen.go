@@ -25,7 +25,7 @@ func NewUserAccountDao(conn *database.RedisHandler) userAccount.UserAccountRedis
 
 func (s *userAccountDao) Find(ctx context.Context, userId string) (*userAccount.UserAccount, error) {
 	t := NewUserAccount()
-	data, err := s.ReadRedisConn.HGet(ctx, t.TableName(), fmt.Sprintf("%s:%v", t.TableName(), userId)).Result()
+	data, err := s.ReadRedisConn.HGet(ctx, t.TableName(), fmt.Sprintf("%s:userId:%v", t.TableName(), userId)).Result()
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +39,7 @@ func (s *userAccountDao) Find(ctx context.Context, userId string) (*userAccount.
 
 func (s *userAccountDao) FindOrNil(ctx context.Context, userId string) (*userAccount.UserAccount, error) {
 	t := NewUserAccount()
-	data, err := s.ReadRedisConn.HGet(ctx, t.TableName(), fmt.Sprintf("%s:%v", t.TableName(), userId)).Result()
+	data, err := s.ReadRedisConn.HGet(ctx, t.TableName(), fmt.Sprintf("%s:userId:%v", t.TableName(), userId)).Result()
 	if err != nil {
 		if err == redis.Nil {
 			return nil, nil
@@ -75,7 +75,7 @@ func (s *userAccountDao) Set(ctx context.Context, tx redis.Pipeliner, m *userAcc
 		return nil, err
 	}
 
-	if err := conn.HSet(ctx, t.TableName(), fmt.Sprintf("%s:%v", t.TableName(), m.UserId), jt).Err(); err != nil {
+	if err := conn.HSet(ctx, t.TableName(), fmt.Sprintf("%s:userId:%v", t.TableName(), m.UserId), jt).Err(); err != nil {
 		return nil, err
 	}
 
@@ -91,7 +91,7 @@ func (s *userAccountDao) Delete(ctx context.Context, tx redis.Pipeliner, m *user
 	}
 
 	t := NewUserAccount()
-	if err := conn.HDel(ctx, t.TableName(), fmt.Sprintf("%s:%v", t.TableName(), m.UserId)).Err(); err != nil {
+	if err := conn.HDel(ctx, t.TableName(), fmt.Sprintf("%s:userId:%v", t.TableName(), m.UserId)).Err(); err != nil {
 		return err
 	}
 
