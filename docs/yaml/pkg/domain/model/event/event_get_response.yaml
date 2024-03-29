@@ -1,0 +1,12 @@
+name: EventGetResponse
+package: event
+comment: "イベント取得レスポンス"
+
+structure:
+  MasterEvent:
+    name: master_event
+    type: structure
+    package: event/masterEvent
+    nullable: true
+    number: 1
+    comment: "イベント"

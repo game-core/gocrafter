@@ -1,0 +1,11 @@
+name: EventGetRequest
+package: event
+comment: "イベント取得リクエスト"
+
+structure:
+  EventId:
+    name: event_id
+    type: int64
+    nullable: false
+    number: 1
+    comment: "イベントID"
