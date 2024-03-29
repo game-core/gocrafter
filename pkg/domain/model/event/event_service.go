@@ -26,7 +26,7 @@ func NewEventService(
 
 // Get イベントを取得する
 func (s *eventService) Get(cxt context.Context, req *EventGetRequest) (*EventGetResponse, error) {
-	result, err := s.masterEventMysqlRepository.Find(cxt, req.EventId)
+	result, err := s.masterEventMysqlRepository.Find(cxt, req.MasterEventId)
 	if err != nil {
 		return nil, errors.NewMethodError("s.masterEventMysqlRepository.Find", err)
 	}

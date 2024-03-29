@@ -3,8 +3,8 @@ package: event
 comment: "イベント取得リクエスト"
 
 structure:
-  EventId:
-    name: event_id
+  MasterEventId:
+    name: master_event_id
     type: int64
     nullable: false
     number: 1

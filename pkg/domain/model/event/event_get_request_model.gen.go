@@ -4,7 +4,7 @@ package event
 type EventGetRequests []*EventGetRequest
 
 type EventGetRequest struct {
-	EventId int64
+	MasterEventId int64
 }
 
 func NewEventGetRequest() *EventGetRequest {
@@ -15,8 +15,8 @@ func NewEventGetRequests() EventGetRequests {
 	return EventGetRequests{}
 }
 
-func SetEventGetRequest(eventId int64) *EventGetRequest {
+func SetEventGetRequest(masterEventId int64) *EventGetRequest {
 	return &EventGetRequest{
-		EventId: eventId,
+		MasterEventId: masterEventId,
 	}
 }
