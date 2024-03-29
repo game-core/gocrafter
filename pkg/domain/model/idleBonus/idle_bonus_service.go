@@ -134,7 +134,7 @@ func (s *idleBonusService) Receive(ctx context.Context, tx *gorm.DB, now time.Ti
 		return nil, errors.NewMethodError("s.receive", err)
 	}
 
-	result, err := s.update(ctx, tx, now, req.UserId, req.MasterIdleBonusId, userIdleBonusModel)
+	result, err := s.update(ctx, tx, now, userIdleBonusModel)
 	if err != nil {
 		return nil, errors.NewMethodError("s.update", err)
 	}
@@ -209,8 +209,8 @@ func (s *idleBonusService) receive(ctx context.Context, tx *gorm.DB, userId stri
 	return nil
 }
 
-// update ユーザーログインボーナスを更新
-func (s *idleBonusService) update(ctx context.Context, tx *gorm.DB, now time.Time, userId string, masterIdleBonusId int64, userIdleBonusModel *userIdleBonus.UserIdleBonus) (*userIdleBonus.UserIdleBonus, error) {
+// update ユーザー放置ボーナスを更新
+func (s *idleBonusService) update(ctx context.Context, tx *gorm.DB, now time.Time, userIdleBonusModel *userIdleBonus.UserIdleBonus) (*userIdleBonus.UserIdleBonus, error) {
 	userIdleBonusModel.ReceivedAt = now
 	result, err := s.userIdleBonusMysqlRepository.Update(ctx, tx, userIdleBonusModel)
 	if err != nil {
