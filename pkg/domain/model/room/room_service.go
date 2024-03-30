@@ -168,7 +168,7 @@ func (s *roomService) generateRoomId(ctx context.Context, userId string) (string
 		return "", errors.NewMethodError("s.configService.GetInt32", err)
 	}
 
-	if len(commonRoomModels) > int(maxRoomNumber) {
+	if len(commonRoomModels) >= int(maxRoomNumber) {
 		return "", errors.NewError("room number exceeded")
 	}
 
