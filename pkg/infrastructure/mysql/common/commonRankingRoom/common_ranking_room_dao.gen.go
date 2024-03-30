@@ -33,7 +33,7 @@ func (s *commonRankingRoomDao) Find(ctx context.Context, masterRankingId int64, 
 		return nil, errors.NewError("record does not exist")
 	}
 
-	return commonRankingRoom.SetCommonRankingRoom(t.MasterRankingId, t.RoomId, t.UserId, t.Score), nil
+	return commonRankingRoom.SetCommonRankingRoom(t.MasterRankingId, t.RoomId, t.UserId, t.Score, t.RankedAt), nil
 }
 
 func (s *commonRankingRoomDao) FindOrNil(ctx context.Context, masterRankingId int64, roomId string, userId string) (*commonRankingRoom.CommonRankingRoom, error) {
@@ -46,7 +46,7 @@ func (s *commonRankingRoomDao) FindOrNil(ctx context.Context, masterRankingId in
 		return nil, nil
 	}
 
-	return commonRankingRoom.SetCommonRankingRoom(t.MasterRankingId, t.RoomId, t.UserId, t.Score), nil
+	return commonRankingRoom.SetCommonRankingRoom(t.MasterRankingId, t.RoomId, t.UserId, t.Score, t.RankedAt), nil
 }
 
 func (s *commonRankingRoomDao) FindByMasterRankingIdAndRoomId(ctx context.Context, masterRankingId int64, roomId string) (*commonRankingRoom.CommonRankingRoom, error) {
@@ -59,7 +59,7 @@ func (s *commonRankingRoomDao) FindByMasterRankingIdAndRoomId(ctx context.Contex
 		return nil, errors.NewError("record does not exist")
 	}
 
-	return commonRankingRoom.SetCommonRankingRoom(t.MasterRankingId, t.RoomId, t.UserId, t.Score), nil
+	return commonRankingRoom.SetCommonRankingRoom(t.MasterRankingId, t.RoomId, t.UserId, t.Score, t.RankedAt), nil
 }
 
 func (s *commonRankingRoomDao) FindOrNilByMasterRankingIdAndRoomId(ctx context.Context, masterRankingId int64, roomId string) (*commonRankingRoom.CommonRankingRoom, error) {
@@ -72,7 +72,7 @@ func (s *commonRankingRoomDao) FindOrNilByMasterRankingIdAndRoomId(ctx context.C
 		return nil, nil
 	}
 
-	return commonRankingRoom.SetCommonRankingRoom(t.MasterRankingId, t.RoomId, t.UserId, t.Score), nil
+	return commonRankingRoom.SetCommonRankingRoom(t.MasterRankingId, t.RoomId, t.UserId, t.Score, t.RankedAt), nil
 }
 
 func (s *commonRankingRoomDao) FindList(ctx context.Context) (commonRankingRoom.CommonRankingRooms, error) {
@@ -84,7 +84,7 @@ func (s *commonRankingRoomDao) FindList(ctx context.Context) (commonRankingRoom.
 
 	ms := commonRankingRoom.NewCommonRankingRooms()
 	for _, t := range ts {
-		ms = append(ms, commonRankingRoom.SetCommonRankingRoom(t.MasterRankingId, t.RoomId, t.UserId, t.Score))
+		ms = append(ms, commonRankingRoom.SetCommonRankingRoom(t.MasterRankingId, t.RoomId, t.UserId, t.Score, t.RankedAt))
 	}
 
 	return ms, nil
@@ -99,7 +99,7 @@ func (s *commonRankingRoomDao) FindListByMasterRankingIdAndRoomId(ctx context.Co
 
 	ms := commonRankingRoom.NewCommonRankingRooms()
 	for _, t := range ts {
-		ms = append(ms, commonRankingRoom.SetCommonRankingRoom(t.MasterRankingId, t.RoomId, t.UserId, t.Score))
+		ms = append(ms, commonRankingRoom.SetCommonRankingRoom(t.MasterRankingId, t.RoomId, t.UserId, t.Score, t.RankedAt))
 	}
 
 	return ms, nil
@@ -118,13 +118,14 @@ func (s *commonRankingRoomDao) Create(ctx context.Context, tx *gorm.DB, m *commo
 		RoomId:          m.RoomId,
 		UserId:          m.UserId,
 		Score:           m.Score,
+		RankedAt:        m.RankedAt,
 	}
 	res := conn.Model(NewCommonRankingRoom()).WithContext(ctx).Create(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
 
-	return commonRankingRoom.SetCommonRankingRoom(t.MasterRankingId, t.RoomId, t.UserId, t.Score), nil
+	return commonRankingRoom.SetCommonRankingRoom(t.MasterRankingId, t.RoomId, t.UserId, t.Score, t.RankedAt), nil
 }
 
 func (s *commonRankingRoomDao) CreateList(ctx context.Context, tx *gorm.DB, ms commonRankingRoom.CommonRankingRooms) (commonRankingRoom.CommonRankingRooms, error) {
@@ -142,6 +143,7 @@ func (s *commonRankingRoomDao) CreateList(ctx context.Context, tx *gorm.DB, ms c
 			RoomId:          m.RoomId,
 			UserId:          m.UserId,
 			Score:           m.Score,
+			RankedAt:        m.RankedAt,
 		}
 		ts = append(ts, t)
 	}
@@ -167,13 +169,14 @@ func (s *commonRankingRoomDao) Update(ctx context.Context, tx *gorm.DB, m *commo
 		RoomId:          m.RoomId,
 		UserId:          m.UserId,
 		Score:           m.Score,
+		RankedAt:        m.RankedAt,
 	}
 	res := conn.Model(NewCommonRankingRoom()).WithContext(ctx).Where("master_ranking_id = ?", m.MasterRankingId).Where("room_id = ?", m.RoomId).Where("user_id = ?", m.UserId).Updates(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
 
-	return commonRankingRoom.SetCommonRankingRoom(t.MasterRankingId, t.RoomId, t.UserId, t.Score), nil
+	return commonRankingRoom.SetCommonRankingRoom(t.MasterRankingId, t.RoomId, t.UserId, t.Score, t.RankedAt), nil
 }
 
 func (s *commonRankingRoomDao) Delete(ctx context.Context, tx *gorm.DB, m *commonRankingRoom.CommonRankingRoom) error {

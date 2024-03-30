@@ -33,7 +33,7 @@ func (s *commonRankingWorldDao) Find(ctx context.Context, masterRankingId int64,
 		return nil, errors.NewError("record does not exist")
 	}
 
-	return commonRankingWorld.SetCommonRankingWorld(t.MasterRankingId, t.UserId, t.Score), nil
+	return commonRankingWorld.SetCommonRankingWorld(t.MasterRankingId, t.UserId, t.Score, t.RankedAt), nil
 }
 
 func (s *commonRankingWorldDao) FindOrNil(ctx context.Context, masterRankingId int64, userId string) (*commonRankingWorld.CommonRankingWorld, error) {
@@ -46,7 +46,7 @@ func (s *commonRankingWorldDao) FindOrNil(ctx context.Context, masterRankingId i
 		return nil, nil
 	}
 
-	return commonRankingWorld.SetCommonRankingWorld(t.MasterRankingId, t.UserId, t.Score), nil
+	return commonRankingWorld.SetCommonRankingWorld(t.MasterRankingId, t.UserId, t.Score, t.RankedAt), nil
 }
 
 func (s *commonRankingWorldDao) FindByMasterRankingId(ctx context.Context, masterRankingId int64) (*commonRankingWorld.CommonRankingWorld, error) {
@@ -59,7 +59,7 @@ func (s *commonRankingWorldDao) FindByMasterRankingId(ctx context.Context, maste
 		return nil, errors.NewError("record does not exist")
 	}
 
-	return commonRankingWorld.SetCommonRankingWorld(t.MasterRankingId, t.UserId, t.Score), nil
+	return commonRankingWorld.SetCommonRankingWorld(t.MasterRankingId, t.UserId, t.Score, t.RankedAt), nil
 }
 
 func (s *commonRankingWorldDao) FindOrNilByMasterRankingId(ctx context.Context, masterRankingId int64) (*commonRankingWorld.CommonRankingWorld, error) {
@@ -72,7 +72,7 @@ func (s *commonRankingWorldDao) FindOrNilByMasterRankingId(ctx context.Context, 
 		return nil, nil
 	}
 
-	return commonRankingWorld.SetCommonRankingWorld(t.MasterRankingId, t.UserId, t.Score), nil
+	return commonRankingWorld.SetCommonRankingWorld(t.MasterRankingId, t.UserId, t.Score, t.RankedAt), nil
 }
 
 func (s *commonRankingWorldDao) FindList(ctx context.Context) (commonRankingWorld.CommonRankingWorlds, error) {
@@ -84,7 +84,7 @@ func (s *commonRankingWorldDao) FindList(ctx context.Context) (commonRankingWorl
 
 	ms := commonRankingWorld.NewCommonRankingWorlds()
 	for _, t := range ts {
-		ms = append(ms, commonRankingWorld.SetCommonRankingWorld(t.MasterRankingId, t.UserId, t.Score))
+		ms = append(ms, commonRankingWorld.SetCommonRankingWorld(t.MasterRankingId, t.UserId, t.Score, t.RankedAt))
 	}
 
 	return ms, nil
@@ -99,7 +99,7 @@ func (s *commonRankingWorldDao) FindListByMasterRankingId(ctx context.Context, m
 
 	ms := commonRankingWorld.NewCommonRankingWorlds()
 	for _, t := range ts {
-		ms = append(ms, commonRankingWorld.SetCommonRankingWorld(t.MasterRankingId, t.UserId, t.Score))
+		ms = append(ms, commonRankingWorld.SetCommonRankingWorld(t.MasterRankingId, t.UserId, t.Score, t.RankedAt))
 	}
 
 	return ms, nil
@@ -117,13 +117,14 @@ func (s *commonRankingWorldDao) Create(ctx context.Context, tx *gorm.DB, m *comm
 		MasterRankingId: m.MasterRankingId,
 		UserId:          m.UserId,
 		Score:           m.Score,
+		RankedAt:        m.RankedAt,
 	}
 	res := conn.Model(NewCommonRankingWorld()).WithContext(ctx).Create(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
 
-	return commonRankingWorld.SetCommonRankingWorld(t.MasterRankingId, t.UserId, t.Score), nil
+	return commonRankingWorld.SetCommonRankingWorld(t.MasterRankingId, t.UserId, t.Score, t.RankedAt), nil
 }
 
 func (s *commonRankingWorldDao) CreateList(ctx context.Context, tx *gorm.DB, ms commonRankingWorld.CommonRankingWorlds) (commonRankingWorld.CommonRankingWorlds, error) {
@@ -140,6 +141,7 @@ func (s *commonRankingWorldDao) CreateList(ctx context.Context, tx *gorm.DB, ms 
 			MasterRankingId: m.MasterRankingId,
 			UserId:          m.UserId,
 			Score:           m.Score,
+			RankedAt:        m.RankedAt,
 		}
 		ts = append(ts, t)
 	}
@@ -164,13 +166,14 @@ func (s *commonRankingWorldDao) Update(ctx context.Context, tx *gorm.DB, m *comm
 		MasterRankingId: m.MasterRankingId,
 		UserId:          m.UserId,
 		Score:           m.Score,
+		RankedAt:        m.RankedAt,
 	}
 	res := conn.Model(NewCommonRankingWorld()).WithContext(ctx).Where("master_ranking_id = ?", m.MasterRankingId).Where("user_id = ?", m.UserId).Updates(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
 
-	return commonRankingWorld.SetCommonRankingWorld(t.MasterRankingId, t.UserId, t.Score), nil
+	return commonRankingWorld.SetCommonRankingWorld(t.MasterRankingId, t.UserId, t.Score, t.RankedAt), nil
 }
 
 func (s *commonRankingWorldDao) Delete(ctx context.Context, tx *gorm.DB, m *commonRankingWorld.CommonRankingWorld) error {

@@ -34,7 +34,7 @@ func (s *commonRankingRoomDao) Find(ctx context.Context, masterRankingId int64, 
 		return nil, err
 	}
 
-	return commonRankingRoom.SetCommonRankingRoom(t.MasterRankingId, t.RoomId, t.UserId, t.Score), nil
+	return commonRankingRoom.SetCommonRankingRoom(t.MasterRankingId, t.RoomId, t.UserId, t.Score, t.RankedAt), nil
 }
 
 func (s *commonRankingRoomDao) FindOrNil(ctx context.Context, masterRankingId int64, roomId string, userId string) (*commonRankingRoom.CommonRankingRoom, error) {
@@ -51,7 +51,7 @@ func (s *commonRankingRoomDao) FindOrNil(ctx context.Context, masterRankingId in
 		return nil, err
 	}
 
-	return commonRankingRoom.SetCommonRankingRoom(t.MasterRankingId, t.RoomId, t.UserId, t.Score), nil
+	return commonRankingRoom.SetCommonRankingRoom(t.MasterRankingId, t.RoomId, t.UserId, t.Score, t.RankedAt), nil
 }
 
 func (s *commonRankingRoomDao) Set(ctx context.Context, tx redis.Pipeliner, m *commonRankingRoom.CommonRankingRoom) (*commonRankingRoom.CommonRankingRoom, error) {
@@ -67,6 +67,7 @@ func (s *commonRankingRoomDao) Set(ctx context.Context, tx redis.Pipeliner, m *c
 		RoomId:          m.RoomId,
 		UserId:          m.UserId,
 		Score:           m.Score,
+		RankedAt:        m.RankedAt,
 	}
 
 	jt, err := t.TableToJson()
@@ -78,7 +79,7 @@ func (s *commonRankingRoomDao) Set(ctx context.Context, tx redis.Pipeliner, m *c
 		return nil, err
 	}
 
-	return commonRankingRoom.SetCommonRankingRoom(t.MasterRankingId, t.RoomId, t.UserId, t.Score), nil
+	return commonRankingRoom.SetCommonRankingRoom(t.MasterRankingId, t.RoomId, t.UserId, t.Score, t.RankedAt), nil
 }
 
 func (s *commonRankingRoomDao) Delete(ctx context.Context, tx redis.Pipeliner, m *commonRankingRoom.CommonRankingRoom) error {

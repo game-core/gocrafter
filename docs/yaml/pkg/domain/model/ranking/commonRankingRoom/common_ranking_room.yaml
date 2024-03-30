@@ -27,3 +27,9 @@ structure:
     nullable: false
     number: 4
     comment: "スコア"
+  RankedAt:
+    name: ranked_at
+    type: time
+    nullable: false
+    number: 5
+    comment: "ランク付け日時"

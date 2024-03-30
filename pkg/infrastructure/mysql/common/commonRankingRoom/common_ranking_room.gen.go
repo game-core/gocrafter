@@ -12,6 +12,7 @@ type CommonRankingRoom struct {
 	RoomId          string
 	UserId          string
 	Score           int32
+	RankedAt        time.Time
 	CreatedAt       time.Time
 	UpdatedAt       time.Time
 }
@@ -24,12 +25,13 @@ func NewCommonRankingRooms() CommonRankingRooms {
 	return CommonRankingRooms{}
 }
 
-func SetCommonRankingRoom(masterRankingId int64, roomId string, userId string, score int32, createdAt time.Time, updatedAt time.Time) *CommonRankingRoom {
+func SetCommonRankingRoom(masterRankingId int64, roomId string, userId string, score int32, rankedAt time.Time, createdAt time.Time, updatedAt time.Time) *CommonRankingRoom {
 	return &CommonRankingRoom{
 		MasterRankingId: masterRankingId,
 		RoomId:          roomId,
 		UserId:          userId,
 		Score:           score,
+		RankedAt:        rankedAt,
 		CreatedAt:       createdAt,
 		UpdatedAt:       updatedAt,
 	}

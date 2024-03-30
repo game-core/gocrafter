@@ -7,8 +7,10 @@ package ranking
 import (
 	context "context"
 	reflect "reflect"
+	time "time"
 
 	gomock "github.com/golang/mock/gomock"
+	gorm "gorm.io/gorm"
 )
 
 // MockRankingService is a mock of RankingService interface.
@@ -35,16 +37,31 @@ func (m *MockRankingService) EXPECT() *MockRankingServiceMockRecorder {
 }
 
 // Get mocks base method.
-func (m *MockRankingService) Get(ctx context.Context, req *RankingGetRequest) (*RankingGetResponse, error) {
+func (m *MockRankingService) Get(ctx context.Context, now time.Time, req *RankingGetRequest) (*RankingGetResponse, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Get", ctx, req)
+	ret := m.ctrl.Call(m, "Get", ctx, now, req)
 	ret0, _ := ret[0].(*RankingGetResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Get indicates an expected call of Get.
-func (mr *MockRankingServiceMockRecorder) Get(ctx, req interface{}) *gomock.Call {
+func (mr *MockRankingServiceMockRecorder) Get(ctx, now, req interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockRankingService)(nil).Get), ctx, req)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockRankingService)(nil).Get), ctx, now, req)
+}
+
+// Update mocks base method.
+func (m *MockRankingService) Update(ctx context.Context, tx *gorm.DB, now time.Time, req *RankingUpdateRequest) (*RankingUpdateResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Update", ctx, tx, now, req)
+	ret0, _ := ret[0].(*RankingUpdateResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Update indicates an expected call of Update.
+func (mr *MockRankingServiceMockRecorder) Update(ctx, tx, now, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockRankingService)(nil).Update), ctx, tx, now, req)
 }

@@ -34,7 +34,7 @@ func (s *commonRankingWorldDao) Find(ctx context.Context, masterRankingId int64,
 		return nil, err
 	}
 
-	return commonRankingWorld.SetCommonRankingWorld(t.MasterRankingId, t.UserId, t.Score), nil
+	return commonRankingWorld.SetCommonRankingWorld(t.MasterRankingId, t.UserId, t.Score, t.RankedAt), nil
 }
 
 func (s *commonRankingWorldDao) FindOrNil(ctx context.Context, masterRankingId int64, userId string) (*commonRankingWorld.CommonRankingWorld, error) {
@@ -51,7 +51,7 @@ func (s *commonRankingWorldDao) FindOrNil(ctx context.Context, masterRankingId i
 		return nil, err
 	}
 
-	return commonRankingWorld.SetCommonRankingWorld(t.MasterRankingId, t.UserId, t.Score), nil
+	return commonRankingWorld.SetCommonRankingWorld(t.MasterRankingId, t.UserId, t.Score, t.RankedAt), nil
 }
 
 func (s *commonRankingWorldDao) Set(ctx context.Context, tx redis.Pipeliner, m *commonRankingWorld.CommonRankingWorld) (*commonRankingWorld.CommonRankingWorld, error) {
@@ -66,6 +66,7 @@ func (s *commonRankingWorldDao) Set(ctx context.Context, tx redis.Pipeliner, m *
 		MasterRankingId: m.MasterRankingId,
 		UserId:          m.UserId,
 		Score:           m.Score,
+		RankedAt:        m.RankedAt,
 	}
 
 	jt, err := t.TableToJson()
@@ -77,7 +78,7 @@ func (s *commonRankingWorldDao) Set(ctx context.Context, tx redis.Pipeliner, m *
 		return nil, err
 	}
 
-	return commonRankingWorld.SetCommonRankingWorld(t.MasterRankingId, t.UserId, t.Score), nil
+	return commonRankingWorld.SetCommonRankingWorld(t.MasterRankingId, t.UserId, t.Score, t.RankedAt), nil
 }
 
 func (s *commonRankingWorldDao) Delete(ctx context.Context, tx redis.Pipeliner, m *commonRankingWorld.CommonRankingWorld) error {
