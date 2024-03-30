@@ -3,11 +3,11 @@ package: enum
 comment: "ランキング範囲タイプ"
 
 structure:
-  World:
-    name: World
-    number: 0
-    comment: "ワールドランキング"
   Room:
     name: Room
-    number: 1
+    number: 0
     comment: "ルームランキング"
+  World:
+    name: World
+    number: 1
+    comment: "ワールドランキング"

@@ -45,7 +45,7 @@ func (s *masterRankingDao) Find(ctx context.Context, id int64) (*masterRanking.M
 		return nil, errors.NewError("record does not exist")
 	}
 
-	m := masterRanking.SetMasterRanking(t.Id, t.MasterRankingEventId, t.Name, t.RankingScopeType)
+	m := masterRanking.SetMasterRanking(t.Id, t.MasterRankingEventId, t.Name, t.RankingScopeType, t.Limit)
 	s.Cache.Set(cashes.CreateCacheKey("master_ranking", "Find", fmt.Sprintf("%d_", id)), m, cache.DefaultExpiration)
 	return m, nil
 }
@@ -67,7 +67,7 @@ func (s *masterRankingDao) FindOrNil(ctx context.Context, id int64) (*masterRank
 		return nil, nil
 	}
 
-	m := masterRanking.SetMasterRanking(t.Id, t.MasterRankingEventId, t.Name, t.RankingScopeType)
+	m := masterRanking.SetMasterRanking(t.Id, t.MasterRankingEventId, t.Name, t.RankingScopeType, t.Limit)
 	s.Cache.Set(cashes.CreateCacheKey("master_ranking", "FindOrNil", fmt.Sprintf("%d_", id)), m, cache.DefaultExpiration)
 	return m, nil
 }
@@ -89,7 +89,7 @@ func (s *masterRankingDao) FindByMasterRankingEventId(ctx context.Context, maste
 		return nil, errors.NewError("record does not exist")
 	}
 
-	m := masterRanking.SetMasterRanking(t.Id, t.MasterRankingEventId, t.Name, t.RankingScopeType)
+	m := masterRanking.SetMasterRanking(t.Id, t.MasterRankingEventId, t.Name, t.RankingScopeType, t.Limit)
 	s.Cache.Set(cashes.CreateCacheKey("master_ranking", "FindByMasterRankingEventId", fmt.Sprintf("%d_", masterRankingEventId)), m, cache.DefaultExpiration)
 	return m, nil
 }
@@ -111,7 +111,7 @@ func (s *masterRankingDao) FindOrNilByMasterRankingEventId(ctx context.Context, 
 		return nil, nil
 	}
 
-	m := masterRanking.SetMasterRanking(t.Id, t.MasterRankingEventId, t.Name, t.RankingScopeType)
+	m := masterRanking.SetMasterRanking(t.Id, t.MasterRankingEventId, t.Name, t.RankingScopeType, t.Limit)
 	s.Cache.Set(cashes.CreateCacheKey("master_ranking", "FindOrNilByMasterRankingEventId", fmt.Sprintf("%d_", masterRankingEventId)), m, cache.DefaultExpiration)
 	return m, nil
 }
@@ -132,7 +132,7 @@ func (s *masterRankingDao) FindList(ctx context.Context) (masterRanking.MasterRa
 
 	ms := masterRanking.NewMasterRankings()
 	for _, t := range ts {
-		ms = append(ms, masterRanking.SetMasterRanking(t.Id, t.MasterRankingEventId, t.Name, t.RankingScopeType))
+		ms = append(ms, masterRanking.SetMasterRanking(t.Id, t.MasterRankingEventId, t.Name, t.RankingScopeType, t.Limit))
 	}
 
 	s.Cache.Set(cashes.CreateCacheKey("master_ranking", "FindList", ""), ms, cache.DefaultExpiration)
@@ -155,7 +155,7 @@ func (s *masterRankingDao) FindListByMasterRankingEventId(ctx context.Context, m
 
 	ms := masterRanking.NewMasterRankings()
 	for _, t := range ts {
-		ms = append(ms, masterRanking.SetMasterRanking(t.Id, t.MasterRankingEventId, t.Name, t.RankingScopeType))
+		ms = append(ms, masterRanking.SetMasterRanking(t.Id, t.MasterRankingEventId, t.Name, t.RankingScopeType, t.Limit))
 	}
 
 	s.Cache.Set(cashes.CreateCacheKey("master_ranking", "FindListByMasterRankingEventId", fmt.Sprintf("%d_", masterRankingEventId)), ms, cache.DefaultExpiration)
@@ -175,13 +175,14 @@ func (s *masterRankingDao) Create(ctx context.Context, tx *gorm.DB, m *masterRan
 		MasterRankingEventId: m.MasterRankingEventId,
 		Name:                 m.Name,
 		RankingScopeType:     m.RankingScopeType,
+		Limit:                m.Limit,
 	}
 	res := conn.Model(NewMasterRanking()).WithContext(ctx).Create(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
 
-	return masterRanking.SetMasterRanking(t.Id, t.MasterRankingEventId, t.Name, t.RankingScopeType), nil
+	return masterRanking.SetMasterRanking(t.Id, t.MasterRankingEventId, t.Name, t.RankingScopeType, t.Limit), nil
 }
 
 func (s *masterRankingDao) CreateList(ctx context.Context, tx *gorm.DB, ms masterRanking.MasterRankings) (masterRanking.MasterRankings, error) {
@@ -199,6 +200,7 @@ func (s *masterRankingDao) CreateList(ctx context.Context, tx *gorm.DB, ms maste
 			MasterRankingEventId: m.MasterRankingEventId,
 			Name:                 m.Name,
 			RankingScopeType:     m.RankingScopeType,
+			Limit:                m.Limit,
 		}
 		ts = append(ts, t)
 	}
@@ -224,13 +226,14 @@ func (s *masterRankingDao) Update(ctx context.Context, tx *gorm.DB, m *masterRan
 		MasterRankingEventId: m.MasterRankingEventId,
 		Name:                 m.Name,
 		RankingScopeType:     m.RankingScopeType,
+		Limit:                m.Limit,
 	}
 	res := conn.Model(NewMasterRanking()).WithContext(ctx).Where("id = ?", m.Id).Updates(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
 
-	return masterRanking.SetMasterRanking(t.Id, t.MasterRankingEventId, t.Name, t.RankingScopeType), nil
+	return masterRanking.SetMasterRanking(t.Id, t.MasterRankingEventId, t.Name, t.RankingScopeType, t.Limit), nil
 }
 
 func (s *masterRankingDao) Delete(ctx context.Context, tx *gorm.DB, m *masterRanking.MasterRanking) error {

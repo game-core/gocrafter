@@ -1,0 +1,19 @@
+name: RankingGetResponse
+package: ranking
+comment: "ランキング取得レスポンス"
+
+structure:
+  CommonRankingRooms:
+    name: common_ranking_rooms
+    type: structures
+    package: ranking/commonRankingRoom
+    nullable: false
+    number: 1
+    comment: "ルームランキング"
+  CommonRankingWorlds:
+    name: common_ranking_worlds
+    type: structures
+    package: ranking/commonRankingWorld
+    nullable: false
+    number: 2
+    comment: "ワールドランキング"

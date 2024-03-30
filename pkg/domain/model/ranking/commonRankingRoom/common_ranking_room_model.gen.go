@@ -1,10 +1,6 @@
 // Package commonRankingRoom ルームランキング
 package commonRankingRoom
 
-import (
-	"time"
-)
-
 type CommonRankingRooms []*CommonRankingRoom
 
 type CommonRankingRoom struct {
@@ -12,8 +8,6 @@ type CommonRankingRoom struct {
 	RoomId          string
 	UserId          string
 	Score           int32
-	CreatedAt       time.Time
-	UpdatedAt       time.Time
 }
 
 func NewCommonRankingRoom() *CommonRankingRoom {
@@ -24,13 +18,11 @@ func NewCommonRankingRooms() CommonRankingRooms {
 	return CommonRankingRooms{}
 }
 
-func SetCommonRankingRoom(masterRankingId int64, roomId string, userId string, score int32, createdAt time.Time, updatedAt time.Time) *CommonRankingRoom {
+func SetCommonRankingRoom(masterRankingId int64, roomId string, userId string, score int32) *CommonRankingRoom {
 	return &CommonRankingRoom{
 		MasterRankingId: masterRankingId,
 		RoomId:          roomId,
 		UserId:          userId,
 		Score:           score,
-		CreatedAt:       createdAt,
-		UpdatedAt:       updatedAt,
 	}
 }

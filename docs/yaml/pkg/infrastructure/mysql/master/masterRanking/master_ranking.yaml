@@ -27,6 +27,12 @@ structure:
     nullable: false
     number: 4
     comment: "ランキング範囲タイプ"
+  Limit:
+    name: limit
+    type: int32
+    nullable: false
+    number: 5
+    comment: "ランキング上限"
 primary:
   - Id
 unique:

@@ -27,15 +27,3 @@ structure:
     nullable: false
     number: 4
     comment: "スコア"
-  CreatedAt:
-    name: created_at
-    type: time
-    nullable: false
-    number: 5
-    comment: "作成日時"
-  UpdatedAt:
-    name: updated_at
-    type: time
-    nullable: false
-    number: 6
-    comment: "更新日時"
