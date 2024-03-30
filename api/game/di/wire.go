@@ -24,16 +24,20 @@ import (
 	accountService "github.com/game-core/gocrafter/pkg/domain/model/account"
 	actionService "github.com/game-core/gocrafter/pkg/domain/model/action"
 	configService "github.com/game-core/gocrafter/pkg/domain/model/config"
+	eventService "github.com/game-core/gocrafter/pkg/domain/model/event"
 	friendService "github.com/game-core/gocrafter/pkg/domain/model/friend"
 	idleBonusService "github.com/game-core/gocrafter/pkg/domain/model/idleBonus"
 	itemService "github.com/game-core/gocrafter/pkg/domain/model/item"
 	loginBonusService "github.com/game-core/gocrafter/pkg/domain/model/loginBonus"
 	profileService "github.com/game-core/gocrafter/pkg/domain/model/profile"
+	rankingService "github.com/game-core/gocrafter/pkg/domain/model/ranking"
 	rarityService "github.com/game-core/gocrafter/pkg/domain/model/rarity"
 	resourceService "github.com/game-core/gocrafter/pkg/domain/model/resource"
 	roomService "github.com/game-core/gocrafter/pkg/domain/model/room"
 	shardService "github.com/game-core/gocrafter/pkg/domain/model/shard"
 	transactionService "github.com/game-core/gocrafter/pkg/domain/model/transaction"
+	commonRankingRoomMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonRankingRoom"
+	commonRankingWorldMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonRankingWorld"
 	commonRoomMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonRoom"
 	commonRoomUserMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonRoomUser"
 	commonShardMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonShard"
@@ -43,6 +47,7 @@ import (
 	masterActionStepMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionStep"
 	masterActionTriggerMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionTrigger"
 	masterConfigMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterConfig"
+	masterEventMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterEvent"
 	masterIdleBonusMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonus"
 	masterIdleBonusEventMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusEvent"
 	masterIdleBonusItemMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusItem"
@@ -52,6 +57,8 @@ import (
 	masterLoginBonusEventMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusEvent"
 	masterLoginBonusItemMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusItem"
 	masterLoginBonusScheduleMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusSchedule"
+	masterRankingMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterRanking"
+	masterRankingEventMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterRankingEvent"
 	masterRarityMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterRarity"
 	masterResourceMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterResource"
 	masterTransactionMysqlDao "github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterTransaction"
@@ -210,6 +217,15 @@ func InitializeConfigService() configService.ConfigService {
 	return nil
 }
 
+func InitializeEventService() eventService.EventService {
+	wire.Build(
+		database.NewMysql,
+		eventService.NewEventService,
+		masterEventMysqlDao.NewMasterEventDao,
+	)
+	return nil
+}
+
 func InitializeFriendService() friendService.FriendService {
 	wire.Build(
 		database.NewMysql,
@@ -263,6 +279,18 @@ func InitializeProfileService() profileService.ProfileService {
 		database.NewMysql,
 		profileService.NewProfileService,
 		userProfileMysqlDao.NewUserProfileDao,
+	)
+	return nil
+}
+
+func InitializeRankingService() rankingService.RankingService {
+	wire.Build(
+		database.NewMysql,
+		rankingService.NewRankingService,
+		commonRankingRoomMysqlDao.NewCommonRankingRoomDao,
+		commonRankingWorldMysqlDao.NewCommonRankingWorldDao,
+		masterRankingMysqlDao.NewMasterRankingDao,
+		masterRankingEventMysqlDao.NewMasterRankingEventDao,
 	)
 	return nil
 }

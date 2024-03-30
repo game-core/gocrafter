@@ -12,16 +12,20 @@ import (
 	"github.com/game-core/gocrafter/pkg/domain/model/account"
 	"github.com/game-core/gocrafter/pkg/domain/model/action"
 	"github.com/game-core/gocrafter/pkg/domain/model/config"
+	"github.com/game-core/gocrafter/pkg/domain/model/event"
 	"github.com/game-core/gocrafter/pkg/domain/model/friend"
 	"github.com/game-core/gocrafter/pkg/domain/model/idleBonus"
 	"github.com/game-core/gocrafter/pkg/domain/model/item"
 	"github.com/game-core/gocrafter/pkg/domain/model/loginBonus"
 	"github.com/game-core/gocrafter/pkg/domain/model/profile"
+	"github.com/game-core/gocrafter/pkg/domain/model/ranking"
 	"github.com/game-core/gocrafter/pkg/domain/model/rarity"
 	"github.com/game-core/gocrafter/pkg/domain/model/resource"
 	"github.com/game-core/gocrafter/pkg/domain/model/room"
 	"github.com/game-core/gocrafter/pkg/domain/model/shard"
 	"github.com/game-core/gocrafter/pkg/domain/model/transaction"
+	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonRankingRoom"
+	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonRankingWorld"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonRoom"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonRoomUser"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/common/commonShard"
@@ -31,6 +35,7 @@ import (
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionStep"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterActionTrigger"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterConfig"
+	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterEvent"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonus"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusEvent"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterIdleBonusItem"
@@ -40,6 +45,8 @@ import (
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusEvent"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusItem"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusSchedule"
+	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterRanking"
+	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterRankingEvent"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterRarity"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterResource"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterTransaction"
@@ -90,6 +97,13 @@ func InitializeConfigService() config.ConfigService {
 	return configService
 }
 
+func InitializeEventService() event.EventService {
+	mysqlHandler := database.NewMysql()
+	masterEventMysqlRepository := masterEvent.NewMasterEventDao(mysqlHandler)
+	eventService := event.NewEventService(masterEventMysqlRepository)
+	return eventService
+}
+
 func InitializeFriendService() friend.FriendService {
 	accountService := InitializeAccountService()
 	mysqlHandler := database.NewMysql()
@@ -135,6 +149,16 @@ func InitializeProfileService() profile.ProfileService {
 	userProfileMysqlRepository := userProfile.NewUserProfileDao(mysqlHandler)
 	profileService := profile.NewProfileService(userProfileMysqlRepository)
 	return profileService
+}
+
+func InitializeRankingService() ranking.RankingService {
+	mysqlHandler := database.NewMysql()
+	commonRankingRoomMysqlRepository := commonRankingRoom.NewCommonRankingRoomDao(mysqlHandler)
+	commonRankingWorldMysqlRepository := commonRankingWorld.NewCommonRankingWorldDao(mysqlHandler)
+	masterRankingMysqlRepository := masterRanking.NewMasterRankingDao(mysqlHandler)
+	masterRankingEventMysqlRepository := masterRankingEvent.NewMasterRankingEventDao(mysqlHandler)
+	rankingService := ranking.NewRankingService(commonRankingRoomMysqlRepository, commonRankingWorldMysqlRepository, masterRankingMysqlRepository, masterRankingEventMysqlRepository)
+	return rankingService
 }
 
 func InitializeRarityService() rarity.RarityService {
