@@ -12,6 +12,8 @@ import (
 
 type RankingUsecase interface {
 	GetMaster(ctx context.Context, req *rankingServer.RankingGetMasterRequest) (*rankingServer.RankingGetMasterResponse, error)
+	Get(ctx context.Context, req *rankingServer.RankingGetRequest) (*rankingServer.RankingGetResponse, error)
+	Update(ctx context.Context, req *rankingServer.RankingUpdateRequest) (*rankingServer.RankingUpdateResponse, error)
 }
 
 type rankingUsecase struct {
@@ -58,5 +60,40 @@ func (s *rankingUsecase) GetMaster(ctx context.Context, req *rankingServer.Ranki
 			result.MasterRankingScope.Name,
 			rankingServer.RankingScopeType(result.MasterRanking.RankingScopeType),
 		),
+	), nil
+}
+
+// Get ランキングを取得する
+func (s *rankingUsecase) Get(ctx context.Context, req *rankingServer.RankingGetRequest) (*rankingServer.RankingGetResponse, error) {
+	result, err := s.rankingService.Get(ctx, times.Now(), rankingService.SetRankingGetRequest(req.UserId, req.MasterRankingId, req.RoomId))
+	if err != nil {
+		return nil, errors.NewMethodError("s.rankingService.Get", err)
+	}
+
+	return rankingServer.SetRankingGetResponse(
+		rankingServer.SetCommonRankingRooms(result.CommonRankingRooms),
+		rankingServer.SetCommonRankingWorlds(result.CommonRankingWorlds),
+	), nil
+}
+
+// Update ランキングを更新する
+func (s *rankingUsecase) Update(ctx context.Context, req *rankingServer.RankingUpdateRequest) (*rankingServer.RankingUpdateResponse, error) {
+	// transaction
+	tx, err := s.transactionService.CommonMysqlBegin(ctx)
+	if err != nil {
+		return nil, errors.NewMethodError("s.transactionService.CommonMysqlBegin", err)
+	}
+	defer func() {
+		s.transactionService.CommonMysqlEnd(ctx, tx, err)
+	}()
+
+	result, err := s.rankingService.Update(ctx, tx, times.Now(), rankingService.SetRankingUpdateRequest(req.UserId, req.MasterRankingId, req.RoomId, req.Score))
+	if err != nil {
+		return nil, errors.NewMethodError("s.rankingService.Update", err)
+	}
+
+	return rankingServer.SetRankingUpdateResponse(
+		rankingServer.SetCommonRankingRooms(result.CommonRankingRooms),
+		rankingServer.SetCommonRankingWorlds(result.CommonRankingWorlds),
 	), nil
 }

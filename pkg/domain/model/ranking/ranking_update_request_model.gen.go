@@ -4,10 +4,10 @@ package ranking
 type RankingUpdateRequests []*RankingUpdateRequest
 
 type RankingUpdateRequest struct {
-	UserId               string
-	MasterRankingEventId int64
-	RoomId               string
-	Score                int32
+	UserId          string
+	MasterRankingId int64
+	RoomId          string
+	Score           int32
 }
 
 func NewRankingUpdateRequest() *RankingUpdateRequest {
@@ -18,11 +18,11 @@ func NewRankingUpdateRequests() RankingUpdateRequests {
 	return RankingUpdateRequests{}
 }
 
-func SetRankingUpdateRequest(userId string, masterRankingEventId int64, roomId string, score int32) *RankingUpdateRequest {
+func SetRankingUpdateRequest(userId string, masterRankingId int64, roomId string, score int32) *RankingUpdateRequest {
 	return &RankingUpdateRequest{
-		UserId:               userId,
-		MasterRankingEventId: masterRankingEventId,
-		RoomId:               roomId,
-		Score:                score,
+		UserId:          userId,
+		MasterRankingId: masterRankingId,
+		RoomId:          roomId,
+		Score:           score,
 	}
 }

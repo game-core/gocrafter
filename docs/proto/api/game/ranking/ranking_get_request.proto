@@ -1,0 +1,12 @@
+// ランキング取得リクエスト
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/ranking";
+
+message RankingGetRequest {
+  string user_id = 1;
+  int64 master_ranking_id = 2;
+  string room_id = 3;
+}

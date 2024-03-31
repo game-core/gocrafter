@@ -11,3 +11,19 @@ structure:
     response: RankingGetMasterResponse
     number: 1
     comment: "マスターデータを取得する"
+  Get:
+    name: get
+    method: unary
+    auth: true
+    request: RankingGetRequest
+    response: RankingGetResponse
+    number: 2
+    comment: "ランキングを取得する"
+  Update:
+    name: update
+    method: unary
+    auth: true
+    request: RankingUpdateRequest
+    response: RankingUpdateResponse
+    number: 3
+    comment: "ランキングを更新する"

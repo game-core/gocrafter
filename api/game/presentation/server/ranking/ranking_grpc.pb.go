@@ -23,6 +23,8 @@ const _ = grpc.SupportPackageIsVersion7
 
 const (
 	Ranking_GetMaster_FullMethodName = "/proto.Ranking/GetMaster"
+	Ranking_Get_FullMethodName       = "/proto.Ranking/Get"
+	Ranking_Update_FullMethodName    = "/proto.Ranking/Update"
 )
 
 // RankingClient is the client API for Ranking service.
@@ -30,6 +32,8 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type RankingClient interface {
 	GetMaster(ctx context.Context, in *RankingGetMasterRequest, opts ...grpc.CallOption) (*RankingGetMasterResponse, error)
+	Get(ctx context.Context, in *RankingGetRequest, opts ...grpc.CallOption) (*RankingGetResponse, error)
+	Update(ctx context.Context, in *RankingUpdateRequest, opts ...grpc.CallOption) (*RankingUpdateResponse, error)
 }
 
 type rankingClient struct {
@@ -49,11 +53,31 @@ func (c *rankingClient) GetMaster(ctx context.Context, in *RankingGetMasterReque
 	return out, nil
 }
 
+func (c *rankingClient) Get(ctx context.Context, in *RankingGetRequest, opts ...grpc.CallOption) (*RankingGetResponse, error) {
+	out := new(RankingGetResponse)
+	err := c.cc.Invoke(ctx, Ranking_Get_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *rankingClient) Update(ctx context.Context, in *RankingUpdateRequest, opts ...grpc.CallOption) (*RankingUpdateResponse, error) {
+	out := new(RankingUpdateResponse)
+	err := c.cc.Invoke(ctx, Ranking_Update_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // RankingServer is the server API for Ranking service.
 // All implementations must embed UnimplementedRankingServer
 // for forward compatibility
 type RankingServer interface {
 	GetMaster(context.Context, *RankingGetMasterRequest) (*RankingGetMasterResponse, error)
+	Get(context.Context, *RankingGetRequest) (*RankingGetResponse, error)
+	Update(context.Context, *RankingUpdateRequest) (*RankingUpdateResponse, error)
 	mustEmbedUnimplementedRankingServer()
 }
 
@@ -63,6 +87,12 @@ type UnimplementedRankingServer struct {
 
 func (UnimplementedRankingServer) GetMaster(context.Context, *RankingGetMasterRequest) (*RankingGetMasterResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMaster not implemented")
+}
+func (UnimplementedRankingServer) Get(context.Context, *RankingGetRequest) (*RankingGetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+func (UnimplementedRankingServer) Update(context.Context, *RankingUpdateRequest) (*RankingUpdateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
 func (UnimplementedRankingServer) mustEmbedUnimplementedRankingServer() {}
 
@@ -95,6 +125,42 @@ func _Ranking_GetMaster_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Ranking_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RankingGetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RankingServer).Get(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Ranking_Get_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RankingServer).Get(ctx, req.(*RankingGetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Ranking_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RankingUpdateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RankingServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Ranking_Update_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RankingServer).Update(ctx, req.(*RankingUpdateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Ranking_ServiceDesc is the grpc.ServiceDesc for Ranking service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -105,6 +171,14 @@ var Ranking_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetMaster",
 			Handler:    _Ranking_GetMaster_Handler,
+		},
+		{
+			MethodName: "Get",
+			Handler:    _Ranking_Get_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _Ranking_Update_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -68,7 +68,7 @@ func (s *rankingService) GetMaster(ctx context.Context, req *RankingGetMasterReq
 
 // Get ランキングを取得する
 func (s *rankingService) Get(ctx context.Context, now time.Time, req *RankingGetRequest) (*RankingGetResponse, error) {
-	masterRankingModel, err := s.masterRankingMysqlRepository.Find(ctx, req.MasterRankingEventId)
+	masterRankingModel, err := s.masterRankingMysqlRepository.Find(ctx, req.MasterRankingId)
 	if err != nil {
 		return nil, errors.NewMethodError("s.masterRankingMysqlRepository.Find", err)
 	}
@@ -80,15 +80,15 @@ func (s *rankingService) Get(ctx context.Context, now time.Time, req *RankingGet
 
 	switch masterRankingModel.RankingScopeType {
 	case enum.RankingScopeType_Room:
-		result, err := s.getRoomRanking(ctx, masterRankingEventModel.GetLastEventAt(now), masterRankingModel.Id, req.RoomId)
+		result, err := s.getRoomRankings(ctx, masterRankingEventModel.GetLastEventAt(now), masterRankingModel.Id, req.RoomId)
 		if err != nil {
-			return nil, errors.NewMethodError("s.getRoomRanking", err)
+			return nil, errors.NewMethodError("s.getRoomRankings", err)
 		}
 		return SetRankingGetResponse(result, commonRankingWorld.NewCommonRankingWorlds()), nil
 	case enum.RankingScopeType_World:
-		result, err := s.getWorldRanking(ctx, masterRankingEventModel.GetLastEventAt(now), masterRankingModel.Id)
+		result, err := s.getWorldRankings(ctx, masterRankingEventModel.GetLastEventAt(now), masterRankingModel.Id)
 		if err != nil {
-			return nil, errors.NewMethodError("s.getWorldRanking", err)
+			return nil, errors.NewMethodError("s.getWorldRankings", err)
 		}
 		return SetRankingGetResponse(commonRankingRoom.NewCommonRankingRooms(), result), nil
 	default:
@@ -98,7 +98,7 @@ func (s *rankingService) Get(ctx context.Context, now time.Time, req *RankingGet
 
 // Update ランキングを更新する
 func (s *rankingService) Update(ctx context.Context, tx *gorm.DB, now time.Time, req *RankingUpdateRequest) (*RankingUpdateResponse, error) {
-	masterRankingModel, err := s.masterRankingMysqlRepository.Find(ctx, req.MasterRankingEventId)
+	masterRankingModel, err := s.masterRankingMysqlRepository.Find(ctx, req.MasterRankingId)
 	if err != nil {
 		return nil, errors.NewMethodError("s.masterRankingMysqlRepository.Find", err)
 	}
@@ -110,15 +110,15 @@ func (s *rankingService) Update(ctx context.Context, tx *gorm.DB, now time.Time,
 
 	switch masterRankingModel.RankingScopeType {
 	case enum.RankingScopeType_Room:
-		result, err := s.updateRoomRanking(ctx, tx, now, masterRankingEventModel.GetLastEventAt(now), masterRankingModel.Id, req.RoomId, masterRankingModel.RankingLimit, req.UserId, req.Score)
+		result, err := s.updateRoomRankings(ctx, tx, now, masterRankingEventModel.GetLastEventAt(now), masterRankingModel.Id, req.RoomId, masterRankingModel.RankingLimit, req.UserId, req.Score)
 		if err != nil {
-			return nil, errors.NewMethodError("s.updateRoomRanking", err)
+			return nil, errors.NewMethodError("s.updateRoomRankings", err)
 		}
 		return SetRankingUpdateResponse(result, commonRankingWorld.NewCommonRankingWorlds()), nil
 	case enum.RankingScopeType_World:
-		result, err := s.updateWorldRanking(ctx, tx, now, masterRankingEventModel.GetLastEventAt(now), masterRankingModel.Id, masterRankingModel.RankingLimit, req.UserId, req.Score)
+		result, err := s.updateWorldRankings(ctx, tx, now, masterRankingEventModel.GetLastEventAt(now), masterRankingModel.Id, masterRankingModel.RankingLimit, req.UserId, req.Score)
 		if err != nil {
-			return nil, errors.NewMethodError("s.updateWorldRanking", err)
+			return nil, errors.NewMethodError("s.updateWorldRankings", err)
 		}
 		return SetRankingUpdateResponse(commonRankingRoom.NewCommonRankingRooms(), result), nil
 	default:
@@ -140,8 +140,8 @@ func (s *rankingService) getEvent(ctx context.Context, now time.Time, masterRank
 	return masterRankingEventModel, nil
 }
 
-// getRoomRanking ルームランキングを取得する
-func (s *rankingService) getRoomRanking(ctx context.Context, lastEventAt time.Time, masterRankingId int64, roomId string) (commonRankingRoom.CommonRankingRooms, error) {
+// getRoomRankings ルームランキングを取得する
+func (s *rankingService) getRoomRankings(ctx context.Context, lastEventAt time.Time, masterRankingId int64, roomId string) (commonRankingRoom.CommonRankingRooms, error) {
 	commonRankingRoomModels, err := s.commonRankingRoomMysqlRepository.FindListByMasterRankingIdAndRoomId(ctx, masterRankingId, roomId)
 	if err != nil {
 		return nil, errors.NewMethodError("s.commonRankingRoomMysqlRepository.FindListByMasterRankingIdAndRoomId", err)
@@ -150,8 +150,8 @@ func (s *rankingService) getRoomRanking(ctx context.Context, lastEventAt time.Ti
 	return commonRankingRoomModels.SortRanking(lastEventAt), nil
 }
 
-// getWorldRanking ワールドランキングを取得する
-func (s *rankingService) getWorldRanking(ctx context.Context, lastEventAt time.Time, masterRankingId int64) (commonRankingWorld.CommonRankingWorlds, error) {
+// getWorldRankings ワールドランキングを取得する
+func (s *rankingService) getWorldRankings(ctx context.Context, lastEventAt time.Time, masterRankingId int64) (commonRankingWorld.CommonRankingWorlds, error) {
 	commonRankingWorldModels, err := s.commonRankingWorldMysqlRepository.FindListByMasterRankingId(ctx, masterRankingId)
 	if err != nil {
 		return nil, errors.NewMethodError("s.commonRankingWorldMysqlRepository.FindListByMasterRankingId", err)
@@ -160,66 +160,82 @@ func (s *rankingService) getWorldRanking(ctx context.Context, lastEventAt time.T
 	return commonRankingWorldModels.SortRanking(lastEventAt), nil
 }
 
-// updateRoomRanking ルームランキングを更新する
-func (s *rankingService) updateRoomRanking(ctx context.Context, tx *gorm.DB, now, lastEventAt time.Time, masterRankingId int64, roomId string, limit int32, userId string, score int32) (commonRankingRoom.CommonRankingRooms, error) {
+// updateRoomRankings ルームランキングを更新する
+func (s *rankingService) updateRoomRankings(ctx context.Context, tx *gorm.DB, now, lastEventAt time.Time, masterRankingId int64, roomId string, limit int32, userId string, score int32) (commonRankingRoom.CommonRankingRooms, error) {
 	commonRankingRoomModels, err := s.commonRankingRoomMysqlRepository.FindListByMasterRankingIdAndRoomId(ctx, masterRankingId, roomId)
 	if err != nil {
 		return nil, errors.NewMethodError("s.commonRankingRoomMysqlRepository.FindListByMasterRankingIdAndRoomId", err)
 	}
 
-	if len(commonRankingRoomModels) < int(limit) {
-		if _, err := s.commonRankingRoomMysqlRepository.Create(ctx, tx, commonRankingRoom.SetCommonRankingRoom(masterRankingId, roomId, userId, score, now)); err != nil {
-			return nil, errors.NewMethodError("s.commonRankingRoomMysqlRepository.Create", err)
+	ranking, updateModel, deleteModel := commonRankingRoomModels.AggregateRanking(masterRankingId, roomId, userId, score, now, lastEventAt, limit)
+	if deleteModel != nil {
+		if err := s.commonRankingRoomMysqlRepository.Delete(ctx, tx, deleteModel); err != nil {
+			return nil, errors.NewMethodError("s.commonRankingRoomMysqlRepository.Delete", err)
 		}
+	}
 
-		result, err := s.getRoomRanking(ctx, lastEventAt, masterRankingId, roomId)
-		if err != nil {
-			return nil, errors.NewMethodError("s.getRoomRanking", err)
+	if updateModel != nil {
+		if err := s.updateRoomRanking(ctx, tx, commonRankingRoomModels, updateModel); err != nil {
+			return nil, errors.NewMethodError("s.updateRoomRanking", err)
 		}
-
-		return result, nil
 	}
 
-	if _, err := s.commonRankingRoomMysqlRepository.Update(ctx, tx, commonRankingRoomModels.ExcludeRanking(masterRankingId, roomId, userId, score, now, lastEventAt)); err != nil {
-		return nil, errors.NewMethodError("s.commonRankingRoomMysqlRepository.Update", err)
-	}
-
-	result, err := s.getRoomRanking(ctx, lastEventAt, masterRankingId, roomId)
-	if err != nil {
-		return nil, errors.NewMethodError("s.getRoomRanking", err)
-	}
-
-	return result, nil
+	return ranking, nil
 }
 
-// updateWorldRanking ワールドランキングを更新する
-func (s *rankingService) updateWorldRanking(ctx context.Context, tx *gorm.DB, now time.Time, lastEventAt time.Time, masterRankingId int64, limit int32, userId string, score int32) (commonRankingWorld.CommonRankingWorlds, error) {
+// updateRoomRanking ルームランキングを更新する
+func (s *rankingService) updateRoomRanking(ctx context.Context, tx *gorm.DB, commonRankingRoomModels commonRankingRoom.CommonRankingRooms, commonRankingRoomModel *commonRankingRoom.CommonRankingRoom) error {
+	if commonRankingRoomModels.CheckRankingByUserId(commonRankingRoomModel.UserId) {
+		if _, err := s.commonRankingRoomMysqlRepository.Update(ctx, tx, commonRankingRoomModel); err != nil {
+			return errors.NewMethodError("s.commonRankingRoomMysqlRepository.Update", err)
+		}
+
+		return nil
+	}
+
+	if _, err := s.commonRankingRoomMysqlRepository.Create(ctx, tx, commonRankingRoomModel); err != nil {
+		return errors.NewMethodError("s.commonRankingRoomMysqlRepository.Create", err)
+	}
+
+	return nil
+}
+
+// updateWorldRankings ルームランキングを更新する
+func (s *rankingService) updateWorldRankings(ctx context.Context, tx *gorm.DB, now, lastEventAt time.Time, masterRankingId int64, limit int32, userId string, score int32) (commonRankingWorld.CommonRankingWorlds, error) {
 	commonRankingWorldModels, err := s.commonRankingWorldMysqlRepository.FindListByMasterRankingId(ctx, masterRankingId)
 	if err != nil {
 		return nil, errors.NewMethodError("s.commonRankingWorldMysqlRepository.FindListByMasterRankingId", err)
 	}
 
-	if len(commonRankingWorldModels) < int(limit) {
-		if _, err := s.commonRankingWorldMysqlRepository.Create(ctx, tx, commonRankingWorld.SetCommonRankingWorld(masterRankingId, userId, score, now)); err != nil {
-			return nil, errors.NewMethodError("s.commonRankingWorldMysqlRepository.Create", err)
+	ranking, updateModel, deleteModel := commonRankingWorldModels.AggregateRanking(masterRankingId, userId, score, now, lastEventAt, limit)
+	if deleteModel != nil {
+		if err := s.commonRankingWorldMysqlRepository.Delete(ctx, tx, deleteModel); err != nil {
+			return nil, errors.NewMethodError("s.commonRankingWorldMysqlRepository.Delete", err)
+		}
+	}
+
+	if updateModel != nil {
+		if err := s.updateWorldRanking(ctx, tx, commonRankingWorldModels, updateModel); err != nil {
+			return nil, errors.NewMethodError("s.updateWorldRanking", err)
+		}
+	}
+
+	return ranking, nil
+}
+
+// updateWorldRanking ルームランキングを更新する
+func (s *rankingService) updateWorldRanking(ctx context.Context, tx *gorm.DB, commonRankingWorldModels commonRankingWorld.CommonRankingWorlds, commonRankingWorldModel *commonRankingWorld.CommonRankingWorld) error {
+	if commonRankingWorldModels.CheckRankingByUserId(commonRankingWorldModel.UserId) {
+		if _, err := s.commonRankingWorldMysqlRepository.Update(ctx, tx, commonRankingWorldModel); err != nil {
+			return errors.NewMethodError("s.commonRankingWorldMysqlRepository.Update", err)
 		}
 
-		result, err := s.getWorldRanking(ctx, lastEventAt, masterRankingId)
-		if err != nil {
-			return nil, errors.NewMethodError("s.getWorldRanking", err)
-		}
-
-		return result, nil
+		return nil
 	}
 
-	if _, err := s.commonRankingWorldMysqlRepository.Update(ctx, tx, commonRankingWorldModels.ExcludeRanking(masterRankingId, userId, score, now, lastEventAt)); err != nil {
-		return nil, errors.NewMethodError("s.commonRankingWorldMysqlRepository.Update", err)
+	if _, err := s.commonRankingWorldMysqlRepository.Create(ctx, tx, commonRankingWorldModel); err != nil {
+		return errors.NewMethodError("s.commonRankingWorldMysqlRepository.Create", err)
 	}
 
-	result, err := s.getWorldRanking(ctx, lastEventAt, masterRankingId)
-	if err != nil {
-		return nil, errors.NewMethodError("s.getWorldRanking", err)
-	}
-
-	return result, nil
+	return nil
 }
