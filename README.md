@@ -11,6 +11,7 @@
   - [IdleBonus：放置ボーナス](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/idleBonus.md)
   - [LoginBonus：ログインボーナス](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/loginBonus.md)
   - [Profile：プロフィール](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/profile.md)
+  - [Ranking：ルーム](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/ranking.md)
   - [Room：ルーム](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/room.md)
 - Service
   - [Account：アカウント](https://github.com/game-core/gocrafter/blob/main/docs/md/function/service/account.md)
