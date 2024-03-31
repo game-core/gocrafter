@@ -174,6 +174,7 @@ func InitializeRankingService() rankingService.RankingService {
 	wire.Build(
 		database.NewMysql,
 		rankingService.NewRankingService,
+		InitializeRoomService,
 		commonRankingRoomMysqlDao.NewCommonRankingRoomDao,
 		commonRankingWorldMysqlDao.NewCommonRankingWorldDao,
 		masterRankingMysqlDao.NewMasterRankingDao,

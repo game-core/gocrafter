@@ -14,6 +14,7 @@ import (
 	"github.com/game-core/gocrafter/pkg/domain/model/ranking/masterRanking"
 	"github.com/game-core/gocrafter/pkg/domain/model/ranking/masterRankingEvent"
 	"github.com/game-core/gocrafter/pkg/domain/model/ranking/masterRankingScope"
+	roomService "github.com/game-core/gocrafter/pkg/domain/model/room"
 )
 
 type RankingService interface {
@@ -23,6 +24,7 @@ type RankingService interface {
 }
 
 type rankingService struct {
+	roomService                       roomService.RoomService
 	commonRankingRoomMysqlRepository  commonRankingRoom.CommonRankingRoomMysqlRepository
 	commonRankingWorldMysqlRepository commonRankingWorld.CommonRankingWorldMysqlRepository
 	masterRankingMysqlRepository      masterRanking.MasterRankingMysqlRepository
@@ -31,6 +33,7 @@ type rankingService struct {
 }
 
 func NewRankingService(
+	roomService roomService.RoomService,
 	commonRankingRoomMysqlRepository commonRankingRoom.CommonRankingRoomMysqlRepository,
 	commonRankingWorldMysqlRepository commonRankingWorld.CommonRankingWorldMysqlRepository,
 	masterRankingMysqlRepository masterRanking.MasterRankingMysqlRepository,
@@ -38,6 +41,7 @@ func NewRankingService(
 	masterRankingScopeMysqlRepository masterRankingScope.MasterRankingScopeMysqlRepository,
 ) RankingService {
 	return &rankingService{
+		roomService:                       roomService,
 		commonRankingRoomMysqlRepository:  commonRankingRoomMysqlRepository,
 		commonRankingWorldMysqlRepository: commonRankingWorldMysqlRepository,
 		masterRankingMysqlRepository:      masterRankingMysqlRepository,
@@ -80,7 +84,7 @@ func (s *rankingService) Get(ctx context.Context, now time.Time, req *RankingGet
 
 	switch masterRankingModel.RankingScopeType {
 	case enum.RankingScopeType_Room:
-		result, err := s.getRoomRankings(ctx, masterRankingEventModel.GetLastEventAt(now), masterRankingModel.Id, req.RoomId)
+		result, err := s.getRoomRankings(ctx, masterRankingEventModel.GetLastEventAt(now), req.RoomId, masterRankingModel.Id)
 		if err != nil {
 			return nil, errors.NewMethodError("s.getRoomRankings", err)
 		}
@@ -110,7 +114,7 @@ func (s *rankingService) Update(ctx context.Context, tx *gorm.DB, now time.Time,
 
 	switch masterRankingModel.RankingScopeType {
 	case enum.RankingScopeType_Room:
-		result, err := s.updateRoomRankings(ctx, tx, now, masterRankingEventModel.GetLastEventAt(now), masterRankingModel.Id, req.RoomId, masterRankingModel.RankingLimit, req.UserId, req.Score)
+		result, err := s.updateRoomRankings(ctx, tx, now, masterRankingEventModel.GetLastEventAt(now), req.UserId, req.RoomId, masterRankingModel.Id, masterRankingModel.RankingLimit, req.Score)
 		if err != nil {
 			return nil, errors.NewMethodError("s.updateRoomRankings", err)
 		}
@@ -141,7 +145,7 @@ func (s *rankingService) getEvent(ctx context.Context, now time.Time, masterRank
 }
 
 // getRoomRankings ルームランキングを取得する
-func (s *rankingService) getRoomRankings(ctx context.Context, lastEventAt time.Time, masterRankingId int64, roomId string) (commonRankingRoom.CommonRankingRooms, error) {
+func (s *rankingService) getRoomRankings(ctx context.Context, lastEventAt time.Time, roomId string, masterRankingId int64) (commonRankingRoom.CommonRankingRooms, error) {
 	commonRankingRoomModels, err := s.commonRankingRoomMysqlRepository.FindListByMasterRankingIdAndRoomId(ctx, masterRankingId, roomId)
 	if err != nil {
 		return nil, errors.NewMethodError("s.commonRankingRoomMysqlRepository.FindListByMasterRankingIdAndRoomId", err)
@@ -161,7 +165,11 @@ func (s *rankingService) getWorldRankings(ctx context.Context, lastEventAt time.
 }
 
 // updateRoomRankings ルームランキングを更新する
-func (s *rankingService) updateRoomRankings(ctx context.Context, tx *gorm.DB, now, lastEventAt time.Time, masterRankingId int64, roomId string, limit int32, userId string, score int32) (commonRankingRoom.CommonRankingRooms, error) {
+func (s *rankingService) updateRoomRankings(ctx context.Context, tx *gorm.DB, now, lastEventAt time.Time, userId, roomId string, masterRankingId int64, limit int32, score int32) (commonRankingRoom.CommonRankingRooms, error) {
+	if _, err := s.roomService.Check(ctx, roomService.SetRoomCheckRequest(userId, roomId)); err != nil {
+		return nil, errors.NewMethodError("s.roomService.Check", err)
+	}
+
 	commonRankingRoomModels, err := s.commonRankingRoomMysqlRepository.FindListByMasterRankingIdAndRoomId(ctx, masterRankingId, roomId)
 	if err != nil {
 		return nil, errors.NewMethodError("s.commonRankingRoomMysqlRepository.FindListByMasterRankingIdAndRoomId", err)

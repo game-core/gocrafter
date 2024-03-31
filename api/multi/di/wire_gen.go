@@ -153,13 +153,14 @@ func InitializeProfileService() profile.ProfileService {
 }
 
 func InitializeRankingService() ranking.RankingService {
+	roomService := InitializeRoomService()
 	mysqlHandler := database.NewMysql()
 	commonRankingRoomMysqlRepository := commonRankingRoom.NewCommonRankingRoomDao(mysqlHandler)
 	commonRankingWorldMysqlRepository := commonRankingWorld.NewCommonRankingWorldDao(mysqlHandler)
 	masterRankingMysqlRepository := masterRanking.NewMasterRankingDao(mysqlHandler)
 	masterRankingEventMysqlRepository := masterRankingEvent.NewMasterRankingEventDao(mysqlHandler)
 	masterRankingScopeMysqlRepository := masterRankingScope.NewMasterRankingScopeDao(mysqlHandler)
-	rankingService := ranking.NewRankingService(commonRankingRoomMysqlRepository, commonRankingWorldMysqlRepository, masterRankingMysqlRepository, masterRankingEventMysqlRepository, masterRankingScopeMysqlRepository)
+	rankingService := ranking.NewRankingService(roomService, commonRankingRoomMysqlRepository, commonRankingWorldMysqlRepository, masterRankingMysqlRepository, masterRankingEventMysqlRepository, masterRankingScopeMysqlRepository)
 	return rankingService
 }
 
