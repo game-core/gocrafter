@@ -87,7 +87,7 @@ func TestEventService_Get(t *testing.T) {
 			args: args{
 				ctx: nil,
 				req: &EventGetRequest{
-					EventId: 1,
+					MasterEventId: 1,
 				},
 			},
 			want: &EventGetResponse{
@@ -123,7 +123,7 @@ func TestEventService_Get(t *testing.T) {
 			args: args{
 				ctx: nil,
 				req: &EventGetRequest{
-					EventId: 1,
+					MasterEventId: 1,
 				},
 			},
 			want:    nil,
