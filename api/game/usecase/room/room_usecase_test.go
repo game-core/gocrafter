@@ -543,6 +543,138 @@ func TestRoomUsecase_Delete(t *testing.T) {
 	}
 }
 
+func TestRoomUsecase_Check(t *testing.T) {
+	type fields struct {
+		roomService        func(ctrl *gomock.Controller) roomService.RoomService
+		transactionService func(ctrl *gomock.Controller) transactionService.TransactionService
+	}
+	type args struct {
+		ctx context.Context
+		req *roomServer.RoomCheckRequest
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *roomServer.RoomCheckResponse
+		wantErr error
+	}{
+		{
+			name: "正常：確認できる場合",
+			fields: fields{
+				roomService: func(ctrl *gomock.Controller) roomService.RoomService {
+					m := roomService.NewMockRoomService(ctrl)
+					m.EXPECT().
+						Check(
+							gomock.Any(),
+							&roomService.RoomCheckRequest{
+								UserId: "1:test",
+								RoomId: "roomId",
+							},
+						).
+						Return(
+							&roomService.RoomCheckResponse{
+								CommonRoom: &commonRoom.CommonRoom{
+									RoomId:          "roomId",
+									HostUserId:      "0:test",
+									RoomReleaseType: enum.RoomReleaseType_Public,
+									Name:            "test_user_room",
+									UserCount:       2,
+								},
+								CommonRoomUser: &commonRoomUser.CommonRoomUser{
+									RoomId:               "roomId",
+									UserId:               "1:test",
+									RoomUserPositionType: enum.RoomUserPositionType_General,
+								},
+							},
+							nil,
+						)
+					return m
+				},
+				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
+					m := transactionService.NewMockTransactionService(ctrl)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &roomServer.RoomCheckRequest{
+					UserId: "1:test",
+					RoomId: "roomId",
+				},
+			},
+			want: &roomServer.RoomCheckResponse{
+				CommonRoom: &roomServer.CommonRoom{
+					RoomId:          "roomId",
+					HostUserId:      "0:test",
+					RoomReleaseType: roomServer.RoomReleaseType_Public,
+					Name:            "test_user_room",
+					UserCount:       2,
+				},
+				CommonRoomUser: &roomServer.CommonRoomUser{
+					RoomId:               "roomId",
+					UserId:               "1:test",
+					RoomUserPositionType: roomServer.RoomUserPositionType_General,
+				},
+			},
+			wantErr: nil,
+		},
+		{
+			name: "異常：s.roomService.Check",
+			fields: fields{
+				roomService: func(ctrl *gomock.Controller) roomService.RoomService {
+					m := roomService.NewMockRoomService(ctrl)
+					m.EXPECT().
+						Check(
+							gomock.Any(),
+							&roomService.RoomCheckRequest{
+								UserId: "1:test",
+								RoomId: "roomId",
+							},
+						).
+						Return(
+							nil,
+							errors.NewTestError(),
+						)
+					return m
+				},
+				transactionService: func(ctrl *gomock.Controller) transactionService.TransactionService {
+					m := transactionService.NewMockTransactionService(ctrl)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &roomServer.RoomCheckRequest{
+					UserId: "1:test",
+					RoomId: "roomId",
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.roomService.Check", errors.NewTestError()),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctrl := gomock.NewController(t)
+
+			u := &roomUsecase{
+				roomService:        tt.fields.roomService(ctrl),
+				transactionService: tt.fields.transactionService(ctrl),
+			}
+
+			got, err := u.Check(tt.args.ctx, tt.args.req)
+			if !reflect.DeepEqual(err, tt.wantErr) {
+				t.Errorf("Check() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Check() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestRoomUsecase_CheckIn(t *testing.T) {
 	type fields struct {
 		roomService        func(ctrl *gomock.Controller) roomService.RoomService
