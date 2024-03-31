@@ -9,8 +9,8 @@ structure:
     nullable: false
     number: 1
     comment: "ユーザーID"
-  MasterRankingEventId:
-    name: master_ranking_event_id
+  MasterRankingId:
+    name: master_ranking_id
     type: int64
     nullable: false
     number: 2

@@ -12,7 +12,7 @@ type MasterRanking struct {
 	MasterRankingEventId int64
 	Name                 string
 	RankingScopeType     enum.RankingScopeType
-	Limit                int32
+	RankingLimit         int32
 }
 
 func NewMasterRanking() *MasterRanking {
@@ -23,13 +23,13 @@ func NewMasterRankings() MasterRankings {
 	return MasterRankings{}
 }
 
-func SetMasterRanking(id int64, masterRankingEventId int64, name string, rankingScopeType enum.RankingScopeType, limit int32) *MasterRanking {
+func SetMasterRanking(id int64, masterRankingEventId int64, name string, rankingScopeType enum.RankingScopeType, rankingLimit int32) *MasterRanking {
 	return &MasterRanking{
 		Id:                   id,
 		MasterRankingEventId: masterRankingEventId,
 		Name:                 name,
 		RankingScopeType:     rankingScopeType,
-		Limit:                limit,
+		RankingLimit:         rankingLimit,
 	}
 }
 

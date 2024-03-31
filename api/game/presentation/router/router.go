@@ -12,6 +12,7 @@ import (
 	"github.com/game-core/gocrafter/api/game/presentation/server/idleBonus"
 	"github.com/game-core/gocrafter/api/game/presentation/server/loginBonus"
 	"github.com/game-core/gocrafter/api/game/presentation/server/profile"
+	"github.com/game-core/gocrafter/api/game/presentation/server/ranking"
 	"github.com/game-core/gocrafter/api/game/presentation/server/room"
 )
 
@@ -23,6 +24,7 @@ func Router(lis net.Listener) {
 	loginBonusHandler := di.InitializeLoginBonusHandler()
 	profileHandler := di.InitializeProfileHandler()
 	idleHandler := di.InitializeIdleBonusHandler()
+	rankingHandler := di.InitializeRankingHandler()
 	roomHandler := di.InitializeRoomHandler()
 
 	// Server
@@ -35,6 +37,7 @@ func Router(lis net.Listener) {
 	loginBonus.RegisterLoginBonusServer(s, loginBonusHandler)
 	profile.RegisterProfileServer(s, profileHandler)
 	idleBonus.RegisterIdleBonusServer(s, idleHandler)
+	ranking.RegisterRankingServer(s, rankingHandler)
 	room.RegisterRoomServer(s, roomHandler)
 
 	log.Printf("gRPC server started")

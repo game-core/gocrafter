@@ -12,5 +12,5 @@ message MasterRanking {
   int64 master_ranking_event_id = 2;
   string name = 3;
   RankingScopeType ranking_scope_type = 4;
-  int32 limit = 5;
+  int32 ranking_limit = 5;
 }

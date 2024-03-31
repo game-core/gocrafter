@@ -4,7 +4,7 @@ package ranking
 type RankingGetMasterRequests []*RankingGetMasterRequest
 
 type RankingGetMasterRequest struct {
-	MasterRankingEventId int64
+	MasterRankingId int64
 }
 
 func NewRankingGetMasterRequest() *RankingGetMasterRequest {
@@ -15,8 +15,8 @@ func NewRankingGetMasterRequests() RankingGetMasterRequests {
 	return RankingGetMasterRequests{}
 }
 
-func SetRankingGetMasterRequest(masterRankingEventId int64) *RankingGetMasterRequest {
+func SetRankingGetMasterRequest(masterRankingId int64) *RankingGetMasterRequest {
 	return &RankingGetMasterRequest{
-		MasterRankingEventId: masterRankingEventId,
+		MasterRankingId: masterRankingId,
 	}
 }

@@ -48,7 +48,7 @@ func NewRankingService(
 
 // GetMaster マスターデータを取得する
 func (s *rankingService) GetMaster(ctx context.Context, req *RankingGetMasterRequest) (*RankingGetMasterResponse, error) {
-	masterRankingModel, err := s.masterRankingMysqlRepository.Find(ctx, req.MasterRankingEventId)
+	masterRankingModel, err := s.masterRankingMysqlRepository.Find(ctx, req.MasterRankingId)
 	if err != nil {
 		return nil, errors.NewMethodError("s.masterRankingMysqlRepository.Find", err)
 	}

@@ -31,7 +31,7 @@ func NewRankingUsecase(
 
 // GetMaster マスターデータを取得する
 func (s *rankingUsecase) GetMaster(ctx context.Context, req *rankingServer.RankingGetMasterRequest) (*rankingServer.RankingGetMasterResponse, error) {
-	result, err := s.rankingService.GetMaster(ctx, rankingService.SetRankingGetMasterRequest(req.MasterRankingEventId))
+	result, err := s.rankingService.GetMaster(ctx, rankingService.SetRankingGetMasterRequest(req.MasterRankingId))
 	if err != nil {
 		return nil, errors.NewMethodError("s.rankingService.GetMaster", err)
 	}
