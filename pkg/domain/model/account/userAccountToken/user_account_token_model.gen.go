@@ -1,17 +1,11 @@
 // Package userAccountToken ユーザーアカウントトークン
 package userAccountToken
 
-import (
-	"time"
-)
-
 type UserAccountTokens []*UserAccountToken
 
 type UserAccountToken struct {
-	UserId    string
-	Token     string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	UserId string
+	Token  string
 }
 
 func NewUserAccountToken() *UserAccountToken {
@@ -22,11 +16,9 @@ func NewUserAccountTokens() UserAccountTokens {
 	return UserAccountTokens{}
 }
 
-func SetUserAccountToken(userId string, token string, createdAt time.Time, updatedAt time.Time) *UserAccountToken {
+func SetUserAccountToken(userId string, token string) *UserAccountToken {
 	return &UserAccountToken{
-		UserId:    userId,
-		Token:     token,
-		CreatedAt: createdAt,
-		UpdatedAt: updatedAt,
+		UserId: userId,
+		Token:  token,
 	}
 }

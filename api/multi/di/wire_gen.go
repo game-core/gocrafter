@@ -60,6 +60,7 @@ import (
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userProfile"
 	masterTransaction2 "github.com/game-core/gocrafter/pkg/infrastructure/mysql/user/userTransaction"
 	userAccount2 "github.com/game-core/gocrafter/pkg/infrastructure/redis/user/userAccount"
+	"github.com/game-core/gocrafter/pkg/infrastructure/redis/user/userAccountToken"
 	masterTransaction3 "github.com/game-core/gocrafter/pkg/infrastructure/redis/user/userTransaction"
 )
 
@@ -76,7 +77,8 @@ func InitializeAccountService() account.AccountService {
 	userAccountMysqlRepository := userAccount.NewUserAccountDao(mysqlHandler)
 	redisHandler := database.NewRedis()
 	userAccountRedisRepository := userAccount2.NewUserAccountDao(redisHandler)
-	accountService := account.NewAccountService(shardService, userAccountMysqlRepository, userAccountRedisRepository)
+	userAccountTokenRedisRepository := userAccountToken.NewUserAccountTokenDao(redisHandler)
+	accountService := account.NewAccountService(shardService, userAccountMysqlRepository, userAccountRedisRepository, userAccountTokenRedisRepository)
 	return accountService
 }
 

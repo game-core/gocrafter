@@ -12,6 +12,7 @@ import (
 	"github.com/game-core/gocrafter/internal/times"
 	"github.com/game-core/gocrafter/internal/tokens"
 	"github.com/game-core/gocrafter/pkg/domain/model/account/userAccount"
+	"github.com/game-core/gocrafter/pkg/domain/model/account/userAccountToken"
 	"github.com/game-core/gocrafter/pkg/domain/model/shard"
 )
 
@@ -20,24 +21,28 @@ type AccountService interface {
 	Create(ctx context.Context, tx *gorm.DB, req *AccountCreateRequest) (*AccountCreateResponse, error)
 	Login(ctx context.Context, mtx *gorm.DB, rtx redis.Pipeliner, req *AccountLoginRequest) (*AccountLoginResponse, error)
 	Check(ctx context.Context, req *AccountCheckRequest) (*AccountCheckResponse, error)
+	CheckToken(ctx context.Context, req *AccountCheckTokenRequest) (*AccountCheckTokenResponse, error)
 	GenerateUserId(ctx context.Context) (string, error)
 }
 
 type accountService struct {
-	shardService               shard.ShardService
-	userAccountMysqlRepository userAccount.UserAccountMysqlRepository
-	userAccountRedisRepository userAccount.UserAccountRedisRepository
+	shardService                    shard.ShardService
+	userAccountMysqlRepository      userAccount.UserAccountMysqlRepository
+	userAccountRedisRepository      userAccount.UserAccountRedisRepository
+	userAccountTokenRedisRepository userAccountToken.UserAccountTokenRedisRepository
 }
 
 func NewAccountService(
 	shardService shard.ShardService,
 	userAccountMysqlRepository userAccount.UserAccountMysqlRepository,
 	userAccountRedisRepository userAccount.UserAccountRedisRepository,
+	userAccountTokenRedisRepository userAccountToken.UserAccountTokenRedisRepository,
 ) AccountService {
 	return &accountService{
-		shardService:               shardService,
-		userAccountMysqlRepository: userAccountMysqlRepository,
-		userAccountRedisRepository: userAccountRedisRepository,
+		shardService:                    shardService,
+		userAccountMysqlRepository:      userAccountMysqlRepository,
+		userAccountRedisRepository:      userAccountRedisRepository,
+		userAccountTokenRedisRepository: userAccountTokenRedisRepository,
 	}
 }
 
@@ -90,13 +95,17 @@ func (s *accountService) Login(ctx context.Context, mtx *gorm.DB, rtx redis.Pipe
 		return nil, errors.NewMethodError("s.userAccountMysqlRepository.Update", err)
 	}
 
+	if _, err := s.userAccountRedisRepository.Set(ctx, rtx, userAccountModel); err != nil {
+		return nil, errors.NewMethodError("s.userAccountRedisRepository.Set", err)
+	}
+
 	token, err := tokens.GenerateAuthTokenByUserId(userAccountModel.UserId, userAccountModel.Name)
 	if err != nil {
 		return nil, errors.NewMethodError("tokens.GenerateAuthTokenByUserId", err)
 	}
 
-	if _, err := s.userAccountRedisRepository.Set(ctx, rtx, userAccountModel); err != nil {
-		return nil, errors.NewMethodError("s.userAccountRedisRepository.Set", err)
+	if _, err := s.userAccountTokenRedisRepository.Set(ctx, rtx, userAccountToken.SetUserAccountToken(userAccountModel.UserId, token)); err != nil {
+		return nil, errors.NewMethodError("s.userAccountTokenRedisRepository.Set", err)
 	}
 
 	return SetAccountLoginResponse(token, result), nil
@@ -110,6 +119,16 @@ func (s *accountService) Check(ctx context.Context, req *AccountCheckRequest) (*
 	}
 
 	return SetAccountCheckResponse(userAccountModel), err
+}
+
+// CheckToken トークンを確認する
+func (s *accountService) CheckToken(ctx context.Context, req *AccountCheckTokenRequest) (*AccountCheckTokenResponse, error) {
+	userAccountTokenModel, err := s.userAccountTokenRedisRepository.Find(ctx, req.UserId)
+	if err != nil {
+		return nil, errors.NewMethodError("s.userAccountTokenRedisRepository.Find", err)
+	}
+
+	return SetAccountCheckTokenResponse(userAccountTokenModel), nil
 }
 
 // GenerateUserId ユーザーIDを生成する

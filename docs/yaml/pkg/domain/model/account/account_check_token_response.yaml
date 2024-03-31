@@ -1,0 +1,12 @@
+name: AccountCheckTokenResponse
+package: account
+comment: "アカウントトークン確認レスポンス"
+
+structure:
+  UserAccountToken:
+    name: user_account_token
+    type: structure
+    package: account/userAccountToken
+    nullable: true
+    number: 1
+    comment: "ユーザーアカウントトークン"
