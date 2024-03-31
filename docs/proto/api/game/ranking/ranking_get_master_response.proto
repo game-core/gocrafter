@@ -1,0 +1,16 @@
+// ランキングマスター取得レスポンス
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/ranking";
+
+import "master_ranking_structure.proto";
+import "master_ranking_event_structure.proto";
+import "master_ranking_scope_structure.proto";
+
+message RankingGetMasterResponse {
+  optional MasterRanking master_ranking = 1;
+  optional MasterRankingEvent master_ranking_event = 2;
+  optional MasterRankingScope master_ranking_scope = 3;
+}

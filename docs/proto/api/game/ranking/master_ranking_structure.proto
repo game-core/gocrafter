@@ -1,0 +1,16 @@
+// ランキング
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/ranking";
+
+import "ranking_scope_type_enum.proto";
+
+message MasterRanking {
+  int64 id = 1;
+  int64 master_ranking_event_id = 2;
+  string name = 3;
+  RankingScopeType ranking_scope_type = 4;
+  int32 limit = 5;
+}

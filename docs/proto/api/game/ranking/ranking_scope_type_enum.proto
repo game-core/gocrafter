@@ -1,0 +1,11 @@
+// ランキング範囲タイプ
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/ranking";
+
+enum RankingScopeType {
+  Room = 0;
+  World = 1;
+}

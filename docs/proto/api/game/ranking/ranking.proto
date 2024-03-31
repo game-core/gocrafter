@@ -1,0 +1,13 @@
+// ランキング
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/ranking";
+
+import "ranking_get_master_request.proto";
+import "ranking_get_master_response.proto";
+
+service Ranking {
+  rpc GetMaster (RankingGetMasterRequest) returns (RankingGetMasterResponse);
+}

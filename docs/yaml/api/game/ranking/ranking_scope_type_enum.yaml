@@ -1,0 +1,13 @@
+name: RankingScopeType
+package: ranking
+comment: "ランキング範囲タイプ"
+
+structure:
+  Room:
+    name: Room
+    number: 0
+    comment: "ルームランキング"
+  World:
+    name: World
+    number: 1
+    comment: "ワールドランキング"

@@ -1,0 +1,13 @@
+name: Ranking
+package: ranking
+comment: "ランキング"
+
+structure:
+  GetMaster:
+    name: get_master
+    method: unary
+    auth: true
+    request: RankingGetMasterRequest
+    response: RankingGetMasterResponse
+    number: 1
+    comment: "マスターデータを取得する"

@@ -12,6 +12,7 @@ import (
 	"github.com/game-core/gocrafter/api/game/presentation/handler/idleBonus"
 	"github.com/game-core/gocrafter/api/game/presentation/handler/loginBonus"
 	"github.com/game-core/gocrafter/api/game/presentation/handler/profile"
+	"github.com/game-core/gocrafter/api/game/presentation/handler/ranking"
 	"github.com/game-core/gocrafter/api/game/presentation/handler/room"
 	"github.com/game-core/gocrafter/api/game/presentation/interceptor/auth"
 	account2 "github.com/game-core/gocrafter/api/game/usecase/account"
@@ -19,6 +20,7 @@ import (
 	idleBonus2 "github.com/game-core/gocrafter/api/game/usecase/idleBonus"
 	loginBonus2 "github.com/game-core/gocrafter/api/game/usecase/loginBonus"
 	profile2 "github.com/game-core/gocrafter/api/game/usecase/profile"
+	ranking2 "github.com/game-core/gocrafter/api/game/usecase/ranking"
 	room2 "github.com/game-core/gocrafter/api/game/usecase/room"
 	"github.com/game-core/gocrafter/configs/database"
 	account3 "github.com/game-core/gocrafter/pkg/domain/model/account"
@@ -30,7 +32,7 @@ import (
 	"github.com/game-core/gocrafter/pkg/domain/model/item"
 	loginBonus3 "github.com/game-core/gocrafter/pkg/domain/model/loginBonus"
 	profile3 "github.com/game-core/gocrafter/pkg/domain/model/profile"
-	"github.com/game-core/gocrafter/pkg/domain/model/ranking"
+	ranking3 "github.com/game-core/gocrafter/pkg/domain/model/ranking"
 	"github.com/game-core/gocrafter/pkg/domain/model/rarity"
 	"github.com/game-core/gocrafter/pkg/domain/model/resource"
 	room3 "github.com/game-core/gocrafter/pkg/domain/model/room"
@@ -112,6 +114,12 @@ func InitializeProfileHandler() profile.ProfileHandler {
 	return profileHandler
 }
 
+func InitializeRankingHandler() ranking.RankingHandler {
+	rankingUsecase := InitializeRankingUsecase()
+	rankingHandler := ranking.NewRankingHandler(rankingUsecase)
+	return rankingHandler
+}
+
 func InitializeRoomHandler() room.RoomHandler {
 	roomUsecase := InitializeRoomUsecase()
 	roomHandler := room.NewRoomHandler(roomUsecase)
@@ -151,6 +159,13 @@ func InitializeProfileUsecase() profile2.ProfileUsecase {
 	transactionService := InitializeTransactionService()
 	profileUsecase := profile2.NewProfileUsecase(profileService, transactionService)
 	return profileUsecase
+}
+
+func InitializeRankingUsecase() ranking2.RankingUsecase {
+	rankingService := InitializeRankingService()
+	transactionService := InitializeTransactionService()
+	rankingUsecase := ranking2.NewRankingUsecase(rankingService, transactionService)
+	return rankingUsecase
 }
 
 func InitializeRoomUsecase() room2.RoomUsecase {
@@ -242,14 +257,14 @@ func InitializeProfileService() profile3.ProfileService {
 	return profileService
 }
 
-func InitializeRankingService() ranking.RankingService {
+func InitializeRankingService() ranking3.RankingService {
 	mysqlHandler := database.NewMysql()
 	commonRankingRoomMysqlRepository := commonRankingRoom.NewCommonRankingRoomDao(mysqlHandler)
 	commonRankingWorldMysqlRepository := commonRankingWorld.NewCommonRankingWorldDao(mysqlHandler)
 	masterRankingMysqlRepository := masterRanking.NewMasterRankingDao(mysqlHandler)
 	masterRankingEventMysqlRepository := masterRankingEvent.NewMasterRankingEventDao(mysqlHandler)
 	masterRankingScopeMysqlRepository := masterRankingScope.NewMasterRankingScopeDao(mysqlHandler)
-	rankingService := ranking.NewRankingService(commonRankingRoomMysqlRepository, commonRankingWorldMysqlRepository, masterRankingMysqlRepository, masterRankingEventMysqlRepository, masterRankingScopeMysqlRepository)
+	rankingService := ranking3.NewRankingService(commonRankingRoomMysqlRepository, commonRankingWorldMysqlRepository, masterRankingMysqlRepository, masterRankingEventMysqlRepository, masterRankingScopeMysqlRepository)
 	return rankingService
 }
 

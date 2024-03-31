@@ -13,6 +13,7 @@ import (
 	idleBonusHandler "github.com/game-core/gocrafter/api/game/presentation/handler/idleBonus"
 	loginBonusHandler "github.com/game-core/gocrafter/api/game/presentation/handler/loginBonus"
 	profileHandler "github.com/game-core/gocrafter/api/game/presentation/handler/profile"
+	rankingHandler "github.com/game-core/gocrafter/api/game/presentation/handler/ranking"
 	roomHandler "github.com/game-core/gocrafter/api/game/presentation/handler/room"
 	authInterceptor "github.com/game-core/gocrafter/api/game/presentation/interceptor/auth"
 	accountUsecase "github.com/game-core/gocrafter/api/game/usecase/account"
@@ -20,6 +21,7 @@ import (
 	idleBonusUsecase "github.com/game-core/gocrafter/api/game/usecase/idleBonus"
 	loginBonusUsecase "github.com/game-core/gocrafter/api/game/usecase/loginBonus"
 	profileUsecase "github.com/game-core/gocrafter/api/game/usecase/profile"
+	rankingUsecase "github.com/game-core/gocrafter/api/game/usecase/ranking"
 	roomUsecase "github.com/game-core/gocrafter/api/game/usecase/room"
 	accountService "github.com/game-core/gocrafter/pkg/domain/model/account"
 	actionService "github.com/game-core/gocrafter/pkg/domain/model/action"
@@ -122,6 +124,14 @@ func InitializeProfileHandler() profileHandler.ProfileHandler {
 	return nil
 }
 
+func InitializeRankingHandler() rankingHandler.RankingHandler {
+	wire.Build(
+		rankingHandler.NewRankingHandler,
+		InitializeRankingUsecase,
+	)
+	return nil
+}
+
 func InitializeRoomHandler() roomHandler.RoomHandler {
 	wire.Build(
 		roomHandler.NewRoomHandler,
@@ -170,6 +180,15 @@ func InitializeProfileUsecase() profileUsecase.ProfileUsecase {
 	wire.Build(
 		profileUsecase.NewProfileUsecase,
 		InitializeProfileService,
+		InitializeTransactionService,
+	)
+	return nil
+}
+
+func InitializeRankingUsecase() rankingUsecase.RankingUsecase {
+	wire.Build(
+		rankingUsecase.NewRankingUsecase,
+		InitializeRankingService,
 		InitializeTransactionService,
 	)
 	return nil

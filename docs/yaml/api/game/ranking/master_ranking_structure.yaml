@@ -1,0 +1,35 @@
+name: MasterRanking
+package: ranking
+comment: "ランキング"
+
+structure:
+  Id:
+    name: id
+    type: int64
+    nullable: false
+    number: 1
+    comment: "ID"
+  MasterRankingEventId:
+    name: master_ranking_event_id
+    type: int64
+    nullable: false
+    number: 2
+    comment: "ランキングID"
+  Name:
+    name: name
+    type: string
+    nullable: false
+    number: 3
+    comment: "ランキング名"
+  RankingScopeType:
+    name: ranking_scope_type
+    type: enum
+    nullable: false
+    number: 4
+    comment: "ランキング範囲タイプ"
+  Limit:
+    name: limit
+    type: int32
+    nullable: false
+    number: 5
+    comment: "ランキング上限"
