@@ -35,6 +35,21 @@ func (m *MockRoomService) EXPECT() *MockRoomServiceMockRecorder {
 	return m.recorder
 }
 
+// Check mocks base method.
+func (m *MockRoomService) Check(ctx context.Context, req *RoomCheckRequest) (*RoomCheckResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Check", ctx, req)
+	ret0, _ := ret[0].(*RoomCheckResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Check indicates an expected call of Check.
+func (mr *MockRoomServiceMockRecorder) Check(ctx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Check", reflect.TypeOf((*MockRoomService)(nil).Check), ctx, req)
+}
+
 // CheckIn mocks base method.
 func (m *MockRoomService) CheckIn(ctx context.Context, tx *gorm.DB, req *RoomCheckInRequest) (*RoomCheckInResponse, error) {
 	m.ctrl.T.Helper()
