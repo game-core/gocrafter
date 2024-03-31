@@ -110,13 +110,13 @@ func (s *rankingService) Update(ctx context.Context, tx *gorm.DB, now time.Time,
 
 	switch masterRankingModel.RankingScopeType {
 	case enum.RankingScopeType_Room:
-		result, err := s.updateRoomRanking(ctx, tx, now, masterRankingEventModel.GetLastEventAt(now), masterRankingModel.Id, req.RoomId, masterRankingModel.Limit, req.UserId, req.Score)
+		result, err := s.updateRoomRanking(ctx, tx, now, masterRankingEventModel.GetLastEventAt(now), masterRankingModel.Id, req.RoomId, masterRankingModel.RankingLimit, req.UserId, req.Score)
 		if err != nil {
 			return nil, errors.NewMethodError("s.updateRoomRanking", err)
 		}
 		return SetRankingUpdateResponse(result, commonRankingWorld.NewCommonRankingWorlds()), nil
 	case enum.RankingScopeType_World:
-		result, err := s.updateWorldRanking(ctx, tx, now, masterRankingEventModel.GetLastEventAt(now), masterRankingModel.Id, masterRankingModel.Limit, req.UserId, req.Score)
+		result, err := s.updateWorldRanking(ctx, tx, now, masterRankingEventModel.GetLastEventAt(now), masterRankingModel.Id, masterRankingModel.RankingLimit, req.UserId, req.Score)
 		if err != nil {
 			return nil, errors.NewMethodError("s.updateWorldRanking", err)
 		}
