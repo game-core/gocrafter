@@ -45,6 +45,7 @@
 
 ```json
 {
+    "user_id": "0:1PL-CGARg5DePVGI9bz2",
     "master_login_bonus_id": 1
 }
 ```
