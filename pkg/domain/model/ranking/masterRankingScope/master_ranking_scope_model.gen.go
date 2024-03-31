@@ -8,9 +8,9 @@ import (
 type MasterRankingScopes []*MasterRankingScope
 
 type MasterRankingScope struct {
-	Id          int64
-	Name        string
-	RankingType enum.RankingType
+	Id               int64
+	Name             string
+	RankingScopeType enum.RankingScopeType
 }
 
 func NewMasterRankingScope() *MasterRankingScope {
@@ -21,10 +21,10 @@ func NewMasterRankingScopes() MasterRankingScopes {
 	return MasterRankingScopes{}
 }
 
-func SetMasterRankingScope(id int64, name string, rankingType enum.RankingType) *MasterRankingScope {
+func SetMasterRankingScope(id int64, name string, rankingScopeType enum.RankingScopeType) *MasterRankingScope {
 	return &MasterRankingScope{
-		Id:          id,
-		Name:        name,
-		RankingType: rankingType,
+		Id:               id,
+		Name:             name,
+		RankingScopeType: rankingScopeType,
 	}
 }

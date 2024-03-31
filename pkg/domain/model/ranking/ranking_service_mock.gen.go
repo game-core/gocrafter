@@ -51,6 +51,21 @@ func (mr *MockRankingServiceMockRecorder) Get(ctx, now, req interface{}) *gomock
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockRankingService)(nil).Get), ctx, now, req)
 }
 
+// GetMaster mocks base method.
+func (m *MockRankingService) GetMaster(ctx context.Context, req *RankingGetMasterRequest) (*RankingGetMasterResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetMaster", ctx, req)
+	ret0, _ := ret[0].(*RankingGetMasterResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetMaster indicates an expected call of GetMaster.
+func (mr *MockRankingServiceMockRecorder) GetMaster(ctx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMaster", reflect.TypeOf((*MockRankingService)(nil).GetMaster), ctx, req)
+}
+
 // Update mocks base method.
 func (m *MockRankingService) Update(ctx context.Context, tx *gorm.DB, now time.Time, req *RankingUpdateRequest) (*RankingUpdateResponse, error) {
 	m.ctrl.T.Helper()

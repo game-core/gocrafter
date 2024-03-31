@@ -15,9 +15,9 @@ structure:
     nullable: false
     number: 2
     comment: "ランキング名"
-  RankingType:
-    name: ranking_type
+  RankingScopeType:
+    name: ranking_scope_type
     type: enum
     nullable: false
     number: 3
-    comment: "ランキングタイプ"
+    comment: "ランキング範囲タイプ"
