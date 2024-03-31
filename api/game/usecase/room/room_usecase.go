@@ -14,6 +14,7 @@ type RoomUsecase interface {
 	Search(ctx context.Context, req *roomServer.RoomSearchRequest) (*roomServer.RoomSearchResponse, error)
 	Create(ctx context.Context, req *roomServer.RoomCreateRequest) (*roomServer.RoomCreateResponse, error)
 	Delete(ctx context.Context, req *roomServer.RoomDeleteRequest) (*roomServer.RoomDeleteResponse, error)
+	Check(ctx context.Context, req *roomServer.RoomCheckRequest) (*roomServer.RoomCheckResponse, error)
 	CheckIn(ctx context.Context, req *roomServer.RoomCheckInRequest) (*roomServer.RoomCheckInResponse, error)
 	CheckOut(ctx context.Context, req *roomServer.RoomCheckOutRequest) (*roomServer.RoomCheckOutResponse, error)
 }
@@ -93,6 +94,29 @@ func (s *roomUsecase) Delete(ctx context.Context, req *roomServer.RoomDeleteRequ
 			roomServer.RoomReleaseType(result.CommonRoom.RoomReleaseType),
 			result.CommonRoom.Name,
 			result.CommonRoom.UserCount,
+		),
+	), nil
+}
+
+// Check ルームを確認する
+func (s *roomUsecase) Check(ctx context.Context, req *roomServer.RoomCheckRequest) (*roomServer.RoomCheckResponse, error) {
+	result, err := s.roomService.Check(ctx, roomService.SetRoomCheckRequest(req.UserId, req.RoomId))
+	if err != nil {
+		return nil, errors.NewMethodError("s.roomService.Check", err)
+	}
+
+	return roomServer.SetRoomCheckResponse(
+		roomServer.SetCommonRoom(
+			result.CommonRoom.RoomId,
+			result.CommonRoom.HostUserId,
+			roomServer.RoomReleaseType(result.CommonRoom.RoomReleaseType),
+			result.CommonRoom.Name,
+			result.CommonRoom.UserCount,
+		),
+		roomServer.SetCommonRoomUser(
+			result.CommonRoomUser.RoomId,
+			result.CommonRoomUser.UserId,
+			roomServer.RoomUserPositionType(result.CommonRoomUser.RoomUserPositionType),
 		),
 	), nil
 }

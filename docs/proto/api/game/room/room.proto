@@ -11,6 +11,8 @@ import "room_create_request.proto";
 import "room_create_response.proto";
 import "room_delete_request.proto";
 import "room_delete_response.proto";
+import "room_check_request.proto";
+import "room_check_response.proto";
 import "room_check_in_request.proto";
 import "room_check_in_response.proto";
 import "room_check_out_request.proto";
@@ -20,6 +22,7 @@ service Room {
   rpc Search (RoomSearchRequest) returns (RoomSearchResponse);
   rpc Create (RoomCreateRequest) returns (RoomCreateResponse);
   rpc Delete (RoomDeleteRequest) returns (RoomDeleteResponse);
+  rpc Check (RoomCheckRequest) returns (RoomCheckResponse);
   rpc CheckIn (RoomCheckInRequest) returns (RoomCheckInResponse);
   rpc CheckOut (RoomCheckOutRequest) returns (RoomCheckOutResponse);
 }

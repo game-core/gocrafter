@@ -1060,6 +1060,214 @@ func TestRoomService_Delete(t *testing.T) {
 	}
 }
 
+func TestRoomService_Check(t *testing.T) {
+	type fields struct {
+		configService                 func(ctrl *gomock.Controller) configService.ConfigService
+		friendService                 func(ctrl *gomock.Controller) friendService.FriendService
+		commonRoomMysqlRepository     func(ctrl *gomock.Controller) commonRoom.CommonRoomMysqlRepository
+		commonRoomUserMysqlRepository func(ctrl *gomock.Controller) commonRoomUser.CommonRoomUserMysqlRepository
+	}
+	type args struct {
+		ctx context.Context
+		req *RoomCheckRequest
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		want    *RoomCheckResponse
+		wantErr error
+	}{
+		{
+			name: "正常：確認できる場合",
+			fields: fields{
+				configService: func(ctrl *gomock.Controller) configService.ConfigService {
+					m := configService.NewMockConfigService(ctrl)
+					return m
+				},
+				friendService: func(ctrl *gomock.Controller) friendService.FriendService {
+					m := friendService.NewMockFriendService(ctrl)
+					return m
+				},
+				commonRoomMysqlRepository: func(ctrl *gomock.Controller) commonRoom.CommonRoomMysqlRepository {
+					m := commonRoom.NewMockCommonRoomMysqlRepository(ctrl)
+					m.EXPECT().
+						Find(
+							gomock.Any(),
+							"room1",
+						).
+						Return(
+							&commonRoom.CommonRoom{
+								RoomId:          "room1",
+								HostUserId:      "0:test",
+								RoomReleaseType: enum.RoomReleaseType_Public,
+								Name:            "テストルーム",
+								UserCount:       1,
+							},
+							nil,
+						)
+					return m
+				},
+				commonRoomUserMysqlRepository: func(ctrl *gomock.Controller) commonRoomUser.CommonRoomUserMysqlRepository {
+					m := commonRoomUser.NewMockCommonRoomUserMysqlRepository(ctrl)
+					m.EXPECT().
+						Find(
+							gomock.Any(),
+							"room1",
+							"0:test",
+						).
+						Return(
+							&commonRoomUser.CommonRoomUser{
+								RoomId:               "room1",
+								UserId:               "0:test",
+								RoomUserPositionType: enum.RoomUserPositionType_General,
+							},
+							nil,
+						)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &RoomCheckRequest{
+					UserId: "0:test",
+					RoomId: "room1",
+				},
+			},
+			want: &RoomCheckResponse{
+				CommonRoom: &commonRoom.CommonRoom{
+					RoomId:          "room1",
+					HostUserId:      "0:test",
+					RoomReleaseType: enum.RoomReleaseType_Public,
+					Name:            "テストルーム",
+					UserCount:       1,
+				},
+				CommonRoomUser: &commonRoomUser.CommonRoomUser{
+					RoomId:               "room1",
+					UserId:               "0:test",
+					RoomUserPositionType: enum.RoomUserPositionType_General,
+				},
+			},
+			wantErr: nil,
+		},
+		{
+			name: "異常：s.commonRoomMysqlRepository.Find",
+			fields: fields{
+				configService: func(ctrl *gomock.Controller) configService.ConfigService {
+					m := configService.NewMockConfigService(ctrl)
+					return m
+				},
+				friendService: func(ctrl *gomock.Controller) friendService.FriendService {
+					m := friendService.NewMockFriendService(ctrl)
+					return m
+				},
+				commonRoomMysqlRepository: func(ctrl *gomock.Controller) commonRoom.CommonRoomMysqlRepository {
+					m := commonRoom.NewMockCommonRoomMysqlRepository(ctrl)
+					m.EXPECT().
+						Find(
+							gomock.Any(),
+							"room1",
+						).
+						Return(
+							nil,
+							errors.NewTestError(),
+						)
+					return m
+				},
+				commonRoomUserMysqlRepository: func(ctrl *gomock.Controller) commonRoomUser.CommonRoomUserMysqlRepository {
+					m := commonRoomUser.NewMockCommonRoomUserMysqlRepository(ctrl)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &RoomCheckRequest{
+					UserId: "0:test",
+					RoomId: "room1",
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.commonRoomMysqlRepository.Find", errors.NewTestError()),
+		},
+		{
+			name: "異常：s.commonRoomUserMysqlRepository.Find",
+			fields: fields{
+				configService: func(ctrl *gomock.Controller) configService.ConfigService {
+					m := configService.NewMockConfigService(ctrl)
+					return m
+				},
+				friendService: func(ctrl *gomock.Controller) friendService.FriendService {
+					m := friendService.NewMockFriendService(ctrl)
+					return m
+				},
+				commonRoomMysqlRepository: func(ctrl *gomock.Controller) commonRoom.CommonRoomMysqlRepository {
+					m := commonRoom.NewMockCommonRoomMysqlRepository(ctrl)
+					m.EXPECT().
+						Find(
+							gomock.Any(),
+							"room1",
+						).
+						Return(
+							&commonRoom.CommonRoom{
+								RoomId:          "room1",
+								HostUserId:      "0:test",
+								RoomReleaseType: enum.RoomReleaseType_Public,
+								Name:            "テストルーム",
+								UserCount:       1,
+							},
+							nil,
+						)
+					return m
+				},
+				commonRoomUserMysqlRepository: func(ctrl *gomock.Controller) commonRoomUser.CommonRoomUserMysqlRepository {
+					m := commonRoomUser.NewMockCommonRoomUserMysqlRepository(ctrl)
+					m.EXPECT().
+						Find(
+							gomock.Any(),
+							"room1",
+							"0:test",
+						).
+						Return(
+							nil,
+							errors.NewTestError(),
+						)
+					return m
+				},
+			},
+			args: args{
+				ctx: nil,
+				req: &RoomCheckRequest{
+					UserId: "0:test",
+					RoomId: "room1",
+				},
+			},
+			want:    nil,
+			wantErr: errors.NewMethodError("s.commonRoomUserMysqlRepository.Find", errors.NewTestError()),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctrl := gomock.NewController(t)
+
+			s := &roomService{
+				configService:                 tt.fields.configService(ctrl),
+				friendService:                 tt.fields.friendService(ctrl),
+				commonRoomMysqlRepository:     tt.fields.commonRoomMysqlRepository(ctrl),
+				commonRoomUserMysqlRepository: tt.fields.commonRoomUserMysqlRepository(ctrl),
+			}
+
+			got, err := s.Check(tt.args.ctx, tt.args.req)
+			if !reflect.DeepEqual(err, tt.wantErr) {
+				t.Errorf("Check() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Check() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestRoomService_CheckIn(t *testing.T) {
 	type fields struct {
 		configService                 func(ctrl *gomock.Controller) configService.ConfigService

@@ -65,6 +65,19 @@ func (s *roomHandler) Delete(ctx context.Context, req *room.RoomDeleteRequest) (
 	return res, nil
 }
 
+// Check ルームを確認する
+func (s *roomHandler) Check(ctx context.Context, req *room.RoomCheckRequest) (*room.RoomCheckResponse, error) {
+	if err := tokens.CheckJwtClaims(ctx, req.UserId); err != nil {
+		return nil, errors.NewMethodError("internal.CheckJwtClaims", err)
+	}
+	res, err := s.roomUsecase.Check(ctx, req)
+	if err != nil {
+		return nil, errors.NewMethodError("s.roomUsecase.Check", err)
+	}
+
+	return res, nil
+}
+
 // CheckIn ルームに参加する
 func (s *roomHandler) CheckIn(ctx context.Context, req *room.RoomCheckInRequest) (*room.RoomCheckInResponse, error) {
 	if err := tokens.CheckJwtClaims(ctx, req.UserId); err != nil {

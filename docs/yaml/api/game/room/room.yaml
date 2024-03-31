@@ -27,13 +27,21 @@ structure:
     response: RoomDeleteResponse
     number: 3
     comment: "ルームを削除する"
+  Check:
+    name: check
+    method: unary
+    auth: true
+    request: RoomCheckRequest
+    response: RoomCheckResponse
+    number: 4
+    comment: "ルームを確認する"
   CheckIn:
     name: check_in
     method: unary
     auth: true
     request: RoomCheckInRequest
     response: RoomCheckInResponse
-    number: 4
+    number: 5
     comment: "ルームに参加する"
   CheckOut:
     name: check_out
@@ -41,5 +49,5 @@ structure:
     auth: true
     request: RoomCheckOutRequest
     response: RoomCheckOutResponse
-    number: 5
+    number: 6
     comment: "ルームを退出する"

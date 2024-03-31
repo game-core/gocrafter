@@ -25,6 +25,7 @@ const (
 	Room_Search_FullMethodName   = "/proto.Room/Search"
 	Room_Create_FullMethodName   = "/proto.Room/Create"
 	Room_Delete_FullMethodName   = "/proto.Room/Delete"
+	Room_Check_FullMethodName    = "/proto.Room/Check"
 	Room_CheckIn_FullMethodName  = "/proto.Room/CheckIn"
 	Room_CheckOut_FullMethodName = "/proto.Room/CheckOut"
 )
@@ -36,6 +37,7 @@ type RoomClient interface {
 	Search(ctx context.Context, in *RoomSearchRequest, opts ...grpc.CallOption) (*RoomSearchResponse, error)
 	Create(ctx context.Context, in *RoomCreateRequest, opts ...grpc.CallOption) (*RoomCreateResponse, error)
 	Delete(ctx context.Context, in *RoomDeleteRequest, opts ...grpc.CallOption) (*RoomDeleteResponse, error)
+	Check(ctx context.Context, in *RoomCheckRequest, opts ...grpc.CallOption) (*RoomCheckResponse, error)
 	CheckIn(ctx context.Context, in *RoomCheckInRequest, opts ...grpc.CallOption) (*RoomCheckInResponse, error)
 	CheckOut(ctx context.Context, in *RoomCheckOutRequest, opts ...grpc.CallOption) (*RoomCheckOutResponse, error)
 }
@@ -75,6 +77,15 @@ func (c *roomClient) Delete(ctx context.Context, in *RoomDeleteRequest, opts ...
 	return out, nil
 }
 
+func (c *roomClient) Check(ctx context.Context, in *RoomCheckRequest, opts ...grpc.CallOption) (*RoomCheckResponse, error) {
+	out := new(RoomCheckResponse)
+	err := c.cc.Invoke(ctx, Room_Check_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *roomClient) CheckIn(ctx context.Context, in *RoomCheckInRequest, opts ...grpc.CallOption) (*RoomCheckInResponse, error) {
 	out := new(RoomCheckInResponse)
 	err := c.cc.Invoke(ctx, Room_CheckIn_FullMethodName, in, out, opts...)
@@ -100,6 +111,7 @@ type RoomServer interface {
 	Search(context.Context, *RoomSearchRequest) (*RoomSearchResponse, error)
 	Create(context.Context, *RoomCreateRequest) (*RoomCreateResponse, error)
 	Delete(context.Context, *RoomDeleteRequest) (*RoomDeleteResponse, error)
+	Check(context.Context, *RoomCheckRequest) (*RoomCheckResponse, error)
 	CheckIn(context.Context, *RoomCheckInRequest) (*RoomCheckInResponse, error)
 	CheckOut(context.Context, *RoomCheckOutRequest) (*RoomCheckOutResponse, error)
 	mustEmbedUnimplementedRoomServer()
@@ -117,6 +129,9 @@ func (UnimplementedRoomServer) Create(context.Context, *RoomCreateRequest) (*Roo
 }
 func (UnimplementedRoomServer) Delete(context.Context, *RoomDeleteRequest) (*RoomDeleteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+}
+func (UnimplementedRoomServer) Check(context.Context, *RoomCheckRequest) (*RoomCheckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Check not implemented")
 }
 func (UnimplementedRoomServer) CheckIn(context.Context, *RoomCheckInRequest) (*RoomCheckInResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckIn not implemented")
@@ -191,6 +206,24 @@ func _Room_Delete_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Room_Check_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RoomCheckRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RoomServer).Check(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Room_Check_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RoomServer).Check(ctx, req.(*RoomCheckRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Room_CheckIn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RoomCheckInRequest)
 	if err := dec(in); err != nil {
@@ -245,6 +278,10 @@ var Room_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Delete",
 			Handler:    _Room_Delete_Handler,
+		},
+		{
+			MethodName: "Check",
+			Handler:    _Room_Check_Handler,
 		},
 		{
 			MethodName: "CheckIn",

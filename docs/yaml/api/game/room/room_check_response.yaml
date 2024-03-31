@@ -1,0 +1,17 @@
+name: RoomCheckResponse
+package: room
+comment: "ルーム確認レスポンス"
+
+structure:
+  CommonRoom:
+    name: common_room
+    type: structure
+    nullable: true
+    number: 1
+    comment: "ルーム"
+  CommonRoomUser:
+    name: common_room_user
+    type: structure
+    nullable: true
+    number: 2
+    comment: "ルームユーザー"

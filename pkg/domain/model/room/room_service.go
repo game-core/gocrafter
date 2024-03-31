@@ -19,6 +19,7 @@ type RoomService interface {
 	Search(ctx context.Context, req *RoomSearchRequest) (*RoomSearchResponse, error)
 	Create(ctx context.Context, tx *gorm.DB, req *RoomCreateRequest) (*RoomCreateResponse, error)
 	Delete(ctx context.Context, tx *gorm.DB, req *RoomDeleteRequest) (*RoomDeleteResponse, error)
+	Check(ctx context.Context, req *RoomCheckRequest) (*RoomCheckResponse, error)
 	CheckIn(ctx context.Context, tx *gorm.DB, req *RoomCheckInRequest) (*RoomCheckInResponse, error)
 	CheckOut(ctx context.Context, tx *gorm.DB, req *RoomCheckOutRequest) (*RoomCheckOutResponse, error)
 }
@@ -96,6 +97,21 @@ func (s *roomService) Delete(ctx context.Context, tx *gorm.DB, req *RoomDeleteRe
 	}
 
 	return SetRoomDeleteResponse(commonRoomModel), nil
+}
+
+// Check ルームを確認する
+func (s *roomService) Check(ctx context.Context, req *RoomCheckRequest) (*RoomCheckResponse, error) {
+	commonRoomModel, err := s.commonRoomMysqlRepository.Find(ctx, req.RoomId)
+	if err != nil {
+		return nil, errors.NewMethodError("s.commonRoomMysqlRepository.Find", err)
+	}
+
+	commonRoomUserModel, err := s.commonRoomUserMysqlRepository.Find(ctx, req.RoomId, req.UserId)
+	if err != nil {
+		return nil, errors.NewMethodError("s.commonRoomUserMysqlRepository.Find", err)
+	}
+
+	return SetRoomCheckResponse(commonRoomModel, commonRoomUserModel), nil
 }
 
 // CheckIn ルームに参加する
