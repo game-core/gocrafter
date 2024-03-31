@@ -46,7 +46,7 @@ func (s *masterRankingScopeDao) Find(ctx context.Context, id int64) (*masterRank
 		return nil, errors.NewError("record does not exist")
 	}
 
-	m := masterRankingScope.SetMasterRankingScope(t.Id, t.Name, t.RankingType)
+	m := masterRankingScope.SetMasterRankingScope(t.Id, t.Name, t.RankingScopeType)
 	s.Cache.Set(cashes.CreateCacheKey("master_ranking_scope", "Find", fmt.Sprintf("%d_", id)), m, cache.DefaultExpiration)
 	return m, nil
 }
@@ -68,13 +68,13 @@ func (s *masterRankingScopeDao) FindOrNil(ctx context.Context, id int64) (*maste
 		return nil, nil
 	}
 
-	m := masterRankingScope.SetMasterRankingScope(t.Id, t.Name, t.RankingType)
+	m := masterRankingScope.SetMasterRankingScope(t.Id, t.Name, t.RankingScopeType)
 	s.Cache.Set(cashes.CreateCacheKey("master_ranking_scope", "FindOrNil", fmt.Sprintf("%d_", id)), m, cache.DefaultExpiration)
 	return m, nil
 }
 
-func (s *masterRankingScopeDao) FindByRankingType(ctx context.Context, rankingType enum.RankingType) (*masterRankingScope.MasterRankingScope, error) {
-	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_ranking_scope", "FindByRankingType", fmt.Sprintf("%d_", rankingType)))
+func (s *masterRankingScopeDao) FindByRankingScopeType(ctx context.Context, rankingScopeType enum.RankingScopeType) (*masterRankingScope.MasterRankingScope, error) {
+	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_ranking_scope", "FindByRankingScopeType", fmt.Sprintf("%d_", rankingScopeType)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterRankingScope.MasterRankingScope); ok {
 			return cachedEntity, nil
@@ -82,7 +82,7 @@ func (s *masterRankingScopeDao) FindByRankingType(ctx context.Context, rankingTy
 	}
 
 	t := NewMasterRankingScope()
-	res := s.ReadMysqlConn.WithContext(ctx).Where("ranking_type = ?", rankingType).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("ranking_scope_type = ?", rankingScopeType).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -90,13 +90,13 @@ func (s *masterRankingScopeDao) FindByRankingType(ctx context.Context, rankingTy
 		return nil, errors.NewError("record does not exist")
 	}
 
-	m := masterRankingScope.SetMasterRankingScope(t.Id, t.Name, t.RankingType)
-	s.Cache.Set(cashes.CreateCacheKey("master_ranking_scope", "FindByRankingType", fmt.Sprintf("%d_", rankingType)), m, cache.DefaultExpiration)
+	m := masterRankingScope.SetMasterRankingScope(t.Id, t.Name, t.RankingScopeType)
+	s.Cache.Set(cashes.CreateCacheKey("master_ranking_scope", "FindByRankingScopeType", fmt.Sprintf("%d_", rankingScopeType)), m, cache.DefaultExpiration)
 	return m, nil
 }
 
-func (s *masterRankingScopeDao) FindOrNilByRankingType(ctx context.Context, rankingType enum.RankingType) (*masterRankingScope.MasterRankingScope, error) {
-	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_ranking_scope", "FindOrNilByRankingType", fmt.Sprintf("%d_", rankingType)))
+func (s *masterRankingScopeDao) FindOrNilByRankingScopeType(ctx context.Context, rankingScopeType enum.RankingScopeType) (*masterRankingScope.MasterRankingScope, error) {
+	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_ranking_scope", "FindOrNilByRankingScopeType", fmt.Sprintf("%d_", rankingScopeType)))
 	if found {
 		if cachedEntity, ok := cachedResult.(*masterRankingScope.MasterRankingScope); ok {
 			return cachedEntity, nil
@@ -104,7 +104,7 @@ func (s *masterRankingScopeDao) FindOrNilByRankingType(ctx context.Context, rank
 	}
 
 	t := NewMasterRankingScope()
-	res := s.ReadMysqlConn.WithContext(ctx).Where("ranking_type = ?", rankingType).Find(t)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("ranking_scope_type = ?", rankingScopeType).Find(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
@@ -112,8 +112,8 @@ func (s *masterRankingScopeDao) FindOrNilByRankingType(ctx context.Context, rank
 		return nil, nil
 	}
 
-	m := masterRankingScope.SetMasterRankingScope(t.Id, t.Name, t.RankingType)
-	s.Cache.Set(cashes.CreateCacheKey("master_ranking_scope", "FindOrNilByRankingType", fmt.Sprintf("%d_", rankingType)), m, cache.DefaultExpiration)
+	m := masterRankingScope.SetMasterRankingScope(t.Id, t.Name, t.RankingScopeType)
+	s.Cache.Set(cashes.CreateCacheKey("master_ranking_scope", "FindOrNilByRankingScopeType", fmt.Sprintf("%d_", rankingScopeType)), m, cache.DefaultExpiration)
 	return m, nil
 }
 
@@ -133,15 +133,15 @@ func (s *masterRankingScopeDao) FindList(ctx context.Context) (masterRankingScop
 
 	ms := masterRankingScope.NewMasterRankingScopes()
 	for _, t := range ts {
-		ms = append(ms, masterRankingScope.SetMasterRankingScope(t.Id, t.Name, t.RankingType))
+		ms = append(ms, masterRankingScope.SetMasterRankingScope(t.Id, t.Name, t.RankingScopeType))
 	}
 
 	s.Cache.Set(cashes.CreateCacheKey("master_ranking_scope", "FindList", ""), ms, cache.DefaultExpiration)
 	return ms, nil
 }
 
-func (s *masterRankingScopeDao) FindListByRankingType(ctx context.Context, rankingType enum.RankingType) (masterRankingScope.MasterRankingScopes, error) {
-	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_ranking_scope", "FindListByRankingType", fmt.Sprintf("%d_", rankingType)))
+func (s *masterRankingScopeDao) FindListByRankingScopeType(ctx context.Context, rankingScopeType enum.RankingScopeType) (masterRankingScope.MasterRankingScopes, error) {
+	cachedResult, found := s.Cache.Get(cashes.CreateCacheKey("master_ranking_scope", "FindListByRankingScopeType", fmt.Sprintf("%d_", rankingScopeType)))
 	if found {
 		if cachedEntity, ok := cachedResult.(masterRankingScope.MasterRankingScopes); ok {
 			return cachedEntity, nil
@@ -149,17 +149,17 @@ func (s *masterRankingScopeDao) FindListByRankingType(ctx context.Context, ranki
 	}
 
 	ts := NewMasterRankingScopes()
-	res := s.ReadMysqlConn.WithContext(ctx).Where("ranking_type = ?", rankingType).Find(&ts)
+	res := s.ReadMysqlConn.WithContext(ctx).Where("ranking_scope_type = ?", rankingScopeType).Find(&ts)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
 
 	ms := masterRankingScope.NewMasterRankingScopes()
 	for _, t := range ts {
-		ms = append(ms, masterRankingScope.SetMasterRankingScope(t.Id, t.Name, t.RankingType))
+		ms = append(ms, masterRankingScope.SetMasterRankingScope(t.Id, t.Name, t.RankingScopeType))
 	}
 
-	s.Cache.Set(cashes.CreateCacheKey("master_ranking_scope", "FindListByRankingType", fmt.Sprintf("%d_", rankingType)), ms, cache.DefaultExpiration)
+	s.Cache.Set(cashes.CreateCacheKey("master_ranking_scope", "FindListByRankingScopeType", fmt.Sprintf("%d_", rankingScopeType)), ms, cache.DefaultExpiration)
 	return ms, nil
 }
 
@@ -172,16 +172,16 @@ func (s *masterRankingScopeDao) Create(ctx context.Context, tx *gorm.DB, m *mast
 	}
 
 	t := &MasterRankingScope{
-		Id:          m.Id,
-		Name:        m.Name,
-		RankingType: m.RankingType,
+		Id:               m.Id,
+		Name:             m.Name,
+		RankingScopeType: m.RankingScopeType,
 	}
 	res := conn.Model(NewMasterRankingScope()).WithContext(ctx).Create(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
 
-	return masterRankingScope.SetMasterRankingScope(t.Id, t.Name, t.RankingType), nil
+	return masterRankingScope.SetMasterRankingScope(t.Id, t.Name, t.RankingScopeType), nil
 }
 
 func (s *masterRankingScopeDao) CreateList(ctx context.Context, tx *gorm.DB, ms masterRankingScope.MasterRankingScopes) (masterRankingScope.MasterRankingScopes, error) {
@@ -195,9 +195,9 @@ func (s *masterRankingScopeDao) CreateList(ctx context.Context, tx *gorm.DB, ms 
 	ts := NewMasterRankingScopes()
 	for _, m := range ms {
 		t := &MasterRankingScope{
-			Id:          m.Id,
-			Name:        m.Name,
-			RankingType: m.RankingType,
+			Id:               m.Id,
+			Name:             m.Name,
+			RankingScopeType: m.RankingScopeType,
 		}
 		ts = append(ts, t)
 	}
@@ -219,16 +219,16 @@ func (s *masterRankingScopeDao) Update(ctx context.Context, tx *gorm.DB, m *mast
 	}
 
 	t := &MasterRankingScope{
-		Id:          m.Id,
-		Name:        m.Name,
-		RankingType: m.RankingType,
+		Id:               m.Id,
+		Name:             m.Name,
+		RankingScopeType: m.RankingScopeType,
 	}
 	res := conn.Model(NewMasterRankingScope()).WithContext(ctx).Where("id = ?", m.Id).Updates(t)
 	if err := res.Error; err != nil {
 		return nil, err
 	}
 
-	return masterRankingScope.SetMasterRankingScope(t.Id, t.Name, t.RankingType), nil
+	return masterRankingScope.SetMasterRankingScope(t.Id, t.Name, t.RankingScopeType), nil
 }
 
 func (s *masterRankingScopeDao) Delete(ctx context.Context, tx *gorm.DB, m *masterRankingScope.MasterRankingScope) error {

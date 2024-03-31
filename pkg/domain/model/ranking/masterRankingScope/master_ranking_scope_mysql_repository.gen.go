@@ -14,10 +14,10 @@ import (
 type MasterRankingScopeMysqlRepository interface {
 	Find(ctx context.Context, id int64) (*MasterRankingScope, error)
 	FindOrNil(ctx context.Context, id int64) (*MasterRankingScope, error)
-	FindByRankingType(ctx context.Context, rankingType enum.RankingType) (*MasterRankingScope, error)
-	FindOrNilByRankingType(ctx context.Context, rankingType enum.RankingType) (*MasterRankingScope, error)
+	FindByRankingScopeType(ctx context.Context, rankingScopeType enum.RankingScopeType) (*MasterRankingScope, error)
+	FindOrNilByRankingScopeType(ctx context.Context, rankingScopeType enum.RankingScopeType) (*MasterRankingScope, error)
 	FindList(ctx context.Context) (MasterRankingScopes, error)
-	FindListByRankingType(ctx context.Context, rankingType enum.RankingType) (MasterRankingScopes, error)
+	FindListByRankingScopeType(ctx context.Context, rankingScopeType enum.RankingScopeType) (MasterRankingScopes, error)
 	Create(ctx context.Context, tx *gorm.DB, m *MasterRankingScope) (*MasterRankingScope, error)
 	CreateList(ctx context.Context, tx *gorm.DB, ms MasterRankingScopes) (MasterRankingScopes, error)
 	Update(ctx context.Context, tx *gorm.DB, m *MasterRankingScope) (*MasterRankingScope, error)

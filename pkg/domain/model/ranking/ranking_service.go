@@ -58,9 +58,9 @@ func (s *rankingService) GetMaster(ctx context.Context, req *RankingGetMasterReq
 		return nil, errors.NewMethodError("s.masterRankingEventMysqlRepository.Find", err)
 	}
 
-	masterRankingScopeModel, err := s.masterRankingScopeMysqlRepository.FindByRankingType(ctx, masterRankingModel.RankingScopeType)
+	masterRankingScopeModel, err := s.masterRankingScopeMysqlRepository.FindByRankingScopeType(ctx, masterRankingModel.RankingScopeType)
 	if err != nil {
-		return nil, errors.NewMethodError("s.masterRankingScopeMysqlRepository.FindByRankingType", err)
+		return nil, errors.NewMethodError("s.masterRankingScopeMysqlRepository.FindByRankingScopeType", err)
 	}
 
 	return SetRankingGetMasterResponse(masterRankingModel, masterRankingEventModel, masterRankingScopeModel), nil

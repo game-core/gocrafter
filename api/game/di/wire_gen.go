@@ -59,6 +59,7 @@ import (
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterLoginBonusSchedule"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterRanking"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterRankingEvent"
+	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterRankingScope"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterRarity"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterResource"
 	"github.com/game-core/gocrafter/pkg/infrastructure/mysql/master/masterTransaction"
@@ -247,7 +248,8 @@ func InitializeRankingService() ranking.RankingService {
 	commonRankingWorldMysqlRepository := commonRankingWorld.NewCommonRankingWorldDao(mysqlHandler)
 	masterRankingMysqlRepository := masterRanking.NewMasterRankingDao(mysqlHandler)
 	masterRankingEventMysqlRepository := masterRankingEvent.NewMasterRankingEventDao(mysqlHandler)
-	rankingService := ranking.NewRankingService(commonRankingRoomMysqlRepository, commonRankingWorldMysqlRepository, masterRankingMysqlRepository, masterRankingEventMysqlRepository)
+	masterRankingScopeMysqlRepository := masterRankingScope.NewMasterRankingScopeDao(mysqlHandler)
+	rankingService := ranking.NewRankingService(commonRankingRoomMysqlRepository, commonRankingWorldMysqlRepository, masterRankingMysqlRepository, masterRankingEventMysqlRepository, masterRankingScopeMysqlRepository)
 	return rankingService
 }
 

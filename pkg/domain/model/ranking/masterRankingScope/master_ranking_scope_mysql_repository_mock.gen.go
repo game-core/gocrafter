@@ -95,19 +95,19 @@ func (mr *MockMasterRankingScopeMysqlRepositoryMockRecorder) Find(ctx, id interf
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Find", reflect.TypeOf((*MockMasterRankingScopeMysqlRepository)(nil).Find), ctx, id)
 }
 
-// FindByRankingType mocks base method.
-func (m *MockMasterRankingScopeMysqlRepository) FindByRankingType(ctx context.Context, rankingType enum.RankingType) (*MasterRankingScope, error) {
+// FindByRankingScopeType mocks base method.
+func (m *MockMasterRankingScopeMysqlRepository) FindByRankingScopeType(ctx context.Context, rankingScopeType enum.RankingScopeType) (*MasterRankingScope, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindByRankingType", ctx, rankingType)
+	ret := m.ctrl.Call(m, "FindByRankingScopeType", ctx, rankingScopeType)
 	ret0, _ := ret[0].(*MasterRankingScope)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindByRankingType indicates an expected call of FindByRankingType.
-func (mr *MockMasterRankingScopeMysqlRepositoryMockRecorder) FindByRankingType(ctx, rankingType interface{}) *gomock.Call {
+// FindByRankingScopeType indicates an expected call of FindByRankingScopeType.
+func (mr *MockMasterRankingScopeMysqlRepositoryMockRecorder) FindByRankingScopeType(ctx, rankingScopeType interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByRankingType", reflect.TypeOf((*MockMasterRankingScopeMysqlRepository)(nil).FindByRankingType), ctx, rankingType)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByRankingScopeType", reflect.TypeOf((*MockMasterRankingScopeMysqlRepository)(nil).FindByRankingScopeType), ctx, rankingScopeType)
 }
 
 // FindList mocks base method.
@@ -125,19 +125,19 @@ func (mr *MockMasterRankingScopeMysqlRepositoryMockRecorder) FindList(ctx interf
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindList", reflect.TypeOf((*MockMasterRankingScopeMysqlRepository)(nil).FindList), ctx)
 }
 
-// FindListByRankingType mocks base method.
-func (m *MockMasterRankingScopeMysqlRepository) FindListByRankingType(ctx context.Context, rankingType enum.RankingType) (MasterRankingScopes, error) {
+// FindListByRankingScopeType mocks base method.
+func (m *MockMasterRankingScopeMysqlRepository) FindListByRankingScopeType(ctx context.Context, rankingScopeType enum.RankingScopeType) (MasterRankingScopes, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindListByRankingType", ctx, rankingType)
+	ret := m.ctrl.Call(m, "FindListByRankingScopeType", ctx, rankingScopeType)
 	ret0, _ := ret[0].(MasterRankingScopes)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindListByRankingType indicates an expected call of FindListByRankingType.
-func (mr *MockMasterRankingScopeMysqlRepositoryMockRecorder) FindListByRankingType(ctx, rankingType interface{}) *gomock.Call {
+// FindListByRankingScopeType indicates an expected call of FindListByRankingScopeType.
+func (mr *MockMasterRankingScopeMysqlRepositoryMockRecorder) FindListByRankingScopeType(ctx, rankingScopeType interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindListByRankingType", reflect.TypeOf((*MockMasterRankingScopeMysqlRepository)(nil).FindListByRankingType), ctx, rankingType)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindListByRankingScopeType", reflect.TypeOf((*MockMasterRankingScopeMysqlRepository)(nil).FindListByRankingScopeType), ctx, rankingScopeType)
 }
 
 // FindOrNil mocks base method.
@@ -155,19 +155,19 @@ func (mr *MockMasterRankingScopeMysqlRepositoryMockRecorder) FindOrNil(ctx, id i
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNil", reflect.TypeOf((*MockMasterRankingScopeMysqlRepository)(nil).FindOrNil), ctx, id)
 }
 
-// FindOrNilByRankingType mocks base method.
-func (m *MockMasterRankingScopeMysqlRepository) FindOrNilByRankingType(ctx context.Context, rankingType enum.RankingType) (*MasterRankingScope, error) {
+// FindOrNilByRankingScopeType mocks base method.
+func (m *MockMasterRankingScopeMysqlRepository) FindOrNilByRankingScopeType(ctx context.Context, rankingScopeType enum.RankingScopeType) (*MasterRankingScope, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindOrNilByRankingType", ctx, rankingType)
+	ret := m.ctrl.Call(m, "FindOrNilByRankingScopeType", ctx, rankingScopeType)
 	ret0, _ := ret[0].(*MasterRankingScope)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// FindOrNilByRankingType indicates an expected call of FindOrNilByRankingType.
-func (mr *MockMasterRankingScopeMysqlRepositoryMockRecorder) FindOrNilByRankingType(ctx, rankingType interface{}) *gomock.Call {
+// FindOrNilByRankingScopeType indicates an expected call of FindOrNilByRankingScopeType.
+func (mr *MockMasterRankingScopeMysqlRepositoryMockRecorder) FindOrNilByRankingScopeType(ctx, rankingScopeType interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByRankingType", reflect.TypeOf((*MockMasterRankingScopeMysqlRepository)(nil).FindOrNilByRankingType), ctx, rankingType)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindOrNilByRankingScopeType", reflect.TypeOf((*MockMasterRankingScopeMysqlRepository)(nil).FindOrNilByRankingScopeType), ctx, rankingScopeType)
 }
 
 // Update mocks base method.
