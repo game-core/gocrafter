@@ -84,7 +84,7 @@ func (s *rankingService) Get(ctx context.Context, now time.Time, req *RankingGet
 
 	switch masterRankingModel.RankingScopeType {
 	case enum.RankingScopeType_Room:
-		result, err := s.getRoomRankings(ctx, masterRankingEventModel.GetLastEventAt(now), req.RoomId, masterRankingModel.Id)
+		result, err := s.getRoomRankings(ctx, masterRankingEventModel.GetLastEventAt(now), req.UserId, req.RoomId, masterRankingModel.Id)
 		if err != nil {
 			return nil, errors.NewMethodError("s.getRoomRankings", err)
 		}
@@ -145,7 +145,11 @@ func (s *rankingService) getEvent(ctx context.Context, now time.Time, masterRank
 }
 
 // getRoomRankings ルームランキングを取得する
-func (s *rankingService) getRoomRankings(ctx context.Context, lastEventAt time.Time, roomId string, masterRankingId int64) (commonRankingRoom.CommonRankingRooms, error) {
+func (s *rankingService) getRoomRankings(ctx context.Context, lastEventAt time.Time, userId, roomId string, masterRankingId int64) (commonRankingRoom.CommonRankingRooms, error) {
+	if _, err := s.roomService.Check(ctx, roomService.SetRoomCheckRequest(userId, roomId)); err != nil {
+		return nil, errors.NewMethodError("s.roomService.Check", err)
+	}
+
 	commonRankingRoomModels, err := s.commonRankingRoomMysqlRepository.FindListByMasterRankingIdAndRoomId(ctx, masterRankingId, roomId)
 	if err != nil {
 		return nil, errors.NewMethodError("s.commonRankingRoomMysqlRepository.FindListByMasterRankingIdAndRoomId", err)
