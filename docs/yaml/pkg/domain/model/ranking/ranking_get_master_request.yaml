@@ -1,0 +1,11 @@
+name: RankingGetMasterRequest
+package: ranking
+comment: "ランキングマスター取得リクエスト"
+
+structure:
+  MasterRankingEventId:
+    name: master_ranking_event_id
+    type: int64
+    nullable: false
+    number: 1
+    comment: "ランキングID"

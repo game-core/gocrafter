@@ -1,0 +1,26 @@
+name: RankingGetMasterResponse
+package: ranking
+comment: "ランキングマスター取得レスポンス"
+
+structure:
+  MasterRanking:
+    name: master_ranking
+    type: structure
+    package: ranking/masterRanking
+    nullable: true
+    number: 1
+    comment: "ランキング"
+  MasterRankingEvent:
+    name: master_ranking_event
+    type: structure
+    package: ranking/masterRankingEvent
+    nullable: true
+    number: 2
+    comment: "ランキングイベント"
+  MasterRankingScope:
+    name: master_ranking_scope
+    type: structure
+    package: ranking/masterRankingScope
+    nullable: true
+    number: 3
+    comment: "ランキング範囲"

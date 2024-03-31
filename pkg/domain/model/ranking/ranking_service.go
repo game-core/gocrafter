@@ -13,9 +13,11 @@ import (
 	"github.com/game-core/gocrafter/pkg/domain/model/ranking/commonRankingWorld"
 	"github.com/game-core/gocrafter/pkg/domain/model/ranking/masterRanking"
 	"github.com/game-core/gocrafter/pkg/domain/model/ranking/masterRankingEvent"
+	"github.com/game-core/gocrafter/pkg/domain/model/ranking/masterRankingScope"
 )
 
 type RankingService interface {
+	GetMaster(ctx context.Context, req *RankingGetMasterRequest) (*RankingGetMasterResponse, error)
 	Get(ctx context.Context, now time.Time, req *RankingGetRequest) (*RankingGetResponse, error)
 	Update(ctx context.Context, tx *gorm.DB, now time.Time, req *RankingUpdateRequest) (*RankingUpdateResponse, error)
 }
@@ -25,6 +27,7 @@ type rankingService struct {
 	commonRankingWorldMysqlRepository commonRankingWorld.CommonRankingWorldMysqlRepository
 	masterRankingMysqlRepository      masterRanking.MasterRankingMysqlRepository
 	masterRankingEventMysqlRepository masterRankingEvent.MasterRankingEventMysqlRepository
+	masterRankingScopeMysqlRepository masterRankingScope.MasterRankingScopeMysqlRepository
 }
 
 func NewRankingService(
@@ -32,13 +35,35 @@ func NewRankingService(
 	commonRankingWorldMysqlRepository commonRankingWorld.CommonRankingWorldMysqlRepository,
 	masterRankingMysqlRepository masterRanking.MasterRankingMysqlRepository,
 	masterRankingEventMysqlRepository masterRankingEvent.MasterRankingEventMysqlRepository,
+	masterRankingScopeMysqlRepository masterRankingScope.MasterRankingScopeMysqlRepository,
 ) RankingService {
 	return &rankingService{
 		commonRankingRoomMysqlRepository:  commonRankingRoomMysqlRepository,
 		commonRankingWorldMysqlRepository: commonRankingWorldMysqlRepository,
 		masterRankingMysqlRepository:      masterRankingMysqlRepository,
 		masterRankingEventMysqlRepository: masterRankingEventMysqlRepository,
+		masterRankingScopeMysqlRepository: masterRankingScopeMysqlRepository,
 	}
+}
+
+// GetMaster マスターデータを取得する
+func (s *rankingService) GetMaster(ctx context.Context, req *RankingGetMasterRequest) (*RankingGetMasterResponse, error) {
+	masterRankingModel, err := s.masterRankingMysqlRepository.Find(ctx, req.MasterRankingEventId)
+	if err != nil {
+		return nil, errors.NewMethodError("s.masterRankingMysqlRepository.Find", err)
+	}
+
+	masterRankingEventModel, err := s.masterRankingEventMysqlRepository.Find(ctx, masterRankingModel.MasterRankingEventId)
+	if err != nil {
+		return nil, errors.NewMethodError("s.masterRankingEventMysqlRepository.Find", err)
+	}
+
+	masterRankingScopeModel, err := s.masterRankingScopeMysqlRepository.FindByRankingType(ctx, masterRankingModel.RankingScopeType)
+	if err != nil {
+		return nil, errors.NewMethodError("s.masterRankingScopeMysqlRepository.FindByRankingType", err)
+	}
+
+	return SetRankingGetMasterResponse(masterRankingModel, masterRankingEventModel, masterRankingScopeModel), nil
 }
 
 // Get ランキングを取得する
