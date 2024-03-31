@@ -10,6 +10,8 @@ import (
 	"github.com/golang-jwt/jwt"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
+
+	accountService "github.com/game-core/gocrafter/pkg/domain/model/account"
 )
 
 type AuthInterceptor interface {
@@ -17,10 +19,15 @@ type AuthInterceptor interface {
 }
 
 type authInterceptor struct {
+	accountService accountService.AccountService
 }
 
-func NewAuthInterceptor() AuthInterceptor {
-	return &authInterceptor{}
+func NewAuthInterceptor(
+	accountService accountService.AccountService,
+) AuthInterceptor {
+	return &authInterceptor{
+		accountService: accountService,
+	}
 }
 
 // JwtAuth 認証
@@ -34,14 +41,12 @@ func (i *authInterceptor) JwtAuth(ctx context.Context, req interface{}, info *gr
 		return nil, fmt.Errorf("metadata is not provided")
 	}
 
-	claims, err := i.check(strings.ReplaceAll(strings.Join(md.Get("authorization"), " "), "Bearer ", ""))
+	claims, err := i.check(ctx, strings.ReplaceAll(strings.Join(md.Get("authorization"), " "), "Bearer ", ""))
 	if err != nil {
 		return nil, fmt.Errorf("authentication failed: %s", err)
 	}
 
-	ctx = context.WithValue(ctx, "jwtClaims", claims)
-
-	return handler(ctx, req)
+	return handler(context.WithValue(ctx, "jwtClaims", claims), req)
 }
 
 // isPublic 認証しないpath
@@ -50,7 +55,7 @@ func (i *authInterceptor) isPublic(fullMethod string) bool {
 }
 
 // check JWTトークンの検証
-func (i *authInterceptor) check(tokenString string) (map[string]interface{}, error) {
+func (i *authInterceptor) check(ctx context.Context, tokenString string) (map[string]interface{}, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if signingMethod, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %s", fmt.Sprint(token.Header["alg"]))
@@ -67,6 +72,15 @@ func (i *authInterceptor) check(tokenString string) (map[string]interface{}, err
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok || !token.Valid || !claims.VerifyExpiresAt(time.Now().Unix(), true) {
 		return nil, fmt.Errorf("invalid token")
+	}
+
+	userAccountToken, err := i.accountService.CheckToken(ctx, accountService.SetAccountCheckTokenRequest(claims["userId"].(string)))
+	if err != nil {
+		return nil, fmt.Errorf("i.accountService.CheckToken: %s", err)
+	}
+
+	if tokenString != userAccountToken.UserAccountToken.Token {
+		return nil, fmt.Errorf("invalid userAccountToken")
 	}
 
 	return claims, nil

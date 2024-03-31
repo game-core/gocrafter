@@ -81,7 +81,8 @@ import (
 // Injectors from wire.go:
 
 func InitializeAuthInterceptor() auth.AuthInterceptor {
-	authInterceptor := auth.NewAuthInterceptor()
+	accountService := InitializeAccountService()
+	authInterceptor := auth.NewAuthInterceptor(accountService)
 	return authInterceptor
 }
 

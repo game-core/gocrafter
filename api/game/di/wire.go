@@ -81,6 +81,7 @@ import (
 func InitializeAuthInterceptor() authInterceptor.AuthInterceptor {
 	wire.Build(
 		authInterceptor.NewAuthInterceptor,
+		InitializeAccountService,
 	)
 	return nil
 }
