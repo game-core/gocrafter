@@ -42,7 +42,7 @@ func (s *rankingUsecase) GetMaster(ctx context.Context, req *rankingServer.Ranki
 			result.MasterRanking.MasterRankingEventId,
 			result.MasterRanking.Name,
 			rankingServer.RankingScopeType(result.MasterRanking.RankingScopeType),
-			result.MasterRanking.Limit,
+			result.MasterRanking.RankingLimit,
 		),
 		rankingServer.SetMasterRankingEvent(
 			result.MasterRankingEvent.Id,
