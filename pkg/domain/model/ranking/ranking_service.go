@@ -96,7 +96,7 @@ func (s *rankingService) Get(ctx context.Context, now time.Time, req *RankingGet
 		}
 		return SetRankingGetResponse(commonRankingRoom.NewCommonRankingRooms(), result), nil
 	default:
-		return nil, nil
+		return nil, errors.NewError("RankingScopeType that does not exist")
 	}
 }
 
@@ -126,7 +126,7 @@ func (s *rankingService) Update(ctx context.Context, tx *gorm.DB, now time.Time,
 		}
 		return SetRankingUpdateResponse(commonRankingRoom.NewCommonRankingRooms(), result), nil
 	default:
-		return nil, nil
+		return nil, errors.NewError("RankingScopeType that does not exist")
 	}
 }
 
