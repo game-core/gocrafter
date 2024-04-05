@@ -1,4 +1,4 @@
-package masterTransaction
+package userTransaction
 
 import (
 	"context"
