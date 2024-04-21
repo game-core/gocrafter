@@ -1,0 +1,13 @@
+name: ChatSpaceType
+package: enum
+comment: "チャットスペースタイプ"
+
+structure:
+  World:
+    name: World
+    number: 0
+    comment: "ワールド"
+  Room:
+    name: Room
+    number: 1
+    comment: "ルーム"

@@ -1,0 +1,12 @@
+name: ChatSendResponse
+package: chat
+comment: "チャット送信レスポンス"
+
+structure:
+  CommonChat:
+    name: common_chat
+    type: structure
+    package: chat/commonChat
+    nullable: true
+    number: 1
+    comment: "チャット"
