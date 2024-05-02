@@ -12,10 +12,6 @@ FROM alpine AS prod
 
 WORKDIR /app
 COPY --from=builder /app/main .
-COPY .env .
-RUN mkdir /app/domain/logger
-COPY ./scripts/wait-for.sh .
-RUN chmod +x wait-for.sh
 
 EXPOSE 8000
 
