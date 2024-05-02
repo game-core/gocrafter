@@ -45,7 +45,7 @@ func InitRedis() (*RedisHandler, error) {
 // commonDB コネクションを作成する
 func (s *RedisHandler) commonDB() error {
 	host := os.Getenv("COMMON_REDIS_WRITE_HOST")
-	password := os.Getenv("COMMON_REDIS_WRITE_PASSWORD")
+	password := os.Getenv("COMMON_REDIS_PASSWORD")
 	database, err := strconv.Atoi(os.Getenv("COMMON_REDIS_DATABASE"))
 	if err != nil {
 		return err
@@ -78,7 +78,7 @@ func (s *RedisHandler) commonDB() error {
 // userDB コネクションを作成する
 func (s *RedisHandler) userDB() error {
 	host := os.Getenv("USER_REDIS_WRITE_HOST")
-	password := os.Getenv("USER_REDIS_WRITE_PASSWORD")
+	password := os.Getenv("USER_REDIS_PASSWORD")
 	database, err := strconv.Atoi(os.Getenv("USER_REDIS_DATABASE"))
 	if err != nil {
 		return err
