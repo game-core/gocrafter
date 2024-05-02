@@ -56,16 +56,16 @@ func InitMysql() (*MysqlHandler, error) {
 func (s *MysqlHandler) commonDB() error {
 	readMysqlConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		os.Getenv("COMMON_MYSQL_READ_USER"),
-		os.Getenv("COMMON_MYSQL_READ_PASSWORD"),
+		os.Getenv("COMMON_MYSQL_USER"),
+		os.Getenv("COMMON_MYSQL_PASSWORD"),
 		os.Getenv("COMMON_MYSQL_READ_HOST"),
 		os.Getenv("COMMON_MYSQL_DATABASE"),
 	)
 
 	writeMysqlConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		os.Getenv("COMMON_MYSQL_WRITE_USER"),
-		os.Getenv("COMMON_MYSQL_WRITE_PASSWORD"),
+		os.Getenv("COMMON_MYSQL_USER"),
+		os.Getenv("COMMON_MYSQL_PASSWORD"),
 		os.Getenv("COMMON_MYSQL_WRITE_HOST"),
 		os.Getenv("COMMON_MYSQL_DATABASE"),
 	)
@@ -96,16 +96,16 @@ func (s *MysqlHandler) commonDB() error {
 func (s *MysqlHandler) masterDB() error {
 	readMysqlConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		os.Getenv("MASTER_MYSQL_READ_USER"),
-		os.Getenv("MASTER_MYSQL_READ_PASSWORD"),
+		os.Getenv("MASTER_MYSQL_USER"),
+		os.Getenv("MASTER_MYSQL_PASSWORD"),
 		os.Getenv("MASTER_MYSQL_READ_HOST"),
 		os.Getenv("MASTER_MYSQL_DATABASE"),
 	)
 
 	writeMysqlConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		os.Getenv("MASTER_MYSQL_WRITE_USER"),
-		os.Getenv("MASTER_MYSQL_WRITE_PASSWORD"),
+		os.Getenv("MASTER_MYSQL_USER"),
+		os.Getenv("MASTER_MYSQL_PASSWORD"),
 		os.Getenv("MASTER_MYSQL_WRITE_HOST"),
 		os.Getenv("MASTER_MYSQL_DATABASE"),
 	)
@@ -160,16 +160,16 @@ func (s *MysqlHandler) shardUserDB() error {
 func (s *MysqlHandler) userDB(shard string) (*MysqlConn, error) {
 	readMysqlConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		os.Getenv(fmt.Sprintf("USER_MYSQL_READ_USER%s", shard)),
-		os.Getenv(fmt.Sprintf("USER_MYSQL_READ_PASSWORD%s", shard)),
+		os.Getenv(fmt.Sprintf("USER_MYSQL_USER%s", shard)),
+		os.Getenv(fmt.Sprintf("USER_MYSQL_PASSWORD%s", shard)),
 		os.Getenv(fmt.Sprintf("USER_MYSQL_READ_HOST%s", shard)),
 		os.Getenv(fmt.Sprintf("USER_MYSQL_DATABASE%s", shard)),
 	)
 
 	writeMysqlConn := fmt.Sprintf(
 		"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-		os.Getenv(fmt.Sprintf("USER_MYSQL_WRITE_USER%s", shard)),
-		os.Getenv(fmt.Sprintf("USER_MYSQL_WRITE_PASSWORD%s", shard)),
+		os.Getenv(fmt.Sprintf("USER_MYSQL_USER%s", shard)),
+		os.Getenv(fmt.Sprintf("USER_MYSQL_PASSWORD%s", shard)),
 		os.Getenv(fmt.Sprintf("USER_MYSQL_WRITE_HOST%s", shard)),
 		os.Getenv(fmt.Sprintf("USER_MYSQL_DATABASE%s", shard)),
 	)
