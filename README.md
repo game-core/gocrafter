@@ -1,6 +1,8 @@
 # gocrafter
 ゲームサーバー基盤(gRPC)
 
+<img alt="my skills" src="https://skillicons.dev/icons?theme=light&perline=12&i=go,ts,nuxt,mysql,redis,kubernetes" />
+
 ## アーキテクチャ
 ![architecture](https://github.com/game-core/gocrafter/assets/71867595/67847572-8401-403d-a347-8c078d58c2cc)
 
