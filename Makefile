@@ -1,3 +1,20 @@
+# k8s
+k8s_apply:
+	make env_apply
+	make redis_apply
+	make mysql_apply
+	make api_apply API_NAME=game
+	make gen_apply
+	make gen_migration
+	make gen_master
+
+k8s_delete:
+	make api_delete API_NAME=game
+	make mysql_delete
+	make redis_delete
+	make env_delete
+	make gen_delete
+
 # k8s 環境変数
 env_apply:
 	kubectl create configmap gocrafter-env-config --from-env-file=.env.local
