@@ -1,7 +1,13 @@
 # gocrafter
+![GitHub repo size](https://img.shields.io/github/repo-size/game-core/gocrafter)
+<img src="https://img.shields.io/badge/-Go-76E1FE.svg?logo=go&style=plastic">
+<img src="https://img.shields.io/badge/-Nuxt.js-00C58E.svg?logo=nuxt.js&style=plastic">
+<img src="https://img.shields.io/badge/-Typescript-007ACC.svg?logo=typescript&style=plastic">
+<img src="https://img.shields.io/badge/-Mysql-4479A1.svg?logo=mysql&style=plastic">
+<img src="https://img.shields.io/badge/-Redis-D82C20.svg?logo=redis&style=plastic">
+<img src="https://img.shields.io/badge/-Kubernetes-326CE5.svg?logo=kubernetes&style=plastic">
+  
 ゲームサーバー基盤(gRPC)
-
-<img alt="my skills" src="https://skillicons.dev/icons?theme=light&perline=12&i=go,ts,nuxt,mysql,redis,kubernetes" />
 
 ## アーキテクチャ
 ![architecture](https://github.com/game-core/gocrafter/assets/71867595/67847572-8401-403d-a347-8c078d58c2cc)
