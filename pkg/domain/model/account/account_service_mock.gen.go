@@ -52,6 +52,21 @@ func (mr *MockAccountServiceMockRecorder) Check(ctx, req interface{}) *gomock.Ca
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Check", reflect.TypeOf((*MockAccountService)(nil).Check), ctx, req)
 }
 
+// CheckToken mocks base method.
+func (m *MockAccountService) CheckToken(ctx context.Context, req *AccountCheckTokenRequest) (*AccountCheckTokenResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CheckToken", ctx, req)
+	ret0, _ := ret[0].(*AccountCheckTokenResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// CheckToken indicates an expected call of CheckToken.
+func (mr *MockAccountServiceMockRecorder) CheckToken(ctx, req interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckToken", reflect.TypeOf((*MockAccountService)(nil).CheckToken), ctx, req)
+}
+
 // Create mocks base method.
 func (m *MockAccountService) Create(ctx context.Context, tx *gorm.DB, req *AccountCreateRequest) (*AccountCreateResponse, error) {
 	m.ctrl.T.Helper()
