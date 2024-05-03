@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: gocrafter-gen-pod
+spec:
+  restartPolicy: Never
+  containers:
+    - name: gocrafter-gen-container
+      image: localhost:gocrafter-gen-local
+      envFrom:
+        - configMapRef:
+            name: gocrafter-env-config
+      command: ["tail"]
+      args: ["-f", "/dev/null"]

@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"strconv"
 
@@ -30,11 +31,11 @@ func InitRedis() (*RedisHandler, error) {
 	db := &RedisHandler{}
 
 	if err := db.commonDB(); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("db.commonDB: %s", err)
 	}
 
 	if err := db.userDB(); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("db.userDB: %s", err)
 	}
 
 	RedisHandlerInstance = db
@@ -48,11 +49,11 @@ func (s *RedisHandler) commonDB() error {
 	password := os.Getenv("COMMON_REDIS_PASSWORD")
 	database, err := strconv.Atoi(os.Getenv("COMMON_REDIS_DATABASE"))
 	if err != nil {
-		return err
+		return fmt.Errorf("strconv.Atoi: %s", err)
 	}
 
 	if err := s.setRedis(database, host, password); err != nil {
-		return err
+		return fmt.Errorf("s.setRedis: %s", err)
 	}
 
 	readDB := redis.NewClient(&redis.Options{

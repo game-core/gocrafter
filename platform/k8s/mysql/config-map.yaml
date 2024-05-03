@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-init-scripts
+data:
+  init-script.sql: |-
+    {{ .Files.Get "init-script.sql" | indent 4 }}

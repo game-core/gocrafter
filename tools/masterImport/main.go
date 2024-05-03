@@ -30,8 +30,8 @@ func MasterImport() error {
 		"mysql",
 		fmt.Sprintf(
 			"%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
-			os.Getenv("MASTER_MYSQL_WRITE_USER"),
-			os.Getenv("MASTER_MYSQL_WRITE_PASSWORD"),
+			os.Getenv("MASTER_MYSQL_USER"),
+			os.Getenv("MASTER_MYSQL_PASSWORD"),
 			os.Getenv("MASTER_MYSQL_WRITE_HOST"),
 			os.Getenv("MASTER_MYSQL_DATABASE"),
 		),

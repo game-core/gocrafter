@@ -40,7 +40,7 @@ services:
     tty: true
 
   generator:
-    container_name: gocrafter-generator
+    container_name: gocrafter-gen
     env_file:
       - .env.local
     build:

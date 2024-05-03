@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gocrafter-api-game-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: gocrafter-api-game-pod
+  template:
+    metadata:
+      labels:
+        app: gocrafter-api-game-pod
+    spec:
+      containers:
+        - image: localhost:gocrafter-api-game-local
+          name: gocrafter-api-game-container
+          ports:
+            - containerPort: 50051
+          envFrom:
+            - configMapRef:
+                name: gocrafter-env-config

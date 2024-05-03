@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gocrafter-api-game-service
+spec:
+  type: NodePort
+  ports:
+    - port: 50051
+      nodePort: 30001
+  selector:
+    app: gocrafter-api-game-pod
