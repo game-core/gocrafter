@@ -3,9 +3,9 @@ kind: Service
 metadata:
   name: gocrafter-api-game-service
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
     - port: 50051
-      nodePort: 30001
+      targetPort: 50051
   selector:
     app: gocrafter-api-game-pod
