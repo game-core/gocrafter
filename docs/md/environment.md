@@ -2,27 +2,23 @@
 
 ## Server
 
-- コンテナ起動
+- Kubernetesを起動
 ```
-make docker_up
+make k8s_apply
 ```
 - マイグレーション
   - `./docs/sql`配下のsqlファイルが実行される
 ```
-make docker_migration
+make gen_migration
 ```
 - マスターデータインポート
   - 事前に[GASの設定]()を行う
 ```
-make docker_master_import
+make dgen_master
 ```
 
 ## Test
-- コンテナ起動
-```
-make docker_test_up
-```
 - テスト実行
 ```
-make docker_test_run
+make gen_test
 ```

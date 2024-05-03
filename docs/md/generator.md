@@ -24,7 +24,7 @@
 ### request, responseの生成
 - コマンド
 ```
-make docker_gen_api
+make gen_api
 ```
   - `./docs/yaml/api`配下にyamlファイルを定義する
   
@@ -156,7 +156,7 @@ func (s *loginBonusHandler) Receive(ctx context.Context, req *loginBonus.LoginBo
 ### diの生成
 - コマンド
 ```
-make docker_gen_di
+make gen_di
 ```
 - 下記のようにusecaseやserviceに依存しているパッケージを引数にしたfuncを定義すると、wireで記述されるdiを自動生成してくれる
   - 記述の際の命名規則
@@ -210,7 +210,7 @@ func InitializeLoginBonusService() loginBonusService.LoginBonusService {
 ### Domain
 - コマンド
 ```
-make docker_gen_domain
+make gen_domain
 ```
 - `./docs/yaml/pkg/domain/model`配下にyamlファイルを定義する
   - Domainサービス毎にディレクトリを作成してその中にyamlを定義する
@@ -302,7 +302,7 @@ type MasterLoginBonusMysqlRepository interface {
 ### Infrastructure
 - コマンド
 ```
-make docker_gen_infra
+make gen_infra
 ```
 - `./docs/yaml/pkg/domain/infrastructure`配下にyamlファイルを定義する
   - 定義したフィールドやキーに応じたTable, Dao, SQLを生成してくれる
