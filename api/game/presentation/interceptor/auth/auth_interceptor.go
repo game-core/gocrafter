@@ -51,7 +51,7 @@ func (i *authInterceptor) JwtAuth(ctx context.Context, req interface{}, info *gr
 
 // isPublic 認証しないpath
 func (i *authInterceptor) isPublic(fullMethod string) bool {
-	return fullMethod == "/proto.Account/Login" || fullMethod == "/proto.Account/Create"
+	return fullMethod == "/proto.Account/Login" || fullMethod == "/proto.Account/Create" || fullMethod == "/proto.Health/Check"
 }
 
 // check JWTトークンの検証

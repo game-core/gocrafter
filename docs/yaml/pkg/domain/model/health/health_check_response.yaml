@@ -1,0 +1,11 @@
+name: HealthCheckResponse
+package: health
+comment: "ヘルスチェックレスポンス"
+
+structure:
+  Message:
+    name: message
+    type: string
+    nullable: false
+    number: 1
+    comment: "メッセージ"

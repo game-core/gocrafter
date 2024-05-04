@@ -10,6 +10,7 @@ import (
 
 	accountHandler "github.com/game-core/gocrafter/api/game/presentation/handler/account"
 	friendHandler "github.com/game-core/gocrafter/api/game/presentation/handler/friend"
+	healthHandler "github.com/game-core/gocrafter/api/game/presentation/handler/health"
 	idleBonusHandler "github.com/game-core/gocrafter/api/game/presentation/handler/idleBonus"
 	loginBonusHandler "github.com/game-core/gocrafter/api/game/presentation/handler/loginBonus"
 	profileHandler "github.com/game-core/gocrafter/api/game/presentation/handler/profile"
@@ -18,6 +19,7 @@ import (
 	authInterceptor "github.com/game-core/gocrafter/api/game/presentation/interceptor/auth"
 	accountUsecase "github.com/game-core/gocrafter/api/game/usecase/account"
 	friendUsecase "github.com/game-core/gocrafter/api/game/usecase/friend"
+	healthUsecase "github.com/game-core/gocrafter/api/game/usecase/health"
 	idleBonusUsecase "github.com/game-core/gocrafter/api/game/usecase/idleBonus"
 	loginBonusUsecase "github.com/game-core/gocrafter/api/game/usecase/loginBonus"
 	profileUsecase "github.com/game-core/gocrafter/api/game/usecase/profile"
@@ -28,6 +30,7 @@ import (
 	configService "github.com/game-core/gocrafter/pkg/domain/model/config"
 	eventService "github.com/game-core/gocrafter/pkg/domain/model/event"
 	friendService "github.com/game-core/gocrafter/pkg/domain/model/friend"
+	healthService "github.com/game-core/gocrafter/pkg/domain/model/health"
 	idleBonusService "github.com/game-core/gocrafter/pkg/domain/model/idleBonus"
 	itemService "github.com/game-core/gocrafter/pkg/domain/model/item"
 	loginBonusService "github.com/game-core/gocrafter/pkg/domain/model/loginBonus"
@@ -102,6 +105,14 @@ func InitializeFriendHandler() friendHandler.FriendHandler {
 	return nil
 }
 
+func InitializeHealthHandler() healthHandler.HealthHandler {
+	wire.Build(
+		healthHandler.NewHealthHandler,
+		InitializeHealthUsecase,
+	)
+	return nil
+}
+
 func InitializeIdleBonusHandler() idleBonusHandler.IdleBonusHandler {
 	wire.Build(
 		idleBonusHandler.NewIdleBonusHandler,
@@ -156,6 +167,14 @@ func InitializeFriendUsecase() friendUsecase.FriendUsecase {
 		friendUsecase.NewFriendUsecase,
 		InitializeFriendService,
 		InitializeTransactionService,
+	)
+	return nil
+}
+
+func InitializeHealthUsecase() healthUsecase.HealthUsecase {
+	wire.Build(
+		healthUsecase.NewHealthUsecase,
+		InitializeHealthService,
 	)
 	return nil
 }
@@ -255,6 +274,13 @@ func InitializeFriendService() friendService.FriendService {
 		friendService.NewFriendService,
 		InitializeAccountService,
 		userFriendMysqlDao.NewUserFriendDao,
+	)
+	return nil
+}
+
+func InitializeHealthService() healthService.HealthService {
+	wire.Build(
+		healthService.NewHealthService,
 	)
 	return nil
 }

@@ -9,6 +9,7 @@ package di
 import (
 	"github.com/game-core/gocrafter/api/game/presentation/handler/account"
 	"github.com/game-core/gocrafter/api/game/presentation/handler/friend"
+	"github.com/game-core/gocrafter/api/game/presentation/handler/health"
 	"github.com/game-core/gocrafter/api/game/presentation/handler/idleBonus"
 	"github.com/game-core/gocrafter/api/game/presentation/handler/loginBonus"
 	"github.com/game-core/gocrafter/api/game/presentation/handler/profile"
@@ -17,6 +18,7 @@ import (
 	"github.com/game-core/gocrafter/api/game/presentation/interceptor/auth"
 	account2 "github.com/game-core/gocrafter/api/game/usecase/account"
 	friend2 "github.com/game-core/gocrafter/api/game/usecase/friend"
+	health2 "github.com/game-core/gocrafter/api/game/usecase/health"
 	idleBonus2 "github.com/game-core/gocrafter/api/game/usecase/idleBonus"
 	loginBonus2 "github.com/game-core/gocrafter/api/game/usecase/loginBonus"
 	profile2 "github.com/game-core/gocrafter/api/game/usecase/profile"
@@ -28,6 +30,7 @@ import (
 	"github.com/game-core/gocrafter/pkg/domain/model/config"
 	"github.com/game-core/gocrafter/pkg/domain/model/event"
 	friend3 "github.com/game-core/gocrafter/pkg/domain/model/friend"
+	health3 "github.com/game-core/gocrafter/pkg/domain/model/health"
 	idleBonus3 "github.com/game-core/gocrafter/pkg/domain/model/idleBonus"
 	"github.com/game-core/gocrafter/pkg/domain/model/item"
 	loginBonus3 "github.com/game-core/gocrafter/pkg/domain/model/loginBonus"
@@ -98,6 +101,12 @@ func InitializeFriendHandler() friend.FriendHandler {
 	return friendHandler
 }
 
+func InitializeHealthHandler() health.HealthHandler {
+	healthUsecase := InitializeHealthUsecase()
+	healthHandler := health.NewHealthHandler(healthUsecase)
+	return healthHandler
+}
+
 func InitializeIdleBonusHandler() idleBonus.IdleBonusHandler {
 	idleBonusUsecase := InitializeIdleBonusUsecase()
 	idleBonusHandler := idleBonus.NewIdleBonusHandler(idleBonusUsecase)
@@ -140,6 +149,12 @@ func InitializeFriendUsecase() friend2.FriendUsecase {
 	transactionService := InitializeTransactionService()
 	friendUsecase := friend2.NewFriendUsecase(friendService, transactionService)
 	return friendUsecase
+}
+
+func InitializeHealthUsecase() health2.HealthUsecase {
+	healthService := InitializeHealthService()
+	healthUsecase := health2.NewHealthUsecase(healthService)
+	return healthUsecase
 }
 
 func InitializeIdleBonusUsecase() idleBonus2.IdleBonusUsecase {
@@ -219,6 +234,11 @@ func InitializeFriendService() friend3.FriendService {
 	userFriendMysqlRepository := userFriend.NewUserFriendDao(mysqlHandler)
 	friendService := friend3.NewFriendService(accountService, userFriendMysqlRepository)
 	return friendService
+}
+
+func InitializeHealthService() health3.HealthService {
+	healthService := health3.NewHealthService()
+	return healthService
 }
 
 func InitializeIdleBonusService() idleBonus3.IdleBonusService {

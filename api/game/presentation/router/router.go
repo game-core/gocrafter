@@ -9,6 +9,7 @@ import (
 	"github.com/game-core/gocrafter/api/game/di"
 	"github.com/game-core/gocrafter/api/game/presentation/server/account"
 	"github.com/game-core/gocrafter/api/game/presentation/server/friend"
+	"github.com/game-core/gocrafter/api/game/presentation/server/health"
 	"github.com/game-core/gocrafter/api/game/presentation/server/idleBonus"
 	"github.com/game-core/gocrafter/api/game/presentation/server/loginBonus"
 	"github.com/game-core/gocrafter/api/game/presentation/server/profile"
@@ -18,6 +19,7 @@ import (
 
 func Router(lis net.Listener) {
 	// DI
+	healthHandler := di.InitializeHealthHandler()
 	accountHandler := di.InitializeAccountHandler()
 	friendHandler := di.InitializeFriendHandler()
 	authInterceptor := di.InitializeAuthInterceptor()
@@ -32,6 +34,7 @@ func Router(lis net.Listener) {
 		grpc.UnaryInterceptor(authInterceptor.JwtAuth),
 	)
 
+	health.RegisterHealthServer(s, healthHandler)
 	account.RegisterAccountServer(s, accountHandler)
 	friend.RegisterFriendServer(s, friendHandler)
 	loginBonus.RegisterLoginBonusServer(s, loginBonusHandler)

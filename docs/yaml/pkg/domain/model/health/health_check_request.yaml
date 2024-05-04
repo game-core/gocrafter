@@ -1,0 +1,11 @@
+name: HealthCheckRequest
+package: health
+comment: "ヘルスチェックリクエスト"
+
+structure:
+  Message:
+    name: message
+    type: string
+    nullable: false
+    number: 1
+    comment: "メッセージ"

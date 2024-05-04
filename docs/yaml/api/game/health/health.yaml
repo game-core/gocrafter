@@ -1,0 +1,13 @@
+name: Health
+package: health
+comment: "ヘルスチェック"
+
+structure:
+  Check:
+    name: check
+    method: unary
+    auth: false
+    request: HealthCheckRequest
+    response: HealthCheckResponse
+    number: 1
+    comment: "ヘルスチェック"

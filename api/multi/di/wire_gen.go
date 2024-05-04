@@ -14,6 +14,7 @@ import (
 	"github.com/game-core/gocrafter/pkg/domain/model/config"
 	"github.com/game-core/gocrafter/pkg/domain/model/event"
 	"github.com/game-core/gocrafter/pkg/domain/model/friend"
+	"github.com/game-core/gocrafter/pkg/domain/model/health"
 	"github.com/game-core/gocrafter/pkg/domain/model/idleBonus"
 	"github.com/game-core/gocrafter/pkg/domain/model/item"
 	"github.com/game-core/gocrafter/pkg/domain/model/loginBonus"
@@ -113,6 +114,11 @@ func InitializeFriendService() friend.FriendService {
 	userFriendMysqlRepository := userFriend.NewUserFriendDao(mysqlHandler)
 	friendService := friend.NewFriendService(accountService, userFriendMysqlRepository)
 	return friendService
+}
+
+func InitializeHealthService() health.HealthService {
+	healthService := health.NewHealthService()
+	return healthService
 }
 
 func InitializeIdleBonusService() idleBonus.IdleBonusService {
