@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: gocrafter-api-game-deploy
 spec:
-  replicas: 3
+  replicas: 4
   selector:
     matchLabels:
       app: gocrafter-api-game-pod
