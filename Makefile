@@ -1,6 +1,5 @@
 # kubernetes
 k8s_apply:
-	make env_apply
 	make redis_apply
 	make mysql_apply
 	make api_apply API_NAME=game
@@ -11,14 +10,7 @@ k8s_delete:
 	make api_delete API_NAME=game
 	make mysql_delete
 	make redis_delete
-	make env_delete
 	make gen_delete
-
-# kubernetes 環境変数
-env_apply:
-	kubectl create configmap gocrafter-env-config --from-env-file=.env.local
-env_delete:
-	kubectl delete configmap gocrafter-env-config
 
 # kubernetes MySQL
 mysql_apply:
@@ -58,12 +50,14 @@ redis_delete:
 api_apply:
 	docker build -f ./platform/docker/api/$(API_NAME)/Dockerfile --target prod -t localhost:gocrafter-api-$(API_NAME)-local .
 	kubectl apply -f ./platform/kubernetes/api/$(API_NAME)/namespace.yaml
+	kubectl create configmap gocrafter-env-config --namespace=gocrafter-api-game --from-env-file=.env.local
 	kubectl apply -f ./platform/kubernetes/api/$(API_NAME)/deployment.yaml
 	kubectl apply -f ./platform/kubernetes/api/$(API_NAME)/service.yaml
 # kubernetes API
 api_delete:
 	kubectl delete -f ./platform/kubernetes/api/$(API_NAME)/service.yaml
 	kubectl delete -f ./platform/kubernetes/api/$(API_NAME)/deployment.yaml
+	kubectl delete configmap gocrafter-env-config --namespace=gocrafter-api-game
 	kubectl delete -f ./platform/kubernetes/api/$(API_NAME)/namespace.yaml
 
 # Gen
