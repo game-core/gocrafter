@@ -7,7 +7,6 @@ k8s_apply:
 	make gen_apply
 	make gen_migration
 	make gen_master
-
 k8s_delete:
 	make api_delete API_NAME=game
 	make mysql_delete
