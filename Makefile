@@ -1,4 +1,4 @@
-# k8s
+# kubernetes
 k8s_apply:
 	make env_apply
 	make redis_apply
@@ -15,27 +15,27 @@ k8s_delete:
 	make env_delete
 	make gen_delete
 
-# k8s 環境変数
+# kubernetes 環境変数
 env_apply:
 	kubectl create configmap gocrafter-env-config --from-env-file=.env.local
 env_delete:
 	kubectl delete configmap gocrafter-env-config
 
-# k8s MySQL
+# kubernetes MySQL
 mysql_apply:
-	kubectl apply -f ./platform/k8s/mysql/persistent-volume.yaml
-	kubectl apply -f ./platform/k8s/mysql/persistent-volume-claim.yaml
-	kubectl apply -f ./platform/k8s/mysql/deployment.yaml
-	kubectl apply -f ./platform/k8s/mysql/service.yaml
-	kubectl create configmap mysql-init-scripts --from-file=./platform/k8s/mysql/init/init-script.sql
+	kubectl apply -f ./platform/kubernetes/mysql/persistent-volume.yaml
+	kubectl apply -f ./platform/kubernetes/mysql/persistent-volume-claim.yaml
+	kubectl apply -f ./platform/kubernetes/mysql/deployment.yaml
+	kubectl apply -f ./platform/kubernetes/mysql/service.yaml
+	kubectl create configmap mysql-init-scripts --from-file=./platform/kubernetes/mysql/init/init-script.sql
 mysql_delete:
-	kubectl delete -f ./platform/k8s/mysql/service.yaml
-	kubectl delete -f ./platform/k8s/mysql/deployment.yaml
-	kubectl delete -f ./platform/k8s/mysql/persistent-volume-claim.yaml
-	kubectl delete -f ./platform/k8s/mysql/persistent-volume.yaml
+	kubectl delete -f ./platform/kubernetes/mysql/service.yaml
+	kubectl delete -f ./platform/kubernetes/mysql/deployment.yaml
+	kubectl delete -f ./platform/kubernetes/mysql/persistent-volume-claim.yaml
+	kubectl delete -f ./platform/kubernetes/mysql/persistent-volume.yaml
 	kubectl delete configmap mysql-init-scripts
 
-# k8s MySQLに接続する
+# kubernetes MySQLに接続する
 mysql_conn:
 	kubectl exec -it $(shell kubectl get pods -l app=mysql -o=jsonpath='{.items[0].metadata.name}') -- mysql --host=localhost --user=mysql_user --password=mysql_password
 mysql_conn_user0:
@@ -47,23 +47,25 @@ mysql_conn_master:
 mysql_conn_common:
 	kubectl exec -it $(shell kubectl get pods -l app=mysql -o=jsonpath='{.items[0].metadata.name}') -- mysql --host=localhost --user=mysql_user --password=mysql_password gocrafter_common
 
-# k8s Redis
+# kubernetes Redis
 redis_apply:
-	kubectl apply -f ./platform/k8s/redis/deployment.yaml
-	kubectl apply -f ./platform/k8s/redis/service.yaml
+	kubectl apply -f ./platform/kubernetes/redis/deployment.yaml
+	kubectl apply -f ./platform/kubernetes/redis/service.yaml
 redis_delete:
-	kubectl delete -f ./platform/k8s/redis/service.yaml
-	kubectl delete -f ./platform/k8s/redis/deployment.yaml
+	kubectl delete -f ./platform/kubernetes/redis/service.yaml
+	kubectl delete -f ./platform/kubernetes/redis/deployment.yaml
 
-# k8s API
+# kubernetes API
 api_apply:
 	docker build -f ./platform/docker/api/$(API_NAME)/Dockerfile --target prod -t localhost:gocrafter-api-$(API_NAME)-local .
-	kubectl apply -f ./platform/k8s/api/$(API_NAME)/deployment.yaml
-	kubectl apply -f ./platform/k8s/api/$(API_NAME)/service.yaml
-# k8s API
+	kubectl apply -f ./platform/kubernetes/api/$(API_NAME)/namespace.yaml
+	kubectl apply -f ./platform/kubernetes/api/$(API_NAME)/deployment.yaml
+	kubectl apply -f ./platform/kubernetes/api/$(API_NAME)/service.yaml
+# kubernetes API
 api_delete:
-	kubectl delete -f ./platform/k8s/api/$(API_NAME)/service.yaml
-	kubectl delete -f ./platform/k8s/api/$(API_NAME)/deployment.yaml
+	kubectl delete -f ./platform/kubernetes/api/$(API_NAME)/service.yaml
+	kubectl delete -f ./platform/kubernetes/api/$(API_NAME)/deployment.yaml
+	kubectl delete -f ./platform/kubernetes/api/$(API_NAME)/namespace.yaml
 
 # Gen
 gen_apply:
@@ -71,7 +73,7 @@ gen_apply:
 gen_delete:
 	docker stop gocrafter-gen-container
 
-# k8s Genに入る
+# kubernetes Genに入る
 gen_conn:
 	docker exec -it gocrafter-gen-container /bin/sh
 
@@ -82,11 +84,11 @@ gen_test:
 	&& go test -v ./pkg/domain/model/... \
 	"
 
-# k8s マイグレーション
+# kubernetes マイグレーション
 gen_migration:
 	docker exec -it gocrafter-gen-container /bin/sh -c "go run ./tools/migration/migration.go"
 
-# k8s マスターインポート
+# kubernetes マスターインポート
 gen_master:
 	docker exec -it gocrafter-gen-container /bin/sh -c "go run ./tools/masterImport/main.go"
 

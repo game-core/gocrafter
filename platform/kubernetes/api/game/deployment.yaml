@@ -2,15 +2,16 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: gocrafter-api-game-deploy
+  namespace: gocrafter-api-game
 spec:
   replicas: 4
   selector:
     matchLabels:
-      app: gocrafter-api-game-pod
+      app: gocrafter-api-game
   template:
     metadata:
       labels:
-        app: gocrafter-api-game-pod
+        app: gocrafter-api-game
     spec:
       containers:
         - image: localhost:gocrafter-api-game-local
