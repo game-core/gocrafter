@@ -1,5 +1,10 @@
 # 環境構築
 
+## k8sの環境設定
+- ドキュメントを参考に構築  
+https://kubernetes.io/ja/docs/reference/kubectl/
+
+
 ## Server
 
 - Kubernetesを起動
