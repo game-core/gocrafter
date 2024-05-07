@@ -1,8 +1,8 @@
 # 環境構築
 
 ## k8sの環境設定
-- ドキュメントを参考に構築  
-https://kubernetes.io/ja/docs/reference/kubectl/
+- ドキュメントを参考に構築(kubectlが使えるように慣ればOK)  
+[https://kubernetes.io/ja/docs/reference/kubectl/](https://kubernetes.io/ja/docs/home/)
 
 
 ## Server
