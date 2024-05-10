@@ -1,6 +1,6 @@
 # Account
 アカウント関連。  
-[protobuf](https://github.com/game-core/gocrafter/tree/main/docs/proto/api/game/account)  
+[protobuf](https://github.com/game-core/gocrafter/tree/main/docs/proto/gocrafter-proto/api/game/account)  
 
 - [Create](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/account.md#create)
 - [Login](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/account.md#login)

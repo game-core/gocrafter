@@ -50,7 +50,7 @@ func main() {
 
 		if !info.IsDir() && strings.HasSuffix(info.Name(), ".yaml") {
 			// proto
-			if err := NewProto().generate(path, "../../../../docs/proto/api/game"); err != nil {
+			if err := NewProto().generate(path, "../../../../docs/proto/gocrafter-proto/api/game"); err != nil {
 				log.Printf("failed to NewProto().generate: %s", err)
 			}
 
