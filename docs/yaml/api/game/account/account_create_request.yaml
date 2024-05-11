@@ -9,3 +9,9 @@ structure:
     nullable: false
     number: 1
     comment: "ユーザー名"
+  Password:
+    name: password
+    type: string
+    nullable: false
+    number: 2
+    comment: "パスワード"

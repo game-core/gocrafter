@@ -47,7 +47,7 @@ func (s *accountUsecase) Create(ctx context.Context, req *accountServer.AccountC
 		s.transactionService.UserMysqlEnd(ctx, tx, err)
 	}()
 
-	result, err := s.accountService.Create(ctx, tx, accountService.SetAccountCreateRequest(userId, req.Name))
+	result, err := s.accountService.Create(ctx, tx, accountService.SetAccountCreateRequest(userId, req.Name, req.Password))
 	if err != nil {
 		return nil, errors.NewMethodError("s.accountService.Create", err)
 	}

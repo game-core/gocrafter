@@ -58,12 +58,7 @@ func (s *accountService) FindByUserId(ctx context.Context, userId string) (*user
 
 // Create アカウントを作成する
 func (s *accountService) Create(ctx context.Context, tx *gorm.DB, req *AccountCreateRequest) (*AccountCreateResponse, error) {
-	password, err := keys.GeneratePassword()
-	if err != nil {
-		return nil, errors.NewMethodError("keys.GeneratePassword", err)
-	}
-
-	hashPassword, err := keys.GenerateHashPassword(password)
+	hashPassword, err := keys.GenerateHashPassword(req.Password)
 	if err != nil {
 		return nil, errors.NewMethodError("keys.GenerateHashPassword", err)
 	}
@@ -72,8 +67,6 @@ func (s *accountService) Create(ctx context.Context, tx *gorm.DB, req *AccountCr
 	if err != nil {
 		return nil, errors.NewMethodError("s.userAccountMysqlRepository.Create", err)
 	}
-
-	userAccountModel.Password = password
 
 	return SetAccountCreateResponse(userAccountModel), nil
 }
