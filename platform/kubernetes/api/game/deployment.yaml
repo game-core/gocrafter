@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: gocrafter-api-game-deploy
-  namespace: gocrafter-api-game
+  namespace: gocrafter-local
 spec:
   replicas: 4
   selector:
