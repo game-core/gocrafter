@@ -26,3 +26,5 @@ RUN go install github.com/golang/mock/mockgen@v1.6.0
 RUN go install golang.org/x/tools/cmd/goimports@v0.17.0
 RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+
+CMD [ "go", "run", "cmd/gen/main.go" ]
