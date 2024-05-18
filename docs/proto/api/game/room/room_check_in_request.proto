@@ -1,0 +1,11 @@
+// ルーム参加リクエスト
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/room";
+
+message RoomCheckInRequest {
+  string user_id = 1;
+  string room_id = 2;
+}

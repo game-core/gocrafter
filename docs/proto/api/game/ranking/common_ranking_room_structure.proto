@@ -1,0 +1,16 @@
+// ルームランキング
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/ranking";
+
+import "google/protobuf/timestamp.proto";
+
+message CommonRankingRoom {
+  int64 master_ranking_id = 1;
+  string room_id = 2;
+  string user_id = 3;
+  int32 score = 4;
+  google.protobuf.Timestamp ranked_at = 5;
+}

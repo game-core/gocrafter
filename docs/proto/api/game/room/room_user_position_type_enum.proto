@@ -1,0 +1,11 @@
+// ルームユーザー立場タイプ
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/room";
+
+enum RoomUserPositionType {
+  Leader = 0;
+  General = 1;
+}

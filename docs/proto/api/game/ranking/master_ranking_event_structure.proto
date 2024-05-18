@@ -1,0 +1,18 @@
+// ランキングイベント
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/ranking";
+
+import "google/protobuf/timestamp.proto";
+
+message MasterRankingEvent {
+  int64 id = 1;
+  string name = 2;
+  int32 reset_hour = 3;
+  int32 interval_hour = 4;
+  bool repeat_setting = 5;
+  google.protobuf.Timestamp start_at = 6;
+  optional google.protobuf.Timestamp end_at = 7;
+}

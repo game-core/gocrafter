@@ -1,0 +1,10 @@
+// アカウント確認リクエスト
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/account";
+
+message AccountCheckRequest {
+  string user_id = 1;
+}

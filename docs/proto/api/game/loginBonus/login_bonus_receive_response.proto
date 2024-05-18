@@ -1,0 +1,20 @@
+// ログインボーナス受け取りレスポンス
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/loginBonus";
+
+import "user_login_bonus_structure.proto";
+import "master_login_bonus_structure.proto";
+import "master_login_bonus_event_structure.proto";
+import "master_login_bonus_item_structure.proto";
+import "master_login_bonus_schedule_structure.proto";
+
+message LoginBonusReceiveResponse {
+  optional UserLoginBonus user_login_bonus = 1;
+  optional MasterLoginBonus master_login_bonus = 2;
+  optional MasterLoginBonusEvent master_login_bonus_event = 3;
+  repeated MasterLoginBonusItem master_login_bonus_items = 4;
+  optional MasterLoginBonusSchedule master_login_bonus_schedule = 5;
+}

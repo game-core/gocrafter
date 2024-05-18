@@ -1,6 +1,6 @@
 # Room
 ルーム関連。  
-[protobuf](https://github.com/game-core/gocrafter/tree/main/docs/proto/gocrafter-proto/api/game/room)  
+[protobuf](https://github.com/game-core/gocrafter/tree/main/docs/proto/api/game/room)  
 
 - [Search](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/room.md#Search)
 - [Create](https://github.com/game-core/gocrafter/blob/main/docs/md/function/api/room.md#Create)

@@ -1,0 +1,14 @@
+// ランキング更新レスポンス
+syntax = "proto3";
+
+package proto;
+
+option go_package = "api/game/presentation/server/ranking";
+
+import "common_ranking_room_structure.proto";
+import "common_ranking_world_structure.proto";
+
+message RankingUpdateResponse {
+  repeated CommonRankingRoom common_ranking_rooms = 1;
+  repeated CommonRankingWorld common_ranking_worlds = 2;
+}
